@@ -5,7 +5,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { GoogleGenAI, Type } from "@google/genai";
-import { FileText, Search, Loader2, CheckCircle2, AlertCircle, X, Database, Hospital, DollarSign, LogOut, LogIn, User as UserIcon, Building2, Percent, Calendar, Copy, Check } from 'lucide-react';
+import { FileText, Search, Loader2, CheckCircle2, AlertCircle, X, Database, Hospital, DollarSign, LogOut, LogIn, User as UserIcon, Building2, Percent, Calendar, Copy, Check, Mail } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from './lib/utils';
 import { auth, loginWithGoogle, logout, saveSearch, db, handleFirestoreError, OperationType } from './firebase';
@@ -29,7 +29,76 @@ interface CompanyInfo {
   name: string;
   priceListYear: string;
   discount: number;
+  responsiblePerson?: string;
 }
+
+const MANUAL_REPS: Record<string, string> = {
+  "المصرية الاماراتية": "ديانا",
+  "عز للحديد والصلب": "محمد ابو الوفا",
+  "حديد عز": "محمد ابو الوفا",
+  "تكنولوجيا الاخشاب": "نادين",
+  "صاان مصر": "محمد ابو الوفا",
+  "صان مصر": "محمد ابو الوفا",
+  "مصر للصيانة (صان مصر) EMC": "محمد ابو الوفا",
+  "ميدرايت": "نادين",
+  "Med Right": "نادين",
+  "سوميد": "محمد ابو الوفا",
+  "Sumed": "محمد ابو الوفا",
+  "نيكست كير": "أحمد حمزة",
+  "Next Care نكست كير": "أحمد حمزة",
+  "بترومنت": "زياد",
+  "Petromaint": "زياد",
+  "الحمراويل": "نادين",
+  "شركة الحمرا اويل": "نادين",
+  "نقابة المهندسين": "ديانا",
+  "نقابه المهندسين": "ديانا",
+  "وزراة العدل": "ديانا",
+  "وزاره العدل": "ديانا",
+  "منصور جروب": "محمد ابو الوفا",
+  "Mansour Group مجموعة منصور": "محمد ابو الوفا",
+  "يونايد": "محمد جابر",
+  "يونايتد": "محمد جابر"
+};
+
+const normalizeArabicForSales = (str: string) => {
+  if (!str) return '';
+  return str
+    .toLowerCase()
+    .replace(/[أإآا]/g, 'ا')
+    .replace(/[ىي]/g, 'ي')
+    .replace(/[ةه]/g, 'ه')
+    .replace(/[ئؤ]/g, 'ء')
+    .replace(/ة/g, 'ه')
+    .replace(/[^a-z0-9\u0621-\u064A]/g, '')
+    .trim();
+};
+
+const getBaseNameForSales = (str: string) => {
+  if (!str) return '';
+  let name = str.toLowerCase();
+  
+  name = name.replace(/\bethydco\b/gi, 'ايثدكو');
+  name = name.replace(/\beprom\b/gi, 'ايبروم');
+  name = name.replace(/\bamoc\b/gi, 'اموك');
+  name = name.replace(/\baxa\b/gi, 'اكسا');
+  name = name.replace(/\bwebco\b/gi, 'ويبكو');
+  name = name.replace(/\bwepco\b/gi, 'ويبكو');
+  name = name.replace(/\bel ahly\b/gi, 'الاهلي');
+  name = name.replace(/\bnext care\b/gi, 'نكست كير');
+  
+  const wordsToRemove = [
+    'شركه', 'شركة', 'هيئة', 'هيئه', 'نقابه', 'نقابة', 'نادى', 'نادي', 'جمعية', 'جمعيه',
+    'بترول', 'للبترول', 'الاطباء', 'اطباء', 'المهندسين', 'مهندسين', 'الزراعيه', 'الزراعية',
+    'الماسية', 'الماسيه', 'الخدمات', 'الطبية', 'الطبيه'
+  ];
+  
+  for (const word of wordsToRemove) {
+    name = name.replace(new RegExp(`\\b${word}\\b`, 'g'), '');
+    name = name.replace(new RegExp(`${word}`, 'g'), '');
+  }
+  
+  return normalizeArabicForSales(name);
+};
 
 const normalizeText = (str: string) => {
   if (!str) return '';
@@ -120,6 +189,7 @@ export default function App() {
   const [user, setUser] = useState<User | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
   const [copied, setCopied] = useState(false);
+  const [copiedCC, setCopiedCC] = useState(false);
 
   // Preloaded cash pricelists arrays
   const [cashData2023, setCashData2023] = useState<ProcedureResult[] | null>(null);
@@ -195,6 +265,40 @@ export default function App() {
   useEffect(() => {
     const loadCompanies = async () => {
       try {
+        // 1. Load Sales 2027 mapping
+        let salesReps: { name: string; rep: string }[] = [];
+        try {
+          const salesRes = await fetch('/Sales%202027.xlsx');
+          if (salesRes.ok) {
+            const salesBuf = await salesRes.arrayBuffer();
+            const salesWb = XLSX.read(salesBuf);
+            const salesWs = salesWb.Sheets[salesWb.SheetNames[0]];
+            const salesJson = XLSX.utils.sheet_to_json(salesWs, { header: 1 }) as any[][];
+            
+            if (salesJson && salesJson.length > 1) {
+              const repsRow = salesJson[1] || []; // Row 1 has representatives
+              for (let r = 2; r < salesJson.length; r++) {
+                const row = salesJson[r];
+                if (!row) continue;
+                for (let c = 0; c < repsRow.length; c++) {
+                  const rep = repsRow[c];
+                  const comp = row[c];
+                  if (rep && comp && typeof rep === 'string' && typeof comp === 'string') {
+                    const trimmedRep = rep.trim();
+                    const trimmedComp = comp.trim();
+                    if (trimmedComp && trimmedRep) {
+                      salesReps.push({ name: trimmedComp, rep: trimmedRep });
+                    }
+                  }
+                }
+              }
+            }
+          }
+        } catch (salesErr) {
+          console.error("Error loading Sales 2027.xlsx:", salesErr);
+        }
+
+        // 2. Load Consumables
         const response = await fetch('/Consumables.xlsx');
         if (!response.ok) throw new Error("File not found");
         const arrayBuffer = await response.arrayBuffer();
@@ -225,15 +329,44 @@ export default function App() {
               discountValue = parseFloat(String(rawDiscount || '0').replace('%', '')) || 0;
             }
 
+            const compName = String(row[0]).trim();
+            
+            // Resolve responsible person using manual mapping and sales mapping
+            let responsiblePerson = MANUAL_REPS[compName];
+            if (!responsiblePerson && salesReps.length > 0) {
+              const exactMatch = salesReps.find(s => s.name.toLowerCase() === compName.toLowerCase());
+              if (exactMatch) {
+                responsiblePerson = exactMatch.rep;
+              } else {
+                const compBase = getBaseNameForSales(compName);
+                if (compBase.length > 0) {
+                  const normMatch = salesReps.find(s => getBaseNameForSales(s.name) === compBase);
+                  if (normMatch) {
+                    responsiblePerson = normMatch.rep;
+                  } else if (compBase.length >= 3) {
+                    const subMatch = salesReps.find(s => {
+                      const sNorm = getBaseNameForSales(s.name);
+                      if (sNorm.length < 3) return false;
+                      return sNorm.includes(compBase) || compBase.includes(sNorm);
+                    });
+                    if (subMatch) {
+                      responsiblePerson = subMatch.rep;
+                    }
+                  }
+                }
+              }
+            }
+
             return {
-              name: String(row[0]).trim(),
+              name: compName,
               priceListYear: String(row[1] || '').trim(),
-              discount: Math.round(discountValue)
+              discount: Math.round(discountValue),
+              responsiblePerson
             };
           })
           .filter(c => c.name.length > 0);
 
-        console.log("Found companies in Excel:", loadedCompanies.slice(0, 5));
+        console.log("Found companies in Excel with responsible persons:", loadedCompanies.slice(0, 5));
         setCompanies(loadedCompanies);
       } catch (err) {
         console.error("Error loading companies:", err);
@@ -325,6 +458,9 @@ export default function App() {
 
     lines.push(`Price list: ${priceListName}`);
     lines.push(`Contractor: ${contractorName}`);
+    if (selectedCompany?.responsiblePerson) {
+      lines.push(`المسئول من قسم السيلز: ${selectedCompany.responsiblePerson}`);
+    }
     lines.push(`Contractor Discount: ${discountName}`);
     lines.push(''); // Blank line spacing
 
@@ -367,7 +503,7 @@ export default function App() {
 
     // 2. Build found section
     if (foundProcs.length > 0) {
-      lines.push("*الإجراءات المتواجدة بلائحة أسعار التعاقد*");
+      lines.push("الإجراءات المتواجدة بلائحة أسعار التعاقد:");
       
       let index = 1;
       foundProcs.forEach(proc => {
@@ -378,7 +514,7 @@ export default function App() {
           
           const rEngNorm = normalizeText(r.nameEnglish);
           if (rEngNorm && (rEngNorm.includes(pNorm) || pNorm.includes(rEngNorm))) return true;
-
+ 
           if (proc.arabic) {
             const pAraNorm = normalizeText(proc.arabic);
             const rAraNorm = normalizeText(r.nameArabic);
@@ -386,7 +522,7 @@ export default function App() {
           }
           return false;
         });
-
+ 
         matches.forEach(match => {
           const origPrice = match.price.trim();
           let discountedPriceText = '';
@@ -398,28 +534,23 @@ export default function App() {
               discountedPriceText = `${formattedDiscounted} ${curr}`;
             }
           }
-
+ 
           // Format details without duplicated index numbers from source
           const cleanArabic = cleanNamePrefix(match.nameArabic);
           const cleanEnglish = cleanNamePrefix(match.nameEnglish);
           lines.push(`${index}- ${cleanArabic} (${cleanEnglish})`);
-          if (selectedCompany && discountedPriceText) {
-            lines.push(`  • السعر الأصلي: ${origPrice} | السعر بعد الخصم: ${discountedPriceText}`);
-          } else {
-            lines.push(`  • السعر الأصلي: ${origPrice}`);
-          }
           lines.push(''); // spacer line
           index++;
         });
       });
     }
-
+ 
     // 3. Build not found section
     if (notFoundProcs.length > 0) {
       if (lines.length > 0 && lines[lines.length - 1] !== '') {
         lines.push(''); // separation space
       }
-      lines.push("*الإجراءات الغير متواجدة بلائحة أسعار التعاقد*");
+      lines.push("الإجراءات الغير متواجدة بلائحة أسعار التعاقد:");
       notFoundProcs.forEach((proc, idx) => {
         const cleanArabic = proc.arabic ? cleanNamePrefix(proc.arabic) : '';
         const cleanEng = cleanNamePrefix(proc.name);
@@ -427,14 +558,20 @@ export default function App() {
         lines.push(`${idx + 1}- ${procName}`);
       });
     }
-
+ 
     return lines.join('\n').trim();
   };
-
+ 
   const handleCopy = () => {
     navigator.clipboard.writeText(getSummaryText());
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleCopyCC = () => {
+    navigator.clipboard.writeText("DirectInsurance@elitehospital.org; corporate@elitehospital.org");
+    setCopiedCC(true);
+    setTimeout(() => setCopiedCC(false), 2000);
   };
 
   // Close dropdown on click outside
@@ -961,6 +1098,11 @@ export default function App() {
                     <div className="flex flex-col text-left">
                       <span className="text-[8px] uppercase font-bold text-teal-100 tracking-wider">Contractor</span>
                       <span className="text-xs font-black truncate max-w-[120px] font-display">{selectedCompany.name}</span>
+                      {selectedCompany.responsiblePerson && (
+                        <span className="text-[9px] font-bold text-teal-50 truncate max-w-[120px]">
+                          المسئول: {selectedCompany.responsiblePerson}
+                        </span>
+                      )}
                     </div>
                     <div className="flex items-center gap-1.5">
                       <span className="bg-white/20 text-[9px] font-black px-1.5 py-0.5 rounded text-white">{selectedCompany.discount}% OFF</span>
@@ -1058,6 +1200,12 @@ export default function App() {
                         <p className="text-gray-600 font-semibold mt-0.5">
                           Querying prices for <span className="font-extrabold text-teal-900">{selectedCompany.name}</span>.
                         </p>
+                        {selectedCompany.responsiblePerson && (
+                          <p className="text-teal-800 font-bold text-[11px] mt-1.5 flex items-center gap-1.5 bg-teal-50 px-2 py-1 rounded-lg border border-teal-100 w-fit">
+                            <span className="w-1.5 h-1.5 rounded-full bg-teal-500 shrink-0"></span>
+                            المسئول من قسم السيلز: <span className="font-extrabold text-teal-950">{selectedCompany.responsiblePerson}</span>
+                          </p>
+                        )}
                       </div>
                     </div>
 
@@ -1386,27 +1534,66 @@ export default function App() {
                               <p className="text-[11px] text-teal-900/80 font-semibold">جاهز للنسخ المباشر والمشاركة مع العملاء والمرضى عبر الواتساب</p>
                             </div>
                           </div>
-                          <button
-                            onClick={handleCopy}
-                            className={cn(
-                              "px-6 py-3 rounded-2xl font-extrabold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition-all active:scale-95 shrink-0 self-stretch md:self-auto cursor-pointer",
-                              copied 
-                                ? "bg-teal-600 text-white" 
-                                : "bg-white hover:bg-teal-50 text-teal-900 border border-white/80 shadow-sm"
-                            )}
-                          >
-                            {copied ? (
-                              <>
-                                <Check size={14} className="text-white animate-bounce" />
-                                <span>تم نسخ النص!</span>
-                              </>
-                            ) : (
-                              <>
-                                <Copy size={14} />
-                                <span>نسخ التقرير النصي</span>
-                              </>
-                            )}
-                          </button>
+                          <div className="flex flex-col sm:flex-row gap-2 shrink-0 self-stretch md:self-auto">
+                            <button
+                              onClick={handleCopy}
+                              className={cn(
+                                "px-6 py-3 rounded-2xl font-extrabold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition-all active:scale-95 cursor-pointer w-full sm:w-auto",
+                                copied 
+                                  ? "bg-teal-600 text-white" 
+                                  : "bg-white hover:bg-teal-50 text-teal-900 border border-white/80 shadow-sm"
+                              )}
+                            >
+                              {copied ? (
+                                <>
+                                  <Check size={14} className="text-white animate-bounce" />
+                                  <span>Report Copied!</span>
+                                </>
+                              ) : (
+                                <>
+                                  <Copy size={14} />
+                                  <span>Copy Text Report</span>
+                                </>
+                              )}
+                            </button>
+                            <button
+                              onClick={handleCopyCC}
+                              className={cn(
+                                "px-6 py-3 rounded-2xl font-extrabold text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg transition-all active:scale-95 cursor-pointer w-full sm:w-auto",
+                                copiedCC 
+                                  ? "bg-teal-600 text-white" 
+                                  : "bg-teal-900 hover:bg-teal-950 text-white shadow-sm"
+                              )}
+                              title="Copy CC email addresses to easily paste when replying in Outlook"
+                            >
+                              {copiedCC ? (
+                                <>
+                                  <Check size={14} className="text-white animate-bounce" />
+                                  <span>CC Copied!</span>
+                                </>
+                              ) : (
+                                <>
+                                  <Mail size={14} />
+                                  <span>Copy CC Emails</span>
+                                </>
+                              )}
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* Outlook Reply Guide and Helper */}
+                        <div className="bg-teal-50/70 border border-teal-100/80 p-5 rounded-2xl text-left text-[12px] text-teal-950 font-medium space-y-2 shadow-sm" dir="ltr">
+                          <p className="font-extrabold flex items-center gap-1.5 justify-start text-teal-950 text-[13px]">
+                            <span className="text-sm">✉️</span>
+                            <span>💡 Outlook Reply Tips & Guide</span>
+                          </p>
+                          <p className="text-teal-900/90 leading-relaxed font-semibold">
+                            Since you are replying to an existing email thread in Outlook:
+                            <br />
+                            1. Click <span className="text-teal-950 font-black">"Copy Text Report"</span> and paste it directly into your email reply.
+                            <br />
+                            2. Click <span className="text-teal-950 font-black">"Copy CC Emails"</span> and paste them straight into Outlook's To/CC fields!
+                          </p>
                         </div>
 
                         <div className="relative">
