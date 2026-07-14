@@ -192,6 +192,7 @@ export default function App() {
   const [authLoading, setAuthLoading] = useState(true);
   const [copied, setCopied] = useState(false);
   const [copiedCC, setCopiedCC] = useState(false);
+  const [loginError, setLoginError] = useState<string | null>(null);
 
   // Preloaded cash pricelists arrays
   const [cashData2023, setCashData2023] = useState<ProcedureResult[] | null>(null);
@@ -947,6 +948,16 @@ export default function App() {
   }
 
   if (!user) {
+    const handleLoginClick = async () => {
+      try {
+        setLoginError(null);
+        await loginWithGoogle();
+      } catch (err: any) {
+        console.error("Login click failed:", err);
+        setLoginError(err.message || String(err));
+      }
+    };
+
     return (
       <div className="min-h-screen relative flex items-center justify-center p-6 font-sans overflow-hidden">
         {/* Background image overlay */}
@@ -975,8 +986,34 @@ export default function App() {
           <p className="text-xs text-teal-700/80 font-bold uppercase tracking-widest mb-2 font-display">By Dr. Mohanad El Ma'moun</p>
           <p className="text-sm text-gray-700 font-medium mb-8 leading-relaxed max-w-xs mx-auto">Please sign in with your Google workspace or personal account to explore contract price lists.</p>
           
+          {loginError && (
+            <div className="mb-6 p-4 bg-red-50/90 border border-red-200/85 rounded-2xl text-left text-xs text-red-950 font-medium space-y-2.5 shadow-sm max-h-[300px] overflow-y-auto">
+              <div className="flex items-center gap-2 text-red-800 font-extrabold text-[13px]">
+                <AlertCircle size={15} />
+                <span>Authentication Error</span>
+              </div>
+              <p className="font-semibold break-words leading-relaxed text-red-900 bg-red-100/50 p-2 rounded-lg font-mono text-[10px]">
+                {loginError}
+              </p>
+              <div className="text-[11px] leading-relaxed pt-2 border-t border-red-100 space-y-1.5 text-red-950 font-medium">
+                <p className="font-bold text-red-900">How to solve this on Vercel:</p>
+                <p>
+                  1. <strong>Authorized Domains:</strong> Since you are running on Vercel, go to your <strong>Firebase Console &gt; Authentication &gt; Settings &gt; Authorized domains</strong> and add your Vercel domain (e.g., <code>*.vercel.app</code>) to the list.
+                </p>
+                <p>
+                  2. <strong>Set Environment Variables:</strong> If you are using your own Firebase project, ensure you added your credentials in your <strong>Vercel Project Dashboard</strong> with the <code>VITE_</code> prefix exactly as defined in <code>.env.example</code>:
+                </p>
+                <ul className="list-disc list-inside pl-1 text-[10px] font-mono bg-white/40 p-1.5 rounded-lg space-y-0.5 text-gray-750">
+                  <li>VITE_FIREBASE_API_KEY</li>
+                  <li>VITE_FIREBASE_AUTH_DOMAIN</li>
+                  <li>VITE_FIREBASE_PROJECT_ID</li>
+                </ul>
+              </div>
+            </div>
+          )}
+
           <button
-            onClick={loginWithGoogle}
+            onClick={handleLoginClick}
             className="w-full bg-white/75 hover:bg-white border border-white/80 hover:border-white text-gray-800 px-6 py-4 rounded-2xl font-bold hover:shadow-lg transition-all flex items-center justify-center gap-3.5 shadow-md active:scale-98 cursor-pointer"
           >
             <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" className="w-5 h-5 shrink-0" />
