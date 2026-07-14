@@ -14,7 +14,9 @@ import { collection, query, where, orderBy, limit, onSnapshot, Timestamp } from 
 import * as XLSX from 'xlsx';
 
 // Initialize Gemini
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
+const ai = new GoogleGenAI({ 
+  apiKey: process.env.GEMINI_API_KEY || import.meta.env.VITE_GEMINI_API_KEY || '' 
+});
 
 interface ProcedureResult {
   nameArabic: string;

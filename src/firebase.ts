@@ -1,7 +1,43 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, User } from 'firebase/auth';
 import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
-import firebaseConfig from '../firebase-applet-config.json';
+import firebaseAppletConfig from '../firebase-applet-config.json';
+
+// Determine if we have a valid external Firebase API key set in the environment
+const hasValidEnvConfig = (): boolean => {
+  const envKey = import.meta.env.VITE_FIREBASE_API_KEY;
+  return typeof envKey === 'string' && envKey.trim().startsWith('AIzaSy');
+};
+
+const useEnv = hasValidEnvConfig();
+
+// Construct config, prioritizing environment variables (useful for hosting on Vercel), falling back to pre-configured values
+const firebaseConfig = useEnv ? {
+  apiKey: (import.meta.env.VITE_FIREBASE_API_KEY as string).trim(),
+  authDomain: (import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || '').trim(),
+  projectId: (import.meta.env.VITE_FIREBASE_PROJECT_ID || '').trim(),
+  storageBucket: (import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || '').trim(),
+  messagingSenderId: (import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || '').trim(),
+  appId: (import.meta.env.VITE_FIREBASE_APP_ID || '').trim(),
+  firestoreDatabaseId: (import.meta.env.VITE_FIREBASE_DATABASE_ID || '').trim(),
+} : {
+  apiKey: firebaseAppletConfig.apiKey,
+  authDomain: firebaseAppletConfig.authDomain,
+  projectId: firebaseAppletConfig.projectId,
+  storageBucket: firebaseAppletConfig.storageBucket,
+  messagingSenderId: firebaseAppletConfig.messagingSenderId,
+  appId: firebaseAppletConfig.appId,
+  firestoreDatabaseId: firebaseAppletConfig.firestoreDatabaseId || (firebaseAppletConfig as any).firestoreDatabaseId,
+};
+
+console.log('Firebase Init Config Debug (Safe):', {
+  usingEnvOverrides: useEnv,
+  apiKeyLength: firebaseConfig.apiKey ? firebaseConfig.apiKey.length : 0,
+  apiKeyPrefix: firebaseConfig.apiKey ? firebaseConfig.apiKey.substring(0, 6) : 'none',
+  projectId: firebaseConfig.projectId,
+  authDomain: firebaseConfig.authDomain,
+  firestoreDatabaseId: firebaseConfig.firestoreDatabaseId,
+});
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
