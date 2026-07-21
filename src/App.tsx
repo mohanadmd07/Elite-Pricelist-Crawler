@@ -360,9 +360,15 @@ export default function App() {
               }
             }
 
+            let priceListYearVal = String(row[1] || '').trim();
+            const normCompName = compName.replace(/[أإآا]/g, 'ا').replace(/[ىي]/g, 'ي').replace(/[ةه]/g, 'ه').replace(/\s+/g, ' ').trim().toLowerCase();
+            if (normCompName.includes('لايف هيلث كير') || normCompName.includes('لايف هيلثكير') || normCompName.includes('life health') || normCompName.includes('lifehealth')) {
+              priceListYearVal = '2024';
+            }
+
             return {
               name: compName,
-              priceListYear: String(row[1] || '').trim(),
+              priceListYear: priceListYearVal,
               discount: Math.round(discountValue),
               responsiblePerson
             };
