@@ -364,6 +364,8 @@ export default function App() {
             const normCompName = compName.replace(/[أإآا]/g, 'ا').replace(/[ىي]/g, 'ي').replace(/[ةه]/g, 'ه').replace(/\s+/g, ' ').trim().toLowerCase();
             if (normCompName.includes('لايف هيلث كير') || normCompName.includes('لايف هيلثكير') || normCompName.includes('life health') || normCompName.includes('lifehealth')) {
               priceListYearVal = '2024';
+            } else if (normCompName.includes('خالده') || normCompName.includes('خالدة') || normCompName.includes('khalda')) {
+              priceListYearVal = '2025';
             }
 
             return {
