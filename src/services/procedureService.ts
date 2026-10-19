@@ -1,7 +1,7 @@
 import { ProcedureResult, SelectedProcedure } from '../types';
 import { normalizeText, normalizeArabic } from '../lib/arabic-normalizer';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
-import { matchProceduresWithAI } from './aiMatchService';
+import { matchProceduresWithAI, isGeminiConfigured } from './aiMatchService';
 
 // Module-level caches per react-best-practices (js-cache-function-results)
 const cashDataCache: Record<string, ProcedureResult[]> = {};
@@ -450,19 +450,23 @@ export async function searchAllProcedures(
         }
       }
 
-      if (candidatePool.length > 0) {
-        // Query Gemini with ultra-compact indexed candidate list
-        const newAiMatches = await matchProceduresWithAI(stillUnmatched, candidatePool);
-        geminiResults.push(...newAiMatches);
+      if (candidatePool.length > 0 && isGeminiConfigured()) {
+        try {
+          // Query Gemini with ultra-compact indexed candidate list
+          const newAiMatches = await matchProceduresWithAI(stillUnmatched, candidatePool);
+          geminiResults.push(...newAiMatches);
 
-        // Save newly found matches to multi-tier cache
-        for (const proc of stillUnmatched) {
-          const matchesForProc = newAiMatches.filter(
-            (m) => m.requestedProcedureName?.toLowerCase() === proc.name.toLowerCase()
-          );
-          if (matchesForProc.length > 0) {
-            setCachedAIResults(activeYear, proc.name, proc.arabic, matchesForProc);
+          // Save newly found matches to multi-tier cache
+          for (const proc of stillUnmatched) {
+            const matchesForProc = newAiMatches.filter(
+              (m) => m.requestedProcedureName?.toLowerCase() === proc.name.toLowerCase()
+            );
+            if (matchesForProc.length > 0) {
+              setCachedAIResults(activeYear, proc.name, proc.arabic, matchesForProc);
+            }
           }
+        } catch (aiErr) {
+          console.warn('[Procedure Service] Semantic AI matching skipped/failed:', aiErr);
         }
       }
     }

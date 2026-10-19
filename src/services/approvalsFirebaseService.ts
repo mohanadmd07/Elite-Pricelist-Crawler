@@ -129,12 +129,31 @@ export function subscribeToApprovals(
         }
       });
 
-      if (records.length > 0 && isSubscribed) {
+      if (isSubscribed) {
         onUpdate(records);
       }
     },
     (error) => {
-      onError?.(error);
+      console.warn('[Approvals Service] Ordered approvals query failed, falling back to base query:', error);
+      // Fallback query without orderBy in case of missing compound index
+      onSnapshot(
+        colRef,
+        (snap) => {
+          const records: InpatientApprovalRecord[] = [];
+          snap.docs.forEach((docSnap) => {
+            records.push({
+              id: docSnap.id,
+              ...(docSnap.data() as Omit<InpatientApprovalRecord, 'id'>),
+            });
+          });
+          if (isSubscribed) {
+            onUpdate(records);
+          }
+        },
+        (fallbackErr) => {
+          onError?.(fallbackErr);
+        }
+      );
     }
   );
 
@@ -226,7 +245,7 @@ export function subscribeToCompanyConfigs(
         id: docSnap.id,
         ...(docSnap.data() as Omit<CompanyConfigRecord, 'id'>),
       }));
-      if (companies.length > 0 && isSubscribed) {
+      if (isSubscribed) {
         onUpdate(companies);
       }
     },

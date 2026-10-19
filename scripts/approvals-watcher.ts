@@ -52,6 +52,8 @@ export const IS_EXCHANGE_EWS = IMAP_HOST.toLowerCase().includes('wmail.elitehosp
 export const EXCHANGE_DOMAIN = process.env.EXCHANGE_DOMAIN || 'elitehospital';
 export const EXCHANGE_USERNAME = IMAP_USER.includes('@') ? IMAP_USER.split('@')[0] : IMAP_USER;
 export const EWS_URL = `https://${IMAP_HOST}/EWS/Exchange.asmx`;
+export const EXACT_INAPPROVALS_FOLDER_ID =
+  'AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgAuAAAAAAA4U9epEFcNRbR5QhtWJDZyAQCVKjW+UMYOTr9U/HR/zy7WAAActvclAAA=';
 
 // Local Persistence Paths
 const DATA_DIR = path.resolve(process.cwd(), 'data');
@@ -207,13 +209,32 @@ interface ParsedApprovalEmail {
 }
 
 /**
+ * Decodes XML/HTML entities from Exchange Web Services bodies.
+ */
+export function decodeHtmlEntities(str: string): string {
+  if (!str) return '';
+  return str
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&amp;/g, '&')
+    .replace(/&#xD;/g, '\r')
+    .replace(/&#xA;/g, '\n')
+    .replace(/&nbsp;/g, ' ');
+}
+
+/**
  * Extracts structured approval fields from the incoming HIS HTML email body.
+ * Supports both HIS HTML table formats and key-value / request details formats.
  */
 export function parseHisApprovalHtml(html: string, subject: string, messageId: string): ParsedApprovalEmail {
-  const $ = cheerio.load(html || '');
+  const decodedHtml = decodeHtmlEntities(html || '');
+  const $ = cheerio.load(decodedHtml);
+  const fullText = $('body').text().replace(/\s+/g, ' ').trim() || decodedHtml.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
 
   // Extract MRN & Patient from Subject if available
-  const subjectMatch = subject.match(/(?:RE:\s*)?Inpatient Approval\s*-\s*(.+?)\s*\(MRN:\s*(\d+)\)/i);
+  const subjectMatch = subject.match(/(?:RE:\s*)?(?:\[URGENT\]\s*)?Inpatient Approval\s*-\s*(.+?)\s*\(MRN:\s*(\d+)\)/i);
   let patientName = subjectMatch ? subjectMatch[1].trim() : '';
   let mrn = subjectMatch ? subjectMatch[2].trim() : '';
 
@@ -227,32 +248,32 @@ export function parseHisApprovalHtml(html: string, subject: string, messageId: s
   let requestDetails = '';
 
   // Helper to extract value next to label cell
-  $('td, th, span, div, p').each((_, el) => {
+  $('td, th, span, div, p, strong').each((_, el) => {
     const text = $(el).text().trim();
 
-    if (!patientName && text.includes('Patient Name')) {
-      const next = $(el).next().text().trim() || $(el).parent().find('td').eq(1).text().trim();
+    if (!patientName && (text === 'Patient Name' || text.startsWith('Patient Name:'))) {
+      const next = $(el).next().text().trim() || $(el).parent().find('td').eq(1).text().trim() || text.replace('Patient Name:', '').trim();
       if (next) patientName = next;
     }
     if (text.includes('Admission Date')) {
       const next = $(el).next().text().trim() || $(el).parent().find('td').eq(1).text().trim();
       if (next) admissionDate = next;
     }
-    if (text.includes('Admission Type')) {
+    if (text.includes('Admission Type') || text.includes('Visit Type')) {
       const parentText = $(el).parent().text();
       admissionType = parentText.includes('Inpatient') ? 'Inpatient' : 'Outpatient';
-      const bedMatch = parentText.match(/Bed:\s*([^–\n]+)/i);
+      const bedMatch = parentText.match(/Bed:\s*([^–\n<]+)/i);
       if (bedMatch) bed = bedMatch[1].trim();
     }
-    if (text.includes('Physician')) {
+    if (text === 'Physician' || text.startsWith('Physician:')) {
       const next = $(el).next().text().trim() || $(el).parent().find('td').eq(1).text().trim();
       if (next) physician = next;
     }
-    if (text.includes('Contractor')) {
-      const next = $(el).next().text().trim() || $(el).parent().find('td').eq(1).text().trim();
+    if (text === 'Contractor' || text.startsWith('Contractor:') || text.startsWith('Contractor Name:')) {
+      const next = $(el).next().text().trim() || $(el).parent().find('td').eq(1).text().trim() || text.replace('Contractor Name:', '').replace('Contractor:', '').trim();
       if (next) contractorRaw = next;
     }
-    if (text.includes('Diagnosis')) {
+    if (text === 'Diagnosis' || text.startsWith('Diagnosis:')) {
       const next = $(el).next().text().trim() || $(el).parent().find('td').eq(1).text().trim();
       if (next) diagnosis = next;
     }
@@ -262,16 +283,30 @@ export function parseHisApprovalHtml(html: string, subject: string, messageId: s
     }
   });
 
-  // Fallback: search for Contractor in full text if table selector missed
-  if (!contractorRaw) {
-    const contractorMatch = $('body').text().match(/Contractor[:\s]+([^\n\r]+)/i);
-    if (contractorMatch) contractorRaw = contractorMatch[1].trim();
+  // Key-value regex fallbacks (e.g. for Format 2: "Patient Barcode: 0000063963\nPatient Name: ...\nContractor Name: ...")
+  if (!patientName) {
+    const pMatch = fullText.match(/Patient Name:\s*([^\n\r<]+)/i) || fullText.match(/(?:حاله|حالة)\s*[:\/]\s*([^\n\r<]+)/i);
+    if (pMatch) patientName = pMatch[1].replace(/(?:Contractor|Visit Type|MRN).*/i, '').trim();
   }
 
-  // Fallback: search for Diagnosis in full text
+  if (!mrn) {
+    const bMatch = fullText.match(/Patient Barcode:\s*(\d+)/i) || fullText.match(/(?:MRN|الرقم الطبي)\s*[:\/\s]*(\d+)/i) || subject.match(/\(MRN:\s*(\d+)\)/i);
+    if (bMatch) mrn = bMatch[1].trim();
+  }
+
+  if (!contractorRaw) {
+    const cMatch = fullText.match(/Contractor Name:\s*([^\n\r<]+)/i) || fullText.match(/Contractor[:\s]+([^\n\r<]+)/i) || fullText.match(/(?:تعاقد|شركة|شركه)\s*[:\/]\s*([^\n\r<]+)/i);
+    if (cMatch) contractorRaw = cMatch[1].replace(/(?:Visit Type|Diagnosis).*/i, '').trim();
+  }
+
   if (!diagnosis) {
-    const diagMatch = $('body').text().match(/Diagnosis[:\s]+([^\n\r]+)/i);
+    const diagMatch = fullText.match(/Diagnosis[:\s]+([^\n\r<]+)/i);
     if (diagMatch) diagnosis = diagMatch[1].trim();
+  }
+
+  // Clean contractor name (strip "Main", "<br>", etc.)
+  if (contractorRaw) {
+    contractorRaw = contractorRaw.replace(/^Name:\s*/i, '').replace(/\s*Main\s*$/i, '').replace(/<[^>]+>/g, '').trim();
   }
 
   // Extract SELECTED SERVICES table rows
@@ -279,7 +314,6 @@ export function parseHisApprovalHtml(html: string, subject: string, messageId: s
 
   $('tr').each((_, tr) => {
     const rowText = $(tr).text();
-    // Exclude header or patient info rows
     const isExcluded =
       rowText.includes('Patient Name') ||
       rowText.includes('Admission Date') ||
@@ -309,18 +343,15 @@ export function parseHisApprovalHtml(html: string, subject: string, messageId: s
     }
   });
 
-
-  // If no services parsed via tr, fallback to text regex
-  if (requestedServices.length === 0) {
-    const lines = $('body').text().split('\n');
-    for (const line of lines) {
-      const match = line.match(/^([A-Za-z0-9\s()\-–_]+?)\s+(\d+(?:\.\d+)?)\s*(?:EGP)?$/i);
-      if (match && !match[1].toLowerCase().includes('total') && !match[1].toLowerCase().includes('service')) {
-        requestedServices.push({
-          name: match[1].trim(),
-          rawPrice: parseFloat(match[2]),
-        });
-      }
+  // Fallback: If no services table found, extract requested item from Request Details
+  if (requestedServices.length === 0 && requestDetails) {
+    // Clean request details text
+    const cleanDetails = requestDetails.replace(/يعاني المريض من\s*[^و]+و\s*يحتاج الي\s*/i, '').trim();
+    if (cleanDetails && cleanDetails.length > 3) {
+      requestedServices.push({
+        name: cleanDetails,
+        rawPrice: 0,
+      });
     }
   }
 
@@ -333,13 +364,13 @@ export function parseHisApprovalHtml(html: string, subject: string, messageId: s
     patientName: patientName || 'Unknown Patient',
     mrn: mrn || '0000000000',
     admissionDate,
-    admissionType,
-    bed,
-    physician,
-    contractorRaw: contractorRaw || 'Unknown Contractor',
-    diagnosis,
+    admissionType: admissionType || 'Inpatient',
+    bed: bed || 'Inpatient Bed',
+    physician: physician || 'Hospital Staff',
+    contractorRaw: contractorRaw || 'شركة مستشفى إيليت',
+    diagnosis: diagnosis || 'Clinical Inpatient Evaluation',
     requestedServices,
-    requestDetails,
+    requestDetails: requestDetails || fullText.slice(0, 300),
   };
 }
 
@@ -422,7 +453,12 @@ async function matchRequestedProcedures(
   const results: Array<{ serviceName: string; matchedName: string; code?: string; status: 'matched' | 'unmatched' }> = [];
 
   for (const srv of services) {
-    const localMatches = await searchAllProcedures([{ id: '1', name: srv.name }], priceListYear);
+    let localMatches: any[] = [];
+    try {
+      localMatches = await searchAllProcedures([{ id: '1', name: srv.name }], priceListYear);
+    } catch (searchErr) {
+      console.warn(`[Procedure Match] searchAllProcedures error for "${srv.name}":`, searchErr);
+    }
 
 
     if (localMatches && localMatches.length > 0) {
@@ -475,24 +511,48 @@ async function matchRequestedProcedures(
   return results;
 }
 
-const APPROVAL_KEYWORDS = [
+export function cleanTextFromHtml(input: string): string {
+  if (!input) return '';
+  const decoded = decodeHtmlEntities(input);
+  return decoded
+    .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/[\r\n\t]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+export const APPROVAL_KEYWORDS = [
   'لا مانع',
   'approved',
   'approve',
+  'معتمد',
   'موافقة سعرية',
   'موافقه سعريه',
-  'سعرية',
-  'سعريه',
+  'تمت الموافقة',
+  'تمت الموافقه',
+  'موافقة باللائحة',
+  'موافقه باللائحه',
+  'يضاف علي الفاتوره',
+  'يضاف على الفاتورة',
+  'بفاتوره الشراء',
+  'بفاتورة الشراء',
+  'موافق',
 ];
 
 /**
  * Checks if the email text or thread contains approval phrases.
+ * Decodes XML/HTML entities and strips HTML tags so snippet is clean and readable.
  */
 export function detectExistingApproval(
   text: string,
   subject: string
 ): { hasApproval: boolean; snippet: string } {
-  const combined = `${subject}\n${text}`;
+  const cleanBody = cleanTextFromHtml(text);
+  const cleanSubj = cleanTextFromHtml(subject);
+  const combined = `${cleanSubj} ${cleanBody}`.trim();
   const normalized = combined
     .toLowerCase()
     .replace(/[إأآ]/g, 'ا')
@@ -506,9 +566,9 @@ export function detectExistingApproval(
 
     const idx = normalized.indexOf(kwNorm);
     if (idx !== -1) {
-      const start = Math.max(0, idx - 40);
-      const end = Math.min(combined.length, idx + kw.length + 60);
-      let snippet = combined.substring(start, end).replace(/[\r\n\t]+/g, ' ').trim();
+      const start = Math.max(0, idx - 25);
+      const end = Math.min(combined.length, idx + kw.length + 80);
+      let snippet = combined.substring(start, end).trim();
       if (start > 0) snippet = '...' + snippet;
       if (end < combined.length) snippet = snippet + '...';
 
@@ -533,36 +593,35 @@ export function detectReplies(parsed: {
   html?: string | false;
 }): { hasReplies: boolean; snippet: string } {
   const subject = parsed.subject || '';
-  const isReSubject = /^(re|رد|fw|fwd)\s*:/i.test(subject);
+  const isReSubject = /^(re|رد|fw|fwd)\s*:/i.test(subject.trim());
   const hasInReplyTo = Boolean(parsed.inReplyTo);
   const hasReferences = Array.isArray(parsed.references)
     ? parsed.references.length > 0
     : Boolean(parsed.references);
 
-  const fullContent = (parsed.text || '') + '\n' + (parsed.html || '');
+  const rawContent = (parsed.text || '') + '\n' + (parsed.html || '');
   const hasQuotedMarkers =
-    /-----Original Message-----/i.test(fullContent) ||
-    /From:.*Sent:.*To:/is.test(fullContent) ||
-    /On\s+.+wrote:/i.test(fullContent) ||
-    /بتاريخ\s+.+كتب/i.test(fullContent);
+    /-----Original Message-----/i.test(rawContent) ||
+    /From:.*Sent:.*To:/is.test(rawContent) ||
+    /On\s+.+wrote:/i.test(rawContent) ||
+    /بتاريخ\s+.+كتب/i.test(rawContent);
 
   if (isReSubject || hasInReplyTo || hasReferences || hasQuotedMarkers) {
     let replySnippet = '';
-    const lines = (parsed.text || '')
-      .split('\n')
-      .map((l) => l.trim())
-      .filter((l) => l.length > 0 && !l.startsWith('>'));
+    const cleanContent = cleanTextFromHtml(parsed.text || parsed.html || '');
+    const sentences = cleanContent.split(/[.\n\r]+/).map((s) => s.trim()).filter((s) => s.length > 4);
 
-    for (const l of lines) {
+    for (const s of sentences) {
       if (
-        !l.toLowerCase().includes('inpatient approval') &&
-        !l.toLowerCase().includes('patient information') &&
-        !l.toLowerCase().includes('from:') &&
-        !l.toLowerCase().includes('to:') &&
-        !l.toLowerCase().includes('sent:') &&
-        l.length > 3
+        !s.toLowerCase().includes('inpatient approval') &&
+        !s.toLowerCase().includes('patient information') &&
+        !s.toLowerCase().includes('selected services') &&
+        !s.toLowerCase().includes('from:') &&
+        !s.toLowerCase().includes('to:') &&
+        !s.toLowerCase().includes('sent:') &&
+        !s.toLowerCase().includes('subject:')
       ) {
-        replySnippet = l.substring(0, 120);
+        replySnippet = s.substring(0, 120);
         break;
       }
     }
@@ -931,7 +990,7 @@ async function runApprovalsCheckEws(): Promise<void> {
   // 1. Enforce 30-day database rollover
   await purgeApprovalsOlderThan(MAX_HISTORY_DAYS);
 
-  // 2. Process any manual draft requests submitted from UI (local storage first)
+  // 2. Process any manual draft requests submitted from UI (local storage first & Firestore)
   const localItems = loadLocalApprovals();
   for (const item of localItems) {
     if (item.manualDraftRequested && item.status !== 'draft_created') {
@@ -974,123 +1033,203 @@ async function runApprovalsCheckEws(): Promise<void> {
     }
   } catch {}
 
-  // 3. Resolve target folder (InApprovals or fallback to Inbox)
-  let folderId = await ewsResolveFolderId(IMAP_FOLDER);
-  if (!folderId) {
-    console.log(`[Approvals Watcher / EWS] Folder "${IMAP_FOLDER}" not found in root, falling back to Inbox.`);
-    folderId = 'inbox';
+  // 3. Resolve target folder (use user's exact InApprovals folder ID)
+  let folderId = IMAP_FOLDER;
+  if (!folderId || folderId.toLowerCase() === 'inapprovals' || folderId.startsWith('AAMk') || folderId.startsWith('AQMk')) {
+    folderId = EXACT_INAPPROVALS_FOLDER_ID;
+  } else {
+    folderId = (await ewsResolveFolderId(folderId)) || 'inbox';
   }
 
   const items = await ewsFindItemsInFolder(folderId, 50);
-  console.log(`[Approvals Watcher / EWS] Scanned ${items.length} items in "${IMAP_FOLDER}".`);
+  console.log(`[Approvals Watcher / EWS] Scanned ${items.length} items in InApprovals folder.`);
 
-  for (const item of items) {
+  // Map to hold unique patient approval records keyed by docId (mrn_${mrn})
+  const recordsByDocId = new Map<string, InpatientApprovalRecord>();
+  const docIdByMrn = new Map<string, string>();
+
+  // Pre-seed maps with existing local approvals so ongoing threads link properly
+  for (const existing of loadLocalApprovals()) {
+    if (existing.id && existing.mrn) {
+      recordsByDocId.set(existing.id, existing);
+      docIdByMrn.set(existing.mrn, existing.id);
+    }
+  }
+
+  // Reverse to process chronologically: oldest to newest
+  // This allows initial HIS requests to register first, and subsequent replies from anybody to link to them.
+  const chronoItems = [...items].reverse();
+
+  for (const item of chronoItems) {
     const fullItem = await ewsGetItemDetails(item.id);
     if (!fullItem) continue;
 
     const subject = fullItem.subject || '';
+    const from = fullItem.from || '';
     const messageId = fullItem.messageId || `<${item.id}@exchange>`;
+    const fullHtml = fullItem.bodyHtml || '';
+    const fullText = fullItem.bodyText || '';
+    const cleanBody = cleanTextFromHtml(fullText + '\n' + fullHtml);
 
-    // Filter: only process Inpatient Approval emails
-    if (!subject.toLowerCase().includes('inpatient approval')) {
-      continue;
-    }
+    // Extract MRN from subject or body
+    const mrnMatch =
+      subject.match(/\(MRN:\s*(\d+)\)/i) ||
+      cleanBody.match(/(?:MRN|الرقم الطبي)\s*[:\/\s]*(\d{5,12})/i) ||
+      cleanBody.match(/\b(0000\d{5,7}|\d{6,8})\b/);
+    const detectedMrn = mrnMatch ? mrnMatch[1] : '';
 
-    // Check deduplication
-    if (await isAlreadyProcessed(messageId)) {
-      continue;
-    }
+    const isFromHis =
+      from.toLowerCase().includes('his.notifications') ||
+      from.toLowerCase().includes('his.') ||
+      subject.toLowerCase().includes('his notifications');
+    const isReply = /^(re|رد|fw|fwd)\s*:/i.test(subject.trim());
+    const hasHisApprovalFormat =
+      fullHtml.includes('SELECTED SERVICES') ||
+      fullHtml.includes('Patient Information') ||
+      fullHtml.includes('Request Details') ||
+      subject.toLowerCase().includes('inpatient approval');
 
-    console.log(`[Approvals Watcher / EWS] Processing new approval: ${subject}`);
+    if (isFromHis || (!isReply && hasHisApprovalFormat)) {
+      // --- 1. Original HIS Request ---
+      const decodedHtml = decodeHtmlEntities(fullHtml);
+      const approvalData = parseHisApprovalHtml(decodedHtml, subject, messageId);
+      approvalData.from = from;
+      approvalData.to = fullItem.to;
+      approvalData.cc = fullItem.cc;
 
-    // Parse HTML
-    const approvalData = parseHisApprovalHtml(fullItem.bodyHtml || fullItem.bodyText, subject, messageId);
-    approvalData.from = fullItem.from;
-    approvalData.to = fullItem.to;
-    approvalData.cc = fullItem.cc;
+      const activeMrn = approvalData.mrn !== '0000000000' ? approvalData.mrn : (detectedMrn || '0000000000');
+      const docId = `mrn_${activeMrn}`;
 
-    // Check for existing replies and approval keywords
-    const emailContent = (fullItem.bodyText || '') + '\n' + (fullItem.bodyHtml || '');
-    const approvalCheck = detectExistingApproval(emailContent, subject);
-    const replyCheck = detectReplies({
-      subject,
-      inReplyTo: fullItem.inReplyTo,
-      references: fullItem.references,
-      text: fullItem.bodyText,
-      html: fullItem.bodyHtml,
-    });
-
-    const shouldHoldDraft = approvalCheck.hasApproval || replyCheck.hasReplies;
-
-    // Resolve Contractor & Officer
-    const { contractorNormalized, priceListYear, contractorOfficer } = await resolveContractor(
-      approvalData.contractorRaw
-    );
-
-    // Match Procedures
-    const matched = await matchRequestedProcedures(approvalData.requestedServices, priceListYear);
-
-    // Build Draft (always mentions corporate@elitehospital.org)
-    const draftBody = buildDraftReplyText(priceListYear, contractorNormalized, contractorOfficer, matched);
-
-    // Create Draft in Exchange ONLY if no prior replies or approval keywords were detected
-    if (!shouldHoldDraft) {
-      await ewsCreateDraft({
-        subject: `RE: ${subject}`,
-        to: approvalData.from || 'corporate@elitehospital.org',
-        body: draftBody,
-      });
-      console.log(`[Approvals Watcher / EWS] Auto-drafted reply in Exchange Drafts for MRN: ${approvalData.mrn}`);
-    } else {
-      console.log(
-        `[Approvals Watcher / EWS] ⚠️ Reply/Approval note detected (${approvalCheck.snippet || replyCheck.snippet}). Skipping auto-draft. Awaiting manual trigger in UI.`
+      // Resolve contractor & match procedures
+      const { contractorNormalized, priceListYear, contractorOfficer } = await resolveContractor(
+        approvalData.contractorRaw
       );
+      const matched = await matchRequestedProcedures(approvalData.requestedServices, priceListYear);
+      const draftBody = buildDraftReplyText(priceListYear, contractorNormalized, contractorOfficer, matched);
+
+      const existingRecord = recordsByDocId.get(docId);
+      const record: InpatientApprovalRecord = {
+        id: docId,
+        messageId,
+        receivedAt: fullItem.receivedAt ? Timestamp.fromDate(fullItem.receivedAt) : serverTimestamp(),
+        patientName: approvalData.patientName,
+        mrn: activeMrn,
+        diagnosis: approvalData.diagnosis,
+        admissionType: approvalData.admissionType,
+        bed: approvalData.bed,
+        physician: approvalData.physician,
+        contractorRaw: approvalData.contractorRaw,
+        contractorNormalized,
+        priceListYear,
+        contractorOfficer,
+        requestedServices: approvalData.requestedServices,
+        matchedProcedures: matched,
+        status: existingRecord?.status || 'draft_created',
+        draftBody,
+        draftedAt: existingRecord?.draftedAt || null,
+        hasReplies: existingRecord?.hasReplies || false,
+        replySnippet: existingRecord?.replySnippet || '',
+        hasExistingApproval: existingRecord?.hasExistingApproval || false,
+        existingApprovalSnippet: existingRecord?.existingApprovalSnippet || '',
+        manualDraftRequested: false,
+      };
+
+      recordsByDocId.set(docId, record);
+      docIdByMrn.set(activeMrn, docId);
+      console.log(`[Approvals Watcher / EWS] Registered HIS request for MRN: ${activeMrn} (${approvalData.patientName})`);
+    } else {
+      // --- 2. Reply on thread from ANYBODY ---
+      const approvalCheck = detectExistingApproval(cleanBody, subject);
+      const replyCheck = detectReplies({
+        subject,
+        inReplyTo: fullItem.inReplyTo,
+        references: fullItem.references,
+        text: fullText,
+        html: fullHtml,
+      });
+
+      let targetDocId = detectedMrn ? docIdByMrn.get(detectedMrn) : undefined;
+
+      // If root request wasn't seen directly, try parsing from quoted HIS text in the reply
+      if (!targetDocId && detectedMrn) {
+        targetDocId = `mrn_${detectedMrn}`;
+        const decodedHtml = decodeHtmlEntities(fullHtml);
+        const approvalData = parseHisApprovalHtml(decodedHtml, subject, messageId);
+        const { contractorNormalized, priceListYear, contractorOfficer } = await resolveContractor(
+          approvalData.contractorRaw
+        );
+        const matched = await matchRequestedProcedures(approvalData.requestedServices, priceListYear);
+        const draftBody = buildDraftReplyText(priceListYear, contractorNormalized, contractorOfficer, matched);
+
+        recordsByDocId.set(targetDocId, {
+          id: targetDocId,
+          messageId,
+          receivedAt: fullItem.receivedAt ? Timestamp.fromDate(fullItem.receivedAt) : serverTimestamp(),
+          patientName: approvalData.patientName,
+          mrn: detectedMrn,
+          diagnosis: approvalData.diagnosis,
+          admissionType: approvalData.admissionType,
+          bed: approvalData.bed,
+          physician: approvalData.physician,
+          contractorRaw: approvalData.contractorRaw,
+          contractorNormalized,
+          priceListYear,
+          contractorOfficer,
+          requestedServices: approvalData.requestedServices,
+          matchedProcedures: matched,
+          status: 'draft_created',
+          draftBody,
+          draftedAt: null,
+          hasReplies: true,
+          replySnippet: replyCheck.snippet,
+          hasExistingApproval: approvalCheck.hasApproval,
+          existingApprovalSnippet: approvalCheck.snippet,
+          manualDraftRequested: false,
+        });
+        docIdByMrn.set(detectedMrn, targetDocId);
+        console.log(`[Approvals Watcher / EWS] Quoted request extracted for MRN: ${detectedMrn}`);
+      }
+
+      if (targetDocId && recordsByDocId.has(targetDocId)) {
+        const rec = recordsByDocId.get(targetDocId)!;
+        rec.hasReplies = true;
+        if (approvalCheck.hasApproval) {
+          rec.hasExistingApproval = true;
+          rec.existingApprovalSnippet = approvalCheck.snippet;
+          console.log(`[Approvals Watcher / EWS] ✅ Approval reply detected for MRN ${detectedMrn} from ${from}: ${approvalCheck.snippet}`);
+        } else if (replyCheck.snippet && !rec.replySnippet) {
+          rec.replySnippet = replyCheck.snippet;
+        }
+      }
     }
+  }
 
-    // Save to Firestore
-    const docId = crypto.createHash('md5').update(messageId).digest('hex');
-    const docRef = doc(db, 'inpatient_approvals', docId);
+  // Commit all consolidated records to local storage and Firestore
+  console.log(`[Approvals Watcher / EWS] Synchronizing ${recordsByDocId.size} unique approval records to database...`);
 
-    const record: InpatientApprovalRecord = {
-      id: docId,
-      messageId,
-      receivedAt: fullItem.receivedAt ? Timestamp.fromDate(fullItem.receivedAt) : serverTimestamp(),
-      patientName: approvalData.patientName,
-      mrn: approvalData.mrn,
-      diagnosis: approvalData.diagnosis,
-      admissionType: approvalData.admissionType,
-      bed: approvalData.bed,
-      physician: approvalData.physician,
-      contractorRaw: approvalData.contractorRaw,
-      contractorNormalized,
-      priceListYear,
-      contractorOfficer,
-      requestedServices: approvalData.requestedServices,
-      matchedProcedures: matched,
-      status: shouldHoldDraft ? 'pending_manual_draft' : 'draft_created',
-      draftBody,
-      draftedAt: shouldHoldDraft ? null : serverTimestamp(),
-      hasReplies: replyCheck.hasReplies,
-      replySnippet: replyCheck.snippet,
-      hasExistingApproval: approvalCheck.hasApproval,
-      existingApprovalSnippet: approvalCheck.snippet,
-      manualDraftRequested: false,
-    };
+  for (const record of recordsByDocId.values()) {
+    const shouldHoldDraft = record.hasExistingApproval || record.hasReplies;
+    if (shouldHoldDraft && record.status === 'draft_created') {
+      record.status = 'pending_manual_draft';
+    }
 
     // Save locally
     upsertLocalApproval({
       ...record,
-      receivedAt: fullItem.receivedAt ? fullItem.receivedAt.toISOString() : new Date().toISOString(),
-      draftedAt: shouldHoldDraft ? null : new Date().toISOString(),
+      receivedAt: record.receivedAt && (record.receivedAt as any).toDate ? (record.receivedAt as any).toDate().toISOString() : new Date().toISOString(),
+      draftedAt: record.draftedAt && (record.draftedAt as any).toDate ? (record.draftedAt as any).toDate().toISOString() : null,
     });
 
+    // Save to Firestore
     try {
-      await setDoc(docRef, record);
-      console.log(`[Approvals Watcher / EWS] Saved approval record ${docId} to Firestore.`);
-    } catch {
-      // Local copy saved
+      const docRef = doc(db, 'inpatient_approvals', record.id);
+      await setDoc(docRef, record, { merge: true });
+    } catch (fsErr) {
+      console.warn(`[Approvals Watcher / EWS] Firestore write note for ${record.id}:`, fsErr);
     }
   }
+
+  console.log(`[Approvals Watcher / EWS] Sync complete. ${recordsByDocId.size} records live in feed.`);
 }
 
 /**

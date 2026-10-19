@@ -46,14 +46,28 @@ export const ContractorManager: React.FC<ContractorManagerProps> = ({
   const [savedSuccessIds, setSavedSuccessIds] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
-    const unsubscribe = subscribeToCompanyConfigs((data) => {
-      setCompanies(data);
+    if (companies.length === 0 && catalogCompanies.length > 0) {
+      const formatted: CompanyConfigRecord[] = catalogCompanies.map((c) => ({
+        id: c.name.trim().toLowerCase().replace(/[^a-z0-9\u0600-\u06FF]+/g, '_'),
+        name: c.name,
+        aliases: [c.name],
+        priceListYear: c.priceListYear || '2025',
+        contractorOfficer: c.responsiblePerson || 'محمد ابو الوفا',
+        discountPercentage: c.discount || 0,
+      }));
+      setCompanies(formatted);
       setLoading(false);
+    }
+  }, [catalogCompanies, companies.length]);
 
-      // If empty, automatically seed from the existing loaded catalog
-      if (data.length === 0 && catalogCompanies.length > 0) {
+  useEffect(() => {
+    const unsubscribe = subscribeToCompanyConfigs((data) => {
+      if (data && data.length > 0) {
+        setCompanies(data);
+      } else if (catalogCompanies.length > 0) {
         seedInitialCompaniesIfEmpty(catalogCompanies);
       }
+      setLoading(false);
     });
 
     return () => unsubscribe();

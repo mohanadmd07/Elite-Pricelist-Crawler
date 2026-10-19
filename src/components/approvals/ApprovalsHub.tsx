@@ -31,7 +31,7 @@ export const ApprovalsHub: React.FC<ApprovalsHubProps> = ({
   catalogCompanies,
 }) => {
   const [activeTab, setActiveTab] = useState<'feed' | 'contractors'>('feed');
-  const [dateFilter, setDateFilter] = useState<string>('today');
+  const [dateFilter, setDateFilter] = useState<string>('30days');
 
   const [approvals, setApprovals] = useState<InpatientApprovalRecord[]>([]);
   const [loadingApprovals, setLoadingApprovals] = useState(true);

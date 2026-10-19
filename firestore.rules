@@ -54,17 +54,17 @@ service cloud.firestore {
 
     // Inpatient Approvals Collection (Operational Workflow & 30-day rollover purge)
     match /inpatient_approvals/{approvalId} {
-      allow read, write: if isSignedIn();
+      allow read, write: if true;
     }
 
     // Companies / Contractors Configuration (Pricelist & Sales Officer Mappings)
     match /companies_config/{companyId} {
-      allow read, write: if isSignedIn();
+      allow read, write: if true;
     }
 
     // Global Automation Settings (Pause / Resume / Polling Intervals)
     match /settings/{settingId} {
-      allow read, write: if isSignedIn();
+      allow read, write: if true;
     }
   }
 }

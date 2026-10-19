@@ -1,0 +1,1304 @@
+[
+  {
+    "id": "ايثدكو",
+    "name": "ايثدكو",
+    "aliases": [
+      "ايثدكو"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "نادين",
+    "discountPercentage": 25,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "بترول_ابو_قير",
+    "name": "بترول ابو قير",
+    "aliases": [
+      "بترول ابو قير"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "نادين",
+    "discountPercentage": 30,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "جلوب_ميد",
+    "name": "جلوب ميد",
+    "aliases": [
+      "جلوب ميد"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "زياد",
+    "discountPercentage": 40,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "ويبكو",
+    "name": "ويبكو",
+    "aliases": [
+      "ويبكو"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "زياد",
+    "discountPercentage": 20,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "ايبروم",
+    "name": "ايبروم",
+    "aliases": [
+      "ايبروم"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "محمد جابر",
+    "discountPercentage": 30,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "اموك",
+    "name": "اموك",
+    "aliases": [
+      "اموك"
+    ],
+    "priceListYear": "2024",
+    "contractorOfficer": "أحمد حمزة",
+    "discountPercentage": 25,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "العامرية_للبترول",
+    "name": "العامرية للبترول",
+    "aliases": [
+      "العامرية للبترول"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "محمد جابر",
+    "discountPercentage": 25,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "المصرية_الاماراتية",
+    "name": "المصرية الاماراتية",
+    "aliases": [
+      "المصرية الاماراتية"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "ديانا",
+    "discountPercentage": 0,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "جمعية_مصر_الخير",
+    "name": "جمعية مصر الخير",
+    "aliases": [
+      "جمعية مصر الخير"
+    ],
+    "priceListYear": "2024",
+    "contractorOfficer": "محمد ابو الوفا",
+    "discountPercentage": 30,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "خالدة_للبترول",
+    "name": "خالدة للبترول",
+    "aliases": [
+      "خالدة للبترول"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "محمد ابو الوفا",
+    "discountPercentage": 25,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "البنك_المركزى",
+    "name": "البنك المركزى",
+    "aliases": [
+      "البنك المركزى"
+    ],
+    "priceListYear": "2024",
+    "contractorOfficer": "محمد ابو الوفا",
+    "discountPercentage": 20,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "عجيبة_للبترول",
+    "name": "عجيبة للبترول",
+    "aliases": [
+      "عجيبة للبترول"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "نادين",
+    "discountPercentage": 30,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "التعاون_للبترول",
+    "name": "التعاون للبترول",
+    "aliases": [
+      "التعاون للبترول"
+    ],
+    "priceListYear": "2024",
+    "contractorOfficer": "محمد ابو الوفا",
+    "discountPercentage": 25,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "جابكو",
+    "name": "جابكو",
+    "aliases": [
+      "جابكو"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "محمد جابر",
+    "discountPercentage": 20,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "العامة_للبترول",
+    "name": "العامة للبترول",
+    "aliases": [
+      "العامة للبترول"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "محمد ابو الوفا",
+    "discountPercentage": 35,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "سيدبك",
+    "name": "سيدبك",
+    "aliases": [
+      "سيدبك"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "نادين",
+    "discountPercentage": 35,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "انابيب_البترول",
+    "name": "انابيب البترول",
+    "aliases": [
+      "انابيب البترول"
+    ],
+    "priceListYear": "2024",
+    "contractorOfficer": "محمد جابر",
+    "discountPercentage": 25,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "عز_للحديد_والصلب",
+    "name": "عز للحديد والصلب",
+    "aliases": [
+      "عز للحديد والصلب"
+    ],
+    "priceListYear": "2023",
+    "contractorOfficer": "محمد ابو الوفا",
+    "discountPercentage": 35,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "تكنولوجيا_الاخشاب",
+    "name": "تكنولوجيا الاخشاب",
+    "aliases": [
+      "تكنولوجيا الاخشاب"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "نادين",
+    "discountPercentage": 20,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "انربك",
+    "name": "انربك",
+    "aliases": [
+      "انربك"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "أحمد حمزة",
+    "discountPercentage": 30,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "البتروكيماويات_المصرية",
+    "name": "البتروكيماويات المصرية",
+    "aliases": [
+      "البتروكيماويات المصرية"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "محمد جابر",
+    "discountPercentage": 35,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "جنوب_الضبعة_للبترول",
+    "name": "جنوب الضبعة للبترول",
+    "aliases": [
+      "جنوب الضبعة للبترول"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "نادين",
+    "discountPercentage": 15,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "ميد_مارك",
+    "name": "ميد مارك",
+    "aliases": [
+      "ميد مارك"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "ديانا",
+    "discountPercentage": 25,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "الجهاز_المركزى_للمحاسبات",
+    "name": "الجهاز المركزى للمحاسبات",
+    "aliases": [
+      "الجهاز المركزى للمحاسبات"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "محمد جابر",
+    "discountPercentage": 20,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "ابو_قير_للاسمدة",
+    "name": "ابو قير للاسمدة",
+    "aliases": [
+      "ابو قير للاسمدة"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "نادين",
+    "discountPercentage": 35,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "سوكو",
+    "name": "سوكو",
+    "aliases": [
+      "سوكو"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "محمد ابو الوفا",
+    "discountPercentage": 20,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "غاز_تك",
+    "name": "غاز تك",
+    "aliases": [
+      "غاز تك"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "محمد جابر",
+    "discountPercentage": 30,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "انبى",
+    "name": "انبى",
+    "aliases": [
+      "انبى"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "نادين",
+    "discountPercentage": 20,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "جنوب_الوادى_للبترول",
+    "name": "جنوب الوادى للبترول",
+    "aliases": [
+      "جنوب الوادى للبترول"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "نادين",
+    "discountPercentage": 15,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "بدر_الدين_للبترول",
+    "name": "بدر الدين للبترول",
+    "aliases": [
+      "بدر الدين للبترول"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "محمد ابو الوفا",
+    "discountPercentage": 20,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "ميد_نت",
+    "name": "ميد نت",
+    "aliases": [
+      "ميد نت"
+    ],
+    "priceListYear": "2023",
+    "contractorOfficer": "ديانا",
+    "discountPercentage": 20,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "ميدور",
+    "name": "ميدور",
+    "aliases": [
+      "ميدور"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "محمد جابر",
+    "discountPercentage": 25,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "qnb",
+    "name": "QNB",
+    "aliases": [
+      "QNB"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "أحمد حمزة",
+    "discountPercentage": 0,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "نقابة_المهن_الزراعية",
+    "name": "نقابة المهن الزراعية",
+    "aliases": [
+      "نقابة المهن الزراعية"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "محمد ابو الوفا",
+    "discountPercentage": 20,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "بتروفرح",
+    "name": "بتروفرح",
+    "aliases": [
+      "بتروفرح"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "نادين",
+    "discountPercentage": 15,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "شمال_سيناء_للبترول",
+    "name": "شمال سيناء للبترول",
+    "aliases": [
+      "شمال سيناء للبترول"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "أحمد حمزة",
+    "discountPercentage": 15,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "هيئة_قناة_السويس",
+    "name": "هيئة قناة السويس",
+    "aliases": [
+      "هيئة قناة السويس"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "أحمد حمزة",
+    "discountPercentage": 25,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "مصر_للطيران",
+    "name": "مصر للطيران",
+    "aliases": [
+      "مصر للطيران"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "محمد ابو الوفا",
+    "discountPercentage": 25,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "يونى_كير",
+    "name": "يونى كير",
+    "aliases": [
+      "يونى كير"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "محمد ابو الوفا",
+    "discountPercentage": 35,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "يونى_ميد",
+    "name": "يونى ميد",
+    "aliases": [
+      "يونى ميد"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "محمد ابو الوفا",
+    "discountPercentage": 18,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "بنك_فيصل",
+    "name": "بنك فيصل",
+    "aliases": [
+      "بنك فيصل"
+    ],
+    "priceListYear": "2024",
+    "contractorOfficer": "نادين",
+    "discountPercentage": 20,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "اكسون",
+    "name": "اكسون",
+    "aliases": [
+      "اكسون"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "أحمد حمزة",
+    "discountPercentage": 25,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "هيئة_الرقابة_الادارية",
+    "name": "هيئة الرقابة الادارية",
+    "aliases": [
+      "هيئة الرقابة الادارية"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "زياد",
+    "discountPercentage": 30,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "جاسكو",
+    "name": "جاسكو",
+    "aliases": [
+      "جاسكو"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "زياد",
+    "discountPercentage": 42,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "اوميجا_كير",
+    "name": "اوميجا كير",
+    "aliases": [
+      "اوميجا كير"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "زياد",
+    "discountPercentage": 30,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "بترولوج_pls",
+    "name": "بترولوج PLS",
+    "aliases": [
+      "بترولوج PLS"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "محمد جابر",
+    "discountPercentage": 20,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "مياه_شرب_مطروح",
+    "name": "مياه شرب مطروح",
+    "aliases": [
+      "مياه شرب مطروح"
+    ],
+    "priceListYear": "2024",
+    "contractorOfficer": "ديانا",
+    "discountPercentage": 15,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "لايف_هيلث_كير",
+    "name": "لايف هيلث كير",
+    "aliases": [
+      "لايف هيلث كير"
+    ],
+    "priceListYear": "2024",
+    "contractorOfficer": "نادين",
+    "discountPercentage": 0,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "كير_بلاس",
+    "name": "كير بلاس",
+    "aliases": [
+      "كير بلاس"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "ديانا",
+    "discountPercentage": 25,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "جامعة_دمنهور",
+    "name": "جامعة دمنهور",
+    "aliases": [
+      "جامعة دمنهور"
+    ],
+    "priceListYear": "2024",
+    "contractorOfficer": "محمد ابو الوفا",
+    "discountPercentage": 15,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "مجلس_النواب",
+    "name": "مجلس النواب",
+    "aliases": [
+      "مجلس النواب"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "ديانا",
+    "discountPercentage": 30,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "صاان_مصر",
+    "name": "صاان مصر",
+    "aliases": [
+      "صاان مصر"
+    ],
+    "priceListYear": "2024",
+    "contractorOfficer": "محمد ابو الوفا",
+    "discountPercentage": 25,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "بتروتريد",
+    "name": "بتروتريد",
+    "aliases": [
+      "بتروتريد"
+    ],
+    "priceListYear": "2024",
+    "contractorOfficer": "محمد جابر",
+    "discountPercentage": 20,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "بترول_بلاعيم",
+    "name": "بترول بلاعيم",
+    "aliases": [
+      "بترول بلاعيم"
+    ],
+    "priceListYear": "2024",
+    "contractorOfficer": "نادين",
+    "discountPercentage": 15,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "ميدرايت",
+    "name": "ميدرايت",
+    "aliases": [
+      "ميدرايت"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "نادين",
+    "discountPercentage": 40,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "بترو_امير",
+    "name": "بترو امير",
+    "aliases": [
+      "بترو امير"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "نادين",
+    "discountPercentage": 20,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "المحكمة_الدستورية",
+    "name": "المحكمة الدستورية",
+    "aliases": [
+      "المحكمة الدستورية"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "محمد ابو الوفا",
+    "discountPercentage": 15,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "موبكو",
+    "name": "موبكو",
+    "aliases": [
+      "موبكو"
+    ],
+    "priceListYear": "2023",
+    "contractorOfficer": "أحمد حمزة",
+    "discountPercentage": 25,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "gig",
+    "name": "GIG",
+    "aliases": [
+      "GIG"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "زياد",
+    "discountPercentage": 0,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "بتروجلف",
+    "name": "بتروجلف",
+    "aliases": [
+      "بتروجلف"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "محمد ابو الوفا",
+    "discountPercentage": 25,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "المهندس_للتأمين",
+    "name": "المهندس للتأمين",
+    "aliases": [
+      "المهندس للتأمين"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "محمد ابو الوفا",
+    "discountPercentage": 0,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "خدمات_البترول_البحرية",
+    "name": "خدمات البترول البحرية",
+    "aliases": [
+      "خدمات البترول البحرية"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "محمد جابر",
+    "discountPercentage": 25,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "جامعه_السادات",
+    "name": "جامعه السادات",
+    "aliases": [
+      "جامعه السادات"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "محمد ابو الوفا",
+    "discountPercentage": 20,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "اسبك",
+    "name": "اسبك",
+    "aliases": [
+      "اسبك"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "أحمد حمزة",
+    "discountPercentage": 25,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "اكبا",
+    "name": "اكبا",
+    "aliases": [
+      "اكبا"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "محمد جابر",
+    "discountPercentage": 20,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "المصرية_لانتاج_البروبلين",
+    "name": "المصرية لانتاج البروبلين",
+    "aliases": [
+      "المصرية لانتاج البروبلين"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "زياد",
+    "discountPercentage": 20,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "وادى_النيل",
+    "name": "وادى النيل",
+    "aliases": [
+      "وادى النيل"
+    ],
+    "priceListYear": "2024",
+    "contractorOfficer": "أحمد حمزة",
+    "discountPercentage": 25,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "سوميد",
+    "name": "سوميد",
+    "aliases": [
+      "سوميد"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "محمد ابو الوفا",
+    "discountPercentage": 30,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "نيكست_كير",
+    "name": "نيكست كير",
+    "aliases": [
+      "نيكست كير"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "أحمد حمزة",
+    "discountPercentage": 40,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "بترومنت",
+    "name": "بترومنت",
+    "aliases": [
+      "بترومنت"
+    ],
+    "priceListYear": "2024",
+    "contractorOfficer": "زياد",
+    "discountPercentage": 20,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "اسكندرية_للبترول",
+    "name": "اسكندرية للبترول",
+    "aliases": [
+      "اسكندرية للبترول"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "محمد جابر",
+    "discountPercentage": 35,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "الحمراويل",
+    "name": "الحمراويل",
+    "aliases": [
+      "الحمراويل"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "نادين",
+    "discountPercentage": 30,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "ايلاب",
+    "name": "ايلاب",
+    "aliases": [
+      "ايلاب"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "ديانا",
+    "discountPercentage": 20,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "نقابة_المهندسين",
+    "name": "نقابة المهندسين",
+    "aliases": [
+      "نقابة المهندسين"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "ديانا",
+    "discountPercentage": 30,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "يونايد",
+    "name": "يونايد",
+    "aliases": [
+      "يونايد"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "محمد جابر",
+    "discountPercentage": 30,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "دريم_مشرق",
+    "name": "دريم مشرق",
+    "aliases": [
+      "دريم مشرق"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "محمد جابر",
+    "discountPercentage": 30,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "مشرق_لتنمية_الاعمال",
+    "name": "مشرق لتنمية الاعمال",
+    "aliases": [
+      "مشرق لتنمية الاعمال"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "محمد جابر",
+    "discountPercentage": 30,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "مرسيدس",
+    "name": "مرسيدس",
+    "aliases": [
+      "مرسيدس"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "محمد ابو الوفا",
+    "discountPercentage": 20,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "وزراة_العدل",
+    "name": "وزراة العدل",
+    "aliases": [
+      "وزراة العدل"
+    ],
+    "priceListYear": "2024",
+    "contractorOfficer": "ديانا",
+    "discountPercentage": 35,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "قناة_السويس_للتامين",
+    "name": "قناة السويس للتامين",
+    "aliases": [
+      "قناة السويس للتامين"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "محمد جابر",
+    "discountPercentage": 25,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "صحة_وان",
+    "name": "صحة وان",
+    "aliases": [
+      "صحة وان"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "محمد جابر",
+    "discountPercentage": 30,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "مصر_هيلث_كير",
+    "name": "مصر هيلث كير",
+    "aliases": [
+      "مصر هيلث كير"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "ديانا",
+    "discountPercentage": 25,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "اكسا",
+    "name": "اكسا",
+    "aliases": [
+      "اكسا"
+    ],
+    "priceListYear": "متوقف",
+    "contractorOfficer": "محمد جابر",
+    "discountPercentage": 20,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "منصور_جروب",
+    "name": "منصور جروب",
+    "aliases": [
+      "منصور جروب"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "محمد ابو الوفا",
+    "discountPercentage": 10,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "الماسية_dms",
+    "name": "الماسية DMS",
+    "aliases": [
+      "الماسية DMS"
+    ],
+    "priceListYear": "2024",
+    "contractorOfficer": "أحمد حمزة",
+    "discountPercentage": 25,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "عناية_مصر",
+    "name": "عناية مصر",
+    "aliases": [
+      "عناية مصر"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "زياد",
+    "discountPercentage": 42,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "فاركو_للادوية",
+    "name": "فاركو للادوية",
+    "aliases": [
+      "فاركو للادوية"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "زياد",
+    "discountPercentage": 30,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "نايل_سات",
+    "name": "نايل سات",
+    "aliases": [
+      "نايل سات"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "أحمد حمزة",
+    "discountPercentage": 25,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "بتروسنان",
+    "name": "بتروسنان",
+    "aliases": [
+      "بتروسنان"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "زياد",
+    "discountPercentage": 20,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "مياة_شرب_الاسكندرية",
+    "name": "مياة شرب الاسكندرية",
+    "aliases": [
+      "مياة شرب الاسكندرية"
+    ],
+    "priceListYear": "2024",
+    "contractorOfficer": "زياد",
+    "discountPercentage": 25,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "سولنتيك",
+    "name": "سولنتيك",
+    "aliases": [
+      "سولنتيك"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "محمد ابو الوفا",
+    "discountPercentage": 20,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "ميتلايف_اليكو",
+    "name": "ميتلايف اليكو",
+    "aliases": [
+      "ميتلايف اليكو"
+    ],
+    "priceListYear": "2023",
+    "contractorOfficer": "زياد",
+    "discountPercentage": 35,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  },
+  {
+    "id": "ايجى_كير",
+    "name": "ايجى كير",
+    "aliases": [
+      "ايجى كير"
+    ],
+    "priceListYear": "2024",
+    "contractorOfficer": "زياد",
+    "discountPercentage": 0,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "seed_script"
+  }
+]

@@ -1,0 +1,655 @@
+[
+  {
+    "id": "mrn_0000063963",
+    "messageId": "&lt;e0e57143-f83c-4df3-b31e-3b20ddc6c3ff@Elite-Exchange.elitehospital.org&gt;",
+    "receivedAt": "2026-10-19T19:38:01.000Z",
+    "patientName": "محمد حمدي محمد عبد الحميد",
+    "mrn": "0000063963",
+    "diagnosis": "Clinical Inpatient Evaluation",
+    "admissionType": "Inpatient",
+    "bed": "Inpatient Bed",
+    "physician": "Hospital Staff",
+    "contractorRaw": "شركة صحة وان",
+    "contractorNormalized": "صحة وان",
+    "priceListYear": "2025",
+    "contractorOfficer": "محمد جابر",
+    "requestedServices": [],
+    "matchedProcedures": [],
+    "status": "pending_manual_draft",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: صحة وان\nالمسئول من قسم السيلز: محمد جابر\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n(برجاء المتابعة والتأكيد مع إدارة التعاقدات: corporate@elitehospital.org)",
+    "draftedAt": null,
+    "hasReplies": true,
+    "replySnippet": "Thread has prior conversation/replies",
+    "hasExistingApproval": false,
+    "existingApprovalSnippet": "",
+    "manualDraftRequested": false
+  },
+  {
+    "id": "mrn_0000026741",
+    "messageId": "&lt;4bba5a1c-a663-47e3-b063-7075f65bc599@Elite-Exchange.elitehospital.org&gt;",
+    "receivedAt": "2026-10-19T19:19:04.000Z",
+    "patientName": "حسام الدين محمد حسانين المسيري",
+    "mrn": "0000026741",
+    "diagnosis": "T84.51-Infection and inflammatory reaction due to",
+    "admissionType": "Inpatient",
+    "bed": "Bed 316 - Zone A",
+    "physician": "Abdullah Hammad",
+    "contractorRaw": "Main العامرية لتكرير البترول",
+    "contractorNormalized": "Main العامرية لتكرير البترول",
+    "priceListYear": "2025",
+    "contractorOfficer": "غير محدد (يتطلب تحديد منسق السيلز)",
+    "requestedServices": [
+      {
+        "name": "يعاني المريض من سقوط بالقدم و يحتاج الي دعامة للقدم و الكاحل بإسم ankle foot orthosis",
+        "rawPrice": 0
+      }
+    ],
+    "matchedProcedures": [
+      {
+        "serviceName": "يعاني المريض من سقوط بالقدم و يحتاج الي دعامة للقدم و الكاحل بإسم ankle foot orthosis",
+        "matchedName": "يعاني المريض من سقوط بالقدم و يحتاج الي دعامة للقدم و الكاحل بإسم ankle foot orthosis",
+        "status": "unmatched"
+      }
+    ],
+    "status": "draft_created",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: Main العامرية لتكرير البترول\nالمسئول من قسم السيلز: غير محدد (يتطلب تحديد منسق السيلز)\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️ تنبيه: لم يتم العثور على الإجراءات التالية في لائحة التعاقد وتتطلب تسعير خاص من مسئول التعاقد:\n - يعاني المريض من سقوط بالقدم و يحتاج الي دعامة للقدم و الكاحل بإسم ankle foot orthosis]\n\n(برجاء المتابعة والتأكيد مع إدارة التعاقدات: corporate@elitehospital.org)",
+    "draftedAt": null,
+    "hasReplies": false,
+    "replySnippet": "",
+    "hasExistingApproval": false,
+    "existingApprovalSnippet": "",
+    "manualDraftRequested": false
+  },
+  {
+    "id": "mrn_0000255431",
+    "messageId": "&lt;ea655481-d4a9-4f76-a723-797b65fe26a1@Elite-Exchange.elitehospital.org&gt;",
+    "receivedAt": "2026-10-19T17:54:09.000Z",
+    "patientName": "محمد قباري محمد احمد",
+    "mrn": "0000255431",
+    "diagnosis": "C71-Malignant neoplasm of brain",
+    "admissionType": "Inpatient",
+    "bed": "Bed 321 - Zone B",
+    "physician": "Hany sameer",
+    "contractorRaw": "شركة أنربك",
+    "contractorNormalized": "انربك",
+    "priceListYear": "2025",
+    "contractorOfficer": "أحمد حمزة",
+    "requestedServices": [
+      {
+        "name": "المريض يعاني من ورم خبيث بالمخ و بحاجة لاجراء جراحة عاجلة لاستئصال الورم بالميكروسكوب الجراحي و بحاجة للبقاء في المستشفى لحين الشفاء",
+        "rawPrice": 0
+      }
+    ],
+    "matchedProcedures": [
+      {
+        "serviceName": "المريض يعاني من ورم خبيث بالمخ و بحاجة لاجراء جراحة عاجلة لاستئصال الورم بالميكروسكوب الجراحي و بحاجة للبقاء في المستشفى لحين الشفاء",
+        "matchedName": "المريض يعاني من ورم خبيث بالمخ و بحاجة لاجراء جراحة عاجلة لاستئصال الورم بالميكروسكوب الجراحي و بحاجة للبقاء في المستشفى لحين الشفاء",
+        "status": "unmatched"
+      }
+    ],
+    "status": "pending_manual_draft",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: انربك\nالمسئول من قسم السيلز: أحمد حمزة\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️ تنبيه: لم يتم العثور على الإجراءات التالية في لائحة التعاقد وتتطلب تسعير خاص من مسئول التعاقد:\n - المريض يعاني من ورم خبيث بالمخ و بحاجة لاجراء جراحة عاجلة لاستئصال الورم بالميكروسكوب الجراحي و بحاجة للبقاء في المستشفى لحين الشفاء]\n\n(برجاء المتابعة والتأكيد مع إدارة التعاقدات: corporate@elitehospital.org)",
+    "draftedAt": null,
+    "hasReplies": true,
+    "replySnippet": "Thread has prior conversation/replies",
+    "hasExistingApproval": false,
+    "existingApprovalSnippet": "",
+    "manualDraftRequested": false
+  },
+  {
+    "id": "mrn_0000017506",
+    "messageId": "&lt;d625d23d-e3ae-4c98-afac-a42b77703199@Elite-Exchange.elitehospital.org&gt;",
+    "receivedAt": "2026-10-19T17:12:56.000Z",
+    "patientName": "صالح محمد امحمد الفلقي",
+    "mrn": "0000017506",
+    "diagnosis": "A41.9-Sepsis, unspecified organism, A41-Other sepsis",
+    "admissionType": "Inpatient",
+    "bed": "Bed 323 - Zone B",
+    "physician": "Mohamed Abdelaleem Mohamed Abdelaalem",
+    "contractorRaw": "عقد الرياض El Rayad",
+    "contractorNormalized": "عقد الرياض El Rayad",
+    "priceListYear": "2025",
+    "contractorOfficer": "غير محدد (يتطلب تحديد منسق السيلز)",
+    "requestedServices": [
+      {
+        "name": "Blood Culture - Aerobic - Investigation",
+        "rawPrice": 1000
+      }
+    ],
+    "matchedProcedures": [
+      {
+        "serviceName": "Blood Culture - Aerobic - Investigation",
+        "matchedName": "Blood Culture - Aerobic",
+        "status": "matched"
+      }
+    ],
+    "status": "pending_manual_draft",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: عقد الرياض El Rayad\nالمسئول من قسم السيلز: غير محدد (يتطلب تحديد منسق السيلز)\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\n1- Blood Culture - Aerobic\n\n(برجاء المتابعة والتأكيد مع إدارة التعاقدات: corporate@elitehospital.org)",
+    "draftedAt": null,
+    "hasReplies": true,
+    "replySnippet": "\"00 TOTAL AMOUNT: 1000\"",
+    "hasExistingApproval": true,
+    "existingApprovalSnippet": "...الفلقي (MRN: 0000017506) Approved Kind Regards, Ibrahim Samir International Marketing Senior E-Mail: ibrahim.sami...",
+    "manualDraftRequested": false
+  },
+  {
+    "id": "mrn_0000060854",
+    "messageId": "&lt;b539f3d7-d83d-449e-ac81-f48833a23a46@Elite-Exchange.elitehospital.org&gt;",
+    "receivedAt": "2026-10-19T17:05:05.000Z",
+    "patientName": "فوزيه سليمان محمد طاهر",
+    "mrn": "0000060854",
+    "diagnosis": "C67-Malignant neoplasm of bladder",
+    "admissionType": "Inpatient",
+    "bed": "Bed 303 - Zone A",
+    "physician": "AbdelMagid Sabry AbdelMagid Badr",
+    "contractorRaw": "Hussem Medical",
+    "contractorNormalized": "Hussem Medical",
+    "priceListYear": "2025",
+    "contractorOfficer": "غير محدد (يتطلب تحديد منسق السيلز)",
+    "requestedServices": [
+      {
+        "name": "الحاله تعاني من ورم غير حميد بالمثانه البوليه منتشر بالعظام وتتلقي علاج كيميائى وادويه سيوله ةتعاني من المشديد بالاذن وطنين بالاذن\n\nوتم عرض الحاله علي استشارى الانف والاذن وتم طلب رسم سمع وظغط اذن \nلتقييم الحاله",
+        "rawPrice": 0
+      }
+    ],
+    "matchedProcedures": [
+      {
+        "serviceName": "الحاله تعاني من ورم غير حميد بالمثانه البوليه منتشر بالعظام وتتلقي علاج كيميائى وادويه سيوله ةتعاني من المشديد بالاذن وطنين بالاذن\n\nوتم عرض الحاله علي استشارى الانف والاذن وتم طلب رسم سمع وظغط اذن \nلتقييم الحاله",
+        "matchedName": "الحاله تعاني من ورم غير حميد بالمثانه البوليه منتشر بالعظام وتتلقي علاج كيميائى وادويه سيوله ةتعاني من المشديد بالاذن وطنين بالاذن\n\nوتم عرض الحاله علي استشارى الانف والاذن وتم طلب رسم سمع وظغط اذن \nلتقييم الحاله",
+        "status": "unmatched"
+      }
+    ],
+    "status": "pending_manual_draft",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: Hussem Medical\nالمسئول من قسم السيلز: غير محدد (يتطلب تحديد منسق السيلز)\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️ تنبيه: لم يتم العثور على الإجراءات التالية في لائحة التعاقد وتتطلب تسعير خاص من مسئول التعاقد:\n - الحاله تعاني من ورم غير حميد بالمثانه البوليه منتشر بالعظام وتتلقي علاج كيميائى وادويه سيوله ةتعاني من المشديد بالاذن وطنين بالاذن\n\nوتم عرض الحاله علي استشارى الانف والاذن وتم طلب رسم سمع وظغط اذن \nلتقييم الحاله]\n\n(برجاء المتابعة والتأكيد مع إدارة التعاقدات: corporate@elitehospital.org)",
+    "draftedAt": null,
+    "hasReplies": true,
+    "replySnippet": "Thread has prior conversation/replies",
+    "hasExistingApproval": true,
+    "existingApprovalSnippet": "...د طاهر (MRN: 0000060854) Approved Kind Regards, Ibrahim Samir International Marketing Senior E-Mail: ibrahim.sami...",
+    "manualDraftRequested": false
+  },
+  {
+    "id": "mrn_0000267870",
+    "messageId": "&lt;PAXP193MB150261A50195237EE7EF6426F1982@PAXP193MB1502.EURP193.PROD.OUTLOOK.COM&gt;",
+    "receivedAt": "2026-10-19T20:12:19.416Z",
+    "patientName": "ماجد محمد عبده رضوان",
+    "mrn": "0000267870",
+    "diagnosis": "I48.0-Paroxysmal atrial fibrillation, I10-Essential (primary) hypertension, E11-Type 2 diabetes mellitus",
+    "admissionType": "Outpatient",
+    "bed": "Bed 1 - CCU",
+    "physician": "Mahmoud Shehata",
+    "contractorRaw": "Contractor",
+    "contractorNormalized": "Contractor",
+    "priceListYear": "2025",
+    "contractorOfficer": "غير محدد (يتطلب تحديد منسق السيلز)",
+    "requestedServices": [
+      {
+        "name": "Transesophageal Echocardiography",
+        "rawPrice": 6000
+      }
+    ],
+    "matchedProcedures": [
+      {
+        "serviceName": "Transesophageal Echocardiography",
+        "matchedName": "Transesophageal Echocardiography",
+        "status": "unmatched"
+      }
+    ],
+    "status": "pending_manual_draft",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: Contractor\nالمسئول من قسم السيلز: غير محدد (يتطلب تحديد منسق السيلز)\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️ تنبيه: لم يتم العثور على الإجراءات التالية في لائحة التعاقد وتتطلب تسعير خاص من مسئول التعاقد:\n - Transesophageal Echocardiography]\n\n(برجاء المتابعة والتأكيد مع إدارة التعاقدات: corporate@elitehospital.org)",
+    "draftedAt": null,
+    "hasReplies": true,
+    "replySnippet": "\"برجاء العلم أن د\"",
+    "hasExistingApproval": true,
+    "existingApprovalSnippet": "...رضوان (MRN: 0000267870) موافقه سعريه بمبلغ 9600 ج لايطبق خصم التعاقد @Ziad Khaled Mohamed Fekry Patient Accountant S...",
+    "manualDraftRequested": false
+  },
+  {
+    "id": "mrn_0000090899",
+    "messageId": "&lt;0c55c169-50ad-4b79-8c0c-c3a21486edc5@Elite-Exchange.elitehospital.org&gt;",
+    "receivedAt": "2026-10-19T14:46:36.000Z",
+    "patientName": "محمد عمرو انور احمد",
+    "mrn": "0000090899",
+    "diagnosis": "C40.32-Malignant neoplasm of short bones of left l",
+    "admissionType": "Inpatient",
+    "bed": "Bed 2 - PICU",
+    "physician": "Ahmed Naeem",
+    "contractorRaw": "سيدى كرير للبتروكيماويات ( سيدبك )",
+    "contractorNormalized": "سيدبك",
+    "priceListYear": "2025",
+    "contractorOfficer": "نادين",
+    "requestedServices": [
+      {
+        "name": "طفل يعانى من ورم ثانويات بالمخ ادى الى ضعف عام فى الجزء الايسر من الجسم و تم عمل تدخل جراحى من قبل استشارى المخ والاعصاب ويحتاج الى عمل اشعة رنين على المخ بالصبغه متابعة بعد استئصال الورم\n\nMRI BRAIN WITH CONTRAST",
+        "rawPrice": 0
+      }
+    ],
+    "matchedProcedures": [
+      {
+        "serviceName": "طفل يعانى من ورم ثانويات بالمخ ادى الى ضعف عام فى الجزء الايسر من الجسم و تم عمل تدخل جراحى من قبل استشارى المخ والاعصاب ويحتاج الى عمل اشعة رنين على المخ بالصبغه متابعة بعد استئصال الورم\n\nMRI BRAIN WITH CONTRAST",
+        "matchedName": "طفل يعانى من ورم ثانويات بالمخ ادى الى ضعف عام فى الجزء الايسر من الجسم و تم عمل تدخل جراحى من قبل استشارى المخ والاعصاب ويحتاج الى عمل اشعة رنين على المخ بالصبغه متابعة بعد استئصال الورم\n\nMRI BRAIN WITH CONTRAST",
+        "status": "unmatched"
+      }
+    ],
+    "status": "pending_manual_draft",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: سيدبك\nالمسئول من قسم السيلز: نادين\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️ تنبيه: لم يتم العثور على الإجراءات التالية في لائحة التعاقد وتتطلب تسعير خاص من مسئول التعاقد:\n - طفل يعانى من ورم ثانويات بالمخ ادى الى ضعف عام فى الجزء الايسر من الجسم و تم عمل تدخل جراحى من قبل استشارى المخ والاعصاب ويحتاج الى عمل اشعة رنين على المخ بالصبغه متابعة بعد استئصال الورم\n\nMRI BRAIN WITH CONTRAST]\n\n(برجاء المتابعة والتأكيد مع إدارة التعاقدات: corporate@elitehospital.org)",
+    "draftedAt": null,
+    "hasReplies": true,
+    "replySnippet": "\"32-Malignant neoplasm of short bones of left l Request Details طفل يعانى من ورم ثانويات بالمخ ادى الى ضعف عام فى الجزء ا\"",
+    "hasExistingApproval": false,
+    "existingApprovalSnippet": "",
+    "manualDraftRequested": false
+  },
+  {
+    "id": "mrn_0000195587",
+    "messageId": "&lt;a9e9c75c-3614-4eb4-b015-a00cbf7f9099@Elite-Exchange.elitehospital.org&gt;",
+    "receivedAt": "2026-10-19T11:21:02.000Z",
+    "patientName": "كريم محمد احمد عبدالرحمن",
+    "mrn": "0000195587",
+    "diagnosis": "C43-Malignant melanoma of skin",
+    "admissionType": "Inpatient",
+    "bed": "Bed 319 - Zone A",
+    "physician": "Hesham Ahmed Gaballah Elghazaly",
+    "contractorRaw": "مصر للطيران للخطوط الجوية بالاسكندرية",
+    "contractorNormalized": "مصر للطيران",
+    "priceListYear": "2025",
+    "contractorOfficer": "محمد ابو الوفا",
+    "requestedServices": [
+      {
+        "name": "الحاله تعاني من ورم غير حميد بالجلد منتشر بالمخ والكبد وتم حجز الحاله لتلقي جرعه علاج كيميائي وعند الكشف علي الحاله تبين وجود سخونيه وصداع شديد\nوترجيع ودوخه وعد اتزان والالام بالعظام وتحتاج الحاله لمد الاقامه لتلقي العلاجات الازمه وعمل التحاليل والفحوصات الازمه",
+        "rawPrice": 0
+      }
+    ],
+    "matchedProcedures": [
+      {
+        "serviceName": "الحاله تعاني من ورم غير حميد بالجلد منتشر بالمخ والكبد وتم حجز الحاله لتلقي جرعه علاج كيميائي وعند الكشف علي الحاله تبين وجود سخونيه وصداع شديد\nوترجيع ودوخه وعد اتزان والالام بالعظام وتحتاج الحاله لمد الاقامه لتلقي العلاجات الازمه وعمل التحاليل والفحوصات الازمه",
+        "matchedName": "الحاله تعاني من ورم غير حميد بالجلد منتشر بالمخ والكبد وتم حجز الحاله لتلقي جرعه علاج كيميائي وعند الكشف علي الحاله تبين وجود سخونيه وصداع شديد\nوترجيع ودوخه وعد اتزان والالام بالعظام وتحتاج الحاله لمد الاقامه لتلقي العلاجات الازمه وعمل التحاليل والفحوصات الازمه",
+        "status": "unmatched"
+      }
+    ],
+    "status": "pending_manual_draft",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: مصر للطيران\nالمسئول من قسم السيلز: محمد ابو الوفا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️ تنبيه: لم يتم العثور على الإجراءات التالية في لائحة التعاقد وتتطلب تسعير خاص من مسئول التعاقد:\n - الحاله تعاني من ورم غير حميد بالجلد منتشر بالمخ والكبد وتم حجز الحاله لتلقي جرعه علاج كيميائي وعند الكشف علي الحاله تبين وجود سخونيه وصداع شديد\nوترجيع ودوخه وعد اتزان والالام بالعظام وتحتاج الحاله لمد الاقامه لتلقي العلاجات الازمه وعمل التحاليل والفحوصات الازمه]\n\n(برجاء المتابعة والتأكيد مع إدارة التعاقدات: corporate@elitehospital.org)",
+    "draftedAt": null,
+    "hasReplies": true,
+    "replySnippet": "Thread has prior conversation/replies",
+    "hasExistingApproval": true,
+    "existingApprovalSnippet": "...الرحمن (MRN: 0000195587) لا مانع Get Outlook for iOS From: Approvals Sent: Monday, 19 October 2026 14:22:21 To:...",
+    "manualDraftRequested": false
+  },
+  {
+    "id": "mrn_0000054665",
+    "messageId": "&lt;4cd291ed-4569-4b0c-98cb-561a54826268@Elite-Exchange.elitehospital.org&gt;",
+    "receivedAt": "2026-10-19T11:16:33.000Z",
+    "patientName": "محمد علي محمد احمد",
+    "mrn": "0000054665",
+    "diagnosis": "N17.9-Acute kidney failure, unspecified, N39.0-Urinary tract infection, site not specified",
+    "admissionType": "Inpatient",
+    "bed": "Bed 2 - ICU",
+    "physician": "Hany sameer",
+    "contractorRaw": "Next Care نكست كير",
+    "contractorNormalized": "Next Care نكست كير",
+    "priceListYear": "2025",
+    "contractorOfficer": "غير محدد (يتطلب تحديد منسق السيلز)",
+    "requestedServices": [
+      {
+        "name": "Image guided PCN (Single)",
+        "rawPrice": 21000
+      }
+    ],
+    "matchedProcedures": [
+      {
+        "serviceName": "Image guided PCN (Single)",
+        "matchedName": "تركيب أنبوبة تصريف الكلى عن طريق الجلد جانبين (Image Guided PCN (single))",
+        "status": "matched"
+      }
+    ],
+    "status": "pending_manual_draft",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: Next Care نكست كير\nالمسئول من قسم السيلز: غير محدد (يتطلب تحديد منسق السيلز)\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\n1- تركيب أنبوبة تصريف الكلى عن طريق الجلد جانبين (Image Guided PCN (single))\n\n(برجاء المتابعة والتأكيد مع إدارة التعاقدات: corporate@elitehospital.org)",
+    "draftedAt": null,
+    "hasReplies": true,
+    "replySnippet": "\"9-Acute kidney failure, unspecified, N39\"",
+    "hasExistingApproval": true,
+    "existingApprovalSnippet": "...د احمد (MRN: 0000054665) موافقه سعريه على فلتره الدم بمبلغ 2200ج لكل كيس على حده Mohamed Fekry Patient Accountant Sup...",
+    "manualDraftRequested": false
+  },
+  {
+    "id": "mrn_0000216945",
+    "messageId": "&lt;0e6b90cd-3ba0-47c2-9252-fc7225ee2f6d@Elite-Exchange.elitehospital.org&gt;",
+    "receivedAt": "2026-10-19T10:53:00.000Z",
+    "patientName": "نادر قدري محمد عبدالله",
+    "mrn": "0000216945",
+    "diagnosis": "R41.82-Altered mental status, unspecified",
+    "admissionType": "Inpatient",
+    "bed": "Bed 4 - ICU",
+    "physician": "Hany sameer",
+    "contractorRaw": "Next Care نكست كير",
+    "contractorNormalized": "Next Care نكست كير",
+    "priceListYear": "2025",
+    "contractorOfficer": "غير محدد (يتطلب تحديد منسق السيلز)",
+    "requestedServices": [
+      {
+        "name": "المريض يعاني من اضطراب بالوعي و تشنجات صرعية متكررة وتم عرض المريض علي السيد استشاري العصبية واوصي بعمل رسم مخ",
+        "rawPrice": 0
+      }
+    ],
+    "matchedProcedures": [
+      {
+        "serviceName": "المريض يعاني من اضطراب بالوعي و تشنجات صرعية متكررة وتم عرض المريض علي السيد استشاري العصبية واوصي بعمل رسم مخ",
+        "matchedName": "المريض يعاني من اضطراب بالوعي و تشنجات صرعية متكررة وتم عرض المريض علي السيد استشاري العصبية واوصي بعمل رسم مخ",
+        "status": "unmatched"
+      }
+    ],
+    "status": "pending_manual_draft",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: Next Care نكست كير\nالمسئول من قسم السيلز: غير محدد (يتطلب تحديد منسق السيلز)\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️ تنبيه: لم يتم العثور على الإجراءات التالية في لائحة التعاقد وتتطلب تسعير خاص من مسئول التعاقد:\n - المريض يعاني من اضطراب بالوعي و تشنجات صرعية متكررة وتم عرض المريض علي السيد استشاري العصبية واوصي بعمل رسم مخ]\n\n(برجاء المتابعة والتأكيد مع إدارة التعاقدات: corporate@elitehospital.org)",
+    "draftedAt": null,
+    "hasReplies": true,
+    "replySnippet": "\"00 TOTAL AMOUNT: 0\"",
+    "hasExistingApproval": true,
+    "existingApprovalSnippet": "...بدالله (MRN: 0000216945) موافقه سعريه على رسم المخ بمبلغ 1800 ج لايطبق خصم التعاقد Mohamed Fekry Patient Accountant S...",
+    "manualDraftRequested": false
+  },
+  {
+    "id": "mrn_0000269249",
+    "messageId": "&lt;b01cbd27-d935-449e-a794-26b831172e45@Elite-Exchange.elitehospital.org&gt;",
+    "receivedAt": "2026-10-19T10:48:10.000Z",
+    "patientName": "فرحات عبدالحميد محمد ابلال",
+    "mrn": "0000269249",
+    "diagnosis": "J96.1-Chronic respiratory failure, G54.2-Cervical root disorders, not elsewhere class, J15-Bacterial pneumonia, not elsewhere classified, G82.52-Quadriplegia, C1-C4 incomplete",
+    "admissionType": "Inpatient",
+    "bed": "Bed 5 - ICU",
+    "physician": "Mohamed Abdelaleem Mohamed Abdelaalem",
+    "contractorRaw": "MTالمرضي الكاش",
+    "contractorNormalized": "MTالمرضي الكاش",
+    "priceListYear": "2025",
+    "contractorOfficer": "غير محدد (يتطلب تحديد منسق السيلز)",
+    "requestedServices": [
+      {
+        "name": "المريض يعاني من اضطراب بالوعي وكسر بالعمود الفقري وتم عرض المربض ععلي السيد استشاري العصبية واوصي بعمل رسم مخ",
+        "rawPrice": 0
+      }
+    ],
+    "matchedProcedures": [
+      {
+        "serviceName": "المريض يعاني من اضطراب بالوعي وكسر بالعمود الفقري وتم عرض المربض ععلي السيد استشاري العصبية واوصي بعمل رسم مخ",
+        "matchedName": "المريض يعاني من اضطراب بالوعي وكسر بالعمود الفقري وتم عرض المربض ععلي السيد استشاري العصبية واوصي بعمل رسم مخ",
+        "status": "unmatched"
+      }
+    ],
+    "status": "pending_manual_draft",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: MTالمرضي الكاش\nالمسئول من قسم السيلز: غير محدد (يتطلب تحديد منسق السيلز)\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️ تنبيه: لم يتم العثور على الإجراءات التالية في لائحة التعاقد وتتطلب تسعير خاص من مسئول التعاقد:\n - المريض يعاني من اضطراب بالوعي وكسر بالعمود الفقري وتم عرض المربض ععلي السيد استشاري العصبية واوصي بعمل رسم مخ]\n\n(برجاء المتابعة والتأكيد مع إدارة التعاقدات: corporate@elitehospital.org)",
+    "draftedAt": null,
+    "hasReplies": true,
+    "replySnippet": "\"1-Chronic respiratory failure, G54\"",
+    "hasExistingApproval": false,
+    "existingApprovalSnippet": "",
+    "manualDraftRequested": false
+  },
+  {
+    "id": "mrn_0000269566",
+    "messageId": "&lt;b51d202e-10b3-4f5a-8f9b-b0acf13a5a6c@Elite-Exchange.elitehospital.org&gt;",
+    "receivedAt": "2026-10-19T10:41:49.000Z",
+    "patientName": "محمد رمضان السيد عباس",
+    "mrn": "0000269566",
+    "diagnosis": "Clinical Inpatient Evaluation",
+    "admissionType": "Inpatient",
+    "bed": "Inpatient Bed",
+    "physician": "Hospital Staff",
+    "contractorRaw": "جلوب ميد",
+    "contractorNormalized": "جلوب ميد",
+    "priceListYear": "2025",
+    "contractorOfficer": "زياد",
+    "requestedServices": [],
+    "matchedProcedures": [],
+    "status": "pending_manual_draft",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: جلوب ميد\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n(برجاء المتابعة والتأكيد مع إدارة التعاقدات: corporate@elitehospital.org)",
+    "draftedAt": null,
+    "hasReplies": true,
+    "replySnippet": "\"Location: ER Description: Patient Barcode: 0000269566 Patient Name: محمد رمضان السيد عباس Contractor Name: جلوب ميد Main\"",
+    "hasExistingApproval": true,
+    "existingApprovalSnippet": "...Approval Request مرفق الموافقه بحد اقصي 20 الف From: Reception Er Sent: Monday, October 19, 2026 1:42:21 PM T...",
+    "manualDraftRequested": false
+  },
+  {
+    "id": "mrn_0000267855",
+    "messageId": "&lt;25377ce3-92c5-4a16-b9f4-431d27dd3e17@Elite-Exchange.elitehospital.org&gt;",
+    "receivedAt": "2026-10-19T10:30:11.000Z",
+    "patientName": "اشرف ياقوت سعد مصطفى",
+    "mrn": "0000267855",
+    "diagnosis": "M01.X7-Direct infection of ankle and foot in infec, R65.21-Severe sepsis with septic shock",
+    "admissionType": "Inpatient",
+    "bed": "Bed 8 - ICU",
+    "physician": "Hany sameer",
+    "contractorRaw": "Bapetco - Badr El Din Petroleum Co بابتيكو - بدر الدين للبترول",
+    "contractorNormalized": "بدر الدين للبترول",
+    "priceListYear": "2025",
+    "contractorOfficer": "محمد ابو الوفا",
+    "requestedServices": [
+      {
+        "name": "Wrist SLAB",
+        "rawPrice": 550
+      }
+    ],
+    "matchedProcedures": [
+      {
+        "serviceName": "Wrist SLAB",
+        "matchedName": "سلاب معصم (Wrist Slab)",
+        "status": "matched"
+      }
+    ],
+    "status": "pending_manual_draft",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: بدر الدين للبترول\nالمسئول من قسم السيلز: محمد ابو الوفا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\n1- سلاب معصم (Wrist Slab)\n\n(برجاء المتابعة والتأكيد مع إدارة التعاقدات: corporate@elitehospital.org)",
+    "draftedAt": null,
+    "hasReplies": true,
+    "replySnippet": "\"X7-Direct infection of ankle and foot in infec, R65\"",
+    "hasExistingApproval": true,
+    "existingApprovalSnippet": "...مصطفى (MRN: 0000267855) لا مانع يضاف علي الفاتوره بفاتوره الشراء Get Outlook for iOS From: Approvals Sent: Mond...",
+    "manualDraftRequested": false
+  },
+  {
+    "id": "mrn_0000267389",
+    "messageId": "&lt;2941347b-e513-430d-9c76-d2f21176b9de@Elite-Exchange.elitehospital.org&gt;",
+    "receivedAt": "2026-10-19T09:57:00.000Z",
+    "patientName": "ماجدة السيد علي حسنين",
+    "mrn": "0000267389",
+    "diagnosis": "G61.0-Guillain-Barre syndrome, R53.1-Weakness",
+    "admissionType": "Inpatient",
+    "bed": "Bed 314 - Zone A",
+    "physician": "Mohamed Bayoumi",
+    "contractorRaw": "Cash نقابة المهندسين",
+    "contractorNormalized": "نقابة المهندسين",
+    "priceListYear": "2025",
+    "contractorOfficer": "ديانا",
+    "requestedServices": [
+      {
+        "name": "CSF culture - Investigation",
+        "rawPrice": 1125
+      },
+      {
+        "name": "CSF analysis (Chemistry & cell count) - Investigation",
+        "rawPrice": 940
+      },
+      {
+        "name": "PCR panel for Meningitis, CSF (Bacterial & Viral) - Investigation",
+        "rawPrice": 6875
+      },
+      {
+        "name": "ANA (IFA) - Investigation",
+        "rawPrice": 600
+      },
+      {
+        "name": "Anti-DNA (d.s) - Investigation",
+        "rawPrice": 690
+      },
+      {
+        "name": "Anti-cyclic citrulinated peptide (Anti-CCP) - Investigation",
+        "rawPrice": 500
+      },
+      {
+        "name": "Complement 3 (C3) - Investigation",
+        "rawPrice": 520
+      },
+      {
+        "name": "Complement 4 (C4) - Investigation",
+        "rawPrice": 520
+      }
+    ],
+    "matchedProcedures": [
+      {
+        "serviceName": "CSF culture - Investigation",
+        "matchedName": "CSF culture",
+        "status": "matched"
+      },
+      {
+        "serviceName": "CSF analysis (Chemistry & cell count) - Investigation",
+        "matchedName": "CSF analysis (Chemistry & cell count)",
+        "status": "matched"
+      },
+      {
+        "serviceName": "PCR panel for Meningitis, CSF (Bacterial & Viral) - Investigation",
+        "matchedName": "PCR panel for Meningitis, CSF (Bacterial & Viral) - Investigation",
+        "status": "unmatched"
+      },
+      {
+        "serviceName": "ANA (IFA) - Investigation",
+        "matchedName": "ANA (IFA)",
+        "status": "matched"
+      },
+      {
+        "serviceName": "Anti-DNA (d.s) - Investigation",
+        "matchedName": "Anti-DNA (d's)",
+        "status": "matched"
+      },
+      {
+        "serviceName": "Anti-cyclic citrulinated peptide (Anti-CCP) - Investigation",
+        "matchedName": "Anti-cyclic citrulinated peptide (Anti-CCP) - Investigation",
+        "status": "unmatched"
+      },
+      {
+        "serviceName": "Complement 3 (C3) - Investigation",
+        "matchedName": "Complement 3 (C3)",
+        "status": "matched"
+      },
+      {
+        "serviceName": "Complement 4 (C4) - Investigation",
+        "matchedName": "Complement 4 (C4)",
+        "status": "matched"
+      }
+    ],
+    "status": "pending_manual_draft",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: نقابة المهندسين\nالمسئول من قسم السيلز: ديانا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\n1- CSF culture\n2- CSF analysis (Chemistry & cell count)\n3- ANA (IFA)\n4- Anti-DNA (d's)\n5- Complement 3 (C3)\n6- Complement 4 (C4)\n\n[⚠️ تنبيه: لم يتم العثور على الإجراءات التالية في لائحة التعاقد وتتطلب تسعير خاص من مسئول التعاقد:\n - PCR panel for Meningitis, CSF (Bacterial & Viral) - Investigation\n - Anti-cyclic citrulinated peptide (Anti-CCP) - Investigation]\n\n(برجاء المتابعة والتأكيد مع إدارة التعاقدات: corporate@elitehospital.org)",
+    "draftedAt": null,
+    "hasReplies": true,
+    "replySnippet": "",
+    "hasExistingApproval": true,
+    "existingApprovalSnippet": "...Request Details برجاء الموافقه علي عمل بذل نخاع و اخد عينات و عمل. التحاليل المذكوره غير مغطى برجاء ارسال الا...",
+    "manualDraftRequested": false
+  },
+  {
+    "id": "mrn_0000256332",
+    "messageId": "&lt;7e92bd8d-74ca-499c-8848-440b52aff808@Elite-Exchange.elitehospital.org&gt;",
+    "receivedAt": "2026-10-19T09:01:11.000Z",
+    "patientName": "هاله احمد شيبه حسين",
+    "mrn": "0000256332",
+    "diagnosis": "C56-Malignant neoplasm of ovary",
+    "admissionType": "Inpatient",
+    "bed": "Bed 7 - ICU",
+    "physician": "Ola AbdElHamid Ahmed Sakr",
+    "contractorRaw": "Blue Dot",
+    "contractorNormalized": "Blue Dot",
+    "priceListYear": "2025",
+    "contractorOfficer": "غير محدد (يتطلب تحديد منسق السيلز)",
+    "requestedServices": [
+      {
+        "name": "Special Nurse",
+        "rawPrice": 2310
+      }
+    ],
+    "matchedProcedures": [
+      {
+        "serviceName": "Special Nurse",
+        "matchedName": "تمريض خاص ٢٤ ساعة (Special Nurse 24 Hour)",
+        "status": "matched"
+      }
+    ],
+    "status": "pending_manual_draft",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: Blue Dot\nالمسئول من قسم السيلز: غير محدد (يتطلب تحديد منسق السيلز)\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\n1- تمريض خاص ٢٤ ساعة (Special Nurse 24 Hour)\n\n(برجاء المتابعة والتأكيد مع إدارة التعاقدات: corporate@elitehospital.org)",
+    "draftedAt": null,
+    "hasReplies": true,
+    "replySnippet": "\"00 TOTAL AMOUNT: 2310\"",
+    "hasExistingApproval": false,
+    "existingApprovalSnippet": "",
+    "manualDraftRequested": false
+  },
+  {
+    "id": "mrn_0000266839",
+    "messageId": "&lt;b7ad0043-7fae-4196-b669-b96410ad56ee@Elite-Exchange.elitehospital.org&gt;",
+    "receivedAt": "2026-10-19T08:49:27.000Z",
+    "patientName": "شريف محمود حنفي محمود",
+    "mrn": "0000266839",
+    "diagnosis": "C22-Malignant neoplasm of liver and intrahepatic b",
+    "admissionType": "Inpatient",
+    "bed": "Bed 327 - Zone B",
+    "physician": "Mohamed Farouk Fathy Elshazly",
+    "contractorRaw": "شركه بترول ابوقير",
+    "contractorNormalized": "شركه بترول ابوقير",
+    "priceListYear": "2025",
+    "contractorOfficer": "غير محدد (يتطلب تحديد منسق السيلز)",
+    "requestedServices": [
+      {
+        "name": "Nutrionist Follow Up",
+        "rawPrice": 330
+      }
+    ],
+    "matchedProcedures": [
+      {
+        "serviceName": "Nutrionist Follow Up",
+        "matchedName": "Nutrionist Follow Up",
+        "status": "unmatched"
+      }
+    ],
+    "status": "pending_manual_draft",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: شركه بترول ابوقير\nالمسئول من قسم السيلز: غير محدد (يتطلب تحديد منسق السيلز)\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️ تنبيه: لم يتم العثور على الإجراءات التالية في لائحة التعاقد وتتطلب تسعير خاص من مسئول التعاقد:\n - Nutrionist Follow Up]\n\n(برجاء المتابعة والتأكيد مع إدارة التعاقدات: corporate@elitehospital.org)",
+    "draftedAt": null,
+    "hasReplies": true,
+    "replySnippet": "\"00 TOTAL AMOUNT: 330\"",
+    "hasExistingApproval": true,
+    "existingApprovalSnippet": "...محمود (MRN: 0000266839) لا مانع Sent from Outlook for Android From: Approvals Sent: Monday, 19 October 2026 12:...",
+    "manualDraftRequested": false
+  },
+  {
+    "id": "mrn_0000269362",
+    "messageId": "&lt;AM9P193MB1080D8ED898489C21E685BCFA0982@AM9P193MB1080.EURP193.PROD.OUTLOOK.COM&gt;",
+    "receivedAt": "2026-10-19T20:12:22.328Z",
+    "patientName": "ياسر محمد محمود عبدالقادر",
+    "mrn": "0000269362",
+    "diagnosis": "K85-Acute pancreatitis",
+    "admissionType": "Inpatient",
+    "bed": "Bed 421 - FourthFloor",
+    "physician": "Ahmed Ali Mohamed Metwally",
+    "contractorRaw": "سيدى كرير للبتروكيماويات ( سيدبك )",
+    "contractorNormalized": "سيدبك",
+    "priceListYear": "2025",
+    "contractorOfficer": "نادين",
+    "requestedServices": [
+      {
+        "name": "CT Pancreas Triphasic",
+        "rawPrice": 2700
+      }
+    ],
+    "matchedProcedures": [
+      {
+        "serviceName": "CT Pancreas Triphasic",
+        "matchedName": "أشعة مقطعية على البنكرياس (CT Pancreas Triphasic)",
+        "status": "matched"
+      }
+    ],
+    "status": "pending_manual_draft",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: سيدبك\nالمسئول من قسم السيلز: نادين\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\n1- أشعة مقطعية على البنكرياس (CT Pancreas Triphasic)\n\n(برجاء المتابعة والتأكيد مع إدارة التعاقدات: corporate@elitehospital.org)",
+    "draftedAt": null,
+    "hasReplies": true,
+    "replySnippet": "\"Notifications@elitehospital\"",
+    "hasExistingApproval": true,
+    "existingApprovalSnippet": "...القادر (MRN: 0000269362) لا مانع Sent from Outlook for Android From: mohamed Fekri Sent: Monday, 19 October 2026...",
+    "manualDraftRequested": false
+  }
+]
