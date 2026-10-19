@@ -49,6 +49,7 @@ export function isGeminiConfigured(): boolean {
 
 /**
  * Executes AI semantic procedure matching against candidates with model fallback.
+ * Uses compact index-based prompt format and candidateId response schema for ultra-fast generation.
  */
 export async function matchProceduresWithAI(
   unmatchedProcedures: SelectedProcedure[],
@@ -81,74 +82,49 @@ export async function matchProceduresWithAI(
     )
     .join('\n');
 
-  const candidatesText = JSON.stringify(
-    candidates.map((c) => ({
-      nameEnglish: c.nameEnglish,
-      nameArabic: c.nameArabic,
-      price: c.price,
-      sectionName: c.sectionName,
-      sourceFile: c.sourceFile,
-    })),
-    null,
-    2
-  );
+  // Compact indexed text: eliminates multi-kilobyte JSON syntax overhead
+  const candidatesLines = candidates
+    .map((c, idx) => {
+      const arPart = c.nameArabic ? ` | Ar: ${c.nameArabic}` : '';
+      const secPart = c.sectionName ? ` | Sec: ${c.sectionName}` : '';
+      return `[${idx}] ${c.nameEnglish}${arPart}${secPart}`;
+    })
+    .join('\n');
 
-  const promptText = `You are an expert AI medical assistant for Elite Hospital. Below is a subset of pricing rows extracted from the hospital's official Excel pricelists:
+  const promptText = `You are an expert AI medical assistant for Elite Hospital.
+Below is a numbered list of candidate pricing rows from the hospital's official pricelists:
 
-<ExcelPricelistData>
-${candidatesText}
-</ExcelPricelistData>
+<CandidatePricelist>
+${candidatesLines}
+</CandidatePricelist>
 
 Match each of the following requested clinical procedures with the pricing rows above:
 ${proceduresListText}
 
-STRICT MEDICAL EXTRACTION RULES:
+STRICT CLINICAL EXTRACTION RULES:
 1. Handle clinical abbreviations with or without dots (e.g., "EEG" matches "ELECTROENCEPHALOGRAPHY (EEG)", "ECG" matches "Electrocardiogram").
 2. Handle synonyms and common clinical variations (e.g., "Echo" matches "Echocardiography").
-3. ONLY select procedures and rates explicitly present in <ExcelPricelistData>. DO NOT invent, hallucinate, or estimate prices.
-4. For each match, map 'requestedProcedureName' to the exact English name of the requested procedure it matches.
-5. Return a JSON array of matches. If none match, return an empty array [].`;
+3. ONLY select candidates that truly match the requested procedure by their numeric [ID]. If no candidate is an appropriate clinical match, omit it.
+4. Return a JSON array with 'candidateId' (integer ID) and 'requestedProcedureName' (exact requested English name). If none match, return an empty array [].`;
 
+  // Lean response schema: LLM outputs only the numeric index and requested name (~15-30 tokens)
   const responseSchema = {
     type: Type.ARRAY,
     items: {
       type: Type.OBJECT,
       properties: {
-        nameArabic: {
-          type: Type.STRING,
+        candidateId: {
+          type: Type.INTEGER,
           description:
-            'The name of the procedure in Arabic as text. If there is no Arabic name in the document, return an empty string ("").',
-        },
-        nameEnglish: {
-          type: Type.STRING,
-          description: 'The name of the procedure in English as text.',
-        },
-        price: {
-          type: Type.STRING,
-          description: 'The price of the procedure. Extract this number as a string.',
-        },
-        sectionName: {
-          type: Type.STRING,
-          description: 'The name of the section where the procedure was found',
-        },
-        sourceFile: {
-          type: Type.STRING,
-          description: 'The source file name exactly as shown in the candidate row',
+            'The numeric index [0, 1, 2...] of the matching candidate row from CandidatePricelist.',
         },
         requestedProcedureName: {
           type: Type.STRING,
           description:
-            "The exact English name from the prompt's requested list of unmatched procedures that this item match belongs to.",
+            "The exact English name from the prompt's requested list that this candidate belongs to.",
         },
       },
-      required: [
-        'nameArabic',
-        'nameEnglish',
-        'price',
-        'sectionName',
-        'sourceFile',
-        'requestedProcedureName',
-      ],
+      required: ['candidateId', 'requestedProcedureName'],
     },
   };
 
@@ -158,28 +134,65 @@ STRICT MEDICAL EXTRACTION RULES:
 
   for (const model of candidateModels) {
     try {
-      const response = await ai.models.generateContent({
-        model,
-        contents: [
-          {
-            parts: [{ text: promptText }],
+      // 8-second timeout per model attempt to prevent UI hangs
+      const response = await Promise.race([
+        ai.models.generateContent({
+          model,
+          contents: [
+            {
+              parts: [{ text: promptText }],
+            },
+          ],
+          config: {
+            temperature: 0, // Deterministic greedy search for maximum speed
+            responseMimeType: 'application/json',
+            responseSchema,
           },
-        ],
-        config: {
-          responseMimeType: 'application/json',
-          responseSchema,
-        },
-      });
+        }),
+        new Promise<never>((_, reject) =>
+          setTimeout(() => reject(new Error(`Timeout querying Gemini model ${model}`)), 8000)
+        ),
+      ]);
 
-      const parsed = JSON.parse(response.text || '[]') as ProcedureResult[];
-      return parsed;
+      const parsed = JSON.parse(response.text || '[]') as Array<{
+        candidateId: number;
+        requestedProcedureName: string;
+      }>;
+
+      // Reconstruct full ProcedureResult objects instantly in memory with 100% data fidelity
+      const matches: ProcedureResult[] = [];
+      const seenMatch = new Set<string>();
+
+      for (const item of parsed) {
+        if (
+          typeof item.candidateId === 'number' &&
+          item.candidateId >= 0 &&
+          item.candidateId < candidates.length
+        ) {
+          const cand = candidates[item.candidateId];
+          const matchKey = `${cand.nameEnglish}|${cand.sourceFile}|${cand.price}|${item.requestedProcedureName}`;
+          if (!seenMatch.has(matchKey)) {
+            seenMatch.add(matchKey);
+            matches.push({
+              ...cand,
+              requestedProcedureName: item.requestedProcedureName,
+            });
+          }
+        }
+      }
+
+      return matches;
     } catch (err: any) {
       lastError = err;
       const msg = err?.message || String(err);
       console.warn(`Gemini model ${model} failed, trying fallback:`, msg);
 
       // If it's a 403 (Permission denied / Invalid API key), don't retry models as the key is rejected
-      if (msg.includes('403') || msg.includes('API key not valid') || msg.includes('PERMISSION_DENIED')) {
+      if (
+        msg.includes('403') ||
+        msg.includes('API key not valid') ||
+        msg.includes('PERMISSION_DENIED')
+      ) {
         throw new Error(
           'Gemini API Key rejected (403 Permission Denied). Please verify that your API key is active and has access to Gemini in Google AI Studio.'
         );

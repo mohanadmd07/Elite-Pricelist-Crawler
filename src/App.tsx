@@ -31,7 +31,7 @@ import {
 import { auth, loginWithGoogle, logout, saveSearch, deleteSearch, clearRecentSearches, db } from './firebase';
 import { useStandardProcedures } from './hooks/useStandardProcedures';
 import { useCompaniesData } from './hooks/useCompaniesData';
-import { searchAllProcedures } from './services/procedureService';
+import { searchAllProcedures, preloadPricelists } from './services/procedureService';
 import { isGeminiConfigured } from './services/aiMatchService';
 
 import { AppHeader } from './components/layout/AppHeader';
@@ -144,6 +144,28 @@ export default function App() {
     };
     checkFiles();
   }, []);
+
+  // Pre-warm pricelist catalogs in idle time per /vercel-optimize
+  useEffect(() => {
+    if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
+      const handle = (window as any).requestIdleCallback(() => {
+        preloadPricelists('2025');
+      });
+      return () => (window as any).cancelIdleCallback(handle);
+    } else {
+      const timer = setTimeout(() => {
+        preloadPricelists('2025');
+      }, 300);
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
+  // Pre-warm specific contractor catalog when company selection changes
+  useEffect(() => {
+    if (selectedCompany?.priceListYear) {
+      preloadPricelists(selectedCompany.priceListYear);
+    }
+  }, [selectedCompany?.priceListYear]);
 
   const handleLoginClick = async () => {
     try {

@@ -6,6 +6,27 @@ import { matchProceduresWithAI } from './aiMatchService';
 // Module-level caches per react-best-practices (js-cache-function-results)
 const cashDataCache: Record<string, ProcedureResult[]> = {};
 
+const AI_CACHE_STORAGE_KEY = 'elite_ai_match_cache_v2';
+const aiMemoryCache = new Map<string, ProcedureResult[]>();
+
+/**
+ * Pre-warms active pricelist catalogs in memory so user searches incur 0ms network fetch latency.
+ */
+export function preloadPricelists(activeYear?: string): void {
+  const yearsToPreload: ('2023' | '2024' | '2025')[] = [];
+  if (activeYear && (activeYear === '2025' || activeYear === '2024' || activeYear === '2023')) {
+    yearsToPreload.push(activeYear);
+  } else {
+    yearsToPreload.push('2025', '2024', '2023');
+  }
+
+  for (const yr of yearsToPreload) {
+    if (!cashDataCache[yr]) {
+      getCashData(yr).catch(() => {});
+    }
+  }
+}
+
 export async function getCashData(year: '2023' | '2024' | '2025'): Promise<ProcedureResult[]> {
   if (cashDataCache[year]) {
     return cashDataCache[year];
@@ -19,6 +40,145 @@ export async function getCashData(year: '2023' | '2024' | '2025'): Promise<Proce
   const data: ProcedureResult[] = await response.json();
   cashDataCache[year] = data;
   return data;
+}
+
+/**
+ * Cache key generator for multi-tier AI matching cache
+ */
+function getCacheKey(year: string | undefined, name: string, arabic?: string): string {
+  const y = year || 'all';
+  const n = normalizeText(name);
+  const a = arabic ? normalizeArabic(arabic) : '';
+  return `${y}:${n}:${a}`;
+}
+
+function loadStorageCache(): Record<string, ProcedureResult[]> {
+  if (typeof window === 'undefined') return {};
+  try {
+    const raw = localStorage.getItem(AI_CACHE_STORAGE_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    return {};
+  }
+}
+
+function saveToStorageCache(key: string, results: ProcedureResult[]): void {
+  if (typeof window === 'undefined') return;
+  try {
+    const cache = loadStorageCache();
+    cache[key] = results;
+    // Bound cache size to last 200 entries to prevent localStorage bloat
+    const keys = Object.keys(cache);
+    if (keys.length > 200) {
+      delete cache[keys[0]];
+    }
+    localStorage.setItem(AI_CACHE_STORAGE_KEY, JSON.stringify(cache));
+  } catch {
+    // Ignore storage quota errors
+  }
+}
+
+function getCachedAIResults(
+  year: string | undefined,
+  proc: SelectedProcedure
+): ProcedureResult[] | null {
+  const key = getCacheKey(year, proc.name, proc.arabic);
+  if (aiMemoryCache.has(key)) {
+    return aiMemoryCache.get(key)!;
+  }
+  const storage = loadStorageCache();
+  if (storage[key]) {
+    aiMemoryCache.set(key, storage[key]);
+    return storage[key];
+  }
+  return null;
+}
+
+function setCachedAIResults(
+  year: string | undefined,
+  procName: string,
+  procArabic: string | undefined,
+  results: ProcedureResult[]
+): void {
+  const key = getCacheKey(year, procName, procArabic);
+  aiMemoryCache.set(key, results);
+  saveToStorageCache(key, results);
+}
+
+/**
+ * Calculates Dice string similarity coefficient (0.0 to 1.0) for fast typo/fuzzy matching
+ */
+function getDiceCoefficient(s1: string, s2: string): number {
+  if (!s1 || !s2) return 0;
+  if (s1 === s2) return 1;
+  if (s1.length < 2 || s2.length < 2) return 0;
+
+  const bigrams = new Map<string, number>();
+  for (let i = 0; i < s1.length - 1; i++) {
+    const bigram = s1.substring(i, i + 2);
+    bigrams.set(bigram, (bigrams.get(bigram) || 0) + 1);
+  }
+
+  let intersection = 0;
+  for (let i = 0; i < s2.length - 1; i++) {
+    const bigram = s2.substring(i, i + 2);
+    const count = bigrams.get(bigram) || 0;
+    if (count > 0) {
+      bigrams.set(bigram, count - 1);
+      intersection++;
+    }
+  }
+
+  return (2.0 * intersection) / (s1.length + s2.length - 2);
+}
+
+/**
+ * Relevance scoring function: evaluates a pricelist candidate row against query terms
+ */
+function scoreCandidate(
+  rowEngNorm: string,
+  rowAraNorm: string,
+  queryEngNorm: string,
+  queryAraNorm: string,
+  tokens: string[]
+): number {
+  let score = 0;
+
+  // Exact phrase match
+  if (queryEngNorm && rowEngNorm === queryEngNorm) score += 100;
+  if (queryAraNorm && rowAraNorm && rowAraNorm === queryAraNorm) score += 100;
+
+  // Prefix match
+  if (queryEngNorm && rowEngNorm.startsWith(queryEngNorm)) score += 45;
+  if (queryAraNorm && rowAraNorm && rowAraNorm.startsWith(queryAraNorm)) score += 45;
+
+  // Substring match
+  if (queryEngNorm && rowEngNorm.includes(queryEngNorm)) score += 25;
+  if (queryAraNorm && rowAraNorm && rowAraNorm.includes(queryAraNorm)) score += 25;
+
+  // Token word matches
+  for (const token of tokens) {
+    if (rowEngNorm === token || (rowAraNorm && rowAraNorm === token)) {
+      score += 20;
+    } else if (
+      rowEngNorm.includes(` ${token} `) ||
+      rowEngNorm.startsWith(`${token} `) ||
+      rowEngNorm.endsWith(` ${token}`) ||
+      (rowAraNorm && rowAraNorm.includes(token))
+    ) {
+      score += 12;
+    } else if (rowEngNorm.includes(token)) {
+      score += 5;
+    }
+  }
+
+  // Dice bigram similarity bonus
+  if (queryEngNorm.length >= 3 && rowEngNorm.length >= 3) {
+    const dice = getDiceCoefficient(queryEngNorm, rowEngNorm);
+    score += Math.round(dice * 25);
+  }
+
+  return score;
 }
 
 export function searchLocalPricelist(
@@ -107,36 +267,47 @@ export async function searchAllProcedures(
   const localResults: ProcedureResult[] = [];
   const listsToSearch: { year: string; list: ProcedureResult[] }[] = [];
 
-  // 1. Try Supabase RPC first if configured
+  // 1. Parallel Supabase RPC lookup with fast 750ms timeout race
   if (isSupabaseConfigured() && supabase) {
     try {
       const targetYear = activeYear ? parseInt(activeYear, 10) : 2025;
-      for (const proc of selectedProcedures) {
-        const { data, error } = await supabase.rpc('search_procedures', {
-          p_pricelist_year: targetYear,
-          p_search_term: proc.name,
-          p_similarity_threshold: 0.25,
-        });
-        if (!error && Array.isArray(data) && data.length > 0) {
-          localResults.push(
-            ...data.map((r: any) => ({
+      const rpcPromises = selectedProcedures.map(async (proc) => {
+        try {
+          const { data, error } = await supabase.rpc('search_procedures', {
+            p_pricelist_year: targetYear,
+            p_search_term: proc.name,
+            p_similarity_threshold: 0.25,
+          });
+          if (!error && Array.isArray(data) && data.length > 0) {
+            return data.map((r: any) => ({
               nameArabic: r.name_arabic,
               nameEnglish: r.name_english,
               price: String(r.price),
               sectionName: r.section_name || 'عام',
               sourceFile: r.source_file || `Elite Hospital ${targetYear}`,
               requestedProcedureName: proc.name,
-            }))
-          );
+            }));
+          }
+          return [];
+        } catch {
+          return [];
         }
+      });
+
+      const rpcResults = await Promise.race([
+        Promise.all(rpcPromises),
+        new Promise<ProcedureResult[][]>((resolve) => setTimeout(() => resolve([]), 750)),
+      ]);
+
+      for (const resList of rpcResults) {
+        localResults.push(...resList);
       }
     } catch (rpcErr) {
-      console.warn('Supabase RPC search skipped, falling back to cached lists:', rpcErr);
+      console.warn('Supabase RPC search skipped or timed out, using cached lists:', rpcErr);
     }
   }
 
-  // 2. ALWAYS load the local JSON lists into listsToSearch
-  // This guarantees local search works AND candidate rows are available for Gemini AI matching
+  // 2. Load cached local JSON lists in parallel
   const fetchedLists = await Promise.all(
     yearsToFetch.map(async (yr) => {
       try {
@@ -156,7 +327,7 @@ export async function searchAllProcedures(
     }
   }
 
-  // Find procedures with no matches
+  // 3. Identify unmatched procedures
   const unmatchedProcedures = selectedProcedures.filter(
     (proc) => !localResults.some((r) => r.requestedProcedureName === proc.name)
   );
@@ -175,98 +346,107 @@ export async function searchAllProcedures(
   let geminiResults: ProcedureResult[] = [];
 
   if (unmatchedProcedures.length > 0 && aiSearchEnabled && listsToSearch.length > 0) {
-    const candidates: ProcedureResult[] = [];
-    const seenCandidateKeys = new Set<string>();
-
-    const getSearchTokens = (text: string) => {
-      return text
-        .toLowerCase()
-        .replace(/[^a-zA-Z0-9\u0621-\u064A\s]/g, ' ')
-        .split(/\s+/)
-        .map((t) => t.trim())
-        .filter(
-          (t) =>
-            t.length >= 2 &&
-            ![
-              'and',
-              'the',
-              'for',
-              'with',
-              'test',
-              'blood',
-              'study',
-              'urine',
-              'stool',
-              'scan',
-              'profile',
-              'panel',
-              'investigation',
-              'procedure',
-            ].includes(t)
-        );
-    };
+    // 4. Multi-tier Cache Check: Check memory and localStorage cache first
+    const stillUnmatched: SelectedProcedure[] = [];
 
     for (const proc of unmatchedProcedures) {
-      const engTokens = getSearchTokens(proc.name);
-      const araTokens = proc.arabic ? getSearchTokens(proc.arabic) : [];
-      const allTokens = [...engTokens, ...araTokens];
-
-      if (allTokens.length === 0) {
-        allTokens.push(
-          ...proc.name
-            .toLowerCase()
-            .replace(/[^a-zA-Z0-9\u0621-\u064A\s]/g, ' ')
-            .split(/\s+/)
-            .map((t) => t.trim())
-            .filter((t) => t.length >= 1)
-        );
+      const cached = getCachedAIResults(activeYear, proc);
+      if (cached && cached.length > 0) {
+        geminiResults.push(...cached);
+      } else {
+        stillUnmatched.push(proc);
       }
+    }
 
-      for (const item of listsToSearch) {
-        let count = 0;
-        for (const row of item.list) {
-          const rowEng = row.nameEnglish.toLowerCase();
-          const rowAra = row.nameArabic ? row.nameArabic.toLowerCase() : '';
-
-          const hasOverlap = allTokens.some(
-            (token) => rowEng.includes(token) || (rowAra && rowAra.includes(token))
+    // Only query Gemini if there are uncached procedures
+    if (stillUnmatched.length > 0) {
+      const getSearchTokens = (text: string) => {
+        return text
+          .toLowerCase()
+          .replace(/[^a-zA-Z0-9\u0621-\u064A\s]/g, ' ')
+          .split(/\s+/)
+          .map((t) => t.trim())
+          .filter(
+            (t) =>
+              t.length >= 2 &&
+              ![
+                'and',
+                'the',
+                'for',
+                'with',
+                'test',
+                'blood',
+                'study',
+                'urine',
+                'stool',
+                'scan',
+                'profile',
+                'panel',
+                'investigation',
+                'procedure',
+              ].includes(t)
           );
+      };
 
-          if (hasOverlap) {
-            const key = `${row.nameEnglish.toLowerCase()}|${row.sourceFile.toLowerCase()}|${row.price}`;
-            if (!seenCandidateKeys.has(key)) {
-              seenCandidateKeys.add(key);
-              candidates.push(row);
-              count++;
-              if (count > 250) break;
+      // 5. Pre-score and rank candidates using fast local scoring
+      const candidatePool: ProcedureResult[] = [];
+      const seenCandidateKeys = new Set<string>();
+
+      for (const proc of stillUnmatched) {
+        const qEngNorm = normalizeText(proc.name);
+        const qAraNorm = proc.arabic ? normalizeArabic(proc.arabic) : '';
+        const tokens = [
+          ...getSearchTokens(proc.name),
+          ...(proc.arabic ? getSearchTokens(proc.arabic) : []),
+        ];
+
+        // Score all available pricelist rows for this procedure
+        const scoredRows: { row: ProcedureResult; score: number }[] = [];
+
+        for (const item of listsToSearch) {
+          for (const row of item.list) {
+            const rowEngNorm = normalizeText(row.nameEnglish);
+            const rowAraNorm = normalizeArabic(row.nameArabic);
+
+            const score = scoreCandidate(rowEngNorm, rowAraNorm, qEngNorm, qAraNorm, tokens);
+            if (score >= 8) {
+              scoredRows.push({ row, score });
             }
           }
         }
-      }
-    }
 
-    // If candidate list is empty or sparse, provide top representative candidate items
-    if (candidates.length < 15) {
-      for (const item of listsToSearch) {
-        for (const row of item.list) {
-          const key = `${row.nameEnglish.toLowerCase()}|${row.sourceFile.toLowerCase()}|${row.price}`;
+        // Sort descending by score and pick top 18 most relevant candidates per procedure
+        scoredRows.sort((a, b) => b.score - a.score);
+        const topCandidates = scoredRows.slice(0, 18);
+
+        for (const item of topCandidates) {
+          const key = `${item.row.nameEnglish.toLowerCase()}|${item.row.sourceFile.toLowerCase()}|${item.row.price}`;
           if (!seenCandidateKeys.has(key)) {
             seenCandidateKeys.add(key);
-            candidates.push(row);
-            if (candidates.length >= 100) break;
+            candidatePool.push(item.row);
           }
         }
-        if (candidates.length >= 100) break;
       }
-    }
 
-    if (candidates.length > 0) {
-      // Do not swallow error; propagate so user gets explicit error explanation
-      geminiResults = await matchProceduresWithAI(unmatchedProcedures, candidates);
+      if (candidatePool.length > 0) {
+        // Query Gemini with ultra-compact indexed candidate list
+        const newAiMatches = await matchProceduresWithAI(stillUnmatched, candidatePool);
+        geminiResults.push(...newAiMatches);
+
+        // Save newly found matches to multi-tier cache
+        for (const proc of stillUnmatched) {
+          const matchesForProc = newAiMatches.filter(
+            (m) => m.requestedProcedureName?.toLowerCase() === proc.name.toLowerCase()
+          );
+          if (matchesForProc.length > 0) {
+            setCachedAIResults(activeYear, proc.name, proc.arabic, matchesForProc);
+          }
+        }
+      }
     }
   }
 
-  // Deduplicate combined results
+  // 6. Deduplicate combined results
   const seenKeys = new Set<string>();
   const finalResults: ProcedureResult[] = [];
   const allResults = [...localResults, ...geminiResults];
