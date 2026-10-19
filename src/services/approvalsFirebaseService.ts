@@ -28,6 +28,15 @@ export const MAX_HISTORY_DAYS = 30;
 let lastPurgeTimestamp = 0;
 
 /**
+ * Checks if the frontend is running locally (where the local watcher API exists).
+ */
+export const isLocalEnvironment = (): boolean => {
+  if (typeof window === 'undefined') return false;
+  const host = window.location.hostname;
+  return host === 'localhost' || host === '127.0.0.1' || host.startsWith('192.168.') || host.startsWith('10.');
+};
+
+/**
  * Purges inpatient approval records older than maxDays (default 30)
  * to enforce a strictly 30-day rolling history with automatic daily rollover.
  */
@@ -49,10 +58,9 @@ export async function purgeRecordsOlderThanDays(maxDays = MAX_HISTORY_DAYS): Pro
       batch.delete(docSnap.ref);
     });
     await batch.commit();
-    console.log(`[Firestore 30-Day Rollover] Purged ${snap.size} records older than ${maxDays} days.`);
     return snap.size;
   } catch (err) {
-    console.warn('Could not run 30-day rollover purge on Firestore:', err);
+    // Skip silently if client does not have delete privileges
     return 0;
   }
 }
@@ -80,8 +88,11 @@ export function subscribeToApprovals(
     } catch {}
   };
 
-  fetchFromApi();
-  const pollInterval = setInterval(fetchFromApi, 3000);
+  let pollInterval: any = null;
+  if (isLocalEnvironment()) {
+    fetchFromApi();
+    pollInterval = setInterval(fetchFromApi, 3000);
+  }
 
   // 2. Also listen to Firestore real-time snapshot
   const colRef = collection(db, APPROVALS_COLLECTION);
@@ -91,9 +102,7 @@ export function subscribeToApprovals(
   const now = Date.now();
   if (now - lastPurgeTimestamp > 6 * 60 * 60 * 1000) {
     lastPurgeTimestamp = now;
-    purgeRecordsOlderThanDays(MAX_HISTORY_DAYS).catch((e) =>
-      console.warn('Background 30-day purge skipped:', e)
-    );
+    purgeRecordsOlderThanDays(MAX_HISTORY_DAYS).catch(() => {});
   }
 
   const unsubFirestore = onSnapshot(
@@ -131,7 +140,7 @@ export function subscribeToApprovals(
 
   return () => {
     isSubscribed = false;
-    clearInterval(pollInterval);
+    if (pollInterval) clearInterval(pollInterval);
     unsubFirestore();
   };
 }
@@ -145,9 +154,11 @@ export async function toggleApprovalStatus(
 ): Promise<void> {
   const newStatus = currentStatus === 'answered' ? 'draft_created' : 'answered';
 
-  try {
-    await fetch(`/api/approvals/${id}/toggle`, { method: 'POST' });
-  } catch {}
+  if (isLocalEnvironment()) {
+    try {
+      await fetch(`/api/approvals/${id}/toggle`, { method: 'POST' });
+    } catch {}
+  }
 
   try {
     const docRef = doc(db, APPROVALS_COLLECTION, id);
@@ -162,9 +173,11 @@ export async function toggleApprovalStatus(
  * Triggers manual drafting for an approval that was held back due to detected replies or approval notes.
  */
 export async function triggerManualDraft(id: string): Promise<void> {
-  try {
-    await fetch(`/api/approvals/${id}/draft`, { method: 'POST' });
-  } catch {}
+  if (isLocalEnvironment()) {
+    try {
+      await fetch(`/api/approvals/${id}/draft`, { method: 'POST' });
+    } catch {}
+  }
 
   try {
     const docRef = doc(db, APPROVALS_COLLECTION, id);
@@ -197,8 +210,11 @@ export function subscribeToCompanyConfigs(
     } catch {}
   };
 
-  fetchFromApi();
-  const pollInterval = setInterval(fetchFromApi, 4000);
+  let pollInterval: any = null;
+  if (isLocalEnvironment()) {
+    fetchFromApi();
+    pollInterval = setInterval(fetchFromApi, 4000);
+  }
 
   const colRef = collection(db, COMPANIES_COLLECTION);
   const q = query(colRef, orderBy('name', 'asc'));
@@ -221,7 +237,7 @@ export function subscribeToCompanyConfigs(
 
   return () => {
     isSubscribed = false;
-    clearInterval(pollInterval);
+    if (pollInterval) clearInterval(pollInterval);
     unsubFirestore();
   };
 }
@@ -235,13 +251,15 @@ export async function saveCompanyConfig(
 ): Promise<string> {
   const docId = company.id || company.name.trim().toLowerCase().replace(/[^a-z0-9\u0600-\u06FF]+/g, '_');
 
-  try {
-    await fetch('/api/contractors', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...company, id: docId }),
-    });
-  } catch {}
+  if (isLocalEnvironment()) {
+    try {
+      await fetch('/api/contractors', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...company, id: docId }),
+      });
+    } catch {}
+  }
 
   try {
     const docRef = doc(db, COMPANIES_COLLECTION, docId);
@@ -290,8 +308,11 @@ export function subscribeToAutomationSettings(
     } catch {}
   };
 
-  fetchFromApi();
-  const pollInterval = setInterval(fetchFromApi, 3000);
+  let pollInterval: any = null;
+  if (isLocalEnvironment()) {
+    fetchFromApi();
+    pollInterval = setInterval(fetchFromApi, 3000);
+  }
 
   const docRef = doc(db, SETTINGS_COLLECTION, AUTOMATION_SETTINGS_DOC);
 
@@ -309,7 +330,7 @@ export function subscribeToAutomationSettings(
 
   return () => {
     isSubscribed = false;
-    clearInterval(pollInterval);
+    if (pollInterval) clearInterval(pollInterval);
     unsubFirestore();
   };
 }
@@ -318,13 +339,15 @@ export function subscribeToAutomationSettings(
  * Toggles the pause status of the background automation.
  */
 export async function setAutomationPaused(isPaused: boolean, userEmail?: string): Promise<void> {
-  try {
-    await fetch('/api/settings/pause', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ isPaused }),
-    });
-  } catch {}
+  if (isLocalEnvironment()) {
+    try {
+      await fetch('/api/settings/pause', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ isPaused }),
+      });
+    } catch {}
+  }
 
   try {
     const docRef = doc(db, SETTINGS_COLLECTION, AUTOMATION_SETTINGS_DOC);
