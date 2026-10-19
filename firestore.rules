@@ -20,55 +20,11 @@ service cloud.firestore {
       return isSignedIn() && request.auth.uid == userId;
     }
 
-    function isValidId(id) {
-      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
-    }
-
-    function incoming() {
-      return request.resource.data;
-    }
-
-    function existing() {
-      return resource.data;
-    }
-
-    // Admin role verification: checks custom claim or verified admin email (case-insensitive)
     function isAdmin() {
       return isSignedIn() && (
-        request.auth.token.get('admin', false) == true ||
-        (
-          request.auth.token.email != null &&
-          request.auth.token.email.matches('(?i)^mohanad\\.md07@gmail\\.com$') &&
-          request.auth.token.email_verified == true
-        )
+        ('admin' in request.auth.token && request.auth.token.admin == true) ||
+        (request.auth.token.email != null && request.auth.token.email == 'mohanad.md07@gmail.com')
       );
-    }
-
-    // ===============================================================
-    // Validation Blueprints
-    // ===============================================================
-
-    function isValidUser(data) {
-      return data.keys().hasAll(['uid', 'email']) &&
-             data.keys().size() <= 12 &&
-             data.uid == request.auth.uid &&
-             data.email is string && data.email.size() <= 256 &&
-             (!('displayName' in data) || data.displayName == null || (data.displayName is string && data.displayName.size() <= 128)) &&
-             (!('photoURL' in data) || data.photoURL == null || (data.photoURL is string && data.photoURL.size() <= 1024)) &&
-             (!('lastLogin' in data) || data.lastLogin == null || data.lastLogin is timestamp) &&
-             (!('createdAt' in data) || data.createdAt == null || data.createdAt is timestamp);
-    }
-
-    function isValidSearch(data) {
-      return data.keys().hasAll(['userId', 'query', 'timestamp', 'resultCount']) &&
-             data.keys().size() <= 8 &&
-             data.userId == request.auth.uid &&
-             data.query is string && data.query.size() > 0 && data.query.size() <= 500 &&
-             data.timestamp == request.time &&
-             data.resultCount is int && data.resultCount >= 0 &&
-             (!('companyName' in data) || data.companyName == null || (data.companyName is string && data.companyName.size() <= 128)) &&
-             (!('priceListYear' in data) || data.priceListYear == null || (data.priceListYear is string && data.priceListYear.size() <= 10)) &&
-             (!('aiUsed' in data) || data.aiUsed is bool);
     }
 
     // ===============================================================
@@ -79,53 +35,36 @@ service cloud.firestore {
     match /users/{userId} {
       allow get: if isOwner(userId) || isAdmin();
       allow list: if isAdmin();
-      
-      allow create: if isOwner(userId) && isValidUser(incoming());
-      
-      allow update: if isOwner(userId) && isValidUser(incoming()) && (
-        // Allow updating profile metadata and login timestamps
-        incoming().diff(existing()).affectedKeys().hasOnly(['displayName', 'photoURL', 'lastLogin', 'updatedAt'])
-      );
-      
+      allow create, update: if isOwner(userId) || isAdmin();
       allow delete: if isAdmin();
 
       // Search History (Subcollection)
       match /searches/{searchId} {
-        allow list: if isOwner(userId) || isAdmin();
-        allow get: if isOwner(userId) || isAdmin();
-        
-        allow create: if isOwner(userId) && isValidSearch(incoming()) && isValidId(searchId);
-        
-        // Searches are immutable, but user or admin can delete them (privacy / GDPR / cleanup)
+        allow list, get: if isOwner(userId) || isAdmin();
+        allow create: if isOwner(userId);
         allow update: if false;
         allow delete: if isOwner(userId) || isAdmin();
       }
     }
 
-    // Collection Group for Searches (Admin inspection & analytical queries)
+    // Collection Group for Searches (Admin analytics & inspection)
     match /{path=**}/searches/{searchId} {
       allow read: if isAdmin();
     }
 
-    // Inpatient Approvals Collection (Operational Workflow)
+    // Inpatient Approvals Collection (Operational Workflow & 30-day rollover purge)
     match /inpatient_approvals/{approvalId} {
-      allow read: if isSignedIn();
-      allow create, update: if isSignedIn();
-      allow delete: if isAdmin();
+      allow read, write: if isSignedIn();
     }
 
     // Companies / Contractors Configuration (Pricelist & Sales Officer Mappings)
     match /companies_config/{companyId} {
-      allow read: if isSignedIn();
-      allow create, update: if isSignedIn();
-      allow delete: if isAdmin();
+      allow read, write: if isSignedIn();
     }
 
     // Global Automation Settings (Pause / Resume / Polling Intervals)
     match /settings/{settingId} {
-      allow read: if isSignedIn();
-      allow write: if isSignedIn();
+      allow read, write: if isSignedIn();
     }
   }
 }
-
