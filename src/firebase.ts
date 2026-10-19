@@ -30,23 +30,33 @@ import {
 import firebaseAppletConfig from '../firebase-applet-config.json';
 import { SaveSearchOptions, UserSearchRecord } from './types';
 
+const getEnvVar = (key: string): string => {
+  if (typeof import.meta !== 'undefined' && (import.meta as any).env && (import.meta as any).env[key]) {
+    return String((import.meta as any).env[key]).trim();
+  }
+  if (typeof process !== 'undefined' && process.env && process.env[key]) {
+    return String(process.env[key]).trim();
+  }
+  return '';
+};
+
 // Determine if we have a valid external Firebase API key set in the environment
 const hasValidEnvConfig = (): boolean => {
-  const envKey = import.meta.env.VITE_FIREBASE_API_KEY;
-  return typeof envKey === 'string' && envKey.trim().startsWith('AIzaSy');
+  const envKey = getEnvVar('VITE_FIREBASE_API_KEY');
+  return envKey.startsWith('AIzaSy');
 };
 
 const useEnv = hasValidEnvConfig();
 
-// Construct config, prioritizing environment variables (useful for hosting on Vercel), falling back to pre-configured values
+// Construct config, prioritizing environment variables, falling back to pre-configured values
 const firebaseConfig = useEnv ? {
-  apiKey: (import.meta.env.VITE_FIREBASE_API_KEY as string).trim(),
-  authDomain: (import.meta.env.VITE_FIREBASE_AUTH_DOMAIN || '').trim(),
-  projectId: (import.meta.env.VITE_FIREBASE_PROJECT_ID || '').trim(),
-  storageBucket: (import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || '').trim(),
-  messagingSenderId: (import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || '').trim(),
-  appId: (import.meta.env.VITE_FIREBASE_APP_ID || '').trim(),
-  firestoreDatabaseId: (import.meta.env.VITE_FIREBASE_DATABASE_ID || '').trim(),
+  apiKey: getEnvVar('VITE_FIREBASE_API_KEY'),
+  authDomain: getEnvVar('VITE_FIREBASE_AUTH_DOMAIN'),
+  projectId: getEnvVar('VITE_FIREBASE_PROJECT_ID'),
+  storageBucket: getEnvVar('VITE_FIREBASE_STORAGE_BUCKET'),
+  messagingSenderId: getEnvVar('VITE_FIREBASE_MESSAGING_SENDER_ID'),
+  appId: getEnvVar('VITE_FIREBASE_APP_ID'),
+  firestoreDatabaseId: getEnvVar('VITE_FIREBASE_DATABASE_ID'),
 } : {
   apiKey: firebaseAppletConfig.apiKey,
   authDomain: firebaseAppletConfig.authDomain,
@@ -56,6 +66,7 @@ const firebaseConfig = useEnv ? {
   appId: firebaseAppletConfig.appId,
   firestoreDatabaseId: firebaseAppletConfig.firestoreDatabaseId || (firebaseAppletConfig as any).firestoreDatabaseId,
 };
+
 
 console.log('Firebase Init Config Debug (Safe):', {
   usingEnvOverrides: useEnv,

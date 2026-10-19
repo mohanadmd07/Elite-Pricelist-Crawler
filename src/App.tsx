@@ -46,13 +46,19 @@ import { ProcedureResultCard } from './components/procedure/ProcedureResultCard'
 import { CopyableReportCard } from './components/report/CopyableReportCard';
 import { OutlookTipsCard } from './components/report/OutlookTipsCard';
 import { AiSettingsModal } from './components/modals/AiSettingsModal';
+import { ApprovalsHub } from './components/approvals/ApprovalsHub';
+import { Inbox, Search as SearchIcon } from 'lucide-react';
 
 export default function App() {
   const [user, setUser] = useState<User | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
   const [loginError, setLoginError] = useState<string | null>(null);
 
+  // Main navigation tab: 'search' vs 'approvals'
+  const [mainTab, setMainTab] = useState<'search' | 'approvals'>('search');
+
   // AI Key modal state
+
   const [isAiModalOpen, setIsAiModalOpen] = useState(false);
   const [aiKeyVersion, setAiKeyVersion] = useState(0);
 
@@ -331,8 +337,48 @@ export default function App() {
         aiKeyVersion={aiKeyVersion}
       />
 
+      {/* Top-Level Navigation Switcher */}
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 mb-3 relative z-20">
+        <div className="flex items-center gap-1.5 p-1 bg-white/95 backdrop-blur-md border border-slate-200/90 rounded-2xl shadow-xs">
+          <button
+            type="button"
+            onClick={() => setMainTab('search')}
+            className={`flex-1 py-2.5 px-4 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-2 ${
+              mainTab === 'search'
+                ? 'bg-teal-700 text-white shadow-xs'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+            }`}
+          >
+            <SearchIcon size={14} />
+            <span>Pricelist Explorer & Search</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setMainTab('approvals')}
+            className={`flex-1 py-2.5 px-4 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-2 ${
+              mainTab === 'approvals'
+                ? 'bg-teal-700 text-white shadow-xs'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+            }`}
+          >
+            <Inbox size={14} />
+            <span>Inpatient Approvals & Outlook AI</span>
+            <span className="text-[10px] bg-amber-400 text-slate-950 font-black px-1.5 py-0.5 rounded-full uppercase tracking-wider">
+              Live
+            </span>
+          </button>
+        </div>
+      </div>
+
       <main className="max-w-5xl mx-auto px-4 sm:px-6 py-2 relative z-10">
-        <div className="grid gap-6">
+        {mainTab === 'approvals' ? (
+          <ApprovalsHub
+            userEmail={user.email || undefined}
+            catalogCompanies={companies}
+          />
+        ) : (
+          <div className="grid gap-6">
+
           {/* Section 1: Active Pricelists & Contractor Selection */}
           <section className="bg-white/95 backdrop-blur-md border border-slate-200/90 rounded-2xl p-6 shadow-sm relative z-20">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
@@ -651,7 +697,9 @@ export default function App() {
             )}
           </AnimatePresence>
         </div>
+        )}
       </main>
+
 
       <AppFooter userEmail={user?.email} />
 

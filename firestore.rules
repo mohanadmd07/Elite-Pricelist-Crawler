@@ -106,5 +106,26 @@ service cloud.firestore {
     match /{path=**}/searches/{searchId} {
       allow read: if isAdmin();
     }
+
+    // Inpatient Approvals Collection (Operational Workflow)
+    match /inpatient_approvals/{approvalId} {
+      allow read: if isSignedIn();
+      allow create, update: if isSignedIn();
+      allow delete: if isAdmin();
+    }
+
+    // Companies / Contractors Configuration (Pricelist & Sales Officer Mappings)
+    match /companies_config/{companyId} {
+      allow read: if isSignedIn();
+      allow create, update: if isSignedIn();
+      allow delete: if isAdmin();
+    }
+
+    // Global Automation Settings (Pause / Resume / Polling Intervals)
+    match /settings/{settingId} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn();
+    }
   }
 }
+

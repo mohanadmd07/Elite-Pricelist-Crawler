@@ -1,0 +1,341 @@
+import React, { useState, useEffect } from 'react';
+import {
+  Inbox,
+  FileCheck2,
+  CheckCircle2,
+  Clock,
+  Pause,
+  Play,
+  Building2,
+  Download,
+  Copy,
+  Check,
+  RefreshCw,
+} from 'lucide-react';
+import { InpatientApprovalRecord, AutomationSettings, CompanyInfo } from '../../types';
+import {
+  subscribeToApprovals,
+  subscribeToAutomationSettings,
+  setAutomationPaused,
+} from '../../services/approvalsFirebaseService';
+import { ApprovalsTable } from './ApprovalsTable';
+import { ContractorManager } from './ContractorManager';
+
+interface ApprovalsHubProps {
+  userEmail?: string;
+  catalogCompanies?: CompanyInfo[];
+}
+
+export const ApprovalsHub: React.FC<ApprovalsHubProps> = ({
+  userEmail,
+  catalogCompanies,
+}) => {
+  const [activeTab, setActiveTab] = useState<'feed' | 'contractors'>('feed');
+  const [dateFilter, setDateFilter] = useState<string>('today');
+
+  const [approvals, setApprovals] = useState<InpatientApprovalRecord[]>([]);
+  const [loadingApprovals, setLoadingApprovals] = useState(true);
+  const [automationSettings, setAutomationSettings] = useState<AutomationSettings>({
+    isPaused: false,
+    pollingIntervalSeconds: 120,
+  });
+  const [isTogglingPause, setIsTogglingPause] = useState(false);
+  const [reportCopied, setReportCopied] = useState(false);
+
+  // Subscribe to real-time approvals from Firestore (30-day rolling window)
+  useEffect(() => {
+    const unsubApprovals = subscribeToApprovals((data) => {
+      setApprovals(data);
+      setLoadingApprovals(false);
+    });
+
+    const unsubSettings = subscribeToAutomationSettings((settings) => {
+      setAutomationSettings(settings);
+    });
+
+    return () => {
+      unsubApprovals();
+      unsubSettings();
+    };
+  }, []);
+
+  const handleTogglePause = async () => {
+    try {
+      setIsTogglingPause(true);
+      const nextState = !automationSettings.isPaused;
+      await setAutomationPaused(nextState, userEmail);
+    } catch (err) {
+      console.error('Failed to toggle automation state:', err);
+    } finally {
+      setIsTogglingPause(false);
+    }
+  };
+
+  // Compute metrics based on dateFilter within the 30-day window
+  const filteredApprovals = approvals.filter((a) => {
+    if (!a.receivedAt) return false;
+    const date =
+      typeof a.receivedAt.toDate === 'function' ? a.receivedAt.toDate() : new Date(a.receivedAt);
+    const now = new Date();
+    const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const dateStr = date.toISOString().split('T')[0];
+
+    if (dateFilter === 'today') {
+      return date >= startOfToday;
+    } else if (dateFilter === 'yesterday') {
+      const startOfYesterday = new Date(startOfToday.getTime() - 24 * 60 * 60 * 1000);
+      return date >= startOfYesterday && date < startOfToday;
+    } else if (dateFilter === '7days') {
+      const sevenDaysAgo = new Date(startOfToday.getTime() - 6 * 24 * 60 * 60 * 1000);
+      return date >= sevenDaysAgo;
+    } else if (dateFilter === '30days' || dateFilter === 'all') {
+      const thirtyDaysAgo = new Date(startOfToday.getTime() - 29 * 24 * 60 * 60 * 1000);
+      return date >= thirtyDaysAgo;
+    } else if (dateFilter.includes('-')) {
+      return dateStr === dateFilter;
+    }
+    return true;
+  });
+
+  const totalCount = filteredApprovals.length;
+  const pendingApprovalCount = filteredApprovals.filter(
+    (a) => !a.hasExistingApproval && a.status !== 'answered'
+  ).length;
+  const approvedReplyCount = filteredApprovals.filter(
+    (a) => Boolean(a.hasExistingApproval)
+  ).length;
+  const answeredCount = filteredApprovals.filter((a) => a.status === 'answered').length;
+  const draftedCount = filteredApprovals.filter((a) => a.status === 'draft_created').length;
+
+  const handleCopyDailyReport = async () => {
+    const dateLabel =
+      dateFilter === 'today'
+        ? 'Today'
+        : dateFilter === 'yesterday'
+        ? 'Yesterday'
+        : dateFilter === '7days'
+        ? 'Last 7 Days'
+        : dateFilter === '30days' || dateFilter === 'all'
+        ? 'Last 30 Days (Rolling History)'
+        : dateFilter;
+
+    const reportText = `📋 Elite Hospital - Inpatient Approvals Report (${dateLabel})
+───────────────────────────────
+• Total Received: ${totalCount}
+• ⏳ Pending Approval: ${pendingApprovalCount}
+• ✅ Approved Replies ("لا مانع" / "Approved"): ${approvedReplyCount}
+• ✉️ Answered (Sent): ${answeredCount}
+• ✍️ Drafted in Outlook: ${draftedCount}
+
+Breakdown by Contractor:
+${Object.entries(
+  filteredApprovals.reduce((acc, a) => {
+    const c = a.contractorNormalized || a.contractorRaw || 'Unknown';
+    acc[c] = (acc[c] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>)
+)
+  .map(([c, count]) => `  - ${c}: ${count}`)
+  .join('\n')}
+───────────────────────────────
+Generated via Elite Corporate Approvals Hub • 30-Day Rolling Active`;
+
+    try {
+      await navigator.clipboard.writeText(reportText);
+      setReportCopied(true);
+      setTimeout(() => setReportCopied(false), 2500);
+    } catch (err) {
+      console.error('Failed to copy report:', err);
+    }
+  };
+
+  return (
+    <div className="space-y-6 text-left max-w-5xl mx-auto">
+      {/* Top Banner: Status, Pause Switch & Navigation Tabs */}
+      <div className="bg-white/95 backdrop-blur-md border border-slate-200/90 rounded-2xl p-5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+        {/* Sub-Tabs */}
+        <div className="flex items-center gap-1.5 p-1 bg-slate-100/80 rounded-xl border border-slate-200/60">
+          <button
+            onClick={() => setActiveTab('feed')}
+            className={`px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-2 ${
+              activeTab === 'feed'
+                ? 'bg-white text-teal-900 shadow-xs'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            <Inbox size={15} />
+            <span>Approvals Feed & Reports</span>
+            {pendingApprovalCount > 0 && (
+              <span className="w-5 h-5 rounded-full bg-amber-500 text-white text-[10px] font-black flex items-center justify-center">
+                {pendingApprovalCount}
+              </span>
+            )}
+          </button>
+
+          <button
+            onClick={() => setActiveTab('contractors')}
+            className={`px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-2 ${
+              activeTab === 'contractors'
+                ? 'bg-white text-teal-900 shadow-xs'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            <Building2 size={15} />
+            <span>Contractors & Officers</span>
+          </button>
+        </div>
+
+        {/* Global Pause / Resume Switch */}
+        <div className="flex items-center gap-3">
+          <div
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-bold border transition-all ${
+              automationSettings.isPaused
+                ? 'bg-amber-50 border-amber-300 text-amber-900'
+                : 'bg-emerald-50 border-emerald-300 text-emerald-900'
+            }`}
+          >
+            <span
+              className={`w-2 h-2 rounded-full ${
+                automationSettings.isPaused
+                  ? 'bg-amber-500 animate-pulse'
+                  : 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.7)]'
+              }`}
+            />
+            <span>{automationSettings.isPaused ? 'Automation: PAUSED' : 'Automation: RUNNING'}</span>
+          </div>
+
+          <button
+            onClick={handleTogglePause}
+            disabled={isTogglingPause}
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer active:scale-98 shadow-xs border ${
+              automationSettings.isPaused
+                ? 'bg-teal-700 hover:bg-teal-800 text-white border-teal-800'
+                : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-300'
+            }`}
+            title={automationSettings.isPaused ? 'Resume monitoring InApprovals' : 'Pause automation'}
+          >
+            {automationSettings.isPaused ? (
+              <>
+                <Play size={13} className="fill-current" />
+                <span>Resume</span>
+              </>
+            ) : (
+              <>
+                <Pause size={13} className="fill-current" />
+                <span>Pause</span>
+              </>
+            )}
+          </button>
+        </div>
+      </div>
+
+      {/* KPI Stats Cards (Visible when on feed tab) */}
+      {activeTab === 'feed' && (
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          {/* Total Received */}
+          <div className="bg-white/95 backdrop-blur-md border border-slate-200/90 rounded-2xl p-4 sm:p-5 shadow-xs">
+            <div className="flex items-center justify-between text-slate-500 mb-2">
+              <span className="text-xs font-bold uppercase tracking-wider">Total Received</span>
+              <div className="w-7 h-7 rounded-lg bg-teal-50 text-teal-800 flex items-center justify-center">
+                <Inbox size={14} />
+              </div>
+            </div>
+            <div className="text-2xl sm:text-3xl font-black text-slate-900 font-display">
+              {totalCount}
+            </div>
+            <p className="text-[11px] text-slate-400 mt-1">
+              30-Day Window: {dateFilter === 'today' ? 'Today' : dateFilter === 'yesterday' ? 'Yesterday' : dateFilter === '7days' ? 'Last 7 Days' : dateFilter === '30days' || dateFilter === 'all' ? 'Full 30 Days' : dateFilter}
+            </p>
+          </div>
+
+          {/* Pending Approval */}
+          <div className="bg-white/95 backdrop-blur-md border border-slate-200/90 rounded-2xl p-4 sm:p-5 shadow-xs">
+            <div className="flex items-center justify-between text-slate-500 mb-2">
+              <span className="text-xs font-bold uppercase tracking-wider">Pending Approval</span>
+              <div className="w-7 h-7 rounded-lg bg-amber-50 text-amber-800 flex items-center justify-center">
+                <Clock size={14} />
+              </div>
+            </div>
+            <div className={`text-2xl sm:text-3xl font-black font-display ${
+              pendingApprovalCount > 0 ? 'text-amber-600' : 'text-slate-900'
+            }`}>
+              {pendingApprovalCount}
+            </div>
+            <p className="text-[11px] text-slate-400 mt-1">
+              No replies / pending approval
+            </p>
+          </div>
+
+          {/* Approved Replies ("لا مانع" / "Approved") */}
+          <div className="bg-white/95 backdrop-blur-md border border-slate-200/90 rounded-2xl p-4 sm:p-5 shadow-xs">
+            <div className="flex items-center justify-between text-slate-500 mb-2">
+              <span className="text-xs font-bold uppercase tracking-wider">Approved Replies</span>
+              <div className="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-800 flex items-center justify-center">
+                <CheckCircle2 size={14} />
+              </div>
+            </div>
+            <div className="text-2xl sm:text-3xl font-black text-emerald-700 font-display">
+              {approvedReplyCount}
+            </div>
+            <p className="text-[11px] text-emerald-600 font-medium mt-1">
+              Confirmed (لا مانع / Approved)
+            </p>
+          </div>
+
+          {/* Answered / Sent */}
+          <div className="bg-white/95 backdrop-blur-md border border-slate-200/90 rounded-2xl p-4 sm:p-5 shadow-xs">
+            <div className="flex items-center justify-between text-slate-500 mb-2">
+              <span className="text-xs font-bold uppercase tracking-wider">Answered (Sent)</span>
+              <div className="w-7 h-7 rounded-lg bg-teal-50 text-teal-800 flex items-center justify-center">
+                <Check size={14} />
+              </div>
+            </div>
+            <div className="text-2xl sm:text-3xl font-black text-teal-800 font-display">
+              {answeredCount}
+            </div>
+            <p className="text-[11px] text-slate-400 mt-1">
+              {draftedCount} drafts prepared
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Main View Router */}
+      {activeTab === 'feed' ? (
+        <div className="space-y-4">
+          {/* Quick Handover Export Button */}
+          <div className="flex justify-end">
+            <button
+              onClick={handleCopyDailyReport}
+              className="text-xs font-bold text-slate-600 hover:text-slate-900 bg-white/95 border border-slate-200 px-3.5 py-1.5 rounded-xl shadow-2xs hover:bg-slate-50 flex items-center gap-1.5 transition-all cursor-pointer"
+            >
+              {reportCopied ? (
+                <>
+                  <Check size={13} className="text-emerald-600" />
+                  <span className="text-emerald-700">Copied Shift Report!</span>
+                </>
+              ) : (
+                <>
+                  <Copy size={13} />
+                  <span>Copy Daily Handover Report</span>
+                </>
+              )}
+            </button>
+          </div>
+
+          <ApprovalsTable
+            approvals={approvals}
+            loading={loadingApprovals}
+            selectedDateFilter={dateFilter}
+            onDateFilterChange={setDateFilter}
+          />
+        </div>
+      ) : (
+        <ContractorManager
+          userEmail={userEmail}
+          catalogCompanies={catalogCompanies}
+        />
+      )}
+    </div>
+  );
+};

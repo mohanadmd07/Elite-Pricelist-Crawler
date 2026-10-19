@@ -67,16 +67,41 @@ export async function loadCompanies(): Promise<CompanyInfo[]> {
 
   // 2. Fallback to local Excel files with parallel fetching per react-best-practices
   try {
-    const [salesRes, consumablesRes] = await Promise.all([
-      fetch('/Sales%202027.xlsx').catch(() => null),
-      fetch('/Consumables.xlsx').catch(() => null),
+    const loadFileBuffer = async (fileName: string): Promise<ArrayBuffer | null> => {
+      if (typeof window === 'undefined') {
+        try {
+          const fs = await import('fs');
+          const path = await import('path');
+          const filePath = path.resolve(process.cwd(), 'public', fileName);
+          if (fs.existsSync(filePath)) {
+            const buf = fs.readFileSync(filePath);
+            return buf.buffer.slice(buf.byteOffset, buf.byteOffset + buf.byteLength);
+          }
+        } catch {
+          return null;
+        }
+      }
+
+      try {
+        const res = await fetch(`/${encodeURIComponent(fileName)}`);
+        if (res && res.ok) {
+          return await res.arrayBuffer();
+        }
+      } catch {
+        return null;
+      }
+      return null;
+    };
+
+    const [salesBuf, consumablesBuf] = await Promise.all([
+      loadFileBuffer('Sales 2027.xlsx'),
+      loadFileBuffer('Consumables.xlsx'),
     ]);
 
     let salesReps: { name: string; rep: string }[] = [];
 
-    if (salesRes && salesRes.ok) {
+    if (salesBuf) {
       try {
-        const salesBuf = await salesRes.arrayBuffer();
         const salesWb = XLSX.read(salesBuf);
         const salesWs = salesWb.Sheets[salesWb.SheetNames[0]];
         const salesJson = XLSX.utils.sheet_to_json(salesWs, { header: 1 }) as any[][];
@@ -109,12 +134,13 @@ export async function loadCompanies(): Promise<CompanyInfo[]> {
       }
     }
 
-    if (!consumablesRes || !consumablesRes.ok) {
+    if (!consumablesBuf) {
       throw new Error('Consumables.xlsx not found');
     }
 
-    const arrayBuffer = await consumablesRes.arrayBuffer();
+    const arrayBuffer = consumablesBuf;
     const workbook = XLSX.read(arrayBuffer);
+
     const worksheet = workbook.Sheets[workbook.SheetNames[0]];
     const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 }) as any[][];
 

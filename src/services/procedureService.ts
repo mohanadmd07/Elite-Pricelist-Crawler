@@ -32,15 +32,37 @@ export async function getCashData(year: '2023' | '2024' | '2025'): Promise<Proce
     return cashDataCache[year];
   }
 
-  const response = await fetch(`/${year}_cash.json`);
-  if (!response.ok) {
-    throw new Error(`Could not load ${year} Cash pricelist file.`);
+  let data: ProcedureResult[] | null = null;
+
+  if (typeof window === 'undefined') {
+    try {
+      const fs = await import('fs');
+      const path = await import('path');
+      const filePath = path.resolve(process.cwd(), 'public', `${year}_cash.json`);
+      if (fs.existsSync(filePath)) {
+        const raw = fs.readFileSync(filePath, 'utf-8');
+        data = JSON.parse(raw);
+      }
+    } catch (err) {
+      console.warn(`Node read error for ${year}_cash.json:`, err);
+    }
   }
 
-  const data: ProcedureResult[] = await response.json();
-  cashDataCache[year] = data;
-  return data;
+  if (!data) {
+    const response = await fetch(`/${year}_cash.json`);
+    if (!response.ok) {
+      throw new Error(`Could not load ${year} Cash pricelist file.`);
+    }
+    data = await response.json();
+  }
+
+  if (data) {
+    cashDataCache[year] = data;
+    return data;
+  }
+  return [];
 }
+
 
 /**
  * Cache key generator for multi-tier AI matching cache
