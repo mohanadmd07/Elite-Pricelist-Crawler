@@ -104,10 +104,10 @@ export async function searchAllProcedures(
     isExtendingToAI: false,
   });
 
-  let localResults: ProcedureResult[] = [];
+  const localResults: ProcedureResult[] = [];
   const listsToSearch: { year: string; list: ProcedureResult[] }[] = [];
 
-  // Try Supabase RPC first if configured
+  // 1. Try Supabase RPC first if configured
   if (isSupabaseConfigured() && supabase) {
     try {
       const targetYear = activeYear ? parseInt(activeYear, 10) : 2025;
@@ -135,25 +135,24 @@ export async function searchAllProcedures(
     }
   }
 
-  // Fallback to local files with parallelized loading per react-best-practices (async-parallel)
-  if (localResults.length === 0) {
-    const fetchedLists = await Promise.all(
-      yearsToFetch.map(async (yr) => {
-        try {
-          const list = await getCashData(yr);
-          return { year: yr, list };
-        } catch {
-          return { year: yr, list: [] };
-        }
-      })
-    );
-
-    for (const item of fetchedLists) {
-      if (item.list.length > 0) {
-        listsToSearch.push(item);
-        const matches = searchLocalPricelist(item.list, selectedProcedures);
-        localResults.push(...matches);
+  // 2. ALWAYS load the local JSON lists into listsToSearch
+  // This guarantees local search works AND candidate rows are available for Gemini AI matching
+  const fetchedLists = await Promise.all(
+    yearsToFetch.map(async (yr) => {
+      try {
+        const list = await getCashData(yr);
+        return { year: yr, list };
+      } catch {
+        return { year: yr, list: [] };
       }
+    })
+  );
+
+  for (const item of fetchedLists) {
+    if (item.list.length > 0) {
+      listsToSearch.push(item);
+      const matches = searchLocalPricelist(item.list, selectedProcedures);
+      localResults.push(...matches);
     }
   }
 
@@ -246,12 +245,24 @@ export async function searchAllProcedures(
       }
     }
 
-    if (candidates.length > 0) {
-      try {
-        geminiResults = await matchProceduresWithAI(unmatchedProcedures, candidates);
-      } catch (err) {
-        console.error('Gemini AI match error:', err);
+    // If candidate list is empty or sparse, provide top representative candidate items
+    if (candidates.length < 15) {
+      for (const item of listsToSearch) {
+        for (const row of item.list) {
+          const key = `${row.nameEnglish.toLowerCase()}|${row.sourceFile.toLowerCase()}|${row.price}`;
+          if (!seenCandidateKeys.has(key)) {
+            seenCandidateKeys.add(key);
+            candidates.push(row);
+            if (candidates.length >= 100) break;
+          }
+        }
+        if (candidates.length >= 100) break;
       }
+    }
+
+    if (candidates.length > 0) {
+      // Do not swallow error; propagate so user gets explicit error explanation
+      geminiResults = await matchProceduresWithAI(unmatchedProcedures, candidates);
     }
   }
 

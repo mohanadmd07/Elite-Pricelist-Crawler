@@ -9,13 +9,26 @@ interface LoginViewProps {
 
 export const LoginView: React.FC<LoginViewProps> = ({ loginError, onLogin }) => {
   return (
-    <div className="min-h-screen relative flex items-center justify-center p-6 bg-slate-50 font-sans">
+    <div className="min-h-screen relative flex items-center justify-center p-6 font-sans overflow-hidden">
+      {/* Background Image: Stretched and Fitted per /impeccable */}
+      <div
+        className="fixed inset-0 w-full h-full pointer-events-none z-0 bg-no-repeat bg-cover bg-center"
+        style={{
+          backgroundImage: `url('/header_bg.webp'), url('/header_bg.png')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundAttachment: 'fixed',
+        }}
+      />
+      {/* Calming, high-contrast overlay */}
+      <div className="fixed inset-0 w-full h-full pointer-events-none z-0 bg-slate-900/25 backdrop-blur-[4px]" />
+
       <motion.div
         initial={{ opacity: 0, scale: 0.98 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="max-w-md w-full bg-white border border-slate-200/90 rounded-3xl p-8 sm:p-10 shadow-lg text-center relative z-10"
+        className="max-w-md w-full bg-white/95 backdrop-blur-md border border-white/60 rounded-3xl p-8 sm:p-10 shadow-2xl text-center relative z-10"
       >
-        <div className="w-20 h-20 bg-teal-50/70 border border-teal-100 rounded-2xl flex items-center justify-center mx-auto mb-6 p-2">
+        <div className="w-20 h-20 bg-teal-50/90 border border-teal-100 rounded-2xl flex items-center justify-center mx-auto mb-6 p-2 shadow-xs">
           <img
             src="/elite_logo.png"
             alt="Elite Hospital Logo"
@@ -29,7 +42,7 @@ export const LoginView: React.FC<LoginViewProps> = ({ loginError, onLogin }) => 
         <h1 className="text-2xl font-black mb-1.5 text-slate-900 tracking-tight font-display">
           Elite Pricelist Explorer
         </h1>
-        <p className="text-xs text-teal-700 font-bold uppercase tracking-wider mb-2">
+        <p className="text-xs text-teal-800 font-bold uppercase tracking-wider mb-2">
           By Dr. Mohanad El Ma'moun
         </p>
         <p className="text-sm text-slate-600 font-medium mb-8 leading-relaxed max-w-xs mx-auto">

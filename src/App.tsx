@@ -1,7 +1,7 @@
 /**
  * Elite Hospital Pricelist Explorer
  * Modular, humanized healthcare application for medical insurance & contractor price inquiries.
- * Refactored per /react-best-practices, /ui-ux-pro-max, and /supabase-postgres-best-practices.
+ * Refactored per /react-best-practices, /ui-ux-pro-max, /impeccable, and /supabase-postgres-best-practices.
  */
 
 import React, { useState, useEffect } from 'react';
@@ -9,13 +9,15 @@ import { User, onAuthStateChanged } from 'firebase/auth';
 import { collection, query, orderBy, limit, onSnapshot } from 'firebase/firestore';
 import { motion, AnimatePresence } from 'motion/react';
 import {
-  FileText,
   AlertCircle,
   Database,
   Tag,
   Loader2,
   Clock,
   Sparkles,
+  Key,
+  Trash2,
+  X,
 } from 'lucide-react';
 
 import {
@@ -24,11 +26,13 @@ import {
   StandardProcedure,
   SelectedProcedure,
   SearchStatus,
+  UserSearchRecord,
 } from './types';
-import { auth, loginWithGoogle, logout, saveSearch, db } from './firebase';
+import { auth, loginWithGoogle, logout, saveSearch, deleteSearch, clearRecentSearches, db } from './firebase';
 import { useStandardProcedures } from './hooks/useStandardProcedures';
 import { useCompaniesData } from './hooks/useCompaniesData';
 import { searchAllProcedures } from './services/procedureService';
+import { isGeminiConfigured } from './services/aiMatchService';
 
 import { AppHeader } from './components/layout/AppHeader';
 import { AppFooter } from './components/layout/AppFooter';
@@ -41,11 +45,16 @@ import { SearchStatusProgress } from './components/procedure/SearchStatusProgres
 import { ProcedureResultCard } from './components/procedure/ProcedureResultCard';
 import { CopyableReportCard } from './components/report/CopyableReportCard';
 import { OutlookTipsCard } from './components/report/OutlookTipsCard';
+import { AiSettingsModal } from './components/modals/AiSettingsModal';
 
 export default function App() {
   const [user, setUser] = useState<User | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
   const [loginError, setLoginError] = useState<string | null>(null);
+
+  // AI Key modal state
+  const [isAiModalOpen, setIsAiModalOpen] = useState(false);
+  const [aiKeyVersion, setAiKeyVersion] = useState(0);
 
   // Data catalogs
   const { standardProcedures } = useStandardProcedures();
@@ -66,7 +75,7 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState<ProcedureResult[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [recentSearches, setRecentSearches] = useState<any[]>([]);
+  const [recentSearches, setRecentSearches] = useState<UserSearchRecord[]>([]);
   const [fileStatus, setFileStatus] = useState<Record<string, boolean>>({});
 
   const [searchStatus, setSearchStatus] = useState<SearchStatus>({
@@ -91,7 +100,7 @@ export default function App() {
     return () => unsubscribe();
   }, []);
 
-  // Real-time search history listener
+  // Real-time search history listener utilizing persistent multi-tab disk cache
   useEffect(() => {
     if (!user) {
       setRecentSearches([]);
@@ -99,14 +108,14 @@ export default function App() {
     }
 
     const searchesRef = collection(db, 'users', user.uid, 'searches');
-    const q = query(searchesRef, orderBy('timestamp', 'desc'), limit(5));
+    const q = query(searchesRef, orderBy('timestamp', 'desc'), limit(8));
 
     const unsubscribe = onSnapshot(
       q,
       (snapshot) => {
-        const searches = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
+        const searches: UserSearchRecord[] = snapshot.docs.map((docItem) => ({
+          id: docItem.id,
+          ...(docItem.data() as Omit<UserSearchRecord, 'id'>),
         }));
         setRecentSearches(searches);
       },
@@ -211,9 +220,13 @@ export default function App() {
 
       setResults(combinedResults);
 
-      // Log search history
+      // Log search history with enriched metadata for analytics and quick re-querying
       const queryText = selectedProcedures.map((p) => p.name).join(', ');
-      saveSearch(user.uid, queryText, combinedResults.length).catch((err) =>
+      saveSearch(user.uid, queryText, combinedResults.length, {
+        companyName: selectedCompany?.name,
+        priceListYear: activeYear,
+        aiUsed: aiSearchEnabled,
+      }).catch((err) =>
         console.warn('Failed to save search history:', err)
       );
 
@@ -222,7 +235,8 @@ export default function App() {
       }
     } catch (err: any) {
       console.error('Search error:', err);
-      setError(err.message || 'An error occurred while executing the search.');
+      const msg = err.message || 'An error occurred while executing the search.';
+      setError(msg);
     } finally {
       setLoading(false);
     }
@@ -245,8 +259,20 @@ export default function App() {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50 font-sans">
-        <div className="flex flex-col items-center gap-4 bg-white border border-slate-200/90 p-8 rounded-3xl shadow-sm">
+      <div className="min-h-screen relative flex items-center justify-center font-sans overflow-hidden">
+        {/* Background Image: Stretched and Fitted per /impeccable */}
+        <div
+          className="fixed inset-0 w-full h-full pointer-events-none z-0 bg-no-repeat bg-cover bg-center"
+          style={{
+            backgroundImage: `url('/header_bg.webp'), url('/header_bg.png')`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundAttachment: 'fixed',
+          }}
+        />
+        <div className="fixed inset-0 w-full h-full pointer-events-none z-0 bg-slate-900/20 backdrop-blur-[4px]" />
+
+        <div className="relative z-10 flex flex-col items-center gap-4 bg-white/95 backdrop-blur-md border border-slate-200/90 p-8 rounded-3xl shadow-xl">
           <Loader2 className="animate-spin text-teal-700" size={40} />
           <p className="text-xs font-bold text-slate-700 tracking-wider font-display">
             Loading Elite Pricelist Explorer…
@@ -261,13 +287,32 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans antialiased selection:bg-teal-100 selection:text-teal-900 pb-16">
-      <AppHeader user={user} onReset={handleReset} onLogout={logout} />
+    <div className="min-h-screen relative text-slate-900 font-sans antialiased selection:bg-teal-100 selection:text-teal-900 pb-16 overflow-x-hidden">
+      {/* Background Image: Stretched and Fitted per /impeccable */}
+      <div
+        className="fixed inset-0 w-full h-full pointer-events-none z-0 bg-no-repeat bg-cover bg-center"
+        style={{
+          backgroundImage: `url('/header_bg.webp'), url('/header_bg.png')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundAttachment: 'fixed',
+        }}
+      />
+      {/* Refined subtle overlay preserving contrast and readability */}
+      <div className="fixed inset-0 w-full h-full pointer-events-none z-0 bg-slate-900/15 backdrop-blur-[3px]" />
+
+      <AppHeader
+        user={user}
+        onReset={handleReset}
+        onLogout={logout}
+        onOpenAiSettings={() => setIsAiModalOpen(true)}
+        aiKeyVersion={aiKeyVersion}
+      />
 
       <main className="max-w-5xl mx-auto px-4 sm:px-6 py-2 relative z-10">
         <div className="grid gap-6">
           {/* Section 1: Active Pricelists & Contractor Selection */}
-          <section className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-xs relative z-20">
+          <section className="bg-white/95 backdrop-blur-md border border-slate-200/90 rounded-2xl p-6 shadow-sm relative z-20">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
               <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-50 rounded-full border border-slate-200 shadow-2xs self-start">
                 <Database size={14} className="text-teal-700" />
@@ -355,7 +400,7 @@ export default function App() {
           </section>
 
           {/* Section 2: Procedure Inquiries Card */}
-          <section className="bg-white border border-slate-200/90 rounded-2xl p-6 sm:p-7 shadow-xs relative z-10 text-left">
+          <section className="bg-white/95 backdrop-blur-md border border-slate-200/90 rounded-2xl p-6 sm:p-7 shadow-sm relative z-10 text-left">
             <div className="flex items-center gap-3 mb-5">
               <div className="w-8 h-8 rounded-xl bg-teal-700 text-white flex items-center justify-center font-bold text-sm shadow-xs">
                 2
@@ -420,37 +465,83 @@ export default function App() {
                   animate={{ opacity: 1 }}
                   className="mt-6 border-t border-slate-100 pt-4"
                 >
-                  <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2.5">
-                    <Clock size={12} />
-                    <span>Recent Procedure Inquiries</span>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {recentSearches.map((search) => (
+                  <div className="flex items-center justify-between mb-2.5">
+                    <div className="flex items-center gap-1.5 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                      <Clock size={12} />
+                      <span>Recent Procedure Inquiries</span>
+                    </div>
+                    {user && (
                       <button
-                        key={search.id}
                         type="button"
                         onClick={() => {
-                          const parts = search.query.split(', ');
-                          const newProcs: SelectedProcedure[] = parts.map((name: string) => {
-                            const match = standardProcedures.find(
-                              (sp) => sp.english.toLowerCase() === name.toLowerCase()
-                            );
-                            return {
-                              id: Math.random().toString(36).substring(2, 9),
-                              name,
-                              arabic: match?.arabic,
-                              isCustom: !match,
-                            };
-                          });
-                          setSelectedProcedures(newProcs);
+                          clearRecentSearches(user.uid);
                         }}
-                        className="px-3 py-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-full text-xs font-semibold text-slate-700 hover:text-slate-900 transition-colors flex items-center gap-2 cursor-pointer focus-visible:ring-2 focus-visible:ring-teal-600 focus-visible:outline-none"
+                        className="text-[11px] text-slate-400 hover:text-rose-600 transition-colors flex items-center gap-1 cursor-pointer font-medium focus-visible:outline-none"
+                        title="Clear recent search inquiries"
                       >
-                        <span>{search.query}</span>
-                        <span className="text-[10px] bg-slate-200 text-slate-700 px-1.5 py-0.2 rounded-full font-bold">
-                          {search.resultCount}
-                        </span>
+                        <Trash2 size={11} />
+                        <span>Clear history</span>
                       </button>
+                    )}
+                  </div>
+
+                  <div className="flex flex-wrap gap-2">
+                    {recentSearches.map((search) => (
+                      <div
+                        key={search.id}
+                        className="group inline-flex items-center bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-full text-xs font-semibold text-slate-700 hover:text-slate-900 transition-all pl-3 pr-1.5 py-1 gap-1.5"
+                      >
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const parts = search.query.split(', ');
+                            const newProcs: SelectedProcedure[] = parts.map((name: string) => {
+                              const match = standardProcedures.find(
+                                (sp) => sp.english.toLowerCase() === name.toLowerCase()
+                              );
+                              return {
+                                id: Math.random().toString(36).substring(2, 9),
+                                name,
+                                arabic: match?.arabic,
+                                isCustom: !match,
+                              };
+                            });
+                            setSelectedProcedures(newProcs);
+                            if (search.companyName) {
+                              const matchedComp = companies.find(
+                                (c) => c.name.toLowerCase() === search.companyName?.toLowerCase()
+                              );
+                              if (matchedComp) setSelectedCompany(matchedComp);
+                            }
+                          }}
+                          className="flex items-center gap-1.5 cursor-pointer text-left focus:outline-none"
+                        >
+                          <span className="truncate max-w-[200px] sm:max-w-[300px]">{search.query}</span>
+                          {search.companyName && (
+                            <span className="text-[10px] text-teal-800 bg-teal-50 border border-teal-200/80 px-1.5 py-0.2 rounded-md font-semibold truncate max-w-[120px]">
+                              {search.companyName}
+                            </span>
+                          )}
+                          <span className="text-[10px] bg-slate-200 text-slate-700 px-1.5 py-0.2 rounded-full font-bold">
+                            {search.resultCount}
+                          </span>
+                        </button>
+
+                        {user && (
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              deleteSearch(user.uid, search.id);
+                            }}
+                            className="text-slate-400 hover:text-rose-600 p-0.5 rounded-full hover:bg-slate-200/60 transition-colors cursor-pointer"
+                            title="Remove inquiry from history"
+                            aria-label={`Remove inquiry ${search.query}`}
+                          >
+                            <X size={12} />
+                          </button>
+                        )}
+                      </div>
                     ))}
                   </div>
                 </motion.div>
@@ -486,14 +577,27 @@ export default function App() {
                 {/* Error Banner */}
                 {error && results.length === 0 && (
                   <div
-                    className="bg-rose-50 border border-rose-200 rounded-2xl p-6 flex items-start gap-3.5 text-rose-900 text-left shadow-xs"
+                    className="bg-rose-50 border border-rose-200 rounded-2xl p-6 flex flex-col sm:flex-row items-start justify-between gap-4 text-rose-900 text-left shadow-xs"
                     role="alert"
                   >
-                    <AlertCircle className="shrink-0 mt-0.5 text-rose-600" size={20} />
-                    <div>
-                      <h4 className="text-sm font-bold">Procedure Not Found</h4>
-                      <p className="text-xs text-rose-800 leading-relaxed mt-1">{error}</p>
+                    <div className="flex items-start gap-3.5">
+                      <AlertCircle className="shrink-0 mt-0.5 text-rose-600" size={20} />
+                      <div>
+                        <h4 className="text-sm font-bold">Procedure Search Notice</h4>
+                        <p className="text-xs text-rose-800 leading-relaxed mt-1">{error}</p>
+                      </div>
                     </div>
+
+                    {error.toLowerCase().includes('gemini') && (
+                      <button
+                        type="button"
+                        onClick={() => setIsAiModalOpen(true)}
+                        className="px-4 py-2 bg-rose-700 hover:bg-rose-800 text-white rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-xs shrink-0 cursor-pointer"
+                      >
+                        <Key size={14} />
+                        <span>Configure Gemini Key</span>
+                      </button>
+                    )}
                   </div>
                 )}
 
@@ -528,6 +632,13 @@ export default function App() {
       </main>
 
       <AppFooter userEmail={user?.email} />
+
+      {/* AI Key Settings Dialog */}
+      <AiSettingsModal
+        isOpen={isAiModalOpen}
+        onClose={() => setIsAiModalOpen(false)}
+        onKeyUpdated={() => setAiKeyVersion((v) => v + 1)}
+      />
     </div>
   );
 }

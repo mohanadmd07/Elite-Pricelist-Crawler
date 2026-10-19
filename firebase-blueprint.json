@@ -9,19 +9,23 @@
         "email": { "type": "string", "format": "email", "description": "The user's email address." },
         "displayName": { "type": "string", "description": "The user's display name." },
         "photoURL": { "type": "string", "format": "uri", "description": "The user's profile picture URL." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Account registration timestamp." },
         "lastLogin": { "type": "string", "format": "date-time", "description": "The timestamp of the user's last login." }
       },
       "required": ["uid", "email"]
     },
     "SearchHistory": {
       "title": "Search History",
-      "description": "Records of user searches and results found.",
+      "description": "Records of user searches and matched procedure inquiries.",
       "type": "object",
       "properties": {
         "userId": { "type": "string", "description": "The UID of the user who performed the search." },
         "query": { "type": "string", "description": "The search query string." },
         "timestamp": { "type": "string", "format": "date-time", "description": "When the search was performed." },
-        "resultCount": { "type": "integer", "description": "Number of results found." }
+        "resultCount": { "type": "integer", "description": "Number of results found." },
+        "companyName": { "type": "string", "description": "Optional name of the selected insurance or corporate company." },
+        "priceListYear": { "type": "string", "description": "Optional year of the pricelist queried (e.g. '2025')." },
+        "aiUsed": { "type": "boolean", "description": "Whether AI semantic search was used for custom terms." }
       },
       "required": ["userId", "query", "timestamp", "resultCount"]
     }

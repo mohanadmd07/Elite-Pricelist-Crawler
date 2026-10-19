@@ -1,7 +1,34 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, User } from 'firebase/auth';
-import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+  onAuthStateChanged,
+  User,
+} from 'firebase/auth';
+import {
+  initializeFirestore,
+  persistentLocalCache,
+  persistentMultipleTabManager,
+  memoryLocalCache,
+  getFirestore,
+  doc,
+  setDoc,
+  getDoc,
+  deleteDoc,
+  collection,
+  addDoc,
+  query,
+  orderBy,
+  limit,
+  getDocs,
+  writeBatch,
+  serverTimestamp,
+  Firestore,
+} from 'firebase/firestore';
 import firebaseAppletConfig from '../firebase-applet-config.json';
+import { SaveSearchOptions, UserSearchRecord } from './types';
 
 // Determine if we have a valid external Firebase API key set in the environment
 const hasValidEnvConfig = (): boolean => {
@@ -39,12 +66,42 @@ console.log('Firebase Init Config Debug (Safe):', {
   firestoreDatabaseId: firebaseConfig.firestoreDatabaseId,
 });
 
-// Initialize Firebase
+// Initialize Firebase App
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
-export const db = firebaseConfig.firestoreDatabaseId 
-  ? getFirestore(app, firebaseConfig.firestoreDatabaseId) 
-  : getFirestore(app);
+
+// Initialize Firestore with Optimized Multi-Tier Persistent Cache
+function setupOptimizedFirestore(): Firestore {
+  const multiTabCache = {
+    localCache: persistentLocalCache({
+      tabManager: persistentMultipleTabManager(),
+    }),
+  };
+
+  try {
+    if (firebaseConfig.firestoreDatabaseId) {
+      return initializeFirestore(app, multiTabCache, firebaseConfig.firestoreDatabaseId);
+    }
+    return initializeFirestore(app, multiTabCache);
+  } catch (err: any) {
+    // If persistent IndexedDB is restricted (e.g. Safari private browsing, isolated iframes), fallback gracefully to memory cache
+    console.warn('Persistent IndexedDB cache unavailable, falling back to memory cache:', err?.message || err);
+    try {
+      const memoryCache = { localCache: memoryLocalCache() };
+      if (firebaseConfig.firestoreDatabaseId) {
+        return initializeFirestore(app, memoryCache, firebaseConfig.firestoreDatabaseId);
+      }
+      return initializeFirestore(app, memoryCache);
+    } catch {
+      // If already initialized, return standard instance
+      return firebaseConfig.firestoreDatabaseId
+        ? getFirestore(app, firebaseConfig.firestoreDatabaseId)
+        : getFirestore(app);
+    }
+  }
+}
+
+export const db: Firestore = setupOptimizedFirestore();
 export const googleProvider = new GoogleAuthProvider();
 
 // Error Handling Spec for Firestore Operations
@@ -73,48 +130,51 @@ export interface FirestoreErrorInfo {
       email: string | null;
       photoUrl: string | null;
     }[];
-  }
+  };
 }
 
 export function handleFirestoreError(error: unknown, operationType: OperationType, path: string | null) {
+  const message = error instanceof Error ? error.message : String(error);
   const errInfo: FirestoreErrorInfo = {
-    error: error instanceof Error ? error.message : String(error),
+    error: message,
     authInfo: {
       userId: auth.currentUser?.uid,
       email: auth.currentUser?.email,
       emailVerified: auth.currentUser?.emailVerified,
       isAnonymous: auth.currentUser?.isAnonymous,
       tenantId: auth.currentUser?.tenantId,
-      providerInfo: auth.currentUser?.providerData.map(provider => ({
+      providerInfo: auth.currentUser?.providerData.map((provider) => ({
         providerId: provider.providerId,
         displayName: provider.displayName,
         email: provider.email,
-        photoUrl: provider.photoURL
-      })) || []
+        photoUrl: provider.photoURL,
+      })) || [],
     },
     operationType,
-    path
-  }
-  console.error('Firestore Error: ', JSON.stringify(errInfo));
-  throw new Error(JSON.stringify(errInfo));
+    path,
+  };
+  console.warn(`[Firestore ${operationType.toUpperCase()}] at ${path}:`, message, errInfo);
+  throw new Error(`Firestore operation failed (${operationType}): ${message}`);
 }
 
 // Auth Helper Functions
-export const loginWithGoogle = async () => {
+export const loginWithGoogle = async (): Promise<User> => {
   try {
     const result = await signInWithPopup(auth, googleProvider);
     const user = result.user;
-    
-    // Create/Update user profile in Firestore
+
+    // Create or update user profile in Firestore with null-safe fields
     const userRef = doc(db, 'users', user.uid);
-    await setDoc(userRef, {
+    const profileData: Record<string, any> = {
       uid: user.uid,
-      email: user.email,
-      displayName: user.displayName,
-      photoURL: user.photoURL,
-      lastLogin: serverTimestamp()
-    }, { merge: true });
-    
+      email: user.email || '',
+      displayName: user.displayName || null,
+      photoURL: user.photoURL || null,
+      lastLogin: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    };
+
+    await setDoc(userRef, profileData, { merge: true });
     return user;
   } catch (error) {
     console.error('Login error:', error);
@@ -125,18 +185,81 @@ export const loginWithGoogle = async () => {
 export const logout = () => signOut(auth);
 
 // Firestore Data Helpers
-import { collection, addDoc } from 'firebase/firestore';
 
-export const saveSearch = async (userId: string, query: string, resultCount: number) => {
+/**
+ * Persist user search inquiries to subcollection users/{userId}/searches
+ */
+export const saveSearch = async (
+  userId: string,
+  rawQuery: string,
+  resultCount: number,
+  options?: SaveSearchOptions
+): Promise<string | null> => {
+  const queryText = (rawQuery || '').trim();
+  if (!userId || !queryText) return null;
+
   const searchesRef = collection(db, 'users', userId, 'searches');
+  const count = Math.max(0, Math.round(Number(resultCount) || 0));
+
+  const payload: Record<string, any> = {
+    userId,
+    query: queryText.substring(0, 500),
+    timestamp: serverTimestamp(),
+    resultCount: count,
+  };
+
+  if (options?.companyName) {
+    payload.companyName = options.companyName.trim().substring(0, 128);
+  }
+  if (options?.priceListYear) {
+    payload.priceListYear = String(options.priceListYear).trim().substring(0, 10);
+  }
+  if (typeof options?.aiUsed === 'boolean') {
+    payload.aiUsed = options.aiUsed;
+  }
+
   try {
-    await addDoc(searchesRef, {
-      userId,
-      query,
-      timestamp: serverTimestamp(),
-      resultCount
-    });
+    const docRef = await addDoc(searchesRef, payload);
+    return docRef.id;
   } catch (error) {
     handleFirestoreError(error, OperationType.WRITE, `users/${userId}/searches`);
+    return null;
   }
 };
+
+/**
+ * Remove an individual search history item
+ */
+export const deleteSearch = async (userId: string, searchId: string): Promise<boolean> => {
+  if (!userId || !searchId) return false;
+  const searchDocRef = doc(db, 'users', userId, 'searches', searchId);
+  try {
+    await deleteDoc(searchDocRef);
+    return true;
+  } catch (error) {
+    handleFirestoreError(error, OperationType.DELETE, `users/${userId}/searches/${searchId}`);
+    return false;
+  }
+};
+
+/**
+ * Clear recent search inquiries in an atomic Firestore batch
+ */
+export const clearRecentSearches = async (userId: string, batchLimit = 30): Promise<void> => {
+  if (!userId) return;
+  const searchesRef = collection(db, 'users', userId, 'searches');
+  try {
+    const q = query(searchesRef, orderBy('timestamp', 'desc'), limit(batchLimit));
+    const snapshot = await getDocs(q);
+    if (snapshot.empty) return;
+
+    const batch = writeBatch(db);
+    snapshot.docs.forEach((docItem) => {
+      batch.delete(docItem.ref);
+    });
+    await batch.commit();
+  } catch (error) {
+    handleFirestoreError(error, OperationType.DELETE, `users/${userId}/searches [batch]`);
+  }
+};
+

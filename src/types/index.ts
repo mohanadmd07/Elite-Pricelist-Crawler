@@ -47,3 +47,21 @@ export interface PricelistDocument {
   name: string;
   path: string;
 }
+
+export interface SaveSearchOptions {
+  companyName?: string;
+  priceListYear?: string;
+  aiUsed?: boolean;
+}
+
+export interface UserSearchRecord {
+  id: string;
+  userId: string;
+  query: string;
+  resultCount: number;
+  timestamp?: any;
+  companyName?: string;
+  priceListYear?: string;
+  aiUsed?: boolean;
+}
+
