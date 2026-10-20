@@ -457,6 +457,7 @@ export const ApprovalsTable: React.FC<ApprovalsTableProps> = ({
                 <tbody className="divide-y divide-slate-100 text-xs">
                   {filteredApprovals.map((record) => {
                     const isAnswered = record.status === 'answered';
+                    const isToggling = togglingId === record.id;
                     const allMatched = record.matchedProcedures?.every((m) => m.status === 'matched');
 
                     return (
@@ -923,6 +924,20 @@ export const ApprovalsTable: React.FC<ApprovalsTableProps> = ({
                       >
                         <Eye size={14} />
                         <span>View</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => handleToggleStatus(record)}
+                        disabled={togglingId === record.id}
+                        className={`py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                          isAnswered
+                            ? 'border border-slate-200 text-slate-500 hover:bg-slate-100'
+                            : 'bg-teal-700 hover:bg-teal-800 text-white shadow-2xs'
+                        }`}
+                      >
+                        <Check size={14} />
+                        <span>{isAnswered ? 'Reopen' : 'Sent'}</span>
                       </button>
                     </div>
                   </div>
