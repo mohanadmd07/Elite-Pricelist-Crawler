@@ -224,26 +224,47 @@ export function loadContractorOfficersFromExcel(
       }
     }
 
-    // Merge complementary aliases from data/contractors.json if available
+    // Merge complementary aliases and authoritative officer overrides from data/contractors.json
     try {
       const jsonPath = path.resolve(process.cwd(), 'data', 'contractors.json');
       if (fs.existsSync(jsonPath)) {
         const contractorsJson = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
         if (Array.isArray(contractorsJson)) {
           for (const item of contractorsJson) {
-            if (!item.name || !Array.isArray(item.aliases)) continue;
+            if (!item.name) continue;
+            const itemAliases = Array.isArray(item.aliases) ? item.aliases : [item.name];
             // Find corresponding mapping
             const match = mappings.find(
               (m) =>
                 normalizeContractorText(m.rawName) === normalizeContractorText(item.name) ||
-                m.aliases.some((a) => item.aliases.includes(a))
+                normalizeContractorText(m.canonicalName) === normalizeContractorText(item.name) ||
+                m.aliases.some((a) => itemAliases.some((ia: string) => normalizeContractorText(a) === normalizeContractorText(ia)))
             );
             if (match) {
-              for (const alias of item.aliases) {
+              match.canonicalName = item.name.trim();
+              if (item.contractorOfficer && item.contractorOfficer.trim()) {
+                match.officer = {
+                  name: item.contractorOfficer.trim(),
+                  phone: match.officer?.phone || '',
+                };
+              }
+              for (const alias of itemAliases) {
                 if (!match.aliases.includes(alias)) {
                   match.aliases.push(alias);
                 }
               }
+            } else {
+              // Add company as first-class contractor mapping
+              mappings.push({
+                canonicalName: item.name.trim(),
+                rawName: item.name.trim(),
+                normalizedTokens: tokenizeContractorName(item.name),
+                officer: {
+                  name: item.contractorOfficer && item.contractorOfficer.trim() ? item.contractorOfficer.trim() : 'غير محدد',
+                  phone: '',
+                },
+                aliases: Array.from(new Set([item.name.trim(), ...itemAliases])),
+              });
             }
           }
         }
@@ -265,6 +286,16 @@ export function loadContractorOfficersFromExcel(
     console.error('[ContractorResolver] Error reading contacts_table.xlsx:', err);
     return cachedMappings;
   }
+}
+
+/**
+ * Manually invalidates in-memory resolver cache so subsequent lookups re-read latest data.
+ */
+export function invalidateContractorResolverCache(): void {
+  cachedMappings = [];
+  cachedOfficers = {};
+  lastExcelMtime = 0;
+  lastExcelPath = '';
 }
 
 /**

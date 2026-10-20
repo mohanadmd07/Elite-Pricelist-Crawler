@@ -42,7 +42,7 @@ import {
   UnifiedThreadInput,
   UnifiedThreadOutput,
 } from '../src/services/aiMatchService';
-import { resolveOfficerByContractor } from '../src/services/contractorOfficerResolver';
+import { resolveOfficerByContractor, invalidateContractorResolverCache } from '../src/services/contractorOfficerResolver';
 import { InpatientApprovalRecord, CompanyConfigRecord } from '../src/types';
 // @ts-ignore
 import httpntlm from 'httpntlm';
@@ -2961,21 +2961,41 @@ apiApp.get('/api/contractors', (_req, res) => {
 
 // POST /api/contractors
 apiApp.post('/api/contractors', async (req, res) => {
-  const { name, priceListYear, contractorOfficer, aliases, discount } = req.body;
+  const { id, name, previousName, priceListYear, contractorOfficer, aliases, discount } = req.body;
   if (!name) {
     res.status(400).json({ error: 'Name is required' });
     return;
   }
 
   const contractors = loadLocalContractors();
-  const existingIdx = contractors.findIndex((c) => c.name.trim() === name.trim());
+  const existingIdx = contractors.findIndex(
+    (c) =>
+      (id && c.id === id) ||
+      c.name.trim().toLowerCase() === name.trim().toLowerCase() ||
+      (previousName && c.name.trim().toLowerCase() === previousName.trim().toLowerCase())
+  );
+  const targetId =
+    id ||
+    (existingIdx >= 0
+      ? contractors[existingIdx].id
+      : name.trim().toLowerCase().replace(/[^a-z0-9\u0600-\u06FF]+/g, '_'));
+
+  const allAliases = Array.from(
+    new Set([
+      name.trim(),
+      ...(previousName ? [previousName.trim()] : []),
+      ...(existingIdx >= 0 && contractors[existingIdx].aliases ? contractors[existingIdx].aliases : []),
+      ...(Array.isArray(aliases) ? aliases : []),
+    ])
+  ).filter(Boolean);
+
   const entry: CompanyConfigRecord = {
-    id: existingIdx >= 0 ? contractors[existingIdx].id : crypto.randomUUID(),
+    id: targetId,
     name: name.trim(),
     priceListYear: priceListYear || '2025',
-    contractorOfficer: contractorOfficer || '',
-    aliases: aliases || [],
-    discountPercentage: (req.body.discountPercentage ?? discount ?? 0),
+    contractorOfficer: (contractorOfficer || '').trim(),
+    aliases: allAliases,
+    discountPercentage: req.body.discountPercentage ?? discount ?? 0,
     updatedAt: new Date().toISOString() as any,
   };
 
@@ -2986,14 +3006,73 @@ apiApp.post('/api/contractors', async (req, res) => {
   }
   saveLocalContractors(contractors);
 
+  // Invalidate resolver cache so local engine uses latest mapping
+  invalidateContractorResolverCache();
+
+  // Cascade update to local inpatient approvals
+  const approvals = loadLocalApprovals();
+  let updatedApprovals = false;
+  const matchNames = new Set<string>();
+  matchNames.add(name.trim().toLowerCase());
+  if (previousName) matchNames.add(previousName.trim().toLowerCase());
+  allAliases.forEach((a) => matchNames.add(a.trim().toLowerCase()));
+
+  approvals.forEach((app) => {
+    const raw = (app.contractorNormalized || app.contractorRaw || '').trim().toLowerCase();
+    if (matchNames.has(raw)) {
+      app.contractorNormalized = entry.name;
+      app.contractorOfficer = entry.contractorOfficer;
+      app.priceListYear = entry.priceListYear;
+      updatedApprovals = true;
+    }
+  });
+
+  if (updatedApprovals) {
+    saveLocalApprovals(approvals);
+    console.log(`[Watcher API] Cascaded contractor update to local inpatient approvals for "${entry.name}"`);
+  }
+
   try {
-    await setDoc(doc(db, 'companies_config', entry.id), {
-      ...entry,
-      updatedAt: serverTimestamp(),
-    }, { merge: true });
+    await setDoc(
+      doc(db, 'companies_config', entry.id),
+      {
+        ...entry,
+        updatedAt: serverTimestamp(),
+      },
+      { merge: true }
+    );
   } catch {}
 
   res.json({ success: true, item: entry });
+});
+
+// DELETE /api/contractors
+apiApp.delete('/api/contractors', async (req, res) => {
+  const id = (req.query.id || req.body?.id) as string;
+  if (!id) {
+    res.status(400).json({ error: 'id is required' });
+    return;
+  }
+  const contractors = loadLocalContractors();
+  const filtered = contractors.filter((c) => c.id !== id);
+  saveLocalContractors(filtered);
+  invalidateContractorResolverCache();
+  try {
+    await deleteDoc(doc(db, 'companies_config', id));
+  } catch {}
+  res.json({ success: true, id });
+});
+
+apiApp.delete('/api/contractors/:id', async (req, res) => {
+  const id = req.params.id;
+  const contractors = loadLocalContractors();
+  const filtered = contractors.filter((c) => c.id !== id);
+  saveLocalContractors(filtered);
+  invalidateContractorResolverCache();
+  try {
+    await deleteDoc(doc(db, 'companies_config', id));
+  } catch {}
+  res.json({ success: true, id });
 });
 
 // GET /api/settings

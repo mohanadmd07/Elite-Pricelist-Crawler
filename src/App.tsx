@@ -174,6 +174,29 @@ export default function App() {
     }
   }, [selectedCompany?.priceListYear]);
 
+  // Keep selectedCompany synchronized with real-time updates from "Contractors & Officers"
+  useEffect(() => {
+    if (selectedCompany && companies.length > 0) {
+      const match = companies.find(
+        (c) =>
+          (c.id && selectedCompany.id && c.id === selectedCompany.id) ||
+          c.name.trim().toLowerCase() === selectedCompany.name.trim().toLowerCase() ||
+          (c.aliases && c.aliases.some((a) => a.trim().toLowerCase() === selectedCompany.name.trim().toLowerCase()))
+      );
+
+      if (match) {
+        if (
+          match.name !== selectedCompany.name ||
+          match.priceListYear !== selectedCompany.priceListYear ||
+          match.discount !== selectedCompany.discount ||
+          match.responsiblePerson !== selectedCompany.responsiblePerson
+        ) {
+          setSelectedCompany(match);
+        }
+      }
+    }
+  }, [companies, selectedCompany]);
+
   const handleLoginClick = async () => {
     try {
       setLoginError(null);

@@ -1,7 +1,9 @@
 import * as XLSX from 'xlsx';
-import { CompanyInfo } from '../types';
+import { CompanyInfo, CompanyConfigRecord } from '../types';
 import { getBaseNameForSales, normalizeArabic } from '../lib/arabic-normalizer';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
+import { db } from '../firebase';
+import { collection, getDocs, query, orderBy } from 'firebase/firestore';
 
 const MANUAL_REPS: Record<string, string> = {
   'المصرية الاماراتية': 'ديانا',
@@ -33,12 +35,78 @@ const MANUAL_REPS: Record<string, string> = {
 
 let cachedCompanies: CompanyInfo[] | null = null;
 
+export function clearCompaniesCache(): void {
+  cachedCompanies = null;
+}
+
+export function setCachedCompanies(companies: CompanyInfo[]): void {
+  cachedCompanies = companies;
+}
+
+export function configToCompanyInfo(c: CompanyConfigRecord): CompanyInfo {
+  return {
+    id: c.id,
+    name: c.name,
+    priceListYear: c.priceListYear || '2025',
+    discount: c.discountPercentage ?? 0,
+    responsiblePerson: c.contractorOfficer || 'غير محدد',
+    contractorOfficer: c.contractorOfficer || 'غير محدد',
+    aliases: c.aliases || [c.name],
+  };
+}
+
 export async function loadCompanies(): Promise<CompanyInfo[]> {
-  if (cachedCompanies) {
+  if (cachedCompanies && cachedCompanies.length > 0) {
     return cachedCompanies;
   }
 
-  // 1. Try Supabase first if configured
+  // 1. Check authoritative "Contractors & Officers" collection in Firestore first
+  try {
+    const colRef = collection(db, 'companies_config');
+    const q = query(colRef, orderBy('name', 'asc'));
+    const snap = await getDocs(q);
+    if (!snap.empty) {
+      const list: CompanyInfo[] = snap.docs.map((d) => {
+        const data = d.data() as CompanyConfigRecord;
+        return {
+          id: d.id,
+          name: data.name || d.id,
+          priceListYear: data.priceListYear || '2025',
+          discount: data.discountPercentage ?? 0,
+          responsiblePerson: data.contractorOfficer || 'غير محدد',
+          contractorOfficer: data.contractorOfficer || 'غير محدد',
+          aliases: data.aliases || [data.name],
+        };
+      });
+      cachedCompanies = list;
+      return list;
+    }
+  } catch (err) {
+    console.warn('Firestore companies_config read skipped:', err);
+  }
+
+  // 2. Try local API (/api/contractors)
+  try {
+    const res = await fetch('/api/contractors');
+    if (res.ok) {
+      const localData = await res.json();
+      if (Array.isArray(localData) && localData.length > 0) {
+        const list: CompanyInfo[] = localData.map((data: any) => ({
+          id: data.id,
+          name: data.name,
+          priceListYear: data.priceListYear || '2025',
+          discount: data.discountPercentage ?? data.discount ?? 0,
+          responsiblePerson: data.contractorOfficer || data.responsiblePerson || 'غير محدد',
+          contractorOfficer: data.contractorOfficer || data.responsiblePerson || 'غير محدد',
+          aliases: data.aliases || [data.name],
+        }));
+        cachedCompanies = list;
+        return list;
+      }
+    }
+  } catch {}
+
+  // 3. Try Supabase if configured
   if (isSupabaseConfigured() && supabase) {
     try {
       const { data, error } = await supabase

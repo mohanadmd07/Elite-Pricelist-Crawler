@@ -13,10 +13,11 @@ import {
   Check,
   RefreshCw,
 } from 'lucide-react';
-import { InpatientApprovalRecord, AutomationSettings, CompanyInfo } from '../../types';
+import { InpatientApprovalRecord, AutomationSettings, CompanyInfo, CompanyConfigRecord } from '../../types';
 import {
   subscribeToApprovals,
   subscribeToAutomationSettings,
+  subscribeToCompanyConfigs,
   setAutomationPaused,
   triggerManualApprovalsSync,
 } from '../../services/approvalsFirebaseService';
@@ -28,6 +29,43 @@ interface ApprovalsHubProps {
   catalogCompanies?: CompanyInfo[];
 }
 
+export function resolveApprovalContractorAndOfficer(
+  approval: InpatientApprovalRecord,
+  companies: CompanyConfigRecord[]
+): { contractor: string; officer: string; priceListYear?: string } {
+  const rawQuery = (approval.contractorNormalized || approval.contractorRaw || '').trim();
+  if (!rawQuery || rawQuery === 'غير محدد') {
+    return {
+      contractor: approval.contractorNormalized || approval.contractorRaw || 'غير محدد',
+      officer: approval.contractorOfficer || 'غير محدد',
+      priceListYear: approval.priceListYear,
+    };
+  }
+
+  const queryNorm = rawQuery.toLowerCase();
+
+  const match = companies.find((c) => {
+    if (c.name.trim().toLowerCase() === queryNorm) return true;
+    if (c.aliases && c.aliases.some((a) => a.trim().toLowerCase() === queryNorm)) return true;
+    if (c.id && c.id.toLowerCase() === queryNorm) return true;
+    return false;
+  });
+
+  if (match) {
+    return {
+      contractor: match.name,
+      officer: match.contractorOfficer || 'غير محدد',
+      priceListYear: match.priceListYear,
+    };
+  }
+
+  return {
+    contractor: approval.contractorNormalized || approval.contractorRaw || 'غير محدد',
+    officer: approval.contractorOfficer || 'غير محدد',
+    priceListYear: approval.priceListYear,
+  };
+}
+
 export const ApprovalsHub: React.FC<ApprovalsHubProps> = ({
   userEmail,
   catalogCompanies,
@@ -36,6 +74,7 @@ export const ApprovalsHub: React.FC<ApprovalsHubProps> = ({
   const [dateFilter, setDateFilter] = useState<string>('30days');
 
   const [approvals, setApprovals] = useState<InpatientApprovalRecord[]>([]);
+  const [companyConfigs, setCompanyConfigs] = useState<CompanyConfigRecord[]>([]);
   const [loadingApprovals, setLoadingApprovals] = useState(true);
   const [automationSettings, setAutomationSettings] = useState<AutomationSettings>({
     isPaused: false,
@@ -62,7 +101,7 @@ export const ApprovalsHub: React.FC<ApprovalsHubProps> = ({
     }
   };
 
-  // Subscribe to real-time approvals from Firestore (30-day rolling window)
+  // Subscribe to real-time approvals and company configs from Firestore
   useEffect(() => {
     const unsubApprovals = subscribeToApprovals((data) => {
       setApprovals(data);
@@ -73,9 +112,16 @@ export const ApprovalsHub: React.FC<ApprovalsHubProps> = ({
       setAutomationSettings(settings);
     });
 
+    const unsubCompanies = subscribeToCompanyConfigs((configs) => {
+      if (configs && configs.length > 0) {
+        setCompanyConfigs(configs);
+      }
+    });
+
     return () => {
       unsubApprovals();
       unsubSettings();
+      unsubCompanies();
     };
   }, []);
 
@@ -151,15 +197,30 @@ export const ApprovalsHub: React.FC<ApprovalsHubProps> = ({
 • ✉️ Answered (Sent): ${answeredCount}
 • ✍️ Drafted in Outlook: ${draftedCount}
 
-Breakdown by Contractor:
+Breakdown by Contractor & Officer:
 ${Object.entries(
   filteredApprovals.reduce((acc, a) => {
-    const c = a.contractorNormalized || a.contractorRaw || 'Unknown';
-    acc[c] = (acc[c] || 0) + 1;
+    const res = resolveApprovalContractorAndOfficer(a, companyConfigs);
+    const key = `${res.contractor} (سيلز: ${res.officer})`;
+    acc[key] = (acc[key] || 0) + 1;
     return acc;
   }, {} as Record<string, number>)
 )
+  .sort((a, b) => b[1] - a[1])
   .map(([c, count]) => `  - ${c}: ${count}`)
+  .join('\n')}
+
+Breakdown by Officer (سيلز):
+${Object.entries(
+  filteredApprovals.reduce((acc, a) => {
+    const res = resolveApprovalContractorAndOfficer(a, companyConfigs);
+    const officer = res.officer;
+    acc[officer] = (acc[officer] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>)
+)
+  .sort((a, b) => b[1] - a[1])
+  .map(([o, count]) => `  - ${o}: ${count} طلبات`)
   .join('\n')}
 ───────────────────────────────
 Generated via Elite Corporate Approvals Hub • 30-Day Rolling Active`;
@@ -406,6 +467,7 @@ Generated via Elite Corporate Approvals Hub • 30-Day Rolling Active`;
             loading={loadingApprovals}
             selectedDateFilter={dateFilter}
             onDateFilterChange={setDateFilter}
+            companyConfigs={companyConfigs}
           />
         </div>
       ) : (

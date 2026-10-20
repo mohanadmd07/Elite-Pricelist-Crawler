@@ -16,10 +16,13 @@ export interface ProcedureResult {
 }
 
 export interface CompanyInfo {
+  id?: string;
   name: string;
   priceListYear: string;
   discount: number;
   responsiblePerson?: string;
+  contractorOfficer?: string;
+  aliases?: string[];
 }
 
 export interface StandardProcedure {

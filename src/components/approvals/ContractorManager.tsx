@@ -108,6 +108,7 @@ export const ContractorManager: React.FC<ContractorManagerProps> = ({
         {
           id: company.id,
           name: updatedName,
+          previousName: company.name,
           aliases,
           priceListYear: edit.priceListYear !== undefined ? edit.priceListYear : company.priceListYear,
           contractorOfficer: edit.contractorOfficer !== undefined ? edit.contractorOfficer : company.contractorOfficer,

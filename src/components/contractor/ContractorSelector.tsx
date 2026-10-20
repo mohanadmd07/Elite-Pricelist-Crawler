@@ -38,10 +38,13 @@ export const ContractorSelector: React.FC<ContractorSelectorProps> = ({
   const filteredCompanies = companies
     .filter((c) => {
       const query = normalizeArabic(searchTerm);
-      if (!query) return false;
-      return normalizeArabic(c.name).includes(query);
+      if (!query) return true;
+      const nameMatch = normalizeArabic(c.name).includes(query);
+      const officerMatch = normalizeArabic(c.responsiblePerson || c.contractorOfficer || '').includes(query);
+      const aliasMatch = c.aliases && c.aliases.some((a) => normalizeArabic(a).includes(query));
+      return nameMatch || officerMatch || Boolean(aliasMatch);
     })
-    .slice(0, 30);
+    .slice(0, 50);
 
   return (
     <div ref={containerRef} className="relative w-full md:w-72 shrink-0">
@@ -118,7 +121,7 @@ export const ContractorSelector: React.FC<ContractorSelectorProps> = ({
 
       {/* Dropdown listbox */}
       <AnimatePresence>
-        {isOpen && searchTerm.trim().length >= 1 && !selectedCompany && (
+        {isOpen && !selectedCompany && (
           <motion.div
             initial={{ opacity: 0, y: 4 }}
             animate={{ opacity: 1, y: 0 }}
@@ -137,7 +140,7 @@ export const ContractorSelector: React.FC<ContractorSelectorProps> = ({
                 </div>
                 {filteredCompanies.map((company, idx) => (
                   <button
-                    key={idx}
+                    key={company.id || idx}
                     role="option"
                     aria-selected={false}
                     onClick={() => {
@@ -145,11 +148,18 @@ export const ContractorSelector: React.FC<ContractorSelectorProps> = ({
                       onOpenChange(false);
                       onSearchChange('');
                     }}
-                    className="w-full text-left px-3.5 py-2.5 hover:bg-slate-50 rounded-xl flex items-center justify-between group transition-colors cursor-pointer border border-transparent hover:border-slate-100 min-h-[44px]"
+                    className="w-full text-left px-3.5 py-2 hover:bg-slate-50 rounded-xl flex items-center justify-between group transition-colors cursor-pointer border border-transparent hover:border-slate-100 min-h-[44px]"
                   >
-                    <span className="font-bold text-xs text-slate-800 truncate max-w-[170px]">
-                      {company.name}
-                    </span>
+                    <div className="flex flex-col text-left overflow-hidden max-w-[190px]">
+                      <span className="font-bold text-xs text-slate-800 truncate">
+                        {company.name}
+                      </span>
+                      {(company.responsiblePerson || company.contractorOfficer) && (
+                        <span className="text-[10px] text-teal-800 font-medium truncate">
+                          سيلز: {company.responsiblePerson || company.contractorOfficer}
+                        </span>
+                      )}
+                    </div>
                     <div className="flex items-center gap-1.5 shrink-0">
                       <span className="text-[10px] bg-teal-50 text-teal-700 border border-teal-200/60 px-1.5 py-0.5 rounded font-extrabold">
                         {company.discount}% OFF

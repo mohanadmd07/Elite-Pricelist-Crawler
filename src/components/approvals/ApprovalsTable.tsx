@@ -20,17 +20,19 @@ import {
   Coins,
   HelpCircle,
 } from 'lucide-react';
-import { InpatientApprovalRecord } from '../../types';
+import { InpatientApprovalRecord, CompanyConfigRecord } from '../../types';
 import { toggleApprovalStatus, triggerManualDraft } from '../../services/approvalsFirebaseService';
 import { generateCmWhatsappMessageAsync } from '../../lib/whatsapp-generator';
 import { stripSentFromSignatures } from '../../lib/arabic-normalizer';
 import { ViewDraftModal } from './ViewDraftModal';
+import { resolveApprovalContractorAndOfficer } from './ApprovalsHub';
 
 interface ApprovalsTableProps {
   approvals: InpatientApprovalRecord[];
   loading: boolean;
   selectedDateFilter: string;
   onDateFilterChange: (filter: string) => void;
+  companyConfigs?: CompanyConfigRecord[];
 }
 
 export const ApprovalsTable: React.FC<ApprovalsTableProps> = ({
@@ -38,6 +40,7 @@ export const ApprovalsTable: React.FC<ApprovalsTableProps> = ({
   loading,
   selectedDateFilter,
   onDateFilterChange,
+  companyConfigs = [],
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<
@@ -135,9 +138,12 @@ export const ApprovalsTable: React.FC<ApprovalsTableProps> = ({
     // 1. Search term
     const term = searchTerm.toLowerCase().trim();
     if (term) {
+      const res = resolveApprovalContractorAndOfficer(a, companyConfigs);
       const match =
         a.patientName?.toLowerCase().includes(term) ||
         a.mrn?.includes(term) ||
+        res.contractor.toLowerCase().includes(term) ||
+        res.officer.toLowerCase().includes(term) ||
         a.contractorNormalized?.toLowerCase().includes(term) ||
         a.contractorRaw?.toLowerCase().includes(term) ||
         a.contractorOfficer?.toLowerCase().includes(term) ||
@@ -448,17 +454,24 @@ export const ApprovalsTable: React.FC<ApprovalsTableProps> = ({
 
                       {/* Contractor & Officer */}
                       <td className="py-3 px-4">
-                        <div className="flex items-center gap-1.5 font-bold text-slate-800" dir="auto">
-                          <Building size={12} className="text-slate-400 shrink-0" />
-                          <span>{record.contractorNormalized || record.contractorRaw}</span>
-                        </div>
-                        <div className="flex items-center gap-1 text-[11px] text-slate-500 mt-0.5">
-                          <User size={11} className="text-slate-400 shrink-0" />
-                          <span>سيلز: <strong className="text-slate-700">{record.contractorOfficer || 'غير محدد'}</strong></span>
-                          <span className="text-[10px] text-teal-700 bg-teal-50 px-1 rounded ml-1 font-semibold">
-                            {record.priceListYear === 'Cash' ? '2026' : (record.priceListYear || '2026')}
-                          </span>
-                        </div>
+                        {(() => {
+                          const resolvedContractor = resolveApprovalContractorAndOfficer(record, companyConfigs);
+                          return (
+                            <>
+                              <div className="flex items-center gap-1.5 font-bold text-slate-800" dir="auto">
+                                <Building size={12} className="text-slate-400 shrink-0" />
+                                <span>{resolvedContractor.contractor}</span>
+                              </div>
+                              <div className="flex items-center gap-1 text-[11px] text-slate-500 mt-0.5">
+                                <User size={11} className="text-slate-400 shrink-0" />
+                                <span>سيلز: <strong className="text-slate-700">{resolvedContractor.officer}</strong></span>
+                                <span className="text-[10px] text-teal-700 bg-teal-50 px-1 rounded ml-1 font-semibold">
+                                  {resolvedContractor.priceListYear === 'Cash' ? '2026' : (resolvedContractor.priceListYear || record.priceListYear || '2026')}
+                                </span>
+                              </div>
+                            </>
+                          );
+                        })()}
 
                         {/* Financial Terms Badges */}
                         {((record.patientSharePercentage !== null && record.patientSharePercentage !== undefined) || record.approvedAmountLimit || record.coverageConditions) && (
@@ -606,7 +619,15 @@ export const ApprovalsTable: React.FC<ApprovalsTableProps> = ({
 
                           {/* View Draft Modal Button */}
                           <button
-                            onClick={() => setViewingApproval(record)}
+                            onClick={() => {
+                              const resolved = resolveApprovalContractorAndOfficer(record, companyConfigs);
+                              setViewingApproval({
+                                ...record,
+                                contractorNormalized: resolved.contractor,
+                                contractorOfficer: resolved.officer,
+                                priceListYear: resolved.priceListYear || record.priceListYear,
+                              });
+                            }}
                             className="px-2.5 py-1.5 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-700 text-xs font-bold flex items-center gap-1 transition-all cursor-pointer"
                             title="Preview AI Drafted Reply"
                           >

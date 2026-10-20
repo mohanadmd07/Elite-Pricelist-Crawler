@@ -252,20 +252,92 @@ export function subscribeToCompanyConfigs(
 }
 
 /**
+ * Cascades updates to all matching inpatient approvals in Firestore
+ * when a contractor or officer is updated or renamed.
+ */
+export async function cascadeApprovalsForCompany(params: {
+  targetName: string;
+  previousName?: string;
+  aliases?: string[];
+  contractorOfficer: string;
+  priceListYear?: string;
+}): Promise<number> {
+  const { targetName, previousName, aliases = [], contractorOfficer, priceListYear } = params;
+  const matchNames = new Set<string>();
+  if (targetName) matchNames.add(targetName.trim().toLowerCase());
+  if (previousName) matchNames.add(previousName.trim().toLowerCase());
+  aliases.forEach((a) => {
+    if (a && a.trim()) matchNames.add(a.trim().toLowerCase());
+  });
+
+  try {
+    const approvalsCol = collection(db, APPROVALS_COLLECTION);
+    const snap = await getDocs(query(approvalsCol, limit(1000)));
+    const batch = writeBatch(db);
+    let count = 0;
+
+    snap.docs.forEach((d) => {
+      const data = d.data();
+      const norm = (data.contractorNormalized || '').trim().toLowerCase();
+      const raw = (data.contractorRaw || '').trim().toLowerCase();
+      if (matchNames.has(norm) || matchNames.has(raw)) {
+        batch.update(d.ref, {
+          contractorNormalized: targetName.trim(),
+          contractorOfficer: contractorOfficer.trim(),
+          ...(priceListYear ? { priceListYear } : {}),
+        });
+        count++;
+      }
+    });
+
+    if (count > 0) {
+      await batch.commit();
+      console.log(`[Approvals] Cascaded contractor update to ${count} approval records in Firestore.`);
+    }
+    return count;
+  } catch (err) {
+    console.warn('[Approvals] Cascade to Firestore approvals failed (may be offline):', err);
+    return 0;
+  }
+}
+
+/**
  * Saves or updates a company configuration in Firestore.
  */
 export async function saveCompanyConfig(
-  company: Partial<CompanyConfigRecord> & { name: string; priceListYear: string; contractorOfficer: string },
+  company: Partial<CompanyConfigRecord> & {
+    name: string;
+    previousName?: string;
+    priceListYear: string;
+    contractorOfficer: string;
+  },
   userEmail?: string
 ): Promise<string> {
   const docId = company.id || company.name.trim().toLowerCase().replace(/[^a-z0-9\u0600-\u06FF]+/g, '_');
+  const targetName = company.name.trim();
+  const targetOfficer = company.contractorOfficer.trim();
+  const targetYear = company.priceListYear || '2025';
+  const targetAliases = Array.from(
+    new Set([
+      targetName,
+      ...(company.previousName ? [company.previousName.trim()] : []),
+      ...(Array.isArray(company.aliases) ? company.aliases : []),
+    ])
+  ).filter(Boolean);
 
   if (isLocalEnvironment()) {
     try {
       await fetch('/api/contractors', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...company, id: docId }),
+        body: JSON.stringify({
+          ...company,
+          id: docId,
+          name: targetName,
+          aliases: targetAliases,
+          contractorOfficer: targetOfficer,
+          priceListYear: targetYear,
+        }),
       });
     } catch {}
   }
@@ -274,26 +346,59 @@ export async function saveCompanyConfig(
     const docRef = doc(db, COMPANIES_COLLECTION, docId);
     const data: Partial<CompanyConfigRecord> = {
       id: docId,
-      name: company.name.trim(),
-      aliases: company.aliases || [company.name.trim()],
-      priceListYear: company.priceListYear || '2025',
-      contractorOfficer: company.contractorOfficer.trim(),
+      name: targetName,
+      aliases: targetAliases,
+      priceListYear: targetYear,
+      contractorOfficer: targetOfficer,
       discountPercentage: company.discountPercentage || 0,
       updatedAt: serverTimestamp(),
       updatedBy: userEmail || 'system',
     };
     await setDoc(docRef, data, { merge: true });
-  } catch {}
+
+    // If company was renamed and previously had a different docId, clean up old doc
+    if (company.previousName && company.previousName.trim() !== targetName) {
+      const oldDocId = company.previousName.trim().toLowerCase().replace(/[^a-z0-9\u0600-\u06FF]+/g, '_');
+      if (oldDocId !== docId && !company.id) {
+        try {
+          await deleteDoc(doc(db, COMPANIES_COLLECTION, oldDocId));
+        } catch {}
+      }
+    }
+
+    // Cascade update to all matching inpatient approval records in Firestore
+    await cascadeApprovalsForCompany({
+      targetName,
+      previousName: company.previousName,
+      aliases: targetAliases,
+      contractorOfficer: targetOfficer,
+      priceListYear: targetYear,
+    });
+  } catch (err) {
+    console.warn('Failed to save company config to Firestore:', err);
+  }
 
   return docId;
 }
 
 /**
- * Deletes a company configuration from Firestore.
+ * Deletes a company configuration from Firestore and local API.
  */
 export async function deleteCompanyConfig(id: string): Promise<void> {
-  const docRef = doc(db, COMPANIES_COLLECTION, id);
-  await deleteDoc(docRef);
+  try {
+    const docRef = doc(db, COMPANIES_COLLECTION, id);
+    await deleteDoc(docRef);
+  } catch (err) {
+    console.warn('Failed to delete company doc in Firestore:', err);
+  }
+
+  if (isLocalEnvironment()) {
+    try {
+      await fetch(`/api/contractors?id=${encodeURIComponent(id)}`, {
+        method: 'DELETE',
+      });
+    } catch {}
+  }
 }
 
 /**
@@ -514,23 +619,27 @@ export async function seedInitialCompaniesIfEmpty(seedCompanies: CompanyInfo[]):
       return; // Already populated
     }
 
-    const batch = writeBatch(db);
-    for (const c of seedCompanies.slice(0, 50)) {
-      const docId = c.name.trim().toLowerCase().replace(/[^a-z0-9\u0600-\u06FF]+/g, '_');
-      const docRef = doc(db, COMPANIES_COLLECTION, docId);
-      batch.set(docRef, {
-        id: docId,
-        name: c.name,
-        aliases: [c.name],
-        priceListYear: c.priceListYear || '2025',
-        contractorOfficer: c.responsiblePerson || 'محمد ابو الوفا',
-        discountPercentage: c.discount || 0,
-        updatedAt: serverTimestamp(),
-        updatedBy: 'seed_init',
-      });
+    const chunkSize = 400;
+    for (let i = 0; i < seedCompanies.length; i += chunkSize) {
+      const chunk = seedCompanies.slice(i, i + chunkSize);
+      const batch = writeBatch(db);
+      for (const c of chunk) {
+        const docId = c.id || c.name.trim().toLowerCase().replace(/[^a-z0-9\u0600-\u06FF]+/g, '_');
+        const docRef = doc(db, COMPANIES_COLLECTION, docId);
+        batch.set(docRef, {
+          id: docId,
+          name: c.name,
+          aliases: c.aliases || [c.name],
+          priceListYear: c.priceListYear || '2025',
+          contractorOfficer: c.responsiblePerson || c.contractorOfficer || 'محمد ابو الوفا',
+          discountPercentage: c.discount || 0,
+          updatedAt: serverTimestamp(),
+          updatedBy: 'seed_init',
+        });
+      }
+      await batch.commit();
     }
-    await batch.commit();
-    console.log('Seeded initial company configs to Firestore.');
+    console.log(`Seeded all ${seedCompanies.length} initial company configs to Firestore.`);
   } catch (err) {
     console.warn('Skipping initial company seeding (rules or offline):', err);
   }

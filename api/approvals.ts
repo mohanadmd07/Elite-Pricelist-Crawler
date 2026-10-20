@@ -1,3 +1,6 @@
+import fs from 'fs';
+import path from 'path';
+
 export default function handler(req: any, res: any) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
@@ -7,6 +10,13 @@ export default function handler(req: any, res: any) {
     return res.status(200).end();
   }
 
-  // Cloud fallback: approvals are synced via Firestore in cloud deployments
+  try {
+    const jsonPath = path.resolve(process.cwd(), 'data', 'inpatient_approvals.json');
+    if (fs.existsSync(jsonPath)) {
+      const data = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
+      return res.status(200).json(data);
+    }
+  } catch {}
+
   return res.status(200).json([]);
 }
