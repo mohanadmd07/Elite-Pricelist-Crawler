@@ -1,6 +1,6 @@
 import { GoogleGenAI, Type } from '@google/genai';
 import { ProcedureResult, SelectedProcedure, InpatientApprovalRecord, ApprovalGranularStatus } from '../types';
-import { cleanContractorName, normalizeArabic, normalizeText } from '../lib/arabic-normalizer';
+import { cleanContractorName, normalizeArabic, normalizeText, expandMedicalSynonyms, hasAntibodyConflict } from '../lib/arabic-normalizer';
 import { generateCmWhatsappMessage } from '../lib/whatsapp-generator';
 
 export const GEMINI_STORAGE_KEY = 'elite_gemini_api_key';
@@ -221,11 +221,31 @@ export function analyzeThreadWithHeuristics(input: UnifiedThreadInput): UnifiedT
   for (const srv of effectiveServices) {
     let matchedItem: any = null;
     const cleanS = srv.name.trim().toLowerCase();
+    const synonyms = expandMedicalSynonyms(srv.name).map((s) => s.toLowerCase());
 
     for (const cand of input.candidatePricelistRows) {
       const eng = (cand.nameEnglish || '').toLowerCase();
       const ara = (cand.nameArabic || '').toLowerCase();
-      if (eng === cleanS || ara === cleanS || (cleanS.length > 4 && (eng.includes(cleanS) || cleanS.includes(eng)))) {
+
+      // Strict Immunoglobulin Isotype conflict protection (e.g. IgG vs IgA)
+      if (hasAntibodyConflict(srv.name, eng) || hasAntibodyConflict(srv.name, ara)) {
+        continue;
+      }
+
+      const isSynMatch = synonyms.some((syn) => {
+        if (syn.length < 3) return false;
+        if (syn.length <= 4) {
+          return new RegExp(`\\b${syn}\\b`, 'i').test(eng) || new RegExp(`\\b${syn}\\b`, 'i').test(ara);
+        }
+        return eng.includes(syn) || ara.includes(syn);
+      });
+
+      if (
+        eng === cleanS ||
+        ara === cleanS ||
+        isSynMatch ||
+        (cleanS.length > 4 && (eng.includes(cleanS) || cleanS.includes(eng)))
+      ) {
         matchedItem = cand;
         break;
       }
@@ -415,6 +435,8 @@ YOUR TASKS:
 4. CLINICAL PROCEDURE MATCHING:
    - For each requested service [Srv 0, 1...], identify which Candidate ID from <CandidatePricelistRows> matches it best. If none match clinically, use -1.
    - Clinical rule: TEE (Transesophageal Echocardiography) must NEVER match standard surface Echo (TTE).
+   - IMMUNOGLOBULIN SPECIFICITY (CRITICAL): IgA, IgG, IgM, IgE are distinct antibodies and must NEVER match a different isotype. For example, Tissue transglutaminase (IgG) must NEVER match Tissue transglutaminase (IgA). Anti-DGP IgG must NEVER match Anti-DGP IgA.
+   - DISTINCT LABORATORY TESTS: Tissue transglutaminase (tTG) is completely distinct from Anti-Deaminated gluten peptide (anti-DGP). Calprotectin in stool, ANA (IFA), and Anti-DNA (d.s) are distinct diagnostic investigations. NEVER assign the same candidate procedure to multiple different tests!
 
 5. OFFICIAL RESPONSE & CM WHATSAPP DRAFTING:
    - suggestedDraftReply: Professional corporate email draft in Arabic/English responding to the latest thread state.
@@ -687,8 +709,10 @@ STRICT CLINICAL EXTRACTION RULES:
 1. Handle clinical abbreviations with or without dots (e.g., "EEG" matches "ELECTROENCEPHALOGRAPHY (EEG)", "ECG" matches "Electrocardiogram").
 2. Handle synonyms and common clinical variations (e.g., "Echo" matches "Echocardiography").
 3. Transesophageal Echocardiography is TEE or T.E.E (موجات فوق صوتية على القلب عن طريق المريء / إيكو بالمنظار). It is an endoscopic cardiac procedure that must NEVER be matched with standard surface Echocardiography (TTE). Only match TEE with Transesophageal Echocardiography.
-4. ONLY select candidates that truly match the requested procedure by their numeric [ID]. If no candidate is an appropriate clinical match, omit it.
-5. Return a JSON array with 'candidateId' (integer ID) and 'requestedProcedureName' (exact requested English name). If none match, return an empty array [].`;
+4. IMMUNOGLOBULIN SPECIFICITY: IgA, IgG, IgM, IgE are distinct antibodies and must NEVER match a different isotype (e.g. IgG must NEVER match IgA, and IgA must NEVER match IgG).
+5. DISTINCT CLINICAL TESTS: Tissue transglutaminase is distinct from Anti-Deaminated gluten peptide (anti-DGP). Calprotectin, ANA, and Anti-DNA are completely distinct tests. Never collapse different tests into a single candidate!
+6. ONLY select candidates that truly match the requested procedure by their numeric [ID]. If no candidate is an appropriate clinical match, omit it.
+7. Return a JSON array with 'candidateId' (integer ID) and 'requestedProcedureName' (exact requested English name). If none match, return an empty array [].`;
 
   // Lean response schema: LLM outputs only the numeric index and requested name (~15-30 tokens)
   const responseSchema = {

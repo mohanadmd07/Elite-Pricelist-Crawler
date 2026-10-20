@@ -4,7 +4,6 @@
 -- ==============================================================================
 
 -- 1. Enable Required Extensions
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE EXTENSION IF NOT EXISTS pg_trgm;       -- Trigram GIN indexing for fast fuzzy search
 CREATE EXTENSION IF NOT EXISTS unaccent;      -- Stripping diacritics / accents
 
@@ -21,7 +20,7 @@ CREATE TABLE IF NOT EXISTS public.profiles (
 
 -- 3. Sales Representatives
 CREATE TABLE IF NOT EXISTS public.sales_reps (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name_ar TEXT NOT NULL,
     name_en TEXT,
     email TEXT,
@@ -32,7 +31,7 @@ CREATE TABLE IF NOT EXISTS public.sales_reps (
 
 -- 4. Corporate Companies & Contractors
 CREATE TABLE IF NOT EXISTS public.companies (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name TEXT NOT NULL UNIQUE,
     normalized_name TEXT NOT NULL,
     sales_rep_id UUID REFERENCES public.sales_reps(id) ON DELETE SET NULL,
@@ -45,7 +44,7 @@ CREATE TABLE IF NOT EXISTS public.companies (
 
 -- 5. Hospital Pricelists (Master years: 2023, 2024, 2025, etc.)
 CREATE TABLE IF NOT EXISTS public.pricelists (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     year SMALLINT NOT NULL UNIQUE,
     title TEXT NOT NULL,
     is_active BOOLEAN NOT NULL DEFAULT true,
@@ -54,7 +53,7 @@ CREATE TABLE IF NOT EXISTS public.pricelists (
 
 -- 6. Hospital Clinical Sections / Departments
 CREATE TABLE IF NOT EXISTS public.sections (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name_ar TEXT NOT NULL,
     name_en TEXT NOT NULL,
     code TEXT UNIQUE
@@ -62,7 +61,7 @@ CREATE TABLE IF NOT EXISTS public.sections (
 
 -- 7. Medical Procedures Catalog
 CREATE TABLE IF NOT EXISTS public.procedures (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     pricelist_id UUID NOT NULL REFERENCES public.pricelists(id) ON DELETE CASCADE,
     section_id UUID REFERENCES public.sections(id) ON DELETE SET NULL,
     code TEXT,
@@ -74,7 +73,7 @@ CREATE TABLE IF NOT EXISTS public.procedures (
 
 -- 8. User Search History / Audit Logs
 CREATE TABLE IF NOT EXISTS public.search_logs (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
     company_id UUID REFERENCES public.companies(id) ON DELETE SET NULL,
     query_text TEXT NOT NULL,

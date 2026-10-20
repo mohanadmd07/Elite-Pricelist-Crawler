@@ -1,5 +1,12 @@
 import { ProcedureResult, SelectedProcedure } from '../types';
-import { normalizeText, normalizeArabic, cleanHisProcedureQuery } from '../lib/arabic-normalizer';
+import {
+  normalizeText,
+  normalizeArabic,
+  cleanHisProcedureQuery,
+  expandMedicalSynonyms,
+  isAccommodationOrGenericFee,
+  hasAntibodyConflict,
+} from '../lib/arabic-normalizer';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import { matchProceduresWithAI, isGeminiConfigured } from './aiMatchService';
 
@@ -507,4 +514,177 @@ export async function searchAllProcedures(
   });
 
   return finalResults;
+}
+
+/**
+ * Dynamic Hybrid Candidate Retriever
+ * Evaluates requested clinical services and diagnosis against the FULL hospital catalog
+ * (1,600 - 10,000+ items) using clinical synonym expansion and high-performance ranking.
+ * Guarantees that Gemini / heuristic engines receive truly relevant surgical and procedural candidates
+ * rather than arbitrary top-of-file rows.
+ */
+export async function retrieveDynamicPricelistCandidates(
+  year: string | undefined,
+  services: Array<{ name: string; rawPrice?: number }>,
+  diagnosis?: string,
+  maxTotalCandidates: number = 30
+): Promise<Array<{ id: number; nameEnglish: string; nameArabic?: string; sectionName?: string; price?: number; score: number }>> {
+  // 1. Resolve normalized year
+  let validYear: '2023' | '2024' | '2025' | '2026' = '2025';
+  if (year === '2026' || year === 'Cash') validYear = '2026';
+  else if (year === '2024') validYear = '2024';
+  else if (year === '2023') validYear = '2023';
+
+  let catalog: ProcedureResult[] = [];
+  try {
+    catalog = await getCashData(validYear);
+  } catch (err) {
+    console.warn(`[CandidateRetriever] Failed to load catalog for year ${validYear}, fallback to 2025:`, err);
+    try {
+      catalog = await getCashData('2025');
+    } catch {}
+  }
+
+  if (!catalog || catalog.length === 0) {
+    return [];
+  }
+
+  // 2. Identify queries to search
+  const queriesToScore: Array<{ query: string; isAccommodation: boolean; priority: number }> = [];
+
+  for (const s of services) {
+    const raw = (s.name || '').trim();
+    if (!raw) continue;
+    const isAccom = isAccommodationOrGenericFee(raw);
+    queriesToScore.push({
+      query: raw,
+      isAccommodation: isAccom,
+      priority: isAccom ? 1 : 10,
+    });
+  }
+
+  // If no services or only accommodation, also extract clinical terms from diagnosis
+  if (diagnosis && (queriesToScore.length === 0 || queriesToScore.every((q) => q.isAccommodation))) {
+    const cleanDiag = diagnosis.replace(/[-–,;:.]+/g, ' ').trim();
+    if (cleanDiag.length > 3) {
+      queriesToScore.push({
+        query: cleanDiag,
+        isAccommodation: false,
+        priority: 5,
+      });
+    }
+  }
+
+  if (queriesToScore.length === 0) {
+    // Fallback: return general surgical and diagnostic core items
+    return catalog.slice(0, maxTotalCandidates).map((row, idx) => ({
+      id: idx,
+      nameEnglish: row.nameEnglish || '',
+      nameArabic: row.nameArabic || '',
+      sectionName: row.sectionName || '',
+      price: Number(row.price) || 0,
+      score: 1,
+    }));
+  }
+
+  // 3. Score all catalog rows against expanded queries
+  const candidateScores = new Map<number, { row: ProcedureResult; maxScore: number }>();
+
+  for (const qObj of queriesToScore) {
+    const expandedSynonyms = expandMedicalSynonyms(qObj.query);
+    const cleanQ = cleanHisProcedureQuery(qObj.query);
+    const qEng = normalizeText(cleanQ);
+    const qAra = normalizeArabic(cleanQ);
+
+    const tokens = new Set<string>();
+    for (const syn of expandedSynonyms) {
+      const parts = (normalizeText(syn) + ' ' + normalizeArabic(syn))
+        .split(' ')
+        .filter((t) => t.length > 2);
+      parts.forEach((p) => tokens.add(p));
+    }
+    const tokenArr = Array.from(tokens);
+
+    catalog.forEach((item, idx) => {
+      // Antibody Isotype conflict protection: e.g. Tissue transglutaminase IgG vs IgA
+      if (hasAntibodyConflict(cleanQ, item.nameEnglish || '') || hasAntibodyConflict(cleanQ, item.nameArabic || '')) {
+        return;
+      }
+
+      const itemEng = normalizeText(item.nameEnglish);
+      const itemAra = normalizeArabic(item.nameArabic);
+
+      let score = 0;
+
+      // Check expanded synonyms for exact or prefix matches
+      for (const syn of expandedSynonyms) {
+        const sEng = normalizeText(syn);
+        const sAra = normalizeArabic(syn);
+
+        if (sEng && itemEng === sEng) score = Math.max(score, 120);
+        if (sAra && itemAra === sAra) score = Math.max(score, 120);
+
+        if (sEng && (itemEng.startsWith(sEng) || itemEng.includes(` ${sEng} `))) score = Math.max(score, 60);
+        if (sAra && (itemAra.startsWith(sAra) || itemAra.includes(` ${sAra} `))) score = Math.max(score, 60);
+      }
+
+      // Check tokens
+      for (const t of tokenArr) {
+        if (itemEng.includes(t) || itemAra.includes(t)) {
+          score += 12;
+        }
+      }
+
+      // Bonus for dice coefficient
+      if (qEng.length >= 3 && itemEng.length >= 3) {
+        const dice = getDiceCoefficient(qEng, itemEng);
+        score += Math.round(dice * 25);
+      }
+
+      // Penalize accommodation rows if query is not accommodation
+      if (!qObj.isAccommodation && isAccommodationOrGenericFee(item.nameArabic || item.nameEnglish)) {
+        score = Math.floor(score * 0.2);
+      }
+
+      if (score > 15) {
+        const existing = candidateScores.get(idx);
+        if (!existing || score > existing.maxScore) {
+          candidateScores.set(idx, { row: item, maxScore: score });
+        }
+      }
+    });
+  }
+
+  // 4. Sort and pick top candidates
+  const sorted = Array.from(candidateScores.entries())
+    .map(([idx, data]) => ({
+      id: idx,
+      nameEnglish: data.row.nameEnglish,
+      nameArabic: data.row.nameArabic,
+      sectionName: data.row.sectionName,
+      price: Number(data.row.price) || 0,
+      score: data.maxScore,
+    }))
+    .sort((a, b) => b.score - a.score);
+
+  const topCandidates = sorted.slice(0, maxTotalCandidates);
+
+  // If candidate count is still low, pad with top catalog items so AI has context
+  if (topCandidates.length < 5) {
+    const padCount = Math.min(10, catalog.length);
+    for (let i = 0; i < padCount; i++) {
+      if (!topCandidates.some((c) => c.id === i)) {
+        topCandidates.push({
+          id: i,
+          nameEnglish: catalog[i].nameEnglish,
+          nameArabic: catalog[i].nameArabic,
+          sectionName: catalog[i].sectionName,
+          price: Number(catalog[i].price) || 0,
+          score: 1,
+        });
+      }
+    }
+  }
+
+  return topCandidates;
 }

@@ -30,10 +30,10 @@ import {
 } from 'firebase/firestore';
 
 import { db } from '../src/firebase';
-import { normalizeArabic, cleanContractorName, normalizeText, stripSentFromSignatures, cleanHisProcedureQuery, extractOriginalRequestDate } from '../src/lib/arabic-normalizer';
+import { normalizeArabic, cleanContractorName, normalizeText, stripSentFromSignatures, cleanHisProcedureQuery, extractOriginalRequestDate, hasAntibodyConflict } from '../src/lib/arabic-normalizer';
 import { extractCleanProcedurePhrase, generateCmWhatsappMessage, extractProcedureFromApprovalReply } from '../src/lib/whatsapp-generator';
 import { loadCompanies } from '../src/services/companyService';
-import { searchAllProcedures } from '../src/services/procedureService';
+import { searchAllProcedures, retrieveDynamicPricelistCandidates } from '../src/services/procedureService';
 import {
   matchProceduresWithAI,
   isGeminiConfigured,
@@ -42,7 +42,7 @@ import {
   UnifiedThreadInput,
   UnifiedThreadOutput,
 } from '../src/services/aiMatchService';
-import { resolveOfficerByContractor, invalidateContractorResolverCache } from '../src/services/contractorOfficerResolver';
+import { resolveOfficerByContractor, invalidateContractorResolverCache, normalizeContractorText } from '../src/services/contractorOfficerResolver';
 import { InpatientApprovalRecord, CompanyConfigRecord } from '../src/types';
 // @ts-ignore
 import httpntlm from 'httpntlm';
@@ -76,6 +76,38 @@ export const APPROVALS_FILE = path.join(DATA_DIR, 'inpatient_approvals.json');
 export const CONTRACTORS_FILE = path.join(DATA_DIR, 'contractors.json');
 export const SETTINGS_FILE = path.join(DATA_DIR, 'settings.json');
 export const SYNC_STATE_FILE = path.join(DATA_DIR, 'sync_state.json');
+export const RAW_STAGING_FILE = path.join(DATA_DIR, 'raw_email_staging.json');
+
+export function loadRawEmailStaging(): Map<string, any> {
+  const map = new Map<string, any>();
+  if (!fs.existsSync(RAW_STAGING_FILE)) return map;
+  try {
+    const raw = fs.readFileSync(RAW_STAGING_FILE, 'utf-8');
+    const items = JSON.parse(raw);
+    for (const item of items) {
+      if (item && item.id) map.set(item.id, item);
+    }
+  } catch {}
+  return map;
+}
+
+export function saveRawEmailStaging(newItems: any[]): void {
+  try {
+    const existing = loadRawEmailStaging();
+    for (const it of newItems) {
+      if (it && it.id) {
+        existing.set(it.id, {
+          ...it,
+          stagedAt: existing.get(it.id)?.stagedAt || new Date().toISOString(),
+          status: existing.get(it.id)?.status || 'pending',
+        });
+      }
+    }
+    fs.writeFileSync(RAW_STAGING_FILE, JSON.stringify(Array.from(existing.values()), null, 2), 'utf-8');
+  } catch (err) {
+    console.warn('[EWS Staging] Could not save raw staging file:', err);
+  }
+}
 
 export function loadLocalSyncState(): string {
   try {
@@ -718,9 +750,23 @@ export async function resolveContractor(rawName: string): Promise<{
   // 1. Absolute Source of Truth: contacts_table.xlsx (Contractor Officers Master List)
   const excelMatch = resolveOfficerByContractor(cleanedName);
   if (excelMatch.matched && excelMatch.confidenceScore >= 0.65) {
+    let configuredYear = isCashContract ? '2026' : '2025';
+    try {
+      const localConfigs = loadLocalContractors();
+      const matchNorm = normalizeContractorText(excelMatch.contractorNormalized);
+      const foundLocal = localConfigs.find((c) => {
+        if (normalizeContractorText(c.name) === matchNorm) return true;
+        if (c.aliases && c.aliases.some((a: string) => normalizeContractorText(a) === matchNorm)) return true;
+        return false;
+      });
+      if (foundLocal && foundLocal.priceListYear) {
+        configuredYear = foundLocal.priceListYear;
+      }
+    } catch {}
+
     return {
       contractorNormalized: excelMatch.contractorNormalized,
-      priceListYear: isCashContract ? '2026' : '2025',
+      priceListYear: configuredYear,
       contractorOfficer: excelMatch.officerName,
     };
   }
@@ -894,6 +940,11 @@ function scoreCandidateProcedure(
   const isTeeQuery = /transesophageal|tee\b|t\.e\.e|مريء|المريء|بالمنظار/i.test(qEng + ' ' + qAra);
   const isTeeRow = /transesophageal|tee\b|t\.e\.e|مريء|المريء|بالمنظار/i.test(rowEng + ' ' + rowAra);
   if (isTeeQuery !== isTeeRow) {
+    return 0;
+  }
+
+  // Immunoglobulin Isotype mismatch protection (IgA vs IgG vs IgM vs IgE)
+  if (hasAntibodyConflict(qEng + ' ' + qAra, rowEng + ' ' + rowAra)) {
     return 0;
   }
 
@@ -1743,44 +1794,54 @@ export async function ewsGetItemsBatch(itemIds: string[]) {
   </soap:Body>
 </soap:Envelope>`;
 
-  try {
-    const xml = await ewsRequest(soap);
-    const messageBlocks = [...xml.matchAll(/<t:Message>([\s\S]*?)<\/t:Message>/g)];
-    return messageBlocks.map((mb) => {
-      const block = mb[1];
-      const idMatch = block.match(/<t:ItemId Id="([^"]+)"/);
-      const itemId = idMatch ? idMatch[1] : '';
-      const subject = block.match(/<t:Subject>([^<]*)<\/t:Subject>/)?.[1] || '';
-      const messageId = block.match(/<t:InternetMessageId>([^<]*)<\/t:InternetMessageId>/)?.[1] || `<${itemId}@exchange>`;
-      const from = block.match(/<t:From>[\s\S]*?<t:EmailAddress>([^<]+)<\/t:EmailAddress>/)?.[1] || '';
-      const bodyHtml = block.match(/<t:Body[^>]*>([\s\S]*?)<\/t:Body>/)?.[1] || '';
-      const inReplyTo = block.match(/<t:InReplyTo>([^<]+)<\/t:InReplyTo>/)?.[1];
-      const references = block.match(/<t:References>([^<]+)<\/t:References>/)?.[1];
-      const conversationId = block.match(/<t:ConversationId Id="([^"]+)"/)?.[1] || '';
-      const conversationTopic = block.match(/<t:ConversationTopic>([^<]*)<\/t:ConversationTopic>/)?.[1] || '';
-      const receivedAtStr = block.match(/<t:DateTimeReceived>([^<]+)<\/t:DateTimeReceived>/)?.[1];
-      const receivedAt = receivedAtStr ? new Date(receivedAtStr) : new Date();
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    try {
+      const xml = await ewsRequest(soap);
+      const messageBlocks = [...xml.matchAll(/<t:Message>([\s\S]*?)<\/t:Message>/g)];
+      return messageBlocks.map((mb) => {
+        const block = mb[1];
+        const idMatch = block.match(/<t:ItemId Id="([^"]+)"/);
+        const itemId = idMatch ? idMatch[1] : '';
+        const subject = block.match(/<t:Subject>([^<]*)<\/t:Subject>/)?.[1] || '';
+        const messageId = block.match(/<t:InternetMessageId>([^<]*)<\/t:InternetMessageId>/)?.[1] || `<${itemId}@exchange>`;
+        const from = block.match(/<t:From>[\s\S]*?<t:EmailAddress>([^<]+)<\/t:EmailAddress>/)?.[1] || '';
+        const bodyHtml = block.match(/<t:Body[^>]*>([\s\S]*?)<\/t:Body>/)?.[1] || '';
+        const inReplyTo = block.match(/<t:InReplyTo>([^<]+)<\/t:InReplyTo>/)?.[1];
+        const references = block.match(/<t:References>([^<]+)<\/t:References>/)?.[1];
+        const conversationId = block.match(/<t:ConversationId Id="([^"]+)"/)?.[1] || '';
+        const conversationTopic = block.match(/<t:ConversationTopic>([^<]*)<\/t:ConversationTopic>/)?.[1] || '';
+        const receivedAtStr = block.match(/<t:DateTimeReceived>([^<]+)<\/t:DateTimeReceived>/)?.[1];
+        const receivedAt = receivedAtStr ? new Date(receivedAtStr) : new Date();
 
-      return {
-        id: itemId,
-        subject,
-        messageId,
-        from,
-        to: '',
-        cc: '',
-        bodyHtml,
-        bodyText: bodyHtml.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim(),
-        inReplyTo,
-        references,
-        conversationId,
-        conversationTopic,
-        receivedAt,
-      };
-    });
-  } catch (err) {
-    console.warn(`[EWS] Error getting batch item details:`, err);
-    return [];
+        return {
+          id: itemId,
+          subject,
+          messageId,
+          from,
+          to: '',
+          cc: '',
+          bodyHtml,
+          bodyText: bodyHtml.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim(),
+          inReplyTo,
+          references,
+          conversationId,
+          conversationTopic,
+          receivedAt,
+        };
+      });
+    } catch (err: any) {
+      const isThrottled = String(err).includes('ErrorServerBusy') || String(err).includes('503') || String(err).includes('500');
+      if (attempt < 3 && isThrottled) {
+        const delay = attempt * 1500 + Math.random() * 500;
+        console.warn(`[EWS] Server busy or throttled. Retrying batch of ${itemIds.length} items (attempt ${attempt}/3) after ${Math.round(delay)}ms...`);
+        await new Promise((r) => setTimeout(r, delay));
+        continue;
+      }
+      console.warn(`[EWS] Error getting batch item details (attempt ${attempt}/3):`, err);
+      if (attempt === 3) return [];
+    }
   }
+  return [];
 }
 
 /**
@@ -2039,22 +2100,24 @@ export async function runApprovalsCheckEws(force = false): Promise<void> {
       }
     }
 
-    // Batch-fetch details for items in parallel chunks of 35
+    // Batch-fetch details for items sequentially with controlled pacing to prevent Exchange EWS throttling
     const fullItems: any[] = [];
-    const chunkSize = 35;
-    const chunkPromises: Promise<any[]>[] = [];
+    const chunkSize = 25;
     for (let i = 0; i < recentItems.length; i += chunkSize) {
       const chunkIds = recentItems.slice(i, i + chunkSize).map((r) => r.id);
-      chunkPromises.push(
-        ewsGetItemsBatch(chunkIds).catch((err) => {
-          console.warn(`[Approvals Watcher / EWS] Batch fetch error for chunk ${i}:`, err);
-          return [];
-        })
-      );
-    }
-    const chunkBatches = await Promise.all(chunkPromises);
-    for (const b of chunkBatches) {
-      fullItems.push(...b);
+      try {
+        const batchResults = await ewsGetItemsBatch(chunkIds);
+        if (batchResults && batchResults.length > 0) {
+          fullItems.push(...batchResults);
+          saveRawEmailStaging(batchResults);
+        }
+      } catch (err) {
+        console.warn(`[Approvals Watcher / EWS] Batch fetch error for chunk ${i}:`, err);
+      }
+      // Pacing delay to avoid triggering Exchange ErrorServerBusy
+      if (i + chunkSize < recentItems.length) {
+        await new Promise((r) => setTimeout(r, 150));
+      }
     }
 
     // Filter spam / automated alerts
@@ -2186,21 +2249,6 @@ export async function runApprovalsCheckEws(force = false): Promise<void> {
       }
       messagesByThread.get(thKey)!.push(item);
     }
-
-    // Load active 2025 pricelist rows for AI matching candidate pool
-    let pricelistCandidates: Array<{ id: number; nameEnglish: string; nameArabic?: string; sectionName?: string }> = [];
-    try {
-      const pPath = path.resolve(process.cwd(), 'public', '2025_cash.json');
-      if (fs.existsSync(pPath)) {
-        const pList = JSON.parse(fs.readFileSync(pPath, 'utf-8'));
-        pricelistCandidates = pList.slice(0, 150).map((row: any, idx: number) => ({
-          id: idx,
-          nameEnglish: row.nameEnglish || '',
-          nameArabic: row.nameArabic || '',
-          sectionName: row.sectionName || '',
-        }));
-      }
-    } catch {}
 
     const dirtyRecords: InpatientApprovalRecord[] = [];
 
@@ -2471,6 +2519,16 @@ export async function runApprovalsCheckEws(force = false): Promise<void> {
 
       console.log(`[Approvals Watcher / EWS] Running Unified Contextual AI Agent for MRN: ${mrn} (${resolvedPatientName})...`);
 
+      // Dynamically retrieve top candidates from the full catalog for this thread's pricelist year and requested services
+      const effectiveInitialServices = aggregatedServices.length > 0 ? aggregatedServices : (record?.requestedServices || []);
+      const candidateBudget = Math.max(40, effectiveInitialServices.length * 8);
+      const dynamicPricelistCandidates = await retrieveDynamicPricelistCandidates(
+        priceListYear,
+        effectiveInitialServices,
+        resolvedDiagnosis,
+        candidateBudget
+      );
+
       // Run Unified Contextual AI Agent
       const threadInput: UnifiedThreadInput = {
         patientName: resolvedPatientName,
@@ -2481,9 +2539,9 @@ export async function runApprovalsCheckEws(force = false): Promise<void> {
         contractorOfficer,
         priceListYear,
         diagnosis: resolvedDiagnosis,
-        initialServices: aggregatedServices.length > 0 ? aggregatedServices : (record?.requestedServices || []),
+        initialServices: effectiveInitialServices,
         threadMessages,
-        candidatePricelistRows: pricelistCandidates,
+        candidatePricelistRows: dynamicPricelistCandidates,
       };
 
       let aiResult: UnifiedThreadOutput;
@@ -2545,7 +2603,7 @@ export async function runApprovalsCheckEws(force = false): Promise<void> {
         aiThreadSummary: isRecordApproved && !aiResult.executiveSummaryArabic.includes('تمت الموافقة')
           ? `طلب موافقة للمريض ${threadInput.patientName} (${contractorNormalized}). تمت الموافقة على الدخول والإجراء${replyApprovedProcedure ? ` (${replyApprovedProcedure})` : ''}${finalLimit ? ` بحد أقصى ${finalLimit.toLocaleString('en-US')} ج.م` : ' باللائحة'}. الحالة معتمدة ولا توجد متطلبات ناقصة.`
           : aiResult.executiveSummaryArabic,
-        draftBody: aiResult.suggestedDraftReply,
+        draftBody: buildDraftReplyText(priceListYear, contractorNormalized, contractorOfficer, aiResult.matchedProcedures) || aiResult.suggestedDraftReply,
         cmWhatsappMessage: aiResult.cmWhatsappMessage,
         draftedAt: record?.draftedAt || (aiResult.status === 'draft_created' ? new Date().toISOString() : null),
         hasReplies: threadMessages.some((m) => m.isReply),
@@ -2590,8 +2648,8 @@ export async function runApprovalsCheckEws(force = false): Promise<void> {
 
       }
 
-      // High-performance batched Firestore writes (max 450 per batch)
-      const batchSize = 450;
+      // High-performance batched Firestore writes with smaller chunks (25 per batch) to prevent network payload timeouts
+      const batchSize = 25;
       for (let i = 0; i < dirtyRecords.length; i += batchSize) {
         const slice = dirtyRecords.slice(i, i + batchSize);
         const batch = writeBatch(db);
@@ -2606,11 +2664,23 @@ export async function runApprovalsCheckEws(force = false): Promise<void> {
         try {
           await Promise.race([
             batch.commit(),
-            new Promise<void>((_, reject) => setTimeout(() => reject(new Error('Firestore batch commit timeout')), 10000)),
+            new Promise<void>((_, reject) => setTimeout(() => reject(new Error('Firestore batch commit timeout')), 35000)),
           ]);
           console.log(`[Approvals Watcher / EWS] Committed Firestore batch of ${slice.length} records.`);
         } catch (batchErr) {
-          console.warn(`[Approvals Watcher / EWS] Firestore batch write error:`, batchErr);
+          console.warn(`[Approvals Watcher / EWS] Firestore batch write error, retrying individual writes:`, batchErr);
+          for (const rec of slice) {
+            try {
+              const docRef = doc(db, 'inpatient_approvals', rec.id);
+              const fsData: any = {};
+              for (const [k, v] of Object.entries(rec)) {
+                fsData[k] = v === undefined ? null : v;
+              }
+              await setDoc(docRef, fsData, { merge: true });
+            } catch (singleErr) {
+              console.warn(`[Approvals Watcher / EWS] Individual write error for ${rec.id}:`, singleErr);
+            }
+          }
         }
       }
     }
@@ -2632,7 +2702,7 @@ export async function runApprovalsCheckEws(force = false): Promise<void> {
           },
           { merge: true }
         ),
-        new Promise((_, reject) => setTimeout(() => reject(new Error('Settings write timeout')), 5000)),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Settings write timeout')), 15000)),
       ]);
     } catch {}
 

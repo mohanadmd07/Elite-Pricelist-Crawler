@@ -102,6 +102,15 @@ export const ApprovalsTable: React.FC<ApprovalsTableProps> = ({
     }
   };
 
+  const toJsDate = (val: any): Date => {
+    if (!val) return new Date();
+    if (val instanceof Date) return val;
+    if (typeof val.toDate === 'function') return val.toDate();
+    if (val.seconds) return new Date(val.seconds * 1000);
+    const d = new Date(val);
+    return isNaN(d.getTime()) ? new Date() : d;
+  };
+
   // Generate 30 rolling calendar days with request counts for day-by-day navigation
   const dayOptions = useMemo(() => {
     const result = [];
@@ -110,8 +119,7 @@ export const ApprovalsTable: React.FC<ApprovalsTableProps> = ({
 
     for (const a of approvals) {
       if (!a.receivedAt) continue;
-      const d =
-        typeof a.receivedAt.toDate === 'function' ? a.receivedAt.toDate() : new Date(a.receivedAt);
+      const d = toJsDate(a.receivedAt);
       const dateStr = d.toISOString().split('T')[0];
       countMap.set(dateStr, (countMap.get(dateStr) || 0) + 1);
     }
@@ -178,10 +186,7 @@ export const ApprovalsTable: React.FC<ApprovalsTableProps> = ({
 
     // 3. Date filter (strictly within 30-day rolling history)
     if (a.receivedAt) {
-      const date =
-        typeof a.receivedAt.toDate === 'function'
-          ? a.receivedAt.toDate()
-          : new Date(a.receivedAt);
+      const date = toJsDate(a.receivedAt);
       const now = new Date();
       const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
       const dateStr = date.toISOString().split('T')[0];
@@ -204,12 +209,22 @@ export const ApprovalsTable: React.FC<ApprovalsTableProps> = ({
     }
 
     return true;
+  }).sort((a, b) => {
+    const getEpoch = (val: any) => {
+      if (!val) return 0;
+      if (typeof val.toMillis === 'function') return val.toMillis();
+      if (typeof val.toDate === 'function') return val.toDate().getTime();
+      if (val.seconds) return val.seconds * 1000;
+      const d = new Date(val).getTime();
+      return isNaN(d) ? 0 : d;
+    };
+    return getEpoch(b.receivedAt) - getEpoch(a.receivedAt);
   });
 
   const formatTimestamp = (ts: any) => {
     if (!ts) return 'Just now';
     try {
-      const d = typeof ts.toDate === 'function' ? ts.toDate() : new Date(ts);
+      const d = toJsDate(ts);
       const isToday =
         d.toDateString() === new Date().toDateString();
       if (isToday) {

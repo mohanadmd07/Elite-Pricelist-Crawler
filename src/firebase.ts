@@ -81,8 +81,26 @@ console.log('Firebase Init Config Debug (Safe):', {
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 
-// Initialize Firestore with Optimized Multi-Tier Persistent Cache
+// Initialize Firestore with Optimized Multi-Tier Cache (Memory in Node.js, Persistent IndexedDB in Browser)
 function setupOptimizedFirestore(): Firestore {
+  const isNode = typeof window === 'undefined';
+
+  if (isNode) {
+    const nodeSettings = {
+      localCache: memoryLocalCache(),
+    };
+    try {
+      if (firebaseConfig.firestoreDatabaseId) {
+        return initializeFirestore(app, nodeSettings, firebaseConfig.firestoreDatabaseId);
+      }
+      return initializeFirestore(app, nodeSettings);
+    } catch {
+      return firebaseConfig.firestoreDatabaseId
+        ? getFirestore(app, firebaseConfig.firestoreDatabaseId)
+        : getFirestore(app);
+    }
+  }
+
   const multiTabSettings = {
     localCache: persistentLocalCache({
       tabManager: persistentMultipleTabManager(),

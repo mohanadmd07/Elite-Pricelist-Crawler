@@ -153,12 +153,18 @@ export function stripSentFromSignatures(input: string): string {
  */
 export function cleanHisProcedureQuery(query: string): string {
   if (!query) return '';
-  const trimmed = query.trim();
+  let trimmed = query.trim();
+
+  // Strip doctor clinical justification clauses accidentally typed into procedure names
+  // e.g. "رسم سمع واتزان حيث انه يعاني من عدم اتزان و دوخة" -> "رسم سمع واتزان"
+  trimmed = trimmed.replace(/\s*(?:حيث\s*(?:انه|أنها|أنه|انها)|نظرا\s*(?:لانه|لأنها|لوجود|لأنه)|بسبب|نظرا|لتشخيص)\s+.*$/i, '');
+  trimmed = trimmed.replace(/\s*(?:due to|because of|for evaluation of|for suspected)\s+.*$/i, '');
+
   // Transesophageal Echocardiography alias handling (TEE / T.E.E)
   if (/^(?:t\.?e\.?e\.?)(?:\s*-\s*investigation|\s*-\s*procedure|\s*echocardiography)?$/i.test(trimmed)) {
     return 'Transesophageal Echocardiography (TEE)';
   }
-  return query
+  return trimmed
     .replace(/\s*-\s*investigation\b/gi, '')
     .replace(/\binvestigation\b/gi, '')
     .replace(/\s*-\s*procedure\b/gi, '')
@@ -168,6 +174,176 @@ export function cleanHisProcedureQuery(query: string): string {
     .replace(/\(d\.s\)/gi, "(d's)")
     .replace(/\s+/g, ' ')
     .trim();
+}
+
+/**
+ * Standard Egyptian Hospital Clinical Nomenclature & Synonym Dictionary
+ * Bridges differences between doctor requests / HIS terms and official hospital pricelist rows.
+ */
+export const MEDICAL_SYNONYMS: Record<string, string[]> = {
+  // Cardiology / Cath Lab / Interventions
+  'pci': ['therapeutic cardiac catheter', 'balloon diltation+stent', 'balloon dilatation', 'قسطرة القلب العلاجية', 'دعامة', 'توسيع بالبالون'],
+  'staged pci': ['therapeutic cardiac catheter', 'balloon diltation+stent', 'قسطرة القلب العلاجية', 'دعامة'],
+  'primary pci': ['therapeutic cardiac catheter', 'قسطرة القلب العلاجية', 'دعامة'],
+  'ptca': ['therapeutic cardiac catheter', 'balloon dilatation', 'قسطرة القلب العلاجية'],
+  'coronary angiography': ['diagnostic cardiac catheter', 'قسطرة القلب التشخيصية', 'قسطرة تشخيصية'],
+  'cardiac catheter': ['diagnostic cardiac catheter', 'قسطرة القلب التشخيصية', 'قسطرة القلب العلاجية'],
+  'قسطرة قلب': ['diagnostic cardiac catheter', 'therapeutic cardiac catheter', 'قسطرة القلب التشخيصية', 'قسطرة القلب العلاجية'],
+  'قسطرة تشخيصية': ['diagnostic cardiac catheter', 'قسطرة القلب التشخيصية'],
+  'قسطرة علاجية': ['therapeutic cardiac catheter', 'balloon diltation+stent', 'قسطرة القلب العلاجية'],
+  'cabg': ['open heart', 'القلب المفتوح'],
+  'open heart': ['open heart', 'القلب المفتوح'],
+  'قلب مفتوح': ['open heart'],
+  'tee': ['transesophageal echocardiography', 'موجات فوق صوتية على القلب عن طريق المريء'],
+  'مريء': ['transesophageal echocardiography', 'tee'],
+  'tte': ['echocardiography', 'موجات فوق صوتية علي القلب', 'ايكو'],
+  'echo': ['echocardiography', 'موجات فوق صوتية علي القلب', 'ايكو'],
+  'echocardiography': ['echocardiography', 'موجات فوق صوتية علي القلب', 'ايكو'],
+  'ايكو': ['echocardiography', 'echo', 'موجات فوق صوتية علي القلب'],
+  'pacemaker': ['single chamber pacemaker', 'dual chamber pacemaker', 'منظم ضربات القلب'],
+  'منظم ضربات': ['pacemaker', 'منظم ضربات القلب'],
+  'ablation': ['simple ablation', 'cryo ablation', 'دراسة كهروفسيولوجيا القلب والكي'],
+  'كهروفسيولوجيا': ['ablation', 'دراسة كهروفسيولوجيا القلب'],
+
+  // Endoscopy / GIT
+  'colonoscopy': ['lower git endoscopy', 'منظار قولون', 'منظار القولون'],
+  'منظار قولون': ['lower git endoscopy', 'colonoscopy'],
+  'gastroscopy': ['upper git endoscopy', 'منظار معدة', 'منظار المعدة'],
+  'منظار معدة': ['upper git endoscopy', 'gastroscopy'],
+  'ogd': ['upper git endoscopy', 'منظار معدة'],
+  'upper endoscopy': ['upper git endoscopy', 'منظار جهاز هضمي علوي'],
+  'lower endoscopy': ['lower git endoscopy', 'منظار جهاز هضمي سفلي'],
+  'ercp': ['ercp diagnostic', 'ercp with stent', 'منظار تشخيصي للقنوات المرارية', 'منظار قنوات مرارية'],
+  'قنوات مرارية': ['ercp', 'منظار قنوات مرارية'],
+  'polypectomy': ['removal of duodenal polyps', 'إزالة زوائد بالقولون', 'استئصال زوائد'],
+  'زوائد بالقولون': ['removal of duodenal polyps', 'polypectomy'],
+  'gastric balloon': ['gastric balloon insertion', 'تركيب بالون معدة'],
+  'بالون معدة': ['gastric balloon'],
+
+  // General Surgery / Laparoscopy
+  'cholecystectomy': ['استئصال المرارة', 'مرارة بالمنظار', 'gallbladder'],
+  'استئصال المرارة': ['cholecystectomy', 'laparoscopic cholecystectomy', 'مرارة'],
+  'مرارة': ['cholecystectomy', 'استئصال المرارة'],
+  'appendectomy': ['استئصال الزائدة', 'زائدة دودية'],
+  'استئصال الزائدة': ['appendectomy', 'زائدة دودية'],
+  'زائدة': ['appendectomy', 'استئصال الزائدة'],
+  'hernia': ['فتق', 'hernioplasty', 'repair of hernia', 'اصلاح فتق'],
+  'hernioplasty': ['hernia', 'فتق', 'اصلاح فتق'],
+  'فتق': ['hernia', 'hernioplasty', 'اصلاح فتق'],
+  'splenectomy': ['استئصال طحال'],
+  'طحال': ['splenectomy', 'استئصال طحال'],
+  'thyroidectomy': ['استئصال الغدة الدرقية', 'غدة درقية'],
+  'غدة درقية': ['thyroidectomy', 'استئصال الغدة الدرقية'],
+  'mastectomy': ['استئصال ثدي', 'أورام الثدي'],
+  'fistula': ['ناسور', 'استئصال ناسور'],
+  'ناسور': ['fistula', 'استئصال ناسور'],
+  'fissure': ['شرخ', 'علاج شرخ شرجي'],
+  'شرخ': ['fissure'],
+  'hemorrhoids': ['بواسير', 'استئصال بواسير'],
+  'بواسير': ['hemorrhoids'],
+
+  // Neurology / Neurophysiology
+  'eeg': ['electroencephalography', 'رسم مخ', 'رسم المخ'],
+  'electroencephalography': ['eeg', 'رسم مخ'],
+  'رسم مخ': ['eeg', 'electroencephalography', 'رسم المخ'],
+  'emg': ['electromyography', 'رسم عضلات'],
+  'رسم عضلات': ['emg', 'electromyography'],
+  'ncs': ['nerve conduction', 'سرعة توصيل الأعصاب'],
+  'رسم اعصاب': ['ncs', 'nerve conduction', 'سرعة توصيل الأعصاب'],
+
+  // Urology
+  'cystoscopy': ['منظار مثانة'],
+  'منظار مثانة': ['cystoscopy'],
+  'turp': ['استئصال بروستاتا بالمنظار', 'بروستاتا'],
+  'بروستاتا': ['turp', 'prostatectomy', 'استئصال بروستاتا'],
+  'ureteroscopy': ['منظار حالب', 'تفتيت حصوة بالليزر'],
+  'منظار حالب': ['ureteroscopy'],
+  'dj stent': ['دعامة حالب'],
+  'دعامة حالب': ['dj stent'],
+
+  // Radiology
+  'ct': ['اشعة مقطعية', 'أشعة مقطعية', 'computed tomography'],
+  'مقطعية': ['ct', 'computed tomography', 'أشعة مقطعية'],
+  'mri': ['رنين مغناطيسي', 'أشعة الرنين المغناطيسي'],
+  'رنين': ['mri', 'magnetic resonance imaging'],
+  'doppler': ['دوبلر', 'دوبلكس ملون'],
+  'دوبلر': ['doppler', 'duplex'],
+  'sonar': ['موجات صوتية', 'سونار'],
+  'سونار': ['ultrasound', 'sonar', 'موجات صوتية'],
+
+  // Dialysis / ICU / Procedures
+  'hd session': ['غسيل كلوي', 'جلسة غسيل كلوي', 'dialysis'],
+  'hemodialysis': ['غسيل كلوي', 'جلسة غسيل كلوي', 'dialysis'],
+  'غسيل كلوي': ['hemodialysis', 'hd session', 'dialysis'],
+  'pig tail': ['تركيب بيج تيل', 'pig tail insertion'],
+  'بيج تيل': ['pig tail insertion', 'تركيب بيج تيل'],
+  'tracheostomy': ['شق حنجري', 'تركيب أنبوب حنجري'],
+  'audiogram': ['computerized audiogram', 'رسم سمع بالكمبيوتر'],
+  'audiometry': ['computerized audiogram', 'رسم سمع'],
+  'رسم سمع': ['computerized audiogram', 'audiogram'],
+  'tapping': ['بزل', 'paracentesis'],
+  'بزل': ['tapping', 'paracentesis'],
+};
+
+/**
+ * Expands a medical query with its clinical aliases and synonyms
+ */
+export function expandMedicalSynonyms(input: string): string[] {
+  if (!input) return [];
+  const cleanQ = cleanHisProcedureQuery(input);
+  const norm = normalizeText(cleanQ);
+  const normAr = normalizeArabic(cleanQ);
+  const results = new Set<string>([cleanQ, norm, normAr]);
+
+  for (const [key, syns] of Object.entries(MEDICAL_SYNONYMS)) {
+    const isEnglishKey = /^[a-z0-9\s]+$/i.test(key);
+    let matched = false;
+
+    if (isEnglishKey && key.length <= 4) {
+      // Short acronyms (e.g. 'ct', 'mri', 'pci', 'eeg', 'ecg') require word boundary to avoid matching inside words like 'calprotectin'
+      matched = new RegExp(`\\b${key}\\b`, 'i').test(cleanQ);
+    } else {
+      matched = norm.includes(key) || normAr.includes(key);
+    }
+
+    if (matched) {
+      syns.forEach((s) => results.add(s));
+    }
+  }
+  return Array.from(results).filter(Boolean);
+}
+
+/**
+ * Detects if query and candidate have conflicting immunoglobulin isotypes (e.g. IgA vs IgG vs IgM vs IgE).
+ * Diagnostic antibody laboratory tests are strictly isotype-specific and must never cross-match.
+ */
+export function hasAntibodyConflict(query: string, candidate: string): boolean {
+  if (!query || !candidate) return false;
+  const isotypes = ['iga', 'igg', 'igm', 'ige'];
+  const qLower = query.toLowerCase();
+  const cLower = candidate.toLowerCase();
+
+  const qIso = isotypes.filter((iso) => new RegExp(`\\b${iso}\\b`, 'i').test(qLower));
+  const cIso = isotypes.filter((iso) => new RegExp(`\\b${iso}\\b`, 'i').test(cLower));
+
+  if (qIso.length > 0 && cIso.length > 0) {
+    return !qIso.some((iso) => cIso.includes(iso));
+  }
+  return false;
+}
+
+/**
+ * Identifies hospital accommodation, bed, and generic administrative fees
+ * to prevent them from misidentifying as medical procedures.
+ */
+export function isAccommodationOrGenericFee(name: string): boolean {
+  if (!name) return false;
+  const n = normalizeText(name);
+  const a = normalizeArabic(name);
+  return (
+    /\b(bed|room|accommodation|stay|icu day|ccu day|nursing|care unit)\b/i.test(n) ||
+    /إقامة|اقامة|سرير|عناية مركزة|رعاية مركزة|رسم دخول|رسوم فتح ملف|كشف طوارئ|استشارة|مرور طبيب/i.test(a)
+  );
 }
 
 /**

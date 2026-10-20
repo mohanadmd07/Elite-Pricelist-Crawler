@@ -137,11 +137,20 @@ export const ApprovalsHub: React.FC<ApprovalsHubProps> = ({
     }
   };
 
+  // Helper to safely parse dates from Date, Firestore Timestamp, or ISO string
+  const toJsDate = (val: any): Date => {
+    if (!val) return new Date();
+    if (val instanceof Date) return val;
+    if (typeof val.toDate === 'function') return val.toDate();
+    if (val.seconds) return new Date(val.seconds * 1000);
+    const d = new Date(val);
+    return isNaN(d.getTime()) ? new Date() : d;
+  };
+
   // Compute metrics based on dateFilter within the 30-day window
   const filteredApprovals = approvals.filter((a) => {
     if (!a.receivedAt) return false;
-    const date =
-      typeof a.receivedAt.toDate === 'function' ? a.receivedAt.toDate() : new Date(a.receivedAt);
+    const date = toJsDate(a.receivedAt);
     const now = new Date();
     const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const dateStr = date.toISOString().split('T')[0];
@@ -198,27 +207,27 @@ export const ApprovalsHub: React.FC<ApprovalsHubProps> = ({
 • ✍️ Drafted in Outlook: ${draftedCount}
 
 Breakdown by Contractor & Officer:
-${Object.entries(
+${(Object.entries(
   filteredApprovals.reduce((acc, a) => {
     const res = resolveApprovalContractorAndOfficer(a, companyConfigs);
     const key = `${res.contractor} (سيلز: ${res.officer})`;
     acc[key] = (acc[key] || 0) + 1;
     return acc;
   }, {} as Record<string, number>)
-)
+) as [string, number][])
   .sort((a, b) => b[1] - a[1])
   .map(([c, count]) => `  - ${c}: ${count}`)
   .join('\n')}
 
 Breakdown by Officer (سيلز):
-${Object.entries(
+${(Object.entries(
   filteredApprovals.reduce((acc, a) => {
     const res = resolveApprovalContractorAndOfficer(a, companyConfigs);
     const officer = res.officer;
     acc[officer] = (acc[officer] || 0) + 1;
     return acc;
   }, {} as Record<string, number>)
-)
+) as [string, number][])
   .sort((a, b) => b[1] - a[1])
   .map(([o, count]) => `  - ${o}: ${count} طلبات`)
   .join('\n')}

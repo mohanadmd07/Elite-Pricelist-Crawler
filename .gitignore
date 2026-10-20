@@ -12,3 +12,7 @@ coverage/
 __pycache__/
 *.pyc
 *.tmp
+.bin/
+supabase/.temp/
+supabase/contractor_aliases_seed.sql
+data/raw_email_staging.json

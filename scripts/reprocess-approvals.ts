@@ -2,9 +2,9 @@ import 'dotenv/config';
 import fs from 'fs';
 import path from 'path';
 import { db } from '../src/firebase';
-import { collection, doc, setDoc } from 'firebase/firestore';
+import { collection, doc, setDoc, Timestamp } from 'firebase/firestore';
 import { loadLocalApprovals, saveLocalApprovals, buildDraftReplyText } from './approvals-watcher';
-import { stripSentFromSignatures, normalizeText, normalizeArabic, cleanHisProcedureQuery } from '../src/lib/arabic-normalizer';
+import { stripSentFromSignatures, normalizeText, normalizeArabic, cleanHisProcedureQuery, hasAntibodyConflict } from '../src/lib/arabic-normalizer';
 import { extractCleanProcedurePhrase, generateCmWhatsappMessage } from '../src/lib/whatsapp-generator';
 import { InpatientApprovalRecord } from '../src/types';
 
@@ -73,71 +73,28 @@ function scoreCandidate(
   return score;
 }
 
-function matchServices(services: Array<{ name: string; rawPrice: number }>, year: string) {
-  const targetYear =
-    year === '2026' || year === 'Cash' || /cash|كاش/i.test(year)
-      ? '2026'
-      : (year === '2024' || year === '2023' ? year : '2025');
-  let pricelist: any[] = [];
-  try {
-    const pPath = path.resolve(process.cwd(), 'public', `${targetYear}_cash.json`);
-    if (fs.existsSync(pPath)) {
-      pricelist = JSON.parse(fs.readFileSync(pPath, 'utf-8'));
-    }
-  } catch {}
+import { retrieveDynamicPricelistCandidates } from '../src/services/procedureService';
 
-  const anatomicalStopwords = ['قدم', 'كاحل', 'يد', 'عين', 'اذن', 'راس', 'مفصل', 'foot', 'ankle', 'wrist', 'hand', 'joint'];
-  const clinicalNoise = [
-    'عمل', 'سحب', 'تحليل', 'طلب', 'برجاء', 'المطلوب', 'باسم', 'باستخدام', 'تحت', 'الحاله', 'الحالة',
-    'المريض', 'مريض', 'المريضة', 'مريضة', 'الطفل', 'طفل', 'الطفلة', 'طفلة', 'استشاري', 'دكتور', 'طبيب', 'كشف'
-  ];
-
+async function matchServices(services: Array<{ name: string; rawPrice: number }>, year: string, diagnosis?: string) {
   const results: Array<{ serviceName: string; matchedName: string; code?: string; status: 'matched' | 'unmatched' }> = [];
 
   for (const srv of services) {
-    const s = srv.name.trim();
-    const cleanS = cleanHisProcedureQuery(s);
-    const engTokens = cleanS
-      .replace(/[\u0600-\u06FF]/g, ' ')
-      .replace(/[^a-zA-Z0-9\s]/g, ' ')
-      .toLowerCase()
-      .split(/\s+/)
-      .filter((t) => (t.length >= 2 || /^[0-9]$/.test(t)) && !clinicalNoise.includes(t));
-    const araTokens = cleanS
-      .replace(/[a-zA-Z0-9]/g, ' ')
-      .replace(/[^ \u0621-\u064A]/g, ' ')
-      .split(/\s+/)
-      .filter((t) => (t.length >= 2 || /^[0-9]$/.test(t)) && !clinicalNoise.includes(t));
-    const allTokens = [...engTokens, ...araTokens];
-    const mainNounTokens = allTokens.filter((t) => !anatomicalStopwords.includes(t));
-
-    const scoredCandidates: Array<{ item: any; score: number }> = [];
-    for (const item of pricelist) {
-      const rowEng = normalizeText(item.nameEnglish);
-      const rowAra = normalizeArabic(item.nameArabic);
-      const score = scoreCandidate(rowEng, rowAra, engTokens.join(' '), araTokens.join(' '), allTokens, mainNounTokens);
-      if (score >= 20) {
-        scoredCandidates.push({ item, score });
-      }
-    }
-    scoredCandidates.sort((a, b) => b.score - a.score);
-
-    if (scoredCandidates.length > 0 && scoredCandidates[0].score >= 35) {
-      const best = scoredCandidates[0].item;
-      const displayName = best.nameArabic ? `${best.nameArabic} (${best.nameEnglish})` : best.nameEnglish;
+    const cands = await retrieveDynamicPricelistCandidates(year, [srv], diagnosis, 10);
+    const topCand = cands.find((c) => c.score >= 35 && !hasAntibodyConflict(srv.name, c.nameEnglish || ''));
+    if (topCand) {
+      const displayName = topCand.nameArabic ? `${topCand.nameArabic} (${topCand.nameEnglish})` : topCand.nameEnglish;
       results.push({
         serviceName: srv.name,
         matchedName: displayName,
         status: 'matched',
       });
-      continue;
+    } else {
+      results.push({
+        serviceName: srv.name,
+        matchedName: srv.name,
+        status: 'unmatched',
+      });
     }
-
-    results.push({
-      serviceName: srv.name,
-      matchedName: srv.name,
-      status: 'unmatched',
-    });
   }
 
   return results;
@@ -198,7 +155,7 @@ async function run() {
     }
 
     // 3. Re-match procedures against pricelist
-    const matched = matchServices(record.requestedServices || [], record.priceListYear || '2025');
+    const matched = await matchServices(record.requestedServices || [], record.priceListYear || '2025', record.diagnosis);
     record.matchedProcedures = matched;
 
     // 4. Re-build draft reply
@@ -215,10 +172,19 @@ async function run() {
     console.log(`[MRN ${record.mrn}] Draft:\n${record.draftBody}`);
     console.log(`[MRN ${record.mrn}] CM WhatsApp:\n${record.cmWhatsappMessage}\n---`);
 
-    // 6. Sync to Firestore
+    // 6. Sync to Firestore with guaranteed Timestamp
     try {
       const docRef = doc(db, 'inpatient_approvals', record.id);
-      await setDoc(docRef, record, { merge: true });
+      const fsData = {
+        ...record,
+        receivedAt:
+          record.receivedAt && typeof (record.receivedAt as any).toDate === 'function'
+            ? record.receivedAt
+            : record.receivedAt
+            ? Timestamp.fromDate(new Date(record.receivedAt))
+            : Timestamp.now(),
+      };
+      await setDoc(docRef, fsData, { merge: true });
     } catch (e) {
       console.warn(`Firestore sync note for ${record.id}:`, e);
     }

@@ -122,6 +122,19 @@ export function subscribeToApprovals(
         }
       });
 
+      // Defensive client-side sort: guarantee absolute chronological descending order
+      records.sort((a, b) => {
+        const getEpoch = (val: any) => {
+          if (!val) return 0;
+          if (typeof val.toMillis === 'function') return val.toMillis();
+          if (typeof val.toDate === 'function') return val.toDate().getTime();
+          if (val.seconds) return val.seconds * 1000;
+          const d = new Date(val).getTime();
+          return isNaN(d) ? 0 : d;
+        };
+        return getEpoch(b.receivedAt) - getEpoch(a.receivedAt);
+      });
+
       if (isSubscribed) {
         onUpdate(records);
       }
@@ -138,6 +151,17 @@ export function subscribeToApprovals(
               id: docSnap.id,
               ...(docSnap.data() as Omit<InpatientApprovalRecord, 'id'>),
             });
+          });
+          records.sort((a, b) => {
+            const getEpoch = (val: any) => {
+              if (!val) return 0;
+              if (typeof val.toMillis === 'function') return val.toMillis();
+              if (typeof val.toDate === 'function') return val.toDate().getTime();
+              if (val.seconds) return val.seconds * 1000;
+              const d = new Date(val).getTime();
+              return isNaN(d) ? 0 : d;
+            };
+            return getEpoch(b.receivedAt) - getEpoch(a.receivedAt);
           });
           if (isSubscribed) {
             onUpdate(records);

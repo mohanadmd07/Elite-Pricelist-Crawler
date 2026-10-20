@@ -245,6 +245,7 @@ export function loadContractorOfficersFromExcel(
               if (item.contractorOfficer && item.contractorOfficer.trim()) {
                 match.officer = {
                   name: item.contractorOfficer.trim(),
+                  columnHeader: match.officer?.columnHeader || item.contractorOfficer.trim(),
                   phone: match.officer?.phone || '',
                 };
               }
@@ -258,9 +259,10 @@ export function loadContractorOfficersFromExcel(
               mappings.push({
                 canonicalName: item.name.trim(),
                 rawName: item.name.trim(),
-                normalizedTokens: tokenizeContractorName(item.name),
+                normalizedTokens: getContractorTokens(item.name),
                 officer: {
                   name: item.contractorOfficer && item.contractorOfficer.trim() ? item.contractorOfficer.trim() : 'غير محدد',
+                  columnHeader: item.contractorOfficer && item.contractorOfficer.trim() ? item.contractorOfficer.trim() : 'غير محدد',
                   phone: '',
                 },
                 aliases: Array.from(new Set([item.name.trim(), ...itemAliases])),
