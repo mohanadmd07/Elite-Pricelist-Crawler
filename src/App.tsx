@@ -92,6 +92,7 @@ export default function App() {
   });
 
   const priceLists = [
+    { name: 'Elite Hospital 2026', path: '/2026.pdf' },
     { name: 'Elite Hospital 2025', path: '/2025.pdf' },
     { name: 'Elite Hospital 2024', path: '/2024.pdf' },
     { name: 'Elite Hospital 2023', path: '/2023.pdf' },

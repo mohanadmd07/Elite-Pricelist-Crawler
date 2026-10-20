@@ -34,7 +34,7 @@ export const SearchStatusProgress: React.FC<SearchStatusProgressProps> = ({ stat
             </h4>
             <p className="text-[11px] text-slate-500 font-medium">
               {status.stage === 'local'
-                ? 'Searching preloaded 2023–2025 cash tables & contractor catalog…'
+                ? 'Searching preloaded 2023–2026 cash tables & contractor catalog…'
                 : 'Analyzing complex terms with Google Gemini flash model…'}
             </p>
           </div>

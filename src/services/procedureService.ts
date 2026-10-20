@@ -13,11 +13,11 @@ const aiMemoryCache = new Map<string, ProcedureResult[]>();
  * Pre-warms active pricelist catalogs in memory so user searches incur 0ms network fetch latency.
  */
 export function preloadPricelists(activeYear?: string): void {
-  const yearsToPreload: ('2023' | '2024' | '2025')[] = [];
-  if (activeYear && (activeYear === '2025' || activeYear === '2024' || activeYear === '2023')) {
+  const yearsToPreload: ('2023' | '2024' | '2025' | '2026')[] = [];
+  if (activeYear && (activeYear === '2026' || activeYear === '2025' || activeYear === '2024' || activeYear === '2023')) {
     yearsToPreload.push(activeYear);
   } else {
-    yearsToPreload.push('2025', '2024', '2023');
+    yearsToPreload.push('2026', '2025', '2024', '2023');
   }
 
   for (const yr of yearsToPreload) {
@@ -27,7 +27,7 @@ export function preloadPricelists(activeYear?: string): void {
   }
 }
 
-export async function getCashData(year: '2023' | '2024' | '2025'): Promise<ProcedureResult[]> {
+export async function getCashData(year: '2023' | '2024' | '2025' | '2026'): Promise<ProcedureResult[]> {
   if (cashDataCache[year]) {
     return cashDataCache[year];
   }
@@ -274,7 +274,8 @@ export async function searchAllProcedures(
     isExtendingToAI: boolean;
   }) => void
 ): Promise<ProcedureResult[]> {
-  const yearsToFetch: ('2023' | '2024' | '2025')[] = [];
+  const yearsToFetch: ('2023' | '2024' | '2025' | '2026')[] = [];
+  if (!activeYear || activeYear === '2026') yearsToFetch.push('2026');
   if (!activeYear || activeYear === '2025') yearsToFetch.push('2025');
   if (!activeYear || activeYear === '2024') yearsToFetch.push('2024');
   if (!activeYear || activeYear === '2023') yearsToFetch.push('2023');

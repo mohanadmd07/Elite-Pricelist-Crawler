@@ -10,6 +10,7 @@ interface AddCompanyModalProps {
 }
 
 const PRICELIST_OPTIONS = [
+  { label: 'Elite Hospital 2026', value: '2026' },
   { label: 'Elite Hospital 2025 (Default)', value: '2025' },
   { label: 'Elite Hospital 2024', value: '2024' },
   { label: 'Elite Hospital 2023', value: '2023' },

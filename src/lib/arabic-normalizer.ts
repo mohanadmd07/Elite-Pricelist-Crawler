@@ -10,10 +10,12 @@ export function normalizeArabic(str: string): string {
   if (!str) return '';
   return str
     .toLowerCase()
-    .replace(/[\u064B-\u065F\u0670]/g, '') // Strip Tashkeel / diacritics
+    .replace(/[\u064B-\u065F\u0670\u0640]/g, '') // Strip Tashkeel / diacritics / tatweel
+    .replace(/[\u0660-\u0669\u06F0-\u06F9]/g, (d) => String(d.charCodeAt(0) & 0xf)) // Arabic-Indic digits -> ASCII
     .replace(/[أإآا]/g, 'ا')
-    .replace(/[ىي]/g, 'ي')
-    .replace(/[ةه]/g, 'ه')
+    .replace(/[ىيی]/g, 'ي') // Alef-maqsura + Persian yeh
+    .replace(/[كک]/g, 'ك') // Persian keheh -> Arabic kaf
+    .replace(/[ةهھۀ]/g, 'ه')
     .replace(/[ئؤ]/g, 'ء')
     .replace(/[^a-zA-Z0-9\u0621-\u064A\s]/g, ' ')
     .replace(/\s+/g, ' ')
@@ -37,10 +39,12 @@ export function normalizeText(str: string): string {
     .replace(/\s+\b(investigations?|procedures?|tests?|testing|panels?|profiles?|screens?|screening|analysis|packages?|scans?|counts?)$/g, '');
 
   return normalized
-    .replace(/[\u064B-\u065F\u0670]/g, '')
+    .replace(/[\u064B-\u065F\u0670\u0640]/g, '')
+    .replace(/[\u0660-\u0669\u06F0-\u06F9]/g, (d) => String(d.charCodeAt(0) & 0xf))
     .replace(/[أإآا]/g, 'ا')
-    .replace(/[ىي]/g, 'ي')
-    .replace(/[ةه]/g, 'ه')
+    .replace(/[ىيی]/g, 'ي')
+    .replace(/[كک]/g, 'ك')
+    .replace(/[ةهھۀ]/g, 'ه')
     .replace(/[ئؤ]/g, 'ء')
     .replace(/\./g, '')
     .replace(/[^a-zA-Z0-9\u0621-\u064A\s]/g, '')

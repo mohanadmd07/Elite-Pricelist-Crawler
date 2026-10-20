@@ -25,6 +25,7 @@ interface ContractorManagerProps {
 }
 
 const PRICELIST_YEARS = [
+  { value: '2026', label: 'Elite Hospital 2026' },
   { value: '2025', label: 'Elite Hospital 2025' },
   { value: '2024', label: 'Elite Hospital 2024' },
   { value: '2023', label: 'Elite Hospital 2023' },

@@ -8,6 +8,10 @@ export interface ProcedureResult {
   price: string;
   sectionName: string;
   sourceFile: string;
+  /** Hospital service code (e.g. P.318) when present in the source workbook */
+  code?: string;
+  /** True for send-out tests marked with ** in the pricelist */
+  outsourced?: boolean;
   requestedProcedureName?: string;
 }
 

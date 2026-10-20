@@ -25,8 +25,9 @@ function normalizeArabicForSearch(str: string): string {
   return str
     .toLowerCase()
     .replace(/[أإآا]/g, 'ا')
-    .replace(/[ىي]/g, 'ي')
-    .replace(/[ةه]/g, 'ه')
+    .replace(/[ىيی]/g, 'ي')
+    .replace(/[كک]/g, 'ك')
+    .replace(/[ةهھ]/g, 'ه')
     .replace(/[ئؤ]/g, 'ء')
     .replace(/[^a-z0-9\u0621-\u064A\s]/g, ' ')
     .replace(/\s+/g, ' ')
@@ -44,6 +45,7 @@ async function run() {
     `INSERT INTO public.pricelists (year, title, is_active) VALUES (2023, 'Elite Hospital 2023', true) ON CONFLICT (year) DO NOTHING;`,
     `INSERT INTO public.pricelists (year, title, is_active) VALUES (2024, 'Elite Hospital 2024', true) ON CONFLICT (year) DO NOTHING;`,
     `INSERT INTO public.pricelists (year, title, is_active) VALUES (2025, 'Elite Hospital 2025', true) ON CONFLICT (year) DO NOTHING;`,
+    `INSERT INTO public.pricelists (year, title, is_active) VALUES (2026, 'Elite Hospital 2026', true) ON CONFLICT (year) DO NOTHING;`,
     ''
   ];
 
@@ -108,7 +110,7 @@ async function run() {
   }
 
   // 3. Load Sample Procedures from JSON (first 500 procedures per year for initial seed)
-  const years = ['2023', '2024', '2025'];
+  const years = ['2023', '2024', '2025', '2026'];
   for (const yr of years) {
     const jsonPath = path.resolve(ROOT_DIR, 'public', `${yr}_cash.json`);
     if (fs.existsSync(jsonPath)) {
