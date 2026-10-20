@@ -333,6 +333,63 @@ export function hasAntibodyConflict(query: string, candidate: string): boolean {
 }
 
 /**
+ * Strict laboratory and clinical modality conflict detector.
+ * Prevents distinct clinical investigations from collapsing onto generic body fluid analyses:
+ * - Microbiology Culture vs Chemistry & Cell Count
+ * - Gram Stain / Acid-Fast Stain vs Chemistry Analysis
+ * - Cytology Fluid Examination vs Chemistry Analysis
+ * - Molecular PCR Panels (Biofire / Multiplex) vs Chemistry Analysis / Culture
+ * - Specific Biochemical Analytes (Lactate, ADA, Pyruvate) vs General Chemistry & Cell Count
+ */
+export function hasLabInvestigationConflict(query: string, candidate: string): boolean {
+  if (!query || !candidate) return false;
+  const q = query.toLowerCase();
+  const c = candidate.toLowerCase();
+
+  // 1. Culture vs Non-Culture
+  const isQCulture = /\bculture\b|مزرع[ةه]/i.test(q);
+  const isCCulture = /\bculture\b|مزرع[ةه]/i.test(c);
+  if (isQCulture !== isCCulture) {
+    if (isQCulture && (/\banalysis\b|chemistry|cell count|تحليل كيمياء/i.test(c))) return true;
+    if (isCCulture && (/\banalysis\b|chemistry|cell count|تحليل كيمياء/i.test(q))) return true;
+  }
+
+  // 2. Gram Stain / Stain vs Non-Stain
+  const isQStain = /\bstain\b|صبغ[ةه]/i.test(q);
+  const isCStain = /\bstain\b|صبغ[ةه]/i.test(c);
+  if (isQStain !== isCStain) {
+    if (isQStain && (/\banalysis\b|chemistry|cell count|culture/i.test(c))) return true;
+    if (isCStain && (/\banalysis\b|chemistry|cell count|culture/i.test(q))) return true;
+  }
+
+  // 3. Cytology vs Non-Cytology
+  const isQCytology = /\bcytology\b|سيتولوج/i.test(q);
+  const isCCytology = /\bcytology\b|سيتولوج/i.test(c);
+  if (isQCytology !== isCCytology) {
+    if (isQCytology && (/\banalysis\b|chemistry|cell count|culture|stain/i.test(c))) return true;
+    if (isCCytology && (/\banalysis\b|chemistry|cell count|culture|stain/i.test(q))) return true;
+  }
+
+  // 4. PCR / Molecular Panel vs Routine Chemistry Analysis / Culture
+  const isQPCR = /\bpcr\b|filmarray|biofire|molecular/i.test(q);
+  const isCPCR = /\bpcr\b|filmarray|biofire|molecular/i.test(c);
+  if (isQPCR !== isCPCR) {
+    if (isQPCR && (/\banalysis\b|chemistry|cell count|culture|stain|cytology/i.test(c))) return true;
+    if (isCPCR && (/\banalysis\b|chemistry|cell count|culture|stain|cytology/i.test(q))) return true;
+  }
+
+  // 5. Specific CSF Analyte (Lactate, ADA, Chloride, etc.) vs General Fluid Analysis
+  const isQLactate = /\blactate\b|لاكتات/i.test(q);
+  const isCLactate = /\blactate\b|لاكتات/i.test(c);
+  if (isQLactate !== isCLactate) {
+    if (isQLactate && (/chemistry & cell count|cell count/i.test(c))) return true;
+    if (isCLactate && (/chemistry & cell count|cell count/i.test(q))) return true;
+  }
+
+  return false;
+}
+
+/**
  * Identifies hospital accommodation, bed, and generic administrative fees
  * to prevent them from misidentifying as medical procedures.
  */

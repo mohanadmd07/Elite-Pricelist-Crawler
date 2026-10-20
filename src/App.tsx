@@ -339,7 +339,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen relative text-slate-900 font-sans antialiased selection:bg-teal-100 selection:text-teal-900 pb-16 overflow-x-hidden">
+    <div className="min-h-screen relative text-slate-900 font-sans antialiased pb-16 overflow-x-hidden">
       {/* Background Image: Stretched and Fitted per /impeccable */}
       <div
         className="fixed inset-0 w-full h-full pointer-events-none z-0 bg-no-repeat bg-cover bg-center"
@@ -387,14 +387,14 @@ export default function App() {
           >
             <Inbox size={14} />
             <span>Inpatient Approvals & Outlook AI</span>
-            <span className="text-[10px] bg-amber-400 text-slate-950 font-black px-1.5 py-0.5 rounded-full uppercase tracking-wider">
+            <span className="text-[10px] bg-amber-400 text-amber-950 font-black px-1.5 py-0.5 rounded-full uppercase tracking-wider">
               Live
             </span>
           </button>
         </div>
       </div>
 
-      <main className="max-w-5xl mx-auto px-4 sm:px-6 py-2 relative z-10">
+      <main className={`mx-auto py-2 relative z-10 ${mainTab === 'approvals' ? 'max-w-[1600px] w-full px-3 sm:px-6 lg:px-8' : 'max-w-5xl px-4 sm:px-6'}`}>
         {mainTab === 'approvals' ? (
           <ApprovalsHub
             userEmail={user.email || undefined}

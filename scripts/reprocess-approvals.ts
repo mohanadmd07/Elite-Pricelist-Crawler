@@ -4,7 +4,7 @@ import path from 'path';
 import { db } from '../src/firebase';
 import { collection, doc, setDoc, Timestamp } from 'firebase/firestore';
 import { loadLocalApprovals, saveLocalApprovals, buildDraftReplyText } from './approvals-watcher';
-import { stripSentFromSignatures, normalizeText, normalizeArabic, cleanHisProcedureQuery, hasAntibodyConflict } from '../src/lib/arabic-normalizer';
+import { stripSentFromSignatures, normalizeText, normalizeArabic, cleanHisProcedureQuery, hasAntibodyConflict, hasLabInvestigationConflict } from '../src/lib/arabic-normalizer';
 import { extractCleanProcedurePhrase, generateCmWhatsappMessage } from '../src/lib/whatsapp-generator';
 import { InpatientApprovalRecord } from '../src/types';
 
@@ -80,7 +80,12 @@ async function matchServices(services: Array<{ name: string; rawPrice: number }>
 
   for (const srv of services) {
     const cands = await retrieveDynamicPricelistCandidates(year, [srv], diagnosis, 10);
-    const topCand = cands.find((c) => c.score >= 35 && !hasAntibodyConflict(srv.name, c.nameEnglish || ''));
+    const topCand = cands.find(
+      (c) =>
+        c.score >= 35 &&
+        !hasAntibodyConflict(srv.name, c.nameEnglish || '') &&
+        !hasLabInvestigationConflict(srv.name, c.nameEnglish || '')
+    );
     if (topCand) {
       const displayName = topCand.nameArabic ? `${topCand.nameArabic} (${topCand.nameEnglish})` : topCand.nameEnglish;
       results.push({

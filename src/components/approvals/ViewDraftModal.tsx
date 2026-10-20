@@ -19,7 +19,7 @@ import {
 } from 'lucide-react';
 import { InpatientApprovalRecord, ApprovalGranularStatus } from '../../types';
 import { generateCmWhatsappMessageAsync } from '../../lib/whatsapp-generator';
-import { triggerManualDraft } from '../../services/approvalsFirebaseService';
+import { triggerManualDraft, updateApprovalStatus } from '../../services/approvalsFirebaseService';
 
 interface ViewDraftModalProps {
   approval: InpatientApprovalRecord | null;
@@ -37,8 +37,32 @@ export const ViewDraftModal: React.FC<ViewDraftModalProps> = ({
   const [copiedWhatsapp, setCopiedWhatsapp] = useState(false);
   const [isDraftingToOutlook, setIsDraftingToOutlook] = useState(false);
   const [draftedSuccess, setDraftedSuccess] = useState(false);
+  const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
+  const [statusSuccessMsg, setStatusSuccessMsg] = useState<string | null>(null);
 
   if (!isOpen || !approval) return null;
+
+  const handleUpdateStatus = async (newStatus: InpatientApprovalRecord['status'], reason: string) => {
+    try {
+      setIsUpdatingStatus(true);
+      await updateApprovalStatus(approval.id, newStatus, reason);
+      approval.status = newStatus;
+      if (newStatus === 'approved') {
+        approval.hasExistingApproval = true;
+        approval.isRefused = false;
+        setStatusSuccessMsg('تم اعتماد الموافقة بنجاح!');
+      } else if (newStatus === 'refused') {
+        approval.isRefused = true;
+        approval.hasExistingApproval = false;
+        setStatusSuccessMsg('تم إلغاء طلب الموافقة بنجاح!');
+      }
+      setTimeout(() => setStatusSuccessMsg(null), 3000);
+    } catch (err) {
+      console.error('Failed to update status:', err);
+    } finally {
+      setIsUpdatingStatus(false);
+    }
+  };
 
   const handleCopyDraft = async () => {
     try {
@@ -372,7 +396,7 @@ export const ViewDraftModal: React.FC<ViewDraftModalProps> = ({
               <div className="relative">
                 <pre
                   dir="rtl"
-                  className="w-full p-4 rounded-xl bg-slate-900 text-slate-100 font-sans text-xs leading-relaxed whitespace-pre-wrap selection:bg-teal-700 border border-slate-800 shadow-inner max-h-96 overflow-y-auto"
+                  className="w-full p-4 rounded-xl bg-slate-900 text-slate-100 font-sans text-xs leading-relaxed whitespace-pre-wrap border border-slate-800 shadow-inner max-h-96 overflow-y-auto"
                 >
                   {approval.draftBody}
                 </pre>
@@ -411,10 +435,38 @@ export const ViewDraftModal: React.FC<ViewDraftModalProps> = ({
         </div>
 
         {/* Footer Actions */}
-        <div className="flex items-center justify-between px-6 py-3.5 border-t border-slate-100 bg-slate-50/70">
-          <p className="text-[11px] text-slate-500">
-            Elite Inpatient Approvals Engine &bull; Automated Real-time Sync
-          </p>
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-6 py-3.5 border-t border-slate-100 bg-slate-50/70">
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => handleUpdateStatus('approved', 'تمت الموافقة واعتماد الحالة يدوياً بواسطة منسق التأمين')}
+              disabled={isUpdatingStatus || approval.status === 'approved'}
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+                approval.status === 'approved'
+                  ? 'bg-emerald-100 text-emerald-800 border border-emerald-300 opacity-80 cursor-default'
+                  : 'bg-emerald-700 hover:bg-emerald-800 text-white shadow-xs active:scale-95'
+              }`}
+            >
+              <CheckCircle2 size={13} />
+              <span>{approval.status === 'approved' ? 'الحالة معتمدة' : 'اعتماد الموافقة'}</span>
+            </button>
+            <button
+              onClick={() => handleUpdateStatus('refused', 'تم إلغاء طلب الموافقة يدوياً')}
+              disabled={isUpdatingStatus || approval.status === 'refused' || approval.isRefused}
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+                approval.status === 'refused' || approval.isRefused
+                  ? 'bg-rose-100 text-rose-800 border border-rose-300 opacity-80 cursor-default'
+                  : 'bg-rose-50 hover:bg-rose-100 text-rose-800 border border-rose-300 active:scale-95'
+              }`}
+            >
+              <XCircle size={13} />
+              <span>{approval.status === 'refused' || approval.isRefused ? 'الطلب ملغي' : 'إلغاء الطلب'}</span>
+            </button>
+            {statusSuccessMsg && (
+              <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
+                {statusSuccessMsg}
+              </span>
+            )}
+          </div>
           <div className="flex items-center gap-2">
             <button
               onClick={handleDraftToOutlook}

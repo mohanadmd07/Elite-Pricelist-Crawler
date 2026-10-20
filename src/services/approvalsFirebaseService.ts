@@ -205,6 +205,47 @@ export async function toggleApprovalStatus(
 }
 
 /**
+ * Explicitly updates an approval status (e.g. 'approved' or 'refused' / cancelled).
+ * Syncs both to local approvals watcher (if active) and Firestore.
+ */
+export async function updateApprovalStatus(
+  id: string,
+  newStatus: InpatientApprovalRecord['status'],
+  reason?: string
+): Promise<void> {
+  if (isLocalEnvironment()) {
+    try {
+      await fetch(`/api/approvals/${id}/status`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: newStatus, reason }),
+      });
+    } catch {}
+  }
+
+  try {
+    const docRef = doc(db, APPROVALS_COLLECTION, id);
+    const updates: Record<string, any> = {
+      status: newStatus,
+      updatedAt: serverTimestamp(),
+    };
+    if (reason) updates.statusReasonArabic = reason;
+    if (newStatus === 'approved') {
+      updates.hasExistingApproval = true;
+      updates.isRefused = false;
+      if (!reason) updates.statusReasonArabic = 'تمت الموافقة واعتماد الحالة يدوياً';
+    } else if (newStatus === 'refused') {
+      updates.isRefused = true;
+      updates.hasExistingApproval = false;
+      if (!reason) updates.statusReasonArabic = 'تم إلغاء طلب الموافقة يدوياً';
+    }
+    await updateDoc(docRef, updates);
+  } catch (err) {
+    console.error('Failed to update approval status:', err);
+  }
+}
+
+/**
  * Triggers manual drafting for an approval that was held back due to detected replies or approval notes.
  */
 export async function triggerManualDraft(id: string): Promise<void> {

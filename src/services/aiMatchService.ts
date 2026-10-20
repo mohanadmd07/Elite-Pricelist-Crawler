@@ -1,6 +1,6 @@
 import { GoogleGenAI, Type } from '@google/genai';
 import { ProcedureResult, SelectedProcedure, InpatientApprovalRecord, ApprovalGranularStatus } from '../types';
-import { cleanContractorName, normalizeArabic, normalizeText, expandMedicalSynonyms, hasAntibodyConflict } from '../lib/arabic-normalizer';
+import { cleanContractorName, normalizeArabic, normalizeText, expandMedicalSynonyms, hasAntibodyConflict, hasLabInvestigationConflict, cleanHisProcedureQuery } from '../lib/arabic-normalizer';
 import { generateCmWhatsappMessage } from '../lib/whatsapp-generator';
 
 export const GEMINI_STORAGE_KEY = 'elite_gemini_api_key';
@@ -220,15 +220,23 @@ export function analyzeThreadWithHeuristics(input: UnifiedThreadInput): UnifiedT
   const matchedProcedures: Array<{ serviceName: string; matchedName: string; status: 'matched' | 'unmatched' }> = [];
   for (const srv of effectiveServices) {
     let matchedItem: any = null;
-    const cleanS = srv.name.trim().toLowerCase();
+    const cleanS = cleanHisProcedureQuery(srv.name).trim().toLowerCase();
+    const cleanSNorm = normalizeText(cleanS);
     const synonyms = expandMedicalSynonyms(srv.name).map((s) => s.toLowerCase());
 
     for (const cand of input.candidatePricelistRows) {
       const eng = (cand.nameEnglish || '').toLowerCase();
       const ara = (cand.nameArabic || '').toLowerCase();
+      const engNorm = normalizeText(cand.nameEnglish || '');
+      const araNorm = normalizeArabic(cand.nameArabic || '');
 
       // Strict Immunoglobulin Isotype conflict protection (e.g. IgG vs IgA)
       if (hasAntibodyConflict(srv.name, eng) || hasAntibodyConflict(srv.name, ara)) {
+        continue;
+      }
+
+      // Strict Laboratory investigation modality conflict protection (e.g. CSF culture vs CSF analysis)
+      if (hasLabInvestigationConflict(srv.name, eng) || hasLabInvestigationConflict(srv.name, ara)) {
         continue;
       }
 
@@ -243,6 +251,8 @@ export function analyzeThreadWithHeuristics(input: UnifiedThreadInput): UnifiedT
       if (
         eng === cleanS ||
         ara === cleanS ||
+        (cleanSNorm && engNorm === cleanSNorm) ||
+        (cleanSNorm && (engNorm.includes(cleanSNorm) || cleanSNorm.includes(engNorm))) ||
         isSynMatch ||
         (cleanS.length > 4 && (eng.includes(cleanS) || cleanS.includes(eng)))
       ) {
@@ -436,7 +446,15 @@ YOUR TASKS:
    - For each requested service [Srv 0, 1...], identify which Candidate ID from <CandidatePricelistRows> matches it best. If none match clinically, use -1.
    - Clinical rule: TEE (Transesophageal Echocardiography) must NEVER match standard surface Echo (TTE).
    - IMMUNOGLOBULIN SPECIFICITY (CRITICAL): IgA, IgG, IgM, IgE are distinct antibodies and must NEVER match a different isotype. For example, Tissue transglutaminase (IgG) must NEVER match Tissue transglutaminase (IgA). Anti-DGP IgG must NEVER match Anti-DGP IgA.
-   - DISTINCT LABORATORY TESTS: Tissue transglutaminase (tTG) is completely distinct from Anti-Deaminated gluten peptide (anti-DGP). Calprotectin in stool, ANA (IFA), and Anti-DNA (d.s) are distinct diagnostic investigations. NEVER assign the same candidate procedure to multiple different tests!
+   - DISTINCT LABORATORY TESTS: Tissue transglutaminase (tTG) is completely distinct from Anti-Deaminated gluten peptide (anti-DGP). Calprotectin in stool, ANA (IFA), and Anti-DNA (d.s) are distinct diagnostic investigations.
+   - DISTINCT CSF & MICROBIOLOGY INVESTIGATIONS (CRITICAL):
+     * CSF culture is microbiological culture (must NEVER match CSF analysis).
+     * CSF analysis (Chemistry & cell count) is routine chemical/cytological fluid count.
+     * PCR panel for Meningitis, CSF (Bacterial & Viral) is multiplex molecular PCR panel.
+     * Lactate, CSF is specific biochemical measurement of cerebrospinal fluid lactate.
+     * Gram stain is direct microscopy stain.
+     * Cytology for fluids is dedicated cytopathological cell study.
+     NEVER assign 'CSF analysis (Chemistry & cell count)' to culture, PCR panel, lactate, gram stain, or cytology! Each test must map to its own exact candidate. NEVER collapse multiple different tests into a single candidate row!
 
 5. OFFICIAL RESPONSE & CM WHATSAPP DRAFTING:
    - suggestedDraftReply: Professional corporate email draft in Arabic/English responding to the latest thread state.

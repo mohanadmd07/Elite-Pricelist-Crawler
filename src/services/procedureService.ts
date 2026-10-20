@@ -6,6 +6,7 @@ import {
   expandMedicalSynonyms,
   isAccommodationOrGenericFee,
   hasAntibodyConflict,
+  hasLabInvestigationConflict,
 } from '../lib/arabic-normalizer';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import { matchProceduresWithAI, isGeminiConfigured } from './aiMatchService';
@@ -176,6 +177,16 @@ function scoreCandidate(
   const isTeeQuery = /transesophageal|tee\b|t\.e\.e|مريء|المريء|بالمنظار/i.test(queryEngNorm + ' ' + queryAraNorm);
   const isTeeRow = /transesophageal|tee\b|t\.e\.e|مريء|المريء|بالمنظار/i.test(rowEngNorm + ' ' + rowAraNorm);
   if (isTeeQuery !== isTeeRow) {
+    return 0;
+  }
+
+  // Immunoglobulin Isotype conflict protection (e.g. IgG vs IgA)
+  if (hasAntibodyConflict(queryEngNorm + ' ' + queryAraNorm, rowEngNorm + ' ' + rowAraNorm)) {
+    return 0;
+  }
+
+  // Laboratory investigation modality conflict protection (e.g. CSF culture vs CSF analysis)
+  if (hasLabInvestigationConflict(queryEngNorm + ' ' + queryAraNorm, rowEngNorm + ' ' + rowAraNorm)) {
     return 0;
   }
 
@@ -608,6 +619,11 @@ export async function retrieveDynamicPricelistCandidates(
     catalog.forEach((item, idx) => {
       // Antibody Isotype conflict protection: e.g. Tissue transglutaminase IgG vs IgA
       if (hasAntibodyConflict(cleanQ, item.nameEnglish || '') || hasAntibodyConflict(cleanQ, item.nameArabic || '')) {
+        return;
+      }
+
+      // Laboratory investigation modality conflict protection: e.g. CSF culture vs CSF analysis
+      if (hasLabInvestigationConflict(cleanQ, item.nameEnglish || '') || hasLabInvestigationConflict(cleanQ, item.nameArabic || '')) {
         return;
       }
 

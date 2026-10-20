@@ -19,9 +19,13 @@ import {
   ShieldCheck,
   Coins,
   HelpCircle,
+  XCircle,
+  X,
+  LayoutGrid,
+  List,
 } from 'lucide-react';
 import { InpatientApprovalRecord, CompanyConfigRecord } from '../../types';
-import { toggleApprovalStatus, triggerManualDraft } from '../../services/approvalsFirebaseService';
+import { toggleApprovalStatus, triggerManualDraft, updateApprovalStatus } from '../../services/approvalsFirebaseService';
 import { generateCmWhatsappMessageAsync } from '../../lib/whatsapp-generator';
 import { stripSentFromSignatures } from '../../lib/arabic-normalizer';
 import { ViewDraftModal } from './ViewDraftModal';
@@ -57,6 +61,33 @@ export const ApprovalsTable: React.FC<ApprovalsTableProps> = ({
   const [togglingId, setTogglingId] = useState<string | null>(null);
   const [draftingManualId, setDraftingManualId] = useState<string | null>(null);
   const [copiedWhatsappId, setCopiedWhatsappId] = useState<string | null>(null);
+  const [updatingStatusId, setUpdatingStatusId] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<'table' | 'cards'>('table');
+
+  const handleMarkApproved = async (record: InpatientApprovalRecord) => {
+    try {
+      setUpdatingStatusId(record.id);
+      await updateApprovalStatus(record.id, 'approved', 'تمت الموافقة واعتماد الحالة يدوياً بواسطة منسق التأمين');
+    } catch (err) {
+      console.error('Failed to mark as approved:', err);
+    } finally {
+      setUpdatingStatusId(null);
+    }
+  };
+
+  const handleCancelApproval = async (record: InpatientApprovalRecord) => {
+    if (!window.confirm(`هل أنت متأكد من إلغاء طلب الموافقة للمريض: ${record.patientName}؟`)) {
+      return;
+    }
+    try {
+      setUpdatingStatusId(record.id);
+      await updateApprovalStatus(record.id, 'refused', 'تم إلغاء طلب الموافقة يدوياً');
+    } catch (err) {
+      console.error('Failed to cancel approval:', err);
+    } finally {
+      setUpdatingStatusId(null);
+    }
+  };
 
   const handleCopyWhatsapp = async (record: InpatientApprovalRecord) => {
     try {
@@ -356,9 +387,37 @@ export const ApprovalsTable: React.FC<ApprovalsTableProps> = ({
               Inpatient Approvals Feed ({filteredApprovals.length})
             </h3>
           </div>
-          <span className="text-[11px] text-slate-400">
-            Source: Outlook / InApprovals Folder
-          </span>
+          <div className="flex items-center gap-3">
+            {/* View Mode Toggle */}
+            <div className="flex items-center p-0.5 rounded-lg bg-slate-200/70 border border-slate-300/60 text-xs">
+              <button
+                type="button"
+                onClick={() => setViewMode('table')}
+                className={`px-2.5 py-1 rounded-md font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+                  viewMode === 'table' ? 'bg-white text-teal-800 shadow-2xs' : 'text-slate-600 hover:text-slate-900'
+                }`}
+                title="Table View (عرض الجدول)"
+              >
+                <List size={13} />
+                <span className="hidden sm:inline">Table</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setViewMode('cards')}
+                className={`px-2.5 py-1 rounded-md font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+                  viewMode === 'cards' ? 'bg-white text-teal-800 shadow-2xs' : 'text-slate-600 hover:text-slate-900'
+                }`}
+                title="Cards View (عرض البطاقات)"
+              >
+                <LayoutGrid size={13} />
+                <span className="hidden sm:inline">Cards</span>
+              </button>
+            </div>
+
+            <span className="text-[11px] text-slate-400 hidden sm:inline">
+              Source: Outlook / InApprovals Folder
+            </span>
+          </div>
         </div>
 
         {loading ? (
@@ -373,311 +432,504 @@ export const ApprovalsTable: React.FC<ApprovalsTableProps> = ({
             </p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="border-b border-slate-100 text-[11px] font-bold text-slate-400 uppercase tracking-wider bg-slate-50/30">
-                  <th className="py-3 px-5">Patient & MRN</th>
-                  <th className="py-3 px-4">Contractor & Officer</th>
-                  <th className="py-3 px-4">Requested Services</th>
-                  <th className="py-3 px-3 text-center">Status</th>
-                  <th className="py-3 px-3 text-right">Time</th>
-                  <th className="py-3 px-5 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 text-xs">
-                {filteredApprovals.map((record) => {
-                  const isAnswered = record.status === 'answered';
-                  const isToggling = togglingId === record.id;
-                  const allMatched = record.matchedProcedures?.every((m) => m.status === 'matched');
+          <>
+            {/* Desktop Table View (Guaranteed 100% width with zero horizontal scroll) */}
+            <div className={`${viewMode === 'cards' ? 'hidden' : 'hidden lg:block'} overflow-hidden`}>
+              <table className="w-full text-left border-collapse table-fixed">
+                <colgroup>
+                  <col style={{ width: '28%' }} />
+                  <col style={{ width: '18%' }} />
+                  <col style={{ width: '20%' }} />
+                  <col style={{ width: '12%' }} />
+                  <col style={{ width: '7%' }} />
+                  <col style={{ width: '15%' }} />
+                </colgroup>
+                <thead>
+                  <tr className="border-b border-slate-100 text-[11px] font-bold text-slate-400 uppercase tracking-wider bg-slate-50/30">
+                    <th className="py-3 px-4">Patient & MRN</th>
+                    <th className="py-3 px-3">Contractor & Officer</th>
+                    <th className="py-3 px-3">Requested Services</th>
+                    <th className="py-3 px-2 text-center">Status</th>
+                    <th className="py-3 px-2 text-right">Time</th>
+                    <th className="py-3 px-3 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 text-xs">
+                  {filteredApprovals.map((record) => {
+                    const isAnswered = record.status === 'answered';
+                    const allMatched = record.matchedProcedures?.every((m) => m.status === 'matched');
 
-                  return (
-                    <tr
-                      key={record.id}
-                      className={`hover:bg-slate-50/70 transition-colors ${
-                        isAnswered ? 'bg-slate-50/40 opacity-80' : ''
-                      }`}
-                    >
-                      {/* Patient Name & MRN */}
-                      <td className="py-3 px-5">
-                        <div className="font-extrabold text-slate-900" dir="auto">
-                          {record.patientName}
-                        </div>
-                        <div className="flex items-center gap-1.5 text-[11px] text-slate-400 mt-0.5">
-                          <span>MRN: <strong className="text-slate-600">{record.mrn}</strong></span>
-                          {record.bed && <span>• Bed: {record.bed}</span>}
-                        </div>
-
-                        {/* AI Executive Summary Banner */}
-                        {record.aiThreadSummary && (
-                          <div className="mt-2 p-2.5 rounded-xl bg-teal-50/80 border border-teal-200 text-xs text-slate-800 flex items-start gap-2 shadow-2xs">
-                            <Sparkles size={14} className="text-teal-700 shrink-0 mt-0.5" />
-                            <div className="flex-1">
-                              <div className="flex items-center gap-1.5 mb-0.5">
-                                <span className="font-extrabold text-[10px] text-teal-800 uppercase tracking-wider">الملخص الذكي (AI Summary):</span>
-                              </div>
-                              <p className="text-[11px] font-medium text-slate-700 leading-relaxed" dir="auto">
-                                {record.aiThreadSummary}
-                              </p>
-                            </div>
+                    return (
+                      <tr
+                        key={record.id}
+                        className={`hover:bg-slate-50/70 transition-colors ${
+                          isAnswered ? 'bg-slate-50/40 opacity-80' : ''
+                        }`}
+                      >
+                        {/* Patient Name & MRN */}
+                        <td className="py-3 px-4 align-top">
+                          <div className="font-extrabold text-slate-900 break-words" dir="auto">
+                            {record.patientName}
                           </div>
-                        )}
-
-                        {/* Refused / Not Covered Alert Banner */}
-                        {record.isRefused && (
-                          <div className="mt-2 p-2.5 rounded-xl bg-rose-50/95 border border-rose-300 text-xs text-rose-950 flex items-start gap-2 shadow-2xs">
-                            <AlertCircle size={15} className="text-rose-600 shrink-0 mt-0.5" />
-                            <div className="flex-1">
-                              <span className="font-bold text-rose-800">رفض / غير مغطى:</span>{' '}
-                              <span className="font-semibold text-rose-950" dir="auto">
-                                "{stripSentFromSignatures(record.refusalSnippet || 'غير مغطى')}"
-                              </span>
-                            </div>
+                          <div className="flex items-center gap-1.5 text-[11px] text-slate-400 mt-0.5">
+                            <span>MRN: <strong className="text-slate-600">{record.mrn}</strong></span>
+                            {record.bed && <span>• Bed: {record.bed}</span>}
                           </div>
-                        )}
 
-                        {/* Existing Approval Reply Alert Banner */}
-                        {record.hasExistingApproval && record.existingApprovalSnippet && !record.isRefused && (
-                          <div className="mt-2 p-2.5 rounded-xl bg-emerald-50/90 border border-emerald-300 text-xs text-emerald-950 flex items-start gap-2 shadow-2xs">
-                            <CheckCircle2 size={15} className="text-emerald-600 shrink-0 mt-0.5" />
-                            <div className="flex-1">
-                              <div>
-                                <span className="font-bold text-emerald-800">رد الموافقة المستلم:</span>{' '}
-                                <span className="font-semibold text-emerald-950" dir="auto">"{stripSentFromSignatures(record.existingApprovalSnippet)}"</span>
-                              </div>
-                              {record.creditLimitText && (
-                                <div className="mt-1.5 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-950 font-bold text-xs border border-emerald-300 shadow-2xs">
-                                  <span>💰 الحد الأقصى للموافقة:</span>
-                                  <span className="font-black text-emerald-950 underline decoration-emerald-500">{record.creditLimitText}</span>
+                          {/* AI Executive Summary Banner */}
+                          {record.aiThreadSummary && (
+                            <div className="mt-2 p-2 rounded-xl bg-teal-50/80 border border-teal-200 text-xs text-slate-800 flex items-start gap-1.5 shadow-2xs">
+                              <Sparkles size={13} className="text-teal-700 shrink-0 mt-0.5" />
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-1 mb-0.5">
+                                  <span className="font-extrabold text-[10px] text-teal-800 uppercase tracking-wider">الملخص الذكي (AI Summary):</span>
                                 </div>
-                              )}
-                            </div>
-                          </div>
-                        )}
-
-                        {/* Has Discussion Replies (Non-approval & Non-refusal) Alert Banner */}
-                        {record.hasReplies && !record.hasExistingApproval && !record.isRefused && record.replySnippet && record.replySnippet !== 'Thread has prior conversation/replies' && (
-                          <div className="mt-2 p-2.5 rounded-xl bg-amber-50/90 border border-amber-300 text-xs text-amber-950 flex items-start gap-2 shadow-2xs">
-                            <MessageSquare size={15} className="text-amber-600 shrink-0 mt-0.5" />
-                            <div className="flex-1">
-                              <span className="font-bold text-amber-800">يوجد ردود سابقة في المحادثة:</span>{' '}
-                              <span className="italic font-medium text-amber-950" dir="auto">"{stripSentFromSignatures(record.replySnippet)}"</span>
-                            </div>
-                          </div>
-                        )}
-                      </td>
-
-                      {/* Contractor & Officer */}
-                      <td className="py-3 px-4">
-                        {(() => {
-                          const resolvedContractor = resolveApprovalContractorAndOfficer(record, companyConfigs);
-                          return (
-                            <>
-                              <div className="flex items-center gap-1.5 font-bold text-slate-800" dir="auto">
-                                <Building size={12} className="text-slate-400 shrink-0" />
-                                <span>{resolvedContractor.contractor}</span>
+                                <p className="text-[11px] font-medium text-slate-700 leading-relaxed break-words" dir="auto">
+                                  {record.aiThreadSummary}
+                                </p>
                               </div>
-                              <div className="flex items-center gap-1 text-[11px] text-slate-500 mt-0.5">
-                                <User size={11} className="text-slate-400 shrink-0" />
-                                <span>سيلز: <strong className="text-slate-700">{resolvedContractor.officer}</strong></span>
-                                <span className="text-[10px] text-teal-700 bg-teal-50 px-1 rounded ml-1 font-semibold">
-                                  {resolvedContractor.priceListYear === 'Cash' ? '2026' : (resolvedContractor.priceListYear || record.priceListYear || '2026')}
-                                </span>
-                              </div>
-                            </>
-                          );
-                        })()}
-
-                        {/* Financial Terms Badges */}
-                        {((record.patientSharePercentage !== null && record.patientSharePercentage !== undefined) || record.approvedAmountLimit || record.coverageConditions) && (
-                          <div className="flex flex-wrap items-center gap-1.5 mt-2">
-                            {record.patientSharePercentage !== null && record.patientSharePercentage !== undefined && (
-                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-black bg-blue-50 text-blue-900 border border-blue-200 shadow-2xs">
-                                تحمل: {record.patientSharePercentage}%
-                              </span>
-                            )}
-                            {record.approvedAmountLimit && (
-                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-black bg-emerald-50 text-emerald-900 border border-emerald-200 shadow-2xs">
-                                سقف: {record.approvedAmountLimit.toLocaleString()} ج.م
-                              </span>
-                            )}
-                            {record.coverageConditions && (
-                              <span
-                                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-amber-50 text-amber-950 border border-amber-200 truncate max-w-[170px] shadow-2xs"
-                                title={record.coverageConditions}
-                              >
-                                {record.coverageConditions}
-                              </span>
-                            )}
-                          </div>
-                        )}
-                      </td>
-
-                      {/* Requested Services */}
-                      <td className="py-3 px-4 max-w-xs">
-                        <div className="space-y-1">
-                          {record.requestedServices?.map((srv, idx) => (
-                            <div key={idx} className="flex items-center gap-1.5 text-[11px]">
-                              <span className="w-1.5 h-1.5 rounded-full bg-slate-300 shrink-0" />
-                              <span className="text-slate-800 truncate font-medium">{srv.name}</span>
                             </div>
-                          ))}
-                        </div>
-                        {allMatched ? (
-                          <span className="inline-block mt-1 text-[10px] font-bold text-emerald-700">
-                            ✓ All procedures matched
-                          </span>
-                        ) : (
-                          <span className="inline-block mt-1 text-[10px] font-bold text-amber-700">
-                            ⚠️ Has unlisted item
-                          </span>
-                        )}
-                      </td>
-
-                      {/* Status Badge */}
-                      <td className="py-3 px-3 text-center whitespace-nowrap">
-                        {isAnswered ? (
-                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-slate-100 text-slate-700 border border-slate-200">
-                            <Check size={12} className="text-emerald-600" />
-                            Answered (Sent)
-                          </span>
-                        ) : record.status === 'conditionally_approved' ? (
-                          <div className="flex flex-col items-center gap-1">
-                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-teal-50 text-teal-900 border border-teal-300 shadow-2xs">
-                              <ShieldCheck size={12} className="text-teal-700" />
-                              موافقة مشروطة
-                            </span>
-                            {record.approvedAmountLimit && (
-                              <span className="text-[10px] font-bold text-teal-800 bg-teal-100 px-2 py-0.5 rounded-md">
-                                سقف: {record.approvedAmountLimit.toLocaleString()} ج.م
-                              </span>
-                            )}
-                          </div>
-                        ) : record.status === 'partially_approved' ? (
-                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-indigo-50 text-indigo-900 border border-indigo-300 shadow-2xs">
-                            <ShieldCheck size={12} className="text-indigo-700" />
-                            موافقة جزئية
-                          </span>
-                        ) : record.status === 'pending_information' ? (
-                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-sky-50 text-sky-900 border border-sky-300 shadow-2xs">
-                            <HelpCircle size={12} className="text-sky-700" />
-                            مطلوب استيفاء بيانات
-                          </span>
-                        ) : record.isRefused || record.status === 'refused' ? (
-                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-rose-50 text-rose-800 border border-rose-300 shadow-2xs">
-                            <AlertCircle size={12} className="text-rose-600" />
-                            غير مغطى / مرفوض
-                          </span>
-                        ) : record.hasExistingApproval || record.status === 'approved' ? (
-                          <div className="flex flex-col items-center gap-1">
-                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-300 shadow-2xs">
-                              <CheckCircle2 size={12} className="text-emerald-600" />
-                              معتمد بالكامل
-                            </span>
-                            {record.approvedAmountLimit && (
-                              <span className="text-[10px] font-bold text-emerald-900 bg-emerald-100 px-2 py-0.5 rounded-md">
-                                💰 {record.approvedAmountLimit.toLocaleString()} ج.م
-                              </span>
-                            )}
-                          </div>
-                        ) : (
-                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-50 text-amber-800 border border-amber-300 shadow-2xs">
-                            <Clock size={12} className="text-amber-600" />
-                            Pending Approval
-                          </span>
-                        )}
-                      </td>
-
-                      {/* Time */}
-                      <td className="py-3 px-3 text-right text-[11px] font-semibold text-slate-500 whitespace-nowrap">
-                        {formatTimestamp(record.receivedAt)}
-                      </td>
-
-                      {/* Actions */}
-                      <td className="py-3 px-5 text-right">
-                        <div className="flex items-center justify-end gap-1.5">
-                          {/* CM Whatsapp Button */}
-                          <button
-                            onClick={() => handleCopyWhatsapp(record)}
-                            className={`px-2.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
-                              copiedWhatsappId === record.id
-                                ? 'bg-emerald-600 text-white shadow-xs'
-                                : 'bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 hover:border-emerald-400'
-                            }`}
-                            title="Copy Case Manager WhatsApp Message"
-                          >
-                            {copiedWhatsappId === record.id ? (
-                              <>
-                                <Check size={13} className="text-white" />
-                                <span>Copied!</span>
-                              </>
-                            ) : (
-                              <>
-                                <MessageCircle size={13} className="text-emerald-700" />
-                                <span>CM Whatsapp</span>
-                              </>
-                            )}
-                          </button>
-
-                          {/* Manual Draft Button (shown when reply or approval detected) */}
-                          {record.status === 'pending_manual_draft' && (
-                            <button
-                              onClick={() => handleManualDraft(record)}
-                              disabled={draftingManualId === record.id}
-                              className="px-2.5 py-1.5 rounded-xl bg-teal-700 hover:bg-teal-800 text-white text-xs font-bold flex items-center gap-1 shadow-xs transition-all cursor-pointer active:scale-95"
-                              title="Draft Reply to Outlook"
-                            >
-                              <Send size={12} />
-                              <span>{draftingManualId === record.id ? 'Drafting...' : 'Draft to Outlook'}</span>
-                            </button>
                           )}
 
-                          {/* View Draft Modal Button */}
-                          <button
-                            onClick={() => {
-                              const resolved = resolveApprovalContractorAndOfficer(record, companyConfigs);
-                              setViewingApproval({
-                                ...record,
-                                contractorNormalized: resolved.contractor,
-                                contractorOfficer: resolved.officer,
-                                priceListYear: resolved.priceListYear || record.priceListYear,
-                              });
-                            }}
-                            className="px-2.5 py-1.5 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-700 text-xs font-bold flex items-center gap-1 transition-all cursor-pointer"
-                            title="Preview AI Drafted Reply"
-                          >
-                            <Eye size={13} />
-                            <span className="hidden sm:inline">View Draft</span>
-                          </button>
+                          {/* Refused / Not Covered Alert Banner */}
+                          {record.isRefused && (
+                            <div className="mt-2 p-2 rounded-xl bg-rose-50/95 border border-rose-300 text-xs text-rose-950 flex items-start gap-1.5 shadow-2xs">
+                              <AlertCircle size={14} className="text-rose-600 shrink-0 mt-0.5" />
+                              <div className="flex-1 min-w-0">
+                                <span className="font-bold text-rose-800">رفض / غير مغطى:</span>{' '}
+                                <span className="font-semibold text-rose-950 break-words" dir="auto">
+                                  "{stripSentFromSignatures(record.refusalSnippet || 'غير مغطى')}"
+                                </span>
+                              </div>
+                            </div>
+                          )}
 
-                          {/* Toggle Answered Button */}
-                          <button
-                            onClick={() => handleToggleStatus(record)}
-                            disabled={isToggling}
-                            className={`px-2.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1 transition-all cursor-pointer ${
-                              isAnswered
-                                ? 'border border-slate-200 text-slate-600 hover:bg-slate-100'
-                                : 'bg-teal-700 hover:bg-teal-800 text-white shadow-xs'
-                            }`}
-                            title={isAnswered ? 'Mark as Pending' : 'Mark as Sent in Outlook'}
-                          >
-                            {isAnswered ? (
-                              <span>Reopen</span>
-                            ) : (
+                          {/* Existing Approval Reply Alert Banner */}
+                          {record.hasExistingApproval && record.existingApprovalSnippet && !record.isRefused && (
+                            <div className="mt-2 p-2 rounded-xl bg-emerald-50/90 border border-emerald-300 text-xs text-emerald-950 flex items-start gap-1.5 shadow-2xs">
+                              <CheckCircle2 size={14} className="text-emerald-600 shrink-0 mt-0.5" />
+                              <div className="flex-1 min-w-0">
+                                <div>
+                                  <span className="font-bold text-emerald-800">رد الموافقة المستلم:</span>{' '}
+                                  <span className="font-semibold text-emerald-950 break-words" dir="auto">"{stripSentFromSignatures(record.existingApprovalSnippet)}"</span>
+                                </div>
+                                {record.creditLimitText && (
+                                  <div className="mt-1.5 inline-flex items-center gap-1 px-2 py-0.5 rounded-lg bg-emerald-100 text-emerald-950 font-bold text-[11px] border border-emerald-300 shadow-2xs">
+                                    <span>💰 الحد الأقصى للموافقة:</span>
+                                    <span className="font-black text-emerald-950 underline decoration-emerald-500">{record.creditLimitText}</span>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Discussion Replies Alert Banner */}
+                          {record.hasReplies && !record.hasExistingApproval && !record.isRefused && record.replySnippet && record.replySnippet !== 'Thread has prior conversation/replies' && (
+                            <div className="mt-2 p-2 rounded-xl bg-amber-50/90 border border-amber-300 text-xs text-amber-950 flex items-start gap-1.5 shadow-2xs">
+                              <MessageSquare size={14} className="text-amber-600 shrink-0 mt-0.5" />
+                              <div className="flex-1 min-w-0">
+                                <span className="font-bold text-amber-800">يوجد ردود سابقة:</span>{' '}
+                                <span className="italic font-medium text-amber-950 break-words" dir="auto">"{stripSentFromSignatures(record.replySnippet)}"</span>
+                              </div>
+                            </div>
+                          )}
+                        </td>
+
+                        {/* Contractor & Officer */}
+                        <td className="py-3 px-3 align-top">
+                          {(() => {
+                            const resolvedContractor = resolveApprovalContractorAndOfficer(record, companyConfigs);
+                            return (
                               <>
-                                <Check size={13} />
-                                <span>Mark Sent</span>
+                                <div className="flex items-center gap-1.5 font-bold text-slate-800 break-words" dir="auto">
+                                  <Building size={12} className="text-slate-400 shrink-0" />
+                                  <span>{resolvedContractor.contractor}</span>
+                                </div>
+                                <div className="flex items-center gap-1 text-[11px] text-slate-500 mt-0.5 flex-wrap">
+                                  <User size={11} className="text-slate-400 shrink-0" />
+                                  <span>سيلز: <strong className="text-slate-700">{resolvedContractor.officer}</strong></span>
+                                  <span className="text-[10px] text-teal-700 bg-teal-50 px-1 rounded font-semibold">
+                                    {resolvedContractor.priceListYear === 'Cash' ? '2026' : (resolvedContractor.priceListYear || record.priceListYear || '2026')}
+                                  </span>
+                                </div>
                               </>
+                            );
+                          })()}
+
+                          {/* Financial Terms Badges */}
+                          {((record.patientSharePercentage !== null && record.patientSharePercentage !== undefined) || record.approvedAmountLimit || record.coverageConditions) && (
+                            <div className="flex flex-wrap items-center gap-1 mt-2">
+                              {record.patientSharePercentage !== null && record.patientSharePercentage !== undefined && (
+                                <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-black bg-blue-50 text-blue-900 border border-blue-200">
+                                  تحمل: {record.patientSharePercentage}%
+                                </span>
+                              )}
+                              {record.approvedAmountLimit && (
+                                <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-black bg-emerald-50 text-emerald-900 border border-emerald-200">
+                                  سقف: {record.approvedAmountLimit.toLocaleString()} ج.م
+                                </span>
+                              )}
+                              {record.coverageConditions && (
+                                <span
+                                  className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-950 border border-amber-200 truncate max-w-[150px]"
+                                  title={record.coverageConditions}
+                                >
+                                  {record.coverageConditions}
+                                </span>
+                              )}
+                            </div>
+                          )}
+                        </td>
+
+                        {/* Requested Services */}
+                        <td className="py-3 px-3 align-top">
+                          <div className="space-y-1">
+                            {record.requestedServices?.map((srv, idx) => (
+                              <div key={idx} className="flex items-start gap-1 text-[11px] leading-tight">
+                                <span className="w-1.5 h-1.5 rounded-full bg-slate-300 shrink-0 mt-1" />
+                                <span className="text-slate-800 font-medium break-words">{srv.name}</span>
+                              </div>
+                            ))}
+                          </div>
+                          {allMatched ? (
+                            <span className="inline-block mt-1 text-[10px] font-bold text-emerald-700">
+                              ✓ All procedures matched
+                            </span>
+                          ) : (
+                            <span className="inline-block mt-1 text-[10px] font-bold text-amber-700">
+                              ⚠️ Has unlisted item
+                            </span>
+                          )}
+                        </td>
+
+                        {/* Status Badge */}
+                        <td className="py-3 px-2 text-center align-top">
+                          {isAnswered ? (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-200">
+                              <Check size={11} className="text-emerald-600" />
+                              Answered
+                            </span>
+                          ) : record.status === 'conditionally_approved' ? (
+                            <div className="flex flex-col items-center gap-0.5">
+                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-teal-50 text-teal-900 border border-teal-300 shadow-2xs">
+                                <ShieldCheck size={11} className="text-teal-700" />
+                                موافقة مشروطة
+                              </span>
+                              {record.approvedAmountLimit && (
+                                <span className="text-[9px] font-bold text-teal-800 bg-teal-100 px-1.5 py-0.2 rounded">
+                                  سقف: {record.approvedAmountLimit.toLocaleString()} ج.م
+                                </span>
+                              )}
+                            </div>
+                          ) : record.status === 'partially_approved' ? (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-50 text-indigo-900 border border-indigo-300 shadow-2xs">
+                              <ShieldCheck size={11} className="text-indigo-700" />
+                              موافقة جزئية
+                            </span>
+                          ) : record.status === 'pending_information' ? (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-sky-50 text-sky-900 border border-sky-300 shadow-2xs">
+                              <HelpCircle size={11} className="text-sky-700" />
+                              استيفاء بيانات
+                            </span>
+                          ) : record.isRefused || record.status === 'refused' ? (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-50 text-rose-800 border border-rose-300 shadow-2xs">
+                              <AlertCircle size={11} className="text-rose-600" />
+                              ملغي / مرفوض
+                            </span>
+                          ) : record.hasExistingApproval || record.status === 'approved' ? (
+                            <div className="flex flex-col items-center gap-0.5">
+                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-300 shadow-2xs">
+                                <CheckCircle2 size={11} className="text-emerald-600" />
+                                معتمد بالكامل
+                              </span>
+                              {record.approvedAmountLimit && (
+                                <span className="text-[9px] font-bold text-emerald-900 bg-emerald-100 px-1.5 py-0.2 rounded">
+                                  💰 {record.approvedAmountLimit.toLocaleString()} ج.م
+                                </span>
+                              )}
+                            </div>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-300 shadow-2xs">
+                              <Clock size={11} className="text-amber-600" />
+                              Pending
+                            </span>
+                          )}
+                        </td>
+
+                        {/* Time */}
+                        <td className="py-3 px-2 text-right text-[11px] font-semibold text-slate-500 whitespace-nowrap align-top">
+                          {formatTimestamp(record.receivedAt)}
+                        </td>
+
+                        {/* Actions */}
+                        <td className="py-3 px-3 text-right align-top">
+                          <div className="flex flex-wrap items-center justify-end gap-1">
+                            {/* Mark as Approved Button */}
+                            <button
+                              type="button"
+                              onClick={() => handleMarkApproved(record)}
+                              disabled={updatingStatusId === record.id || record.status === 'approved'}
+                              className={`px-2 py-1 rounded-lg text-[11px] font-bold inline-flex items-center gap-1 transition-all cursor-pointer ${
+                                record.status === 'approved'
+                                  ? 'bg-emerald-100 text-emerald-800 border border-emerald-300 opacity-80 cursor-default'
+                                  : 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-2xs active:scale-95'
+                              }`}
+                              title={record.status === 'approved' ? 'الحالة معتمدة بالفعل' : 'اعتماد الموافقة (Mark as Approved)'}
+                            >
+                              <CheckCircle2 size={12} className={record.status === 'approved' ? 'text-emerald-700' : 'text-white'} />
+                              <span>اعتماد</span>
+                            </button>
+
+                            {/* Cancel Approval Button */}
+                            <button
+                              type="button"
+                              onClick={() => handleCancelApproval(record)}
+                              disabled={updatingStatusId === record.id || record.status === 'refused' || record.isRefused}
+                              className={`px-2 py-1 rounded-lg text-[11px] font-bold inline-flex items-center gap-1 transition-all cursor-pointer ${
+                                record.status === 'refused' || record.isRefused
+                                  ? 'bg-rose-100 text-rose-800 border border-rose-300 opacity-80 cursor-default'
+                                  : 'bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 active:scale-95'
+                              }`}
+                              title={record.status === 'refused' || record.isRefused ? 'الطلب ملغي / مرفوض' : 'إلغاء الطلب (Cancel Approval)'}
+                            >
+                              <XCircle size={12} className={record.status === 'refused' || record.isRefused ? 'text-rose-700' : 'text-rose-600'} />
+                              <span>إلغاء</span>
+                            </button>
+
+                            {/* CM Whatsapp Button */}
+                            <button
+                              type="button"
+                              onClick={() => handleCopyWhatsapp(record)}
+                              className={`p-1.5 rounded-lg text-[11px] font-bold inline-flex items-center transition-all cursor-pointer ${
+                                copiedWhatsappId === record.id
+                                  ? 'bg-emerald-600 text-white shadow-xs'
+                                  : 'bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300'
+                              }`}
+                              title="Copy Case Manager WhatsApp Message"
+                            >
+                              {copiedWhatsappId === record.id ? (
+                                <Check size={12} className="text-white" />
+                              ) : (
+                                <MessageCircle size={12} className="text-emerald-700" />
+                              )}
+                            </button>
+
+                            {/* Manual Draft Button */}
+                            {record.status === 'pending_manual_draft' && (
+                              <button
+                                type="button"
+                                onClick={() => handleManualDraft(record)}
+                                disabled={draftingManualId === record.id}
+                                className="px-2 py-1 rounded-lg bg-teal-700 hover:bg-teal-800 text-white text-[11px] font-bold inline-flex items-center gap-1 shadow-2xs transition-all cursor-pointer"
+                                title="Draft Reply to Outlook"
+                              >
+                                <Send size={11} />
+                                <span>{draftingManualId === record.id ? '...' : 'Draft'}</span>
+                              </button>
                             )}
-                          </button>
+
+                            {/* View Draft Modal Button */}
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const resolved = resolveApprovalContractorAndOfficer(record, companyConfigs);
+                                setViewingApproval({
+                                  ...record,
+                                  contractorNormalized: resolved.contractor,
+                                  contractorOfficer: resolved.officer,
+                                  priceListYear: resolved.priceListYear || record.priceListYear,
+                                });
+                              }}
+                              className="p-1.5 rounded-lg border border-slate-200 hover:bg-slate-100 text-slate-700 text-[11px] font-bold inline-flex items-center transition-all cursor-pointer"
+                              title="Preview AI Drafted Reply"
+                            >
+                              <Eye size={12} />
+                            </button>
+
+                            {/* Toggle Answered Button */}
+                            <button
+                              type="button"
+                              onClick={() => handleToggleStatus(record)}
+                              disabled={isToggling}
+                              className={`p-1.5 rounded-lg text-[11px] font-bold inline-flex items-center transition-all cursor-pointer ${
+                                isAnswered
+                                  ? 'border border-slate-200 text-slate-500 hover:bg-slate-100'
+                                  : 'bg-teal-700 hover:bg-teal-800 text-white shadow-2xs'
+                              }`}
+                              title={isAnswered ? 'Reopen' : 'Mark as Sent in Outlook'}
+                            >
+                              <Check size={12} />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile & Tablet Card Grid (Zero Horizontal Scrolling) */}
+            <div className={`${viewMode === 'table' ? 'hidden' : 'block lg:hidden'} p-4 divide-y divide-slate-100 space-y-4`}>
+              {filteredApprovals.map((record) => {
+                const isAnswered = record.status === 'answered';
+                const resolvedContractor = resolveApprovalContractorAndOfficer(record, companyConfigs);
+                const allMatched = record.matchedProcedures?.every((m) => m.status === 'matched');
+
+                return (
+                  <div key={record.id} className="pt-4 first:pt-0 space-y-3">
+                    {/* Header: Patient, Bed, Timestamp */}
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <div className="font-extrabold text-sm text-slate-900" dir="auto">
+                          {record.patientName}
                         </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+                        <div className="flex items-center gap-2 text-xs text-slate-500 mt-0.5">
+                          <span>MRN: <strong className="text-slate-700">{record.mrn}</strong></span>
+                          {record.bed && <span>• Bed: {record.bed}</span>}
+                        </div>
+                      </div>
+                      <span className="text-[11px] font-semibold text-slate-400 shrink-0">
+                        {formatTimestamp(record.receivedAt)}
+                      </span>
+                    </div>
+
+                    {/* Status & Contractor Badges */}
+                    <div className="flex flex-wrap items-center gap-2">
+                      {isAnswered ? (
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-700 border border-slate-200">
+                          <Check size={12} className="text-emerald-600" />
+                          Answered (Sent)
+                        </span>
+                      ) : record.isRefused || record.status === 'refused' ? (
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-rose-50 text-rose-800 border border-rose-300">
+                          <AlertCircle size={12} className="text-rose-600" />
+                          ملغي / مرفوض
+                        </span>
+                      ) : record.hasExistingApproval || record.status === 'approved' ? (
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-300">
+                          <CheckCircle2 size={12} className="text-emerald-600" />
+                          معتمد بالكامل {record.approvedAmountLimit ? `(${record.approvedAmountLimit.toLocaleString()} ج.م)` : ''}
+                        </span>
+                      ) : record.status === 'conditionally_approved' ? (
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-teal-50 text-teal-900 border border-teal-300">
+                          <ShieldCheck size={12} className="text-teal-700" />
+                          موافقة مشروطة
+                        </span>
+                      ) : record.status === 'pending_information' ? (
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-sky-50 text-sky-900 border border-sky-300">
+                          <HelpCircle size={12} className="text-sky-700" />
+                          استيفاء بيانات
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-800 border border-amber-300">
+                          <Clock size={12} className="text-amber-600" />
+                          Pending Approval
+                        </span>
+                      )}
+
+                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-800 border border-slate-200">
+                        <Building size={12} className="text-slate-500" />
+                        {resolvedContractor.contractor} (سيلز: {resolvedContractor.officer})
+                      </span>
+                    </div>
+
+                    {/* AI Summary Banner */}
+                    {record.aiThreadSummary && (
+                      <div className="p-2.5 rounded-xl bg-teal-50/80 border border-teal-200 text-xs text-slate-800 flex items-start gap-2">
+                        <Sparkles size={14} className="text-teal-700 shrink-0 mt-0.5" />
+                        <p className="font-medium text-slate-700 leading-relaxed" dir="auto">
+                          {record.aiThreadSummary}
+                        </p>
+                      </div>
+                    )}
+
+                    {/* Requested Services */}
+                    <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                      <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1">
+                        الخدمات المطلوبة:
+                      </div>
+                      {record.requestedServices?.map((srv, idx) => (
+                        <div key={idx} className="flex items-center gap-1.5 text-xs text-slate-800">
+                          <span className="w-1.5 h-1.5 rounded-full bg-slate-400 shrink-0" />
+                          <span>{srv.name}</span>
+                        </div>
+                      ))}
+                      <div className="pt-1">
+                        {allMatched ? (
+                          <span className="text-[10px] font-bold text-emerald-700">✓ All procedures matched</span>
+                        ) : (
+                          <span className="text-[10px] font-bold text-amber-700">⚠️ Has unlisted item</span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Mobile Action Buttons Bar */}
+                    <div className="flex flex-wrap items-center gap-2 pt-1">
+                      <button
+                        type="button"
+                        onClick={() => handleMarkApproved(record)}
+                        disabled={updatingStatusId === record.id || record.status === 'approved'}
+                        className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                          record.status === 'approved'
+                            ? 'bg-emerald-100 text-emerald-800 border border-emerald-300 opacity-80'
+                            : 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-2xs'
+                        }`}
+                      >
+                        <CheckCircle2 size={14} />
+                        <span>{record.status === 'approved' ? 'معتمد' : 'اعتماد'}</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => handleCancelApproval(record)}
+                        disabled={updatingStatusId === record.id || record.status === 'refused' || record.isRefused}
+                        className={`flex-1 py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                          record.status === 'refused' || record.isRefused
+                            ? 'bg-rose-100 text-rose-800 border border-rose-300 opacity-80'
+                            : 'bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200'
+                        }`}
+                      >
+                        <XCircle size={14} />
+                        <span>{record.status === 'refused' || record.isRefused ? 'ملغي' : 'إلغاء'}</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => handleCopyWhatsapp(record)}
+                        className={`py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
+                          copiedWhatsappId === record.id
+                            ? 'bg-emerald-700 text-white'
+                            : 'bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200'
+                        }`}
+                        title="Copy CM WhatsApp"
+                      >
+                        {copiedWhatsappId === record.id ? <Check size={14} /> : <MessageCircle size={14} />}
+                        <span>WhatsApp</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const resolved = resolveApprovalContractorAndOfficer(record, companyConfigs);
+                          setViewingApproval({
+                            ...record,
+                            contractorNormalized: resolved.contractor,
+                            contractorOfficer: resolved.officer,
+                            priceListYear: resolved.priceListYear || record.priceListYear,
+                          });
+                        }}
+                        className="py-2 px-3 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-700 text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+                      >
+                        <Eye size={14} />
+                        <span>View</span>
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </>
         )}
       </div>
 

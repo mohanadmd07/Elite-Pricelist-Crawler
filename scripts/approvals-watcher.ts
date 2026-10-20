@@ -30,7 +30,7 @@ import {
 } from 'firebase/firestore';
 
 import { db } from '../src/firebase';
-import { normalizeArabic, cleanContractorName, normalizeText, stripSentFromSignatures, cleanHisProcedureQuery, extractOriginalRequestDate, hasAntibodyConflict } from '../src/lib/arabic-normalizer';
+import { normalizeArabic, cleanContractorName, normalizeText, stripSentFromSignatures, cleanHisProcedureQuery, extractOriginalRequestDate, hasAntibodyConflict, hasLabInvestigationConflict } from '../src/lib/arabic-normalizer';
 import { extractCleanProcedurePhrase, generateCmWhatsappMessage, extractProcedureFromApprovalReply } from '../src/lib/whatsapp-generator';
 import { loadCompanies } from '../src/services/companyService';
 import { searchAllProcedures, retrieveDynamicPricelistCandidates } from '../src/services/procedureService';
@@ -945,6 +945,11 @@ function scoreCandidateProcedure(
 
   // Immunoglobulin Isotype mismatch protection (IgA vs IgG vs IgM vs IgE)
   if (hasAntibodyConflict(qEng + ' ' + qAra, rowEng + ' ' + rowAra)) {
+    return 0;
+  }
+
+  // Laboratory investigation modality conflict protection (e.g. CSF culture vs CSF analysis)
+  if (hasLabInvestigationConflict(qEng + ' ' + qAra, rowEng + ' ' + rowAra)) {
     return 0;
   }
 
@@ -3018,6 +3023,43 @@ apiApp.post('/api/approvals/:id/toggle', async (req, res) => {
     await updateDoc(doc(db, 'inpatient_approvals', id), {
       status: nextStatus,
       answeredAt: nextStatus === 'answered' ? serverTimestamp() : null,
+    });
+  } catch {}
+
+  res.json({ success: true, item: record });
+});
+
+// POST /api/approvals/:id/status
+apiApp.post('/api/approvals/:id/status', async (req, res) => {
+  const { id } = req.params;
+  const { status, reason } = req.body;
+  const approvals = loadLocalApprovals();
+  const record = approvals.find((a) => a.id === id);
+  if (!record) {
+    res.status(404).json({ error: 'Record not found' });
+    return;
+  }
+
+  record.status = status;
+  if (reason) record.statusReasonArabic = reason;
+  if (status === 'approved') {
+    record.hasExistingApproval = true;
+    record.isRefused = false;
+    if (!reason) record.statusReasonArabic = 'تمت الموافقة واعتماد الحالة يدوياً';
+  } else if (status === 'refused') {
+    record.isRefused = true;
+    record.hasExistingApproval = false;
+    if (!reason) record.statusReasonArabic = 'تم إلغاء طلب الموافقة يدوياً';
+  }
+  upsertLocalApproval(record);
+
+  try {
+    await updateDoc(doc(db, 'inpatient_approvals', id), {
+      status,
+      ...(reason ? { statusReasonArabic: reason } : {}),
+      ...(status === 'approved' ? { hasExistingApproval: true, isRefused: false } : {}),
+      ...(status === 'refused' ? { isRefused: true, hasExistingApproval: false } : {}),
+      updatedAt: serverTimestamp(),
     });
   } catch {}
 

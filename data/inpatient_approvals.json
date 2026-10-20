@@ -2652,8 +2652,8 @@
       },
       {
         "serviceName": "PCR panel for Meningitis, CSF (Bacterial & Viral) - Investigation",
-        "matchedName": "PCR panel for Meningitis, CSF (Bacterial & Viral) - Investigation",
-        "status": "unmatched"
+        "matchedName": "PCR panel for Meningitis, CSF ( Bacterial & Viral Panels)",
+        "status": "matched"
       },
       {
         "serviceName": "ANA (IFA) - Investigation",
@@ -2687,7 +2687,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض ماجدة السيد علي حسنين (نقابه المهندسين). تمت الموافقة على الدخول والإجراء باللائحة. الحالة معتمدة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: نقابه المهندسين\nالمسئول من قسم السيلز: ديانا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\n1- CSF culture\n2- CSF analysis (Chemistry & cell count)\n3- ANA (IFA)\n4- Anti-DNA (d's)\n5- Anti-cyclic citrullinated peptide (Anti-CCP)\n6- Complement 3 (C3)\n7- Complement 4 (C4)\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - PCR panel for Meningitis, CSF (Bacterial & Viral) - Investigation]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: نقابه المهندسين\nالمسئول من قسم السيلز: ديانا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\n1- CSF culture\n2- CSF analysis (Chemistry & cell count)\n3- PCR panel for Meningitis, CSF ( Bacterial & Viral Panels)\n4- ANA (IFA)\n5- Anti-DNA (d's)\n6- Anti-cyclic citrullinated peptide (Anti-CCP)\n7- Complement 3 (C3)\n8- Complement 4 (C4)\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*ماجدة السيد علي حسنين* - Bed 314 - Zone A\nنقابه المهندسين\n*تمت الموافقة على: CSF culture - Investigation و CSF analysis (Chemistry & cell count) - Investigation و PCR panel for Meningitis, CSF (Bacterial & Viral) - Investigation و ANA (IFA) - Investigation و Anti-DNA (d.s) - Investigation و Anti-cyclic citrulinated peptide (Anti-CCP) - Investigation و Complement 3 (C3) - Investigation و Complement 4 (C4) - Investigation*",
     "draftedAt": null,
     "hasReplies": true,
@@ -4028,8 +4028,8 @@
       },
       {
         "serviceName": "PCR panel for Meningitis, CSF (Bacterial & Viral) - Investigation",
-        "matchedName": "PCR panel for Meningitis, CSF (Bacterial & Viral) - Investigation",
-        "status": "unmatched"
+        "matchedName": "PCR panel for Meningitis, CSF ( Bacterial & Viral Panels)",
+        "status": "matched"
       },
       {
         "serviceName": "Lactate, CSF - Investigation",
@@ -4058,7 +4058,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض نادر قدري محمد عبدالله (نكست كير Next Care). تمت الموافقة على الدخول والإجراء باللائحة. الحالة معتمدة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: نكست كير Next Care\nالمسئول من قسم السيلز: أحمد حمزة\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\n1- CSF culture\n2- Lactate, CSF\n3- CSF analysis (Chemistry & cell count)\n4- Gram stain\n5- Cytology for fluids\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - PCR panel for Meningitis, CSF (Bacterial & Viral) - Investigation]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: نكست كير Next Care\nالمسئول من قسم السيلز: أحمد حمزة\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\n1- CSF culture\n2- PCR panel for Meningitis, CSF ( Bacterial & Viral Panels)\n3- Lactate, CSF\n4- CSF analysis (Chemistry & cell count)\n5- Gram stain\n6- Cytology for fluids\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*نادر قدري محمد عبدالله* - Bed 4 - ICU\nنكست كير Next Care\n*تمت الموافقة على: CSF culture - Investigation و PCR panel for Meningitis, CSF (Bacterial & Viral) - Investigation و Lactate, CSF - Investigation و CSF analysis (Chemistry & cell count) - Investigation و Gram stain - Investigation و Cytology for fluids - Investigation*",
     "draftedAt": null,
     "hasReplies": true,
@@ -6951,8 +6951,8 @@
       },
       {
         "serviceName": "PCR panel for Meningitis, CSF (Bacterial & Viral) - Investigation",
-        "matchedName": "PCR panel for Meningitis, CSF (Bacterial & Viral) - Investigation",
-        "status": "unmatched"
+        "matchedName": "PCR panel for Meningitis, CSF ( Bacterial & Viral Panels)",
+        "status": "matched"
       },
       {
         "serviceName": "ANA (IFA) - Investigation",
@@ -6986,7 +6986,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض ماجدة السيد علي حسنين (نقابة المهندسين). تمت الموافقة على الدخول والإجراء باللائحة. الحالة معتمدة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: نقابة المهندسين\nالمسئول من قسم السيلز: ديانا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\n1- CSF culture\n2- CSF analysis (Chemistry & cell count)\n3- ANA (IFA)\n4- Anti-DNA (d's)\n5- Anti-cyclic citrullinated peptide (Anti-CCP)\n6- Complement 3 (C3)\n7- Complement 4 (C4)\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - PCR panel for Meningitis, CSF (Bacterial & Viral) - Investigation]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: نقابة المهندسين\nالمسئول من قسم السيلز: ديانا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\n1- CSF culture\n2- CSF analysis (Chemistry & cell count)\n3- PCR panel for Meningitis, CSF ( Bacterial & Viral Panels)\n4- ANA (IFA)\n5- Anti-DNA (d's)\n6- Anti-cyclic citrullinated peptide (Anti-CCP)\n7- Complement 3 (C3)\n8- Complement 4 (C4)\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*ماجدة السيد علي حسنين* - Bed 314 - Zone A\nنقابة المهندسين\n*تمت الموافقة على: CSF culture - Investigation و CSF analysis (Chemistry & cell count) - Investigation و PCR panel for Meningitis, CSF (Bacterial & Viral) - Investigation و ANA (IFA) - Investigation و Anti-DNA (d.s) - Investigation و Anti-cyclic citrulinated peptide (Anti-CCP) - Investigation و Complement 3 (C3) - Investigation و Complement 4 (C4) - Investigation*",
     "draftedAt": null,
     "hasReplies": true,
@@ -8364,8 +8364,8 @@
       },
       {
         "serviceName": "PCR panel for Meningitis, CSF (Bacterial & Viral) - Investigation",
-        "matchedName": "PCR panel for Meningitis, CSF (Bacterial & Viral) - Investigation",
-        "status": "unmatched"
+        "matchedName": "PCR panel for Meningitis, CSF ( Bacterial & Viral Panels)",
+        "status": "matched"
       },
       {
         "serviceName": "Lactate, CSF - Investigation",
@@ -8394,7 +8394,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض نادر قدري محمد عبدالله (Next Care نكست كير). تمت الموافقة على الدخول والإجراء باللائحة. الحالة معتمدة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: Next Care نكست كير\nالمسئول من قسم السيلز: ديانا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\n1- CSF culture\n2- Lactate, CSF\n3- CSF analysis (Chemistry & cell count)\n4- Gram stain\n5- Cytology for fluids\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - PCR panel for Meningitis, CSF (Bacterial & Viral) - Investigation]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: Next Care نكست كير\nالمسئول من قسم السيلز: ديانا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\n1- CSF culture\n2- PCR panel for Meningitis, CSF ( Bacterial & Viral Panels)\n3- Lactate, CSF\n4- CSF analysis (Chemistry & cell count)\n5- Gram stain\n6- Cytology for fluids\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*نادر قدري محمد عبدالله* - Bed 4 - ICU\nNext Care نكست كير\n*تمت الموافقة على: CSF culture - Investigation و PCR panel for Meningitis, CSF (Bacterial & Viral) - Investigation و Lactate, CSF - Investigation و CSF analysis (Chemistry & cell count) - Investigation و Gram stain - Investigation و Cytology for fluids - Investigation*",
     "draftedAt": null,
     "hasReplies": true,

@@ -244,7 +244,7 @@ Generated via Elite Corporate Approvals Hub • 30-Day Rolling Active`;
   };
 
   return (
-    <div className="space-y-6 text-left max-w-5xl mx-auto">
+    <div className="space-y-6 text-left w-full mx-auto">
       {/* Top Banner: Status, Pause Switch & Navigation Tabs */}
       <div className="bg-white/95 backdrop-blur-md border border-slate-200/90 rounded-2xl p-5 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
         {/* Sub-Tabs */}
