@@ -22,6 +22,22 @@
       "fields": [
         { "fieldPath": "timestamp", "order": "DESCENDING" }
       ]
+    },
+    {
+      "collectionGroup": "inpatient_approvals",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "status", "order": "ASCENDING" },
+        { "fieldPath": "receivedAt", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "inpatient_approvals",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "contractorNormalized", "order": "ASCENDING" },
+        { "fieldPath": "receivedAt", "order": "DESCENDING" }
+      ]
     }
   ],
   "fieldOverrides": []

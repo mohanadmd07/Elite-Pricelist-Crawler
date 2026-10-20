@@ -75,26 +75,19 @@ export function subscribeToApprovals(
 ): () => void {
   let isSubscribed = true;
 
-  // 1. Fetch immediately and poll local watcher API
-  const fetchFromApi = async () => {
-    try {
-      const res = await fetch('/api/approvals');
-      if (res.ok) {
-        const data = await res.json();
+  // 1. Initial fast-hydration from local watcher API if available
+  if (isLocalEnvironment()) {
+    fetch('/api/approvals')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
         if (Array.isArray(data) && isSubscribed) {
           onUpdate(data);
         }
-      }
-    } catch {}
-  };
-
-  let pollInterval: any = null;
-  if (isLocalEnvironment()) {
-    fetchFromApi();
-    pollInterval = setInterval(fetchFromApi, 3000);
+      })
+      .catch(() => {});
   }
 
-  // 2. Also listen to Firestore real-time snapshot
+  // 2. Pure real-time stream via Firestore snapshot listener (no redundant 3s REST polling)
   const colRef = collection(db, APPROVALS_COLLECTION);
   const q = query(colRef, orderBy('receivedAt', 'desc'), limit(1000));
 
@@ -159,7 +152,6 @@ export function subscribeToApprovals(
 
   return () => {
     isSubscribed = false;
-    if (pollInterval) clearInterval(pollInterval);
     unsubFirestore();
   };
 }
@@ -192,12 +184,15 @@ export async function toggleApprovalStatus(
  * Triggers manual drafting for an approval that was held back due to detected replies or approval notes.
  */
 export async function triggerManualDraft(id: string): Promise<void> {
-  if (isLocalEnvironment()) {
-    try {
-      await fetch(`/api/approvals/${id}/draft`, { method: 'POST' });
-    } catch {}
-  }
+  // 1. Attempt local/proxied REST draft trigger
+  try {
+    const res = await fetch(`/api/approvals/${id}/draft`, { method: 'POST' });
+    if (res.ok) {
+      return;
+    }
+  } catch {}
 
+  // 2. Fallback to updating Firestore doc so background watcher picks it up
   try {
     const docRef = doc(db, APPROVALS_COLLECTION, id);
     await updateDoc(docRef, {
@@ -205,7 +200,9 @@ export async function triggerManualDraft(id: string): Promise<void> {
       manualDraftRequested: true,
       draftedAt: serverTimestamp(),
     });
-  } catch {}
+  } catch (err: any) {
+    console.warn('[Approvals] Firestore manual draft request note:', err?.message || err);
+  }
 }
 
 /**
@@ -217,22 +214,16 @@ export function subscribeToCompanyConfigs(
 ): () => void {
   let isSubscribed = true;
 
-  const fetchFromApi = async () => {
-    try {
-      const res = await fetch('/api/contractors');
-      if (res.ok) {
-        const data = await res.json();
+  // Fast hydration on mount if local
+  if (isLocalEnvironment()) {
+    fetch('/api/contractors')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
         if (Array.isArray(data) && data.length > 0 && isSubscribed) {
           onUpdate(data);
         }
-      }
-    } catch {}
-  };
-
-  let pollInterval: any = null;
-  if (isLocalEnvironment()) {
-    fetchFromApi();
-    pollInterval = setInterval(fetchFromApi, 4000);
+      })
+      .catch(() => {});
   }
 
   const colRef = collection(db, COMPANIES_COLLECTION);
@@ -256,7 +247,6 @@ export function subscribeToCompanyConfigs(
 
   return () => {
     isSubscribed = false;
-    if (pollInterval) clearInterval(pollInterval);
     unsubFirestore();
   };
 }
@@ -307,6 +297,142 @@ export async function deleteCompanyConfig(id: string): Promise<void> {
 }
 
 /**
+ * Merges multiple selected companies into a single target company.
+ * Aggregates all aliases, updates the target company, removes source companies,
+ * and cascades changes to existing inpatient approval records.
+ */
+export async function mergeCompanies(params: {
+  targetId: string;
+  targetName: string;
+  priceListYear: string;
+  contractorOfficer: string;
+  discountPercentage?: number;
+  sourceCompanies: CompanyConfigRecord[];
+  userEmail?: string;
+}): Promise<void> {
+  const { targetId, targetName, priceListYear, contractorOfficer, discountPercentage = 0, sourceCompanies, userEmail } = params;
+
+  // Gather all unique aliases and names
+  const allAliasesSet = new Set<string>();
+  allAliasesSet.add(targetName.trim());
+  for (const comp of sourceCompanies) {
+    if (comp.name) allAliasesSet.add(comp.name.trim());
+    if (comp.aliases && Array.isArray(comp.aliases)) {
+      comp.aliases.forEach((a) => {
+        if (a && a.trim()) allAliasesSet.add(a.trim());
+      });
+    }
+  }
+  const mergedAliases = Array.from(allAliasesSet);
+
+  // If local API available, notify watcher
+  if (isLocalEnvironment()) {
+    try {
+      await fetch('/api/contractors/merge', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          targetId,
+          targetName,
+          priceListYear,
+          contractorOfficer,
+          discountPercentage,
+          aliases: mergedAliases,
+          sourceIds: sourceCompanies.filter((c) => c.id !== targetId).map((c) => c.id),
+        }),
+      });
+    } catch {}
+  }
+
+  try {
+    // 1. Update target company doc in Firestore
+    const targetRef = doc(db, COMPANIES_COLLECTION, targetId);
+    await setDoc(
+      targetRef,
+      {
+        id: targetId,
+        name: targetName.trim(),
+        aliases: mergedAliases,
+        priceListYear,
+        contractorOfficer: contractorOfficer.trim(),
+        discountPercentage,
+        updatedAt: serverTimestamp(),
+        updatedBy: userEmail || 'user_merge',
+      },
+      { merge: true }
+    );
+
+    // 2. Delete source companies from Firestore (except target)
+    for (const comp of sourceCompanies) {
+      if (comp.id !== targetId) {
+        const srcRef = doc(db, COMPANIES_COLLECTION, comp.id);
+        await deleteDoc(srcRef);
+      }
+    }
+
+    // 3. Cascade update to inpatient_approvals in Firestore
+    const namesToReplace = new Set(sourceCompanies.map((c) => c.name.trim().toLowerCase()));
+    const approvalsCol = collection(db, APPROVALS_COLLECTION);
+    const snap = await getDocs(query(approvalsCol, limit(500)));
+    const batch = writeBatch(db);
+    let count = 0;
+
+    snap.docs.forEach((d) => {
+      const data = d.data();
+      const rawNorm = (data.contractorNormalized || data.contractorRaw || '').trim().toLowerCase();
+      if (namesToReplace.has(rawNorm)) {
+        batch.update(d.ref, {
+          contractorNormalized: targetName.trim(),
+          contractorOfficer: contractorOfficer.trim(),
+          priceListYear,
+        });
+        count++;
+      }
+    });
+
+    if (count > 0) {
+      await batch.commit();
+    }
+  } catch (err) {
+    console.error('Failed to merge companies in Firestore:', err);
+    throw err;
+  }
+}
+
+/**
+ * Manually triggers an immediate synchronization of the Outlook / Exchange InApprovals folder.
+ */
+export async function triggerManualApprovalsSync(): Promise<{ success: boolean; message: string }> {
+  // 1. If local environment, trigger the watcher HTTP endpoint
+  if (isLocalEnvironment()) {
+    try {
+      const res = await fetch('/api/approvals/sync', { method: 'POST' });
+      if (res.ok) {
+        const data = await res.json();
+        return { success: true, message: data.message || 'Sync triggered successfully' };
+      }
+    } catch {}
+  }
+
+  // 2. Also signal via Firestore automation settings doc
+  try {
+    const docRef = doc(db, SETTINGS_COLLECTION, AUTOMATION_SETTINGS_DOC);
+    await setDoc(
+      docRef,
+      {
+        triggerSync: serverTimestamp(),
+        lastManualSyncTrigger: serverTimestamp(),
+      },
+      { merge: true }
+    );
+    return { success: true, message: 'Sync command broadcast to background watcher' };
+  } catch (err: any) {
+    return { success: false, message: err?.message || 'Sync failed' };
+  }
+}
+
+
+/**
  * Subscribes to global automation settings (pause/resume).
  */
 export function subscribeToAutomationSettings(
@@ -315,22 +441,16 @@ export function subscribeToAutomationSettings(
 ): () => void {
   let isSubscribed = true;
 
-  const fetchFromApi = async () => {
-    try {
-      const res = await fetch('/api/settings');
-      if (res.ok) {
-        const data = await res.json();
+  // Fast hydration on mount if local
+  if (isLocalEnvironment()) {
+    fetch('/api/settings')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
         if (data && typeof data.isPaused === 'boolean' && isSubscribed) {
           onUpdate(data);
         }
-      }
-    } catch {}
-  };
-
-  let pollInterval: any = null;
-  if (isLocalEnvironment()) {
-    fetchFromApi();
-    pollInterval = setInterval(fetchFromApi, 3000);
+      })
+      .catch(() => {});
   }
 
   const docRef = doc(db, SETTINGS_COLLECTION, AUTOMATION_SETTINGS_DOC);
@@ -349,7 +469,6 @@ export function subscribeToAutomationSettings(
 
   return () => {
     isSubscribed = false;
-    if (pollInterval) clearInterval(pollInterval);
     unsubFirestore();
   };
 }

@@ -1,5 +1,5 @@
 import { ProcedureResult, SelectedProcedure } from '../types';
-import { normalizeText, normalizeArabic } from '../lib/arabic-normalizer';
+import { normalizeText, normalizeArabic, cleanHisProcedureQuery } from '../lib/arabic-normalizer';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import { matchProceduresWithAI, isGeminiConfigured } from './aiMatchService';
 
@@ -14,8 +14,9 @@ const aiMemoryCache = new Map<string, ProcedureResult[]>();
  */
 export function preloadPricelists(activeYear?: string): void {
   const yearsToPreload: ('2023' | '2024' | '2025' | '2026')[] = [];
-  if (activeYear && (activeYear === '2026' || activeYear === '2025' || activeYear === '2024' || activeYear === '2023')) {
-    yearsToPreload.push(activeYear);
+  const normalizedYear = activeYear === 'Cash' ? '2026' : activeYear;
+  if (normalizedYear && (normalizedYear === '2026' || normalizedYear === '2025' || normalizedYear === '2024' || normalizedYear === '2023')) {
+    yearsToPreload.push(normalizedYear);
   } else {
     yearsToPreload.push('2026', '2025', '2024', '2023');
   }
@@ -164,6 +165,13 @@ function scoreCandidate(
   queryAraNorm: string,
   tokens: string[]
 ): number {
+  // TEE (Transesophageal Echocardiography) vs Surface Echo (TTE) mismatch protection:
+  const isTeeQuery = /transesophageal|tee\b|t\.e\.e|مريء|المريء|بالمنظار/i.test(queryEngNorm + ' ' + queryAraNorm);
+  const isTeeRow = /transesophageal|tee\b|t\.e\.e|مريء|المريء|بالمنظار/i.test(rowEngNorm + ' ' + rowAraNorm);
+  if (isTeeQuery !== isTeeRow) {
+    return 0;
+  }
+
   let score = 0;
 
   // Exact phrase match
@@ -210,10 +218,12 @@ export function searchLocalPricelist(
   const finalResults: ProcedureResult[] = [];
 
   for (const proc of requestedProcedures) {
-    const qEng = normalizeText(proc.name);
+    const cleanEng = cleanHisProcedureQuery(proc.name);
+    const qEng = normalizeText(cleanEng);
+    const qEngRaw = normalizeText(proc.name);
     const qAra = proc.arabic ? normalizeArabic(proc.arabic) : '';
 
-    if (!qEng && !qAra) continue;
+    if (!qEng && !qAra && !qEngRaw) continue;
 
     const exactMatches: ProcedureResult[] = [];
     const partialMatches: ProcedureResult[] = [];
@@ -222,7 +232,7 @@ export function searchLocalPricelist(
       const itemEng = normalizeText(item.nameEnglish);
       const itemAra = normalizeArabic(item.nameArabic);
 
-      const isExactEng = Boolean(qEng && itemEng === qEng);
+      const isExactEng = Boolean(qEng && (itemEng === qEng || itemEng === qEngRaw));
       const isExactAra = Boolean(qAra && itemAra === qAra);
 
       if (isExactEng || isExactAra) {
@@ -274,11 +284,12 @@ export async function searchAllProcedures(
     isExtendingToAI: boolean;
   }) => void
 ): Promise<ProcedureResult[]> {
+  const normalizedYear = activeYear === 'Cash' ? '2026' : activeYear;
   const yearsToFetch: ('2023' | '2024' | '2025' | '2026')[] = [];
-  if (!activeYear || activeYear === '2026') yearsToFetch.push('2026');
-  if (!activeYear || activeYear === '2025') yearsToFetch.push('2025');
-  if (!activeYear || activeYear === '2024') yearsToFetch.push('2024');
-  if (!activeYear || activeYear === '2023') yearsToFetch.push('2023');
+  if (!normalizedYear || normalizedYear === '2026') yearsToFetch.push('2026');
+  if (!normalizedYear || normalizedYear === '2025') yearsToFetch.push('2025');
+  if (!normalizedYear || normalizedYear === '2024') yearsToFetch.push('2024');
+  if (!normalizedYear || normalizedYear === '2023') yearsToFetch.push('2023');
 
   onProgress?.({
     stage: 'local',
@@ -293,12 +304,13 @@ export async function searchAllProcedures(
   // 1. Parallel Supabase RPC lookup with fast 750ms timeout race
   if (isSupabaseConfigured() && supabase) {
     try {
-      const targetYear = activeYear ? parseInt(activeYear, 10) : 2025;
+      const targetYear = normalizedYear ? parseInt(normalizedYear, 10) : 2026;
       const rpcPromises = selectedProcedures.map(async (proc) => {
         try {
+          const cleanedSearchTerm = cleanHisProcedureQuery(proc.name) || proc.name;
           const { data, error } = await supabase.rpc('search_procedures', {
             p_pricelist_year: targetYear,
-            p_search_term: proc.name,
+            p_search_term: cleanedSearchTerm,
             p_similarity_threshold: 0.25,
           });
           if (!error && Array.isArray(data) && data.length > 0) {
@@ -391,7 +403,7 @@ export async function searchAllProcedures(
           .map((t) => t.trim())
           .filter(
             (t) =>
-              t.length >= 2 &&
+              (t.length >= 2 || /^[0-9]$/.test(t)) &&
               ![
                 'and',
                 'the',
@@ -416,10 +428,11 @@ export async function searchAllProcedures(
       const seenCandidateKeys = new Set<string>();
 
       for (const proc of stillUnmatched) {
-        const qEngNorm = normalizeText(proc.name);
+        const cleanProcName = cleanHisProcedureQuery(proc.name);
+        const qEngNorm = normalizeText(cleanProcName);
         const qAraNorm = proc.arabic ? normalizeArabic(proc.arabic) : '';
         const tokens = [
-          ...getSearchTokens(proc.name),
+          ...getSearchTokens(cleanProcName),
           ...(proc.arabic ? getSearchTokens(proc.arabic) : []),
         ];
 

@@ -3,7 +3,9 @@
     "id": "ايثدكو",
     "name": "ايثدكو",
     "aliases": [
-      "ايثدكو"
+      "ايثدكو",
+      "(Ethydco) اثيدكو.",
+      "Ethydco"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "نادين",
@@ -17,7 +19,8 @@
     "id": "بترول_ابو_قير",
     "name": "بترول ابو قير",
     "aliases": [
-      "بترول ابو قير"
+      "بترول ابو قير",
+      "بترول ابوقير"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "نادين",
@@ -45,7 +48,8 @@
     "id": "ويبكو",
     "name": "ويبكو",
     "aliases": [
-      "ويبكو"
+      "ويبكو",
+      "شركة بترول الصحراء الغربيه (wepco)"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "زياد",
@@ -59,7 +63,8 @@
     "id": "ايبروم",
     "name": "ايبروم",
     "aliases": [
-      "ايبروم"
+      "ايبروم",
+      "EPROM"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "محمد جابر",
@@ -73,7 +78,9 @@
     "id": "اموك",
     "name": "اموك",
     "aliases": [
-      "اموك"
+      "اموك",
+      "(AMOC)شركة الاسكندرية للزيوت المعدنية (اموك)",
+      "AMOC"
     ],
     "priceListYear": "2024",
     "contractorOfficer": "أحمد حمزة",
@@ -87,7 +94,8 @@
     "id": "العامرية_للبترول",
     "name": "العامرية للبترول",
     "aliases": [
-      "العامرية للبترول"
+      "العامرية للبترول",
+      "العامرية لتكرير البترول"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "محمد جابر",
@@ -115,7 +123,8 @@
     "id": "جمعية_مصر_الخير",
     "name": "جمعية مصر الخير",
     "aliases": [
-      "جمعية مصر الخير"
+      "جمعية مصر الخير",
+      "جمعيه مصر الخير"
     ],
     "priceListYear": "2024",
     "contractorOfficer": "محمد ابو الوفا",
@@ -129,7 +138,9 @@
     "id": "خالدة_للبترول",
     "name": "خالدة للبترول",
     "aliases": [
-      "خالدة للبترول"
+      "خالدة للبترول",
+      "خالده للبترول",
+      "شركة خالده للبترول"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "محمد ابو الوفا",
@@ -143,7 +154,8 @@
     "id": "البنك_المركزى",
     "name": "البنك المركزى",
     "aliases": [
-      "البنك المركزى"
+      "البنك المركزى",
+      "البنك المركزي المصري"
     ],
     "priceListYear": "2024",
     "contractorOfficer": "محمد ابو الوفا",
@@ -157,7 +169,8 @@
     "id": "عجيبة_للبترول",
     "name": "عجيبة للبترول",
     "aliases": [
-      "عجيبة للبترول"
+      "عجيبة للبترول",
+      "(عجيبة للبترول) Agiba"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "نادين",
@@ -171,7 +184,8 @@
     "id": "التعاون_للبترول",
     "name": "التعاون للبترول",
     "aliases": [
-      "التعاون للبترول"
+      "التعاون للبترول",
+      "شركة التعاون للبترول"
     ],
     "priceListYear": "2024",
     "contractorOfficer": "محمد ابو الوفا",
@@ -185,7 +199,9 @@
     "id": "جابكو",
     "name": "جابكو",
     "aliases": [
-      "جابكو"
+      "جابكو",
+      "GUPCO (بترول خليج السويس (جابكو",
+      "شركة (بترول خليج السويس (جابكو GUPCO"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "محمد جابر",
@@ -199,7 +215,8 @@
     "id": "العامة_للبترول",
     "name": "العامة للبترول",
     "aliases": [
-      "العامة للبترول"
+      "العامة للبترول",
+      "الشركة العامة للبترول"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "محمد ابو الوفا",
@@ -213,7 +230,8 @@
     "id": "سيدبك",
     "name": "سيدبك",
     "aliases": [
-      "سيدبك"
+      "سيدبك",
+      "سيدى كرير للبتروكيماويات ( سيدبك )"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "نادين",
@@ -238,24 +256,11 @@
     "updatedBy": "seed_script"
   },
   {
-    "id": "عز_للحديد_والصلب",
-    "name": "عز للحديد والصلب",
-    "aliases": [
-      "عز للحديد والصلب"
-    ],
-    "priceListYear": "2023",
-    "contractorOfficer": "محمد ابو الوفا",
-    "discountPercentage": 35,
-    "updatedAt": {
-      "_methodName": "serverTimestamp"
-    },
-    "updatedBy": "seed_script"
-  },
-  {
     "id": "تكنولوجيا_الاخشاب",
     "name": "تكنولوجيا الاخشاب",
     "aliases": [
-      "تكنولوجيا الاخشاب"
+      "تكنولوجيا الاخشاب",
+      "Wotech"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "نادين",
@@ -269,7 +274,9 @@
     "id": "انربك",
     "name": "انربك",
     "aliases": [
-      "انربك"
+      "انربك",
+      "أنربك",
+      "شركة انربك"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "أحمد حمزة",
@@ -283,7 +290,8 @@
     "id": "البتروكيماويات_المصرية",
     "name": "البتروكيماويات المصرية",
     "aliases": [
-      "البتروكيماويات المصرية"
+      "البتروكيماويات المصرية",
+      "البتروكيماويات"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "محمد جابر",
@@ -291,13 +299,14 @@
     "updatedAt": {
       "_methodName": "serverTimestamp"
     },
-    "updatedBy": "seed_script"
+    "updatedBy": "contacts_table_sync"
   },
   {
     "id": "جنوب_الضبعة_للبترول",
     "name": "جنوب الضبعة للبترول",
     "aliases": [
-      "جنوب الضبعة للبترول"
+      "جنوب الضبعة للبترول",
+      "شركة جنوب الضبعة للبترول"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "نادين",
@@ -311,7 +320,8 @@
     "id": "ميد_مارك",
     "name": "ميد مارك",
     "aliases": [
-      "ميد مارك"
+      "ميد مارك",
+      "ميدمارك"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "ديانا",
@@ -339,7 +349,8 @@
     "id": "ابو_قير_للاسمدة",
     "name": "ابو قير للاسمدة",
     "aliases": [
-      "ابو قير للاسمدة"
+      "ابو قير للاسمدة",
+      "ابوقير للأسمدة"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "نادين",
@@ -347,13 +358,14 @@
     "updatedAt": {
       "_methodName": "serverTimestamp"
     },
-    "updatedBy": "seed_script"
+    "updatedBy": "contacts_table_sync"
   },
   {
     "id": "سوكو",
     "name": "سوكو",
     "aliases": [
-      "سوكو"
+      "سوكو",
+      "شركة السويس للزيت سوكو"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "محمد ابو الوفا",
@@ -367,7 +379,8 @@
     "id": "غاز_تك",
     "name": "غاز تك",
     "aliases": [
-      "غاز تك"
+      "غاز تك",
+      "شركة غاز تك"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "محمد جابر",
@@ -381,7 +394,8 @@
     "id": "انبى",
     "name": "انبى",
     "aliases": [
-      "انبى"
+      "انبى",
+      "شركة انبى"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "نادين",
@@ -395,7 +409,8 @@
     "id": "جنوب_الوادى_للبترول",
     "name": "جنوب الوادى للبترول",
     "aliases": [
-      "جنوب الوادى للبترول"
+      "جنوب الوادى للبترول",
+      "جنوب الوادي للبترول"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "نادين",
@@ -409,7 +424,9 @@
     "id": "بدر_الدين_للبترول",
     "name": "بدر الدين للبترول",
     "aliases": [
-      "بدر الدين للبترول"
+      "بدر الدين للبترول",
+      "Bapetco Badr El Din Petroleum Co بابتيكو بدر الدين للبترول",
+      "Bapetco - Badr El Din للبترول"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "محمد ابو الوفا",
@@ -423,7 +440,8 @@
     "id": "ميد_نت",
     "name": "ميد نت",
     "aliases": [
-      "ميد نت"
+      "ميد نت",
+      "ميدنت"
     ],
     "priceListYear": "2023",
     "contractorOfficer": "ديانا",
@@ -451,7 +469,8 @@
     "id": "qnb",
     "name": "QNB",
     "aliases": [
-      "QNB"
+      "QNB",
+      "فحص QNB"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "أحمد حمزة",
@@ -459,13 +478,14 @@
     "updatedAt": {
       "_methodName": "serverTimestamp"
     },
-    "updatedBy": "seed_script"
+    "updatedBy": "contacts_table_sync"
   },
   {
     "id": "نقابة_المهن_الزراعية",
     "name": "نقابة المهن الزراعية",
     "aliases": [
-      "نقابة المهن الزراعية"
+      "نقابة المهن الزراعية",
+      "نقابه المهن الزراعيه"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "محمد ابو الوفا",
@@ -507,7 +527,8 @@
     "id": "هيئة_قناة_السويس",
     "name": "هيئة قناة السويس",
     "aliases": [
-      "هيئة قناة السويس"
+      "هيئة قناة السويس",
+      "هيئة قناة السويس"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "أحمد حمزة",
@@ -521,7 +542,9 @@
     "id": "مصر_للطيران",
     "name": "مصر للطيران",
     "aliases": [
-      "مصر للطيران"
+      "مصر للطيران",
+      "مصر للطيران للخطوط الجوية بالاسكندرية",
+      "مصر للطيران للخدمات الارضية بالاسكندرية"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "محمد ابو الوفا",
@@ -535,7 +558,8 @@
     "id": "يونى_كير",
     "name": "يونى كير",
     "aliases": [
-      "يونى كير"
+      "يونى كير",
+      "يوني كير"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "محمد ابو الوفا",
@@ -549,7 +573,8 @@
     "id": "يونى_ميد",
     "name": "يونى ميد",
     "aliases": [
-      "يونى ميد"
+      "يونى ميد",
+      "يوني ميد"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "محمد ابو الوفا",
@@ -577,7 +602,8 @@
     "id": "اكسون",
     "name": "اكسون",
     "aliases": [
-      "اكسون"
+      "اكسون",
+      "اكسون اجل"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "أحمد حمزة",
@@ -591,7 +617,8 @@
     "id": "هيئة_الرقابة_الادارية",
     "name": "هيئة الرقابة الادارية",
     "aliases": [
-      "هيئة الرقابة الادارية"
+      "هيئة الرقابة الادارية",
+      "هيئة الرقابة الاداريه"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "زياد",
@@ -599,7 +626,7 @@
     "updatedAt": {
       "_methodName": "serverTimestamp"
     },
-    "updatedBy": "seed_script"
+    "updatedBy": "contacts_table_sync"
   },
   {
     "id": "جاسكو",
@@ -633,7 +660,8 @@
     "id": "بترولوج_pls",
     "name": "بترولوج PLS",
     "aliases": [
-      "بترولوج PLS"
+      "بترولوج PLS",
+      "بترولوج pls"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "محمد جابر",
@@ -655,13 +683,14 @@
     "updatedAt": {
       "_methodName": "serverTimestamp"
     },
-    "updatedBy": "seed_script"
+    "updatedBy": "contacts_table_sync"
   },
   {
     "id": "لايف_هيلث_كير",
     "name": "لايف هيلث كير",
     "aliases": [
-      "لايف هيلث كير"
+      "لايف هيلث كير",
+      "شركة لايف هيلث كير"
     ],
     "priceListYear": "2024",
     "contractorOfficer": "نادين",
@@ -675,7 +704,8 @@
     "id": "كير_بلاس",
     "name": "كير بلاس",
     "aliases": [
-      "كير بلاس"
+      "كير بلاس",
+      "شركة كير بلاس"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "ديانا",
@@ -689,7 +719,8 @@
     "id": "جامعة_دمنهور",
     "name": "جامعة دمنهور",
     "aliases": [
-      "جامعة دمنهور"
+      "جامعة دمنهور",
+      "جامعه دمنهور"
     ],
     "priceListYear": "2024",
     "contractorOfficer": "محمد ابو الوفا",
@@ -714,24 +745,30 @@
     "updatedBy": "seed_script"
   },
   {
-    "id": "صاان_مصر",
-    "name": "صاان مصر",
+    "id": "صان_مصر",
+    "name": "صان مصر",
     "aliases": [
-      "صاان مصر"
+      "صان مصر",
+      "مصر للصيانة",
+      "EMC",
+      "صاان مصر",
+      "مصر للصيانة (صان مصر) EMC"
     ],
     "priceListYear": "2024",
-    "contractorOfficer": "محمد ابو الوفا",
+    "contractorOfficer": "طارق",
     "discountPercentage": 25,
     "updatedAt": {
       "_methodName": "serverTimestamp"
     },
-    "updatedBy": "seed_script"
+    "updatedBy": "contacts_table_sync"
   },
   {
     "id": "بتروتريد",
     "name": "بتروتريد",
     "aliases": [
-      "بتروتريد"
+      "بتروتريد",
+      "الخدمات التجارية البترولية (بتروتريد)",
+      "شركة الخدمات التجارية البترولية (بتروتريد)"
     ],
     "priceListYear": "2024",
     "contractorOfficer": "محمد جابر",
@@ -759,7 +796,9 @@
     "id": "ميدرايت",
     "name": "ميدرايت",
     "aliases": [
-      "ميدرايت"
+      "ميدرايت",
+      "Med Right",
+      "Med Right ميد رايت"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "نادين",
@@ -773,7 +812,8 @@
     "id": "بترو_امير",
     "name": "بترو امير",
     "aliases": [
-      "بترو امير"
+      "بترو امير",
+      "شركة بترو امير للبترول"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "نادين",
@@ -815,7 +855,8 @@
     "id": "gig",
     "name": "GIG",
     "aliases": [
-      "GIG"
+      "GIG",
+      "GIG Egypt"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "زياد",
@@ -829,7 +870,8 @@
     "id": "بتروجلف",
     "name": "بتروجلف",
     "aliases": [
-      "بتروجلف"
+      "بتروجلف",
+      "شركة بتروجلف"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "محمد ابو الوفا",
@@ -857,7 +899,8 @@
     "id": "خدمات_البترول_البحرية",
     "name": "خدمات البترول البحرية",
     "aliases": [
-      "خدمات البترول البحرية"
+      "خدمات البترول البحرية",
+      "شركة خدمات البترول البحرية"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "محمد جابر",
@@ -885,7 +928,8 @@
     "id": "اسبك",
     "name": "اسبك",
     "aliases": [
-      "اسبك"
+      "اسبك",
+      "شركة اسبك (asppc)"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "أحمد حمزة",
@@ -913,7 +957,8 @@
     "id": "المصرية_لانتاج_البروبلين",
     "name": "المصرية لانتاج البروبلين",
     "aliases": [
-      "المصرية لانتاج البروبلين"
+      "المصرية لانتاج البروبلين",
+      "الشركة المصرية لانتاج البروبلين والبولى"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "زياد",
@@ -927,7 +972,8 @@
     "id": "وادى_النيل",
     "name": "وادى النيل",
     "aliases": [
-      "وادى النيل"
+      "وادى النيل",
+      "شركة وادى النيل للتأمين wadi el nile"
     ],
     "priceListYear": "2024",
     "contractorOfficer": "أحمد حمزة",
@@ -941,7 +987,8 @@
     "id": "سوميد",
     "name": "سوميد",
     "aliases": [
-      "سوميد"
+      "سوميد",
+      "Sumed"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "محمد ابو الوفا",
@@ -952,24 +999,12 @@
     "updatedBy": "seed_script"
   },
   {
-    "id": "نيكست_كير",
-    "name": "نيكست كير",
-    "aliases": [
-      "نيكست كير"
-    ],
-    "priceListYear": "2025",
-    "contractorOfficer": "أحمد حمزة",
-    "discountPercentage": 40,
-    "updatedAt": {
-      "_methodName": "serverTimestamp"
-    },
-    "updatedBy": "seed_script"
-  },
-  {
     "id": "بترومنت",
     "name": "بترومنت",
     "aliases": [
-      "بترومنت"
+      "بترومنت",
+      "Alexandria Petroleum Maintenance CO.(Petromaint) بترومنت (الاسكندرية للصيانة البترولية)",
+      "Petromaint"
     ],
     "priceListYear": "2024",
     "contractorOfficer": "زياد",
@@ -983,7 +1018,9 @@
     "id": "اسكندرية_للبترول",
     "name": "اسكندرية للبترول",
     "aliases": [
-      "اسكندرية للبترول"
+      "اسكندرية للبترول",
+      "العز الدخيلة للصلب الاسكندرية",
+      "شركة اسكندرية للبترول"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "محمد جابر",
@@ -997,7 +1034,8 @@
     "id": "الحمراويل",
     "name": "الحمراويل",
     "aliases": [
-      "الحمراويل"
+      "الحمراويل",
+      "شركة الحمرا اويل"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "نادين",
@@ -1011,7 +1049,8 @@
     "id": "ايلاب",
     "name": "ايلاب",
     "aliases": [
-      "ايلاب"
+      "ايلاب",
+      "ايلاب للبترول"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "ديانا",
@@ -1025,7 +1064,8 @@
     "id": "نقابة_المهندسين",
     "name": "نقابة المهندسين",
     "aliases": [
-      "نقابة المهندسين"
+      "نقابة المهندسين",
+      "نقابه المهندسين"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "ديانا",
@@ -1039,7 +1079,8 @@
     "id": "يونايد",
     "name": "يونايد",
     "aliases": [
-      "يونايد"
+      "يونايد",
+      "يونايتد"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "محمد جابر",
@@ -1053,7 +1094,9 @@
     "id": "دريم_مشرق",
     "name": "دريم مشرق",
     "aliases": [
-      "دريم مشرق"
+      "دريم مشرق",
+      "دريم مشرق للأغذية",
+      "شركة دريم مشرق للأغذية"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "محمد جابر",
@@ -1067,7 +1110,8 @@
     "id": "مشرق_لتنمية_الاعمال",
     "name": "مشرق لتنمية الاعمال",
     "aliases": [
-      "مشرق لتنمية الاعمال"
+      "مشرق لتنمية الاعمال",
+      "شركة مشرق لتنمية الأعمال"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "محمد جابر",
@@ -1095,7 +1139,9 @@
     "id": "وزراة_العدل",
     "name": "وزراة العدل",
     "aliases": [
-      "وزراة العدل"
+      "وزراة العدل",
+      "وزاره العدل المصرية",
+      "وزارة العدل"
     ],
     "priceListYear": "2024",
     "contractorOfficer": "ديانا",
@@ -1109,7 +1155,8 @@
     "id": "قناة_السويس_للتامين",
     "name": "قناة السويس للتامين",
     "aliases": [
-      "قناة السويس للتامين"
+      "قناة السويس للتامين",
+      "شركة قناة السويس للتأمين"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "محمد جابر",
@@ -1123,7 +1170,9 @@
     "id": "صحة_وان",
     "name": "صحة وان",
     "aliases": [
-      "صحة وان"
+      "صحة وان",
+      "صحه وان وثائق للتامين",
+      "شركة صحة وان"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "محمد جابر",
@@ -1137,7 +1186,8 @@
     "id": "مصر_هيلث_كير",
     "name": "مصر هيلث كير",
     "aliases": [
-      "مصر هيلث كير"
+      "مصر هيلث كير",
+      "شركة مصر هيلث كير"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "ديانا",
@@ -1151,7 +1201,9 @@
     "id": "اكسا",
     "name": "اكسا",
     "aliases": [
-      "اكسا"
+      "اكسا",
+      "(AXA) اكسا",
+      "شركة اكسا (AXA)"
     ],
     "priceListYear": "متوقف",
     "contractorOfficer": "محمد جابر",
@@ -1159,13 +1211,14 @@
     "updatedAt": {
       "_methodName": "serverTimestamp"
     },
-    "updatedBy": "seed_script"
+    "updatedBy": "contacts_table_sync"
   },
   {
     "id": "منصور_جروب",
     "name": "منصور جروب",
     "aliases": [
-      "منصور جروب"
+      "منصور جروب",
+      "مجموعة منصور Mansour Group"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "محمد ابو الوفا",
@@ -1179,7 +1232,9 @@
     "id": "الماسية_dms",
     "name": "الماسية DMS",
     "aliases": [
-      "الماسية DMS"
+      "الماسية DMS",
+      "الماسية للخدمات الطبية (D M S )",
+      "شركة الماسية للخدمات الطبية (D M S)"
     ],
     "priceListYear": "2024",
     "contractorOfficer": "أحمد حمزة",
@@ -1193,7 +1248,9 @@
     "id": "عناية_مصر",
     "name": "عناية مصر",
     "aliases": [
-      "عناية مصر"
+      "عناية مصر",
+      "Aniat masr عنايه مصر",
+      "عنايه مصر"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "زياد",
@@ -1207,7 +1264,8 @@
     "id": "فاركو_للادوية",
     "name": "فاركو للادوية",
     "aliases": [
-      "فاركو للادوية"
+      "فاركو للادوية",
+      "فاركو"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "زياد",
@@ -1235,7 +1293,8 @@
     "id": "بتروسنان",
     "name": "بتروسنان",
     "aliases": [
-      "بتروسنان"
+      "بتروسنان",
+      "شركة بتروسنان"
     ],
     "priceListYear": "2025",
     "contractorOfficer": "زياد",
@@ -1277,7 +1336,8 @@
     "id": "ميتلايف_اليكو",
     "name": "ميتلايف اليكو",
     "aliases": [
-      "ميتلايف اليكو"
+      "ميتلايف اليكو",
+      "اليكو"
     ],
     "priceListYear": "2023",
     "contractorOfficer": "زياد",
@@ -1285,13 +1345,14 @@
     "updatedAt": {
       "_methodName": "serverTimestamp"
     },
-    "updatedBy": "seed_script"
+    "updatedBy": "contacts_table_sync"
   },
   {
     "id": "ايجى_كير",
     "name": "ايجى كير",
     "aliases": [
-      "ايجى كير"
+      "ايجى كير",
+      "شركة ايجى كير للتأمين"
     ],
     "priceListYear": "2024",
     "contractorOfficer": "زياد",
@@ -1300,5 +1361,588 @@
       "_methodName": "serverTimestamp"
     },
     "updatedBy": "seed_script"
+  },
+  {
+    "id": "blue_dot",
+    "name": "Blue Dot",
+    "aliases": [
+      "Blue Dot"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "غير محدد",
+    "discountPercentage": 0,
+    "updatedAt": "2026-10-19T20:51:43.237Z",
+    "updatedBy": "auto_detected"
+  },
+  {
+    "id": "المرضي_الكاش_mt",
+    "name": "المرضي الكاش MT",
+    "aliases": [
+      "المرضي الكاش MT"
+    ],
+    "priceListYear": "2026",
+    "contractorOfficer": "غير محدد",
+    "discountPercentage": 0,
+    "updatedAt": "2026-10-19T20:51:49.778Z",
+    "updatedBy": "auto_detected"
+  },
+  {
+    "id": "hussem_medical",
+    "name": "Hussem Medical",
+    "aliases": [
+      "Hussem Medical"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "غير محدد",
+    "discountPercentage": 0,
+    "updatedAt": "2026-10-19T20:52:09.252Z",
+    "updatedBy": "auto_detected"
+  },
+  {
+    "id": "عقد_الرياض_el_rayad",
+    "name": "عقد الرياض El Rayad",
+    "aliases": [
+      "عقد الرياض El Rayad"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "غير محدد",
+    "discountPercentage": 0,
+    "updatedAt": "2026-10-19T20:52:10.962Z",
+    "updatedBy": "auto_detected"
+  },
+  {
+    "id": "next_care_نكست_كير",
+    "name": "Next Care نكست كير",
+    "aliases": [
+      "Next Care نكست كير",
+      "نكست كير",
+      "نيكست كير",
+      "Next Care",
+      "nextcare",
+      "next care",
+      "نكست كير Next Care"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "ديانا",
+    "discountPercentage": 40,
+    "updatedAt": "2026-10-19T20:58:21.160Z",
+    "updatedBy": "contacts_table_sync"
+  },
+  {
+    "id": "الخليج_الدولي",
+    "name": "الخليج الدولي",
+    "aliases": [
+      "الخليج الدولي"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "غير محدد",
+    "discountPercentage": 0,
+    "updatedAt": "2026-10-20T08:11:28.087Z",
+    "updatedBy": "auto_detected"
+  },
+  {
+    "id": "diagnosis_n18_6_end_stage_renal_disease_f03_91_unspecified_dementia_with_behavioral_distur",
+    "name": "Diagnosis N18.6 End stage renal disease, F03.91 Unspecified dementia with behavioral distur",
+    "aliases": [
+      "Diagnosis N18.6 End stage renal disease, F03.91 Unspecified dementia with behavioral distur",
+      "Diagnosis A41 Other sepsis, L03.116 Cellulitis of left lower limb, N18 Chronic kidney disease (CKD)",
+      "Diagnosis I20.0 Unstable angina, I25.11 Atherosclerotic heart disease of native cor, I10 Essential (primary) hypertension"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "غير محدد",
+    "discountPercentage": 0,
+    "updatedAt": "2026-10-20T09:06:56.916Z",
+    "updatedBy": "auto_detected"
+  },
+  {
+    "id": "monde_care",
+    "name": "Monde Care",
+    "aliases": [
+      "Monde Care"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "غير محدد",
+    "discountPercentage": 0,
+    "updatedAt": "2026-10-20T09:07:09.052Z",
+    "updatedBy": "auto_detected"
+  },
+  {
+    "id": "نادي_سموحة",
+    "name": "نادي سموحة",
+    "aliases": [
+      "نادي سموحة",
+      "( Smouha Club 106 ) خصم نادي سموحة كاش"
+    ],
+    "priceListYear": "2026",
+    "contractorOfficer": "زياد",
+    "discountPercentage": 0,
+    "updatedAt": "2026-10-20T10:42:51.300Z",
+    "updatedBy": "contacts_table_sync"
+  },
+  {
+    "id": "حديد_عز",
+    "name": "حديد عز",
+    "aliases": [
+      "حديد عز",
+      "عز للحديد والصلب",
+      "حديد عز ( مصانع حديد عز الصناعيه )"
+    ],
+    "priceListYear": "2023",
+    "contractorOfficer": "ديانا",
+    "discountPercentage": 35,
+    "updatedAt": "2026-10-20T10:42:53.401Z",
+    "updatedBy": "contacts_table_sync"
+  },
+  {
+    "id": "نقابة_اطباء",
+    "name": "نقابة اطباء",
+    "aliases": [
+      "نقابة اطباء",
+      "نقابة اطباء Cash"
+    ],
+    "priceListYear": "2026",
+    "contractorOfficer": "ديانا",
+    "discountPercentage": 0,
+    "updatedAt": "2026-10-20T10:44:55.998Z",
+    "updatedBy": "contacts_table_sync"
+  },
+  {
+    "id": "سوليتك",
+    "name": "سوليتك",
+    "aliases": [
+      "سوليتك",
+      "شركة سوليتك"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "زياد",
+    "discountPercentage": 0,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "contacts_table_sync"
+  },
+  {
+    "id": "ايجى_ميد",
+    "name": "ايجى ميد",
+    "aliases": [
+      "ايجى ميد"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "زياد",
+    "discountPercentage": 0,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "contacts_table_sync"
+  },
+  {
+    "id": "حياة_كارد",
+    "name": "حياة كارد",
+    "aliases": [
+      "حياة كارد",
+      "شركة حياة كارد"
+    ],
+    "priceListYear": "2026",
+    "contractorOfficer": "زياد",
+    "discountPercentage": 0,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "contacts_table_sync"
+  },
+  {
+    "id": "نادى_الجياد",
+    "name": "نادى الجياد",
+    "aliases": [
+      "نادى الجياد"
+    ],
+    "priceListYear": "2026",
+    "contractorOfficer": "زياد",
+    "discountPercentage": 0,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "contacts_table_sync"
+  },
+  {
+    "id": "اسمنت_بورتلاند",
+    "name": "اسمنت بورتلاند",
+    "aliases": [
+      "اسمنت بورتلاند"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "زياد",
+    "discountPercentage": 0,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "contacts_table_sync"
+  },
+  {
+    "id": "نادي_سبورتنج",
+    "name": "نادي سبورتنج",
+    "aliases": [
+      "نادي سبورتنج"
+    ],
+    "priceListYear": "2026",
+    "contractorOfficer": "نادين",
+    "discountPercentage": 0,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "contacts_table_sync"
+  },
+  {
+    "id": "نادى_وادي_دجلة",
+    "name": "نادى وادي دجلة",
+    "aliases": [
+      "نادى وادي دجلة"
+    ],
+    "priceListYear": "2026",
+    "contractorOfficer": "نادين",
+    "discountPercentage": 0,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "contacts_table_sync"
+  },
+  {
+    "id": "بيريللي_Pirelli_",
+    "name": "بيريللي (Pirelli)",
+    "aliases": [
+      "بيريللي (Pirelli)",
+      "شركة بيريللي فحص بريميثيون (Pirelli)"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "نادين",
+    "discountPercentage": 0,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "contacts_table_sync"
+  },
+  {
+    "id": "اسمنت_العامرية",
+    "name": "اسمنت العامرية",
+    "aliases": [
+      "اسمنت العامرية",
+      "شركة اسمنت العامرية فحص"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "نادين",
+    "discountPercentage": 0,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "contacts_table_sync"
+  },
+  {
+    "id": "Ma3ak_App",
+    "name": "Ma3ak App",
+    "aliases": [
+      "Ma3ak App"
+    ],
+    "priceListYear": "2026",
+    "contractorOfficer": "نادين",
+    "discountPercentage": 0,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "contacts_table_sync"
+  },
+  {
+    "id": "مجلس_الدفاع_الوطنى",
+    "name": "مجلس الدفاع الوطنى",
+    "aliases": [
+      "مجلس الدفاع الوطنى"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "محمد ابو الوفا",
+    "discountPercentage": 0,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "contacts_table_sync"
+  },
+  {
+    "id": "المشرق_Mashreq",
+    "name": "المشرق Mashreq",
+    "aliases": [
+      "المشرق Mashreq"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "ديانا",
+    "discountPercentage": 0,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "contacts_table_sync"
+  },
+  {
+    "id": "ليمتلس_كير",
+    "name": "ليمتلس كير",
+    "aliases": [
+      "ليمتلس كير",
+      "شركة ليمتلس كير"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "ديانا",
+    "discountPercentage": 0,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "contacts_table_sync"
+  },
+  {
+    "id": "نادي_الصيد",
+    "name": "نادي الصيد",
+    "aliases": [
+      "نادي الصيد"
+    ],
+    "priceListYear": "2026",
+    "contractorOfficer": "ديانا",
+    "discountPercentage": 0,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "contacts_table_sync"
+  },
+  {
+    "id": "معاهد_الكينج",
+    "name": "معاهد الكينج",
+    "aliases": [
+      "معاهد الكينج"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "ديانا",
+    "discountPercentage": 0,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "contacts_table_sync"
+  },
+  {
+    "id": "نقابة_العاملين_بالمحاكم",
+    "name": "نقابة العاملين بالمحاكم",
+    "aliases": [
+      "نقابة العاملين بالمحاكم"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "ديانا",
+    "discountPercentage": 0,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "contacts_table_sync"
+  },
+  {
+    "id": "النقابة_العامة_للبترول",
+    "name": "النقابة العامة للبترول",
+    "aliases": [
+      "النقابة العامة للبترول"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "محمد جابر",
+    "discountPercentage": 0,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "contacts_table_sync"
+  },
+  {
+    "id": "مصلحة_الضرائب",
+    "name": "مصلحة الضرائب",
+    "aliases": [
+      "مصلحة الضرائب"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "محمد جابر",
+    "discountPercentage": 0,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "contacts_table_sync"
+  },
+  {
+    "id": "بوميد",
+    "name": "بوميد",
+    "aliases": [
+      "بوميد"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "محمد جابر",
+    "discountPercentage": 0,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "contacts_table_sync"
+  },
+  {
+    "id": "El_Ahly",
+    "name": "El Ahly",
+    "aliases": [
+      "El Ahly"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "أحمد حمزة",
+    "discountPercentage": 0,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "contacts_table_sync"
+  },
+  {
+    "id": "اون_لاين_اكسكلوسيف_",
+    "name": "اون لاين (اكسكلوسيف)",
+    "aliases": [
+      "اون لاين (اكسكلوسيف)",
+      "شركة اون لاين ( اكسكلوسيف )"
+    ],
+    "priceListYear": "2026",
+    "contractorOfficer": "أحمد حمزة",
+    "discountPercentage": 0,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "contacts_table_sync"
+  },
+  {
+    "id": "ELNG",
+    "name": "ELNG",
+    "aliases": [
+      "ELNG",
+      "فحص ELNG"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "أحمد حمزة",
+    "discountPercentage": 0,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "contacts_table_sync"
+  },
+  {
+    "id": "نادى_الاتحاد",
+    "name": "نادى الاتحاد",
+    "aliases": [
+      "نادى الاتحاد"
+    ],
+    "priceListYear": "2026",
+    "contractorOfficer": "أحمد حمزة",
+    "discountPercentage": 0,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "contacts_table_sync"
+  },
+  {
+    "id": "ثروة_للتأمينات_الحياة",
+    "name": "ثروة للتأمينات الحياة",
+    "aliases": [
+      "ثروة للتأمينات الحياة",
+      "فحص شركة ثروة للتأمينات الحياة"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "طارق",
+    "discountPercentage": 0,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "contacts_table_sync"
+  },
+  {
+    "id": "المصرف_العربي",
+    "name": "المصرف العربي",
+    "aliases": [
+      "المصرف العربي"
+    ],
+    "priceListYear": "2025",
+    "contractorOfficer": "طارق",
+    "discountPercentage": 0,
+    "updatedAt": {
+      "_methodName": "serverTimestamp"
+    },
+    "updatedBy": "contacts_table_sync"
+  },
+  {
+    "contractorOfficer": "غير محدد",
+    "name": "( Smouha Club 106 ) خصم نادي سموحة كاش",
+    "id": "_smouha_club_106_خصم_نادي_سموحة_كاش",
+    "priceListYear": "2026",
+    "aliases": [
+      "( Smouha Club 106 ) خصم نادي سموحة كاش"
+    ],
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792492971,
+      "nanoseconds": 343000000
+    },
+    "updatedBy": "auto_detected",
+    "discountPercentage": 0
+  },
+  {
+    "discountPercentage": 25,
+    "name": "صاان مصر",
+    "id": "صاان_مصر",
+    "updatedBy": "seed_script",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792440780,
+      "nanoseconds": 562000000
+    },
+    "aliases": [
+      "صاان مصر"
+    ],
+    "priceListYear": "2024",
+    "contractorOfficer": "محمد ابو الوفا"
+  },
+  {
+    "aliases": [
+      "عز للحديد والصلب",
+      "حديد عز ( مصانع حديد عز الصناعيه )"
+    ],
+    "name": "عز للحديد والصلب",
+    "priceListYear": "2023",
+    "discountPercentage": 35,
+    "id": "عز_للحديد_والصلب",
+    "contractorOfficer": "محمد ابو الوفا",
+    "updatedBy": "seed_script",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792440780,
+      "nanoseconds": 562000000
+    }
+  },
+  {
+    "priceListYear": "2025",
+    "name": "ميدنت",
+    "aliases": [
+      "ميدنت"
+    ],
+    "updatedBy": "auto_detected",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792493025,
+      "nanoseconds": 26000000
+    },
+    "discountPercentage": 0,
+    "contractorOfficer": "غير محدد",
+    "id": "ميدنت"
+  },
+  {
+    "contractorOfficer": "غير محدد",
+    "aliases": [
+      "نقابة اطباء Cash"
+    ],
+    "id": "نقابة_اطباء_cash",
+    "discountPercentage": 0,
+    "priceListYear": "2026",
+    "updatedAt": {
+      "type": "firestore/timestamp/1.0",
+      "seconds": 1792493096,
+      "nanoseconds": 146000000
+    },
+    "updatedBy": "auto_detected",
+    "name": "نقابة اطباء Cash"
   }
 ]

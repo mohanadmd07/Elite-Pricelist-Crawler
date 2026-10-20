@@ -10,11 +10,11 @@ interface AddCompanyModalProps {
 }
 
 const PRICELIST_OPTIONS = [
-  { label: 'Elite Hospital 2026', value: '2026' },
-  { label: 'Elite Hospital 2025 (Default)', value: '2025' },
+  { label: 'Elite Hospital 2026 (Active / Cash)', value: '2026' },
+  { label: 'Elite Hospital 2025', value: '2025' },
   { label: 'Elite Hospital 2024', value: '2024' },
   { label: 'Elite Hospital 2023', value: '2023' },
-  { label: 'Cash Pricelist', value: 'Cash' },
+  { label: 'Cash Pricelist (2026)', value: '2026' },
 ];
 
 const SUGGESTED_OFFICERS = [
@@ -34,7 +34,7 @@ export const AddCompanyModal: React.FC<AddCompanyModalProps> = ({
 }) => {
   const [name, setName] = useState('');
   const [aliases, setAliases] = useState('');
-  const [priceListYear, setPriceListYear] = useState('2025');
+  const [priceListYear, setPriceListYear] = useState('2026');
   const [contractorOfficer, setContractorOfficer] = useState('');
   const [discountPercentage, setDiscountPercentage] = useState('0');
   const [isSaving, setIsSaving] = useState(false);

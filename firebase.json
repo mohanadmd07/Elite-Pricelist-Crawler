@@ -2,15 +2,18 @@
   "firestore": [
     {
       "database": "ai-studio-30af8d7a-885b-455a-bd3a-4af97e61494e",
-      "rules": "firestore.rules"
+      "rules": "firestore.rules",
+      "indexes": "firestore.indexes.json"
     },
     {
       "database": "ai-studio-01d38b77-6206-42e3-8937-1b842d004bb8",
-      "rules": "firestore.rules"
+      "rules": "firestore.rules",
+      "indexes": "firestore.indexes.json"
     },
     {
       "database": "ai-studio-f603660f-2a84-4c68-a5e8-166db31c3160",
-      "rules": "firestore.rules"
+      "rules": "firestore.rules",
+      "indexes": "firestore.indexes.json"
     }
   ],
   "emulators": {

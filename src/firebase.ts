@@ -83,26 +83,30 @@ export const auth = getAuth(app);
 
 // Initialize Firestore with Optimized Multi-Tier Persistent Cache
 function setupOptimizedFirestore(): Firestore {
-  const multiTabCache = {
+  const multiTabSettings = {
     localCache: persistentLocalCache({
       tabManager: persistentMultipleTabManager(),
     }),
+    experimentalAutoDetectLongPolling: true,
   };
 
   try {
     if (firebaseConfig.firestoreDatabaseId) {
-      return initializeFirestore(app, multiTabCache, firebaseConfig.firestoreDatabaseId);
+      return initializeFirestore(app, multiTabSettings, firebaseConfig.firestoreDatabaseId);
     }
-    return initializeFirestore(app, multiTabCache);
+    return initializeFirestore(app, multiTabSettings);
   } catch (err: any) {
     // If persistent IndexedDB is restricted (e.g. Safari private browsing, isolated iframes), fallback gracefully to memory cache
     console.warn('Persistent IndexedDB cache unavailable, falling back to memory cache:', err?.message || err);
     try {
-      const memoryCache = { localCache: memoryLocalCache() };
+      const memorySettings = {
+        localCache: memoryLocalCache(),
+        experimentalAutoDetectLongPolling: true,
+      };
       if (firebaseConfig.firestoreDatabaseId) {
-        return initializeFirestore(app, memoryCache, firebaseConfig.firestoreDatabaseId);
+        return initializeFirestore(app, memorySettings, firebaseConfig.firestoreDatabaseId);
       }
-      return initializeFirestore(app, memoryCache);
+      return initializeFirestore(app, memorySettings);
     } catch {
       // If already initialized, return standard instance
       return firebaseConfig.firestoreDatabaseId

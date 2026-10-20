@@ -9,6 +9,7 @@ import {
   RotateCcw,
   AlertCircle,
   Sparkles,
+  Layers,
 } from 'lucide-react';
 import { CompanyConfigRecord, CompanyInfo } from '../../types';
 import {
@@ -18,6 +19,7 @@ import {
   seedInitialCompaniesIfEmpty,
 } from '../../services/approvalsFirebaseService';
 import { AddCompanyModal } from './AddCompanyModal';
+import { MergeCompaniesModal } from './MergeCompaniesModal';
 
 interface ContractorManagerProps {
   userEmail?: string;
@@ -25,11 +27,11 @@ interface ContractorManagerProps {
 }
 
 const PRICELIST_YEARS = [
-  { value: '2026', label: 'Elite Hospital 2026' },
+  { value: '2026', label: 'Elite Hospital 2026 (Active / Cash)' },
   { value: '2025', label: 'Elite Hospital 2025' },
   { value: '2024', label: 'Elite Hospital 2024' },
   { value: '2023', label: 'Elite Hospital 2023' },
-  { value: 'Cash', label: 'Cash Pricelist' },
+  { value: 'Cash', label: 'Cash Pricelist (2026)' },
 ];
 
 export const ContractorManager: React.FC<ContractorManagerProps> = ({
@@ -40,9 +42,11 @@ export const ContractorManager: React.FC<ContractorManagerProps> = ({
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isMergeModalOpen, setIsMergeModalOpen] = useState(false);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
 
-  // Local draft edits: key is docId, value is modified fields
-  const [edits, setEdits] = useState<Record<string, { priceListYear?: string; contractorOfficer?: string }>>({});
+  // Local draft edits: key is docId, value is modified fields (name, priceListYear, contractorOfficer)
+  const [edits, setEdits] = useState<Record<string, { name?: string; priceListYear?: string; contractorOfficer?: string }>>({});
   const [savingIds, setSavingIds] = useState<Record<string, boolean>>({});
   const [savedSuccessIds, setSavedSuccessIds] = useState<Record<string, boolean>>({});
 
@@ -52,7 +56,7 @@ export const ContractorManager: React.FC<ContractorManagerProps> = ({
         id: c.name.trim().toLowerCase().replace(/[^a-z0-9\u0600-\u06FF]+/g, '_'),
         name: c.name,
         aliases: [c.name],
-        priceListYear: c.priceListYear || '2025',
+        priceListYear: c.priceListYear || '2026',
         contractorOfficer: c.responsiblePerson || 'محمد ابو الوفا',
         discountPercentage: c.discount || 0,
       }));
@@ -76,7 +80,7 @@ export const ContractorManager: React.FC<ContractorManagerProps> = ({
 
   const handleFieldChange = (
     id: string,
-    field: 'priceListYear' | 'contractorOfficer',
+    field: 'name' | 'priceListYear' | 'contractorOfficer',
     value: string
   ) => {
     setEdits((prev) => ({
@@ -95,11 +99,16 @@ export const ContractorManager: React.FC<ContractorManagerProps> = ({
     try {
       setSavingIds((prev) => ({ ...prev, [company.id]: true }));
 
+      const updatedName = edit.name !== undefined && edit.name.trim() ? edit.name.trim() : company.name;
+      const aliases = Array.from(
+        new Set([...(company.aliases || []), company.name, updatedName])
+      ).filter(Boolean);
+
       await saveCompanyConfig(
         {
           id: company.id,
-          name: company.name,
-          aliases: company.aliases || [company.name],
+          name: updatedName,
+          aliases,
           priceListYear: edit.priceListYear !== undefined ? edit.priceListYear : company.priceListYear,
           contractorOfficer: edit.contractorOfficer !== undefined ? edit.contractorOfficer : company.contractorOfficer,
           discountPercentage: company.discountPercentage || 0,
@@ -142,6 +151,43 @@ export const ContractorManager: React.FC<ContractorManagerProps> = ({
     }
   };
 
+  const handleToggleSelect = (id: string) => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  const handleSelectAll = () => {
+    if (selectedIds.size === filteredCompanies.length) {
+      setSelectedIds(new Set<string>());
+    } else {
+      setSelectedIds(new Set<string>(filteredCompanies.map((c) => c.id)));
+    }
+  };
+
+  const handleDeselectAll = () => {
+    setSelectedIds(new Set<string>());
+  };
+
+  const handleDeleteSelected = async () => {
+    const count = selectedIds.size;
+    if (count === 0) return;
+    const confirmed = window.confirm(`Are you sure you want to remove ${count} selected companies from database?`);
+    if (!confirmed) return;
+
+    try {
+      for (const id of Array.from(selectedIds) as string[]) {
+        await deleteCompanyConfig(id);
+      }
+      setSelectedIds(new Set<string>());
+    } catch (err) {
+      console.error('Failed to delete selected companies:', err);
+    }
+  };
+
   const filteredCompanies = companies.filter((c) => {
     const term = search.toLowerCase().trim();
     if (!term) return true;
@@ -170,6 +216,16 @@ export const ContractorManager: React.FC<ContractorManagerProps> = ({
         </div>
 
         <div className="flex items-center gap-2">
+          {selectedIds.size >= 2 && (
+            <button
+              onClick={() => setIsMergeModalOpen(true)}
+              className="px-3.5 py-2 bg-teal-50 hover:bg-teal-100 text-teal-800 border border-teal-300 rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer"
+            >
+              <Layers size={14} />
+              <span>Merge ({selectedIds.size})</span>
+            </button>
+          )}
+
           <button
             onClick={() => setIsAddModalOpen(true)}
             className="px-4 py-2 bg-teal-700 hover:bg-teal-800 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow-sm transition-all cursor-pointer active:scale-98"
@@ -179,6 +235,41 @@ export const ContractorManager: React.FC<ContractorManagerProps> = ({
           </button>
         </div>
       </div>
+
+      {/* Bulk Selection Action Bar */}
+      {selectedIds.size > 0 && (
+        <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 bg-teal-50/90 border border-teal-300/80 rounded-2xl text-xs text-teal-950 shadow-xs animate-in fade-in">
+          <div className="flex items-center gap-2">
+            <span className="font-extrabold text-teal-900">
+              {selectedIds.size} {selectedIds.size === 1 ? 'company' : 'companies'} selected
+            </span>
+            <button
+              onClick={handleDeselectAll}
+              className="text-[11px] text-teal-700 underline hover:text-teal-950 cursor-pointer font-bold ml-2"
+            >
+              Clear selection
+            </button>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setIsMergeModalOpen(true)}
+              disabled={selectedIds.size < 2}
+              className="px-3.5 py-1.5 bg-teal-700 hover:bg-teal-800 disabled:opacity-50 text-white rounded-xl font-bold flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer"
+              title={selectedIds.size < 2 ? 'Select at least 2 companies to merge' : 'Merge selected companies into one'}
+            >
+              <Layers size={14} />
+              <span>Merge Companies ({selectedIds.size})</span>
+            </button>
+            <button
+              onClick={handleDeleteSelected}
+              className="px-3.5 py-1.5 bg-white hover:bg-rose-50 text-rose-700 border border-rose-300 rounded-xl font-bold flex items-center gap-1.5 shadow-2xs transition-all cursor-pointer"
+            >
+              <Trash2 size={13} />
+              <span>Delete Selected</span>
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Main Companies Table */}
       <div className="bg-white/95 backdrop-blur-md border border-slate-200/90 rounded-2xl shadow-xs overflow-hidden">
@@ -216,9 +307,18 @@ export const ContractorManager: React.FC<ContractorManagerProps> = ({
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="border-b border-slate-100 text-[11px] font-bold text-slate-400 uppercase tracking-wider bg-slate-50/30">
-                  <th className="py-3 px-5">Contractor / Company</th>
-                  <th className="py-3 px-4 w-56">Active Pricelist</th>
-                  <th className="py-3 px-4 w-64">Contractor Officer (سيلز)</th>
+                  <th className="py-3 px-3 w-10 text-center">
+                    <input
+                      type="checkbox"
+                      checked={filteredCompanies.length > 0 && selectedIds.size === filteredCompanies.length}
+                      onChange={handleSelectAll}
+                      className="rounded border-slate-300 text-teal-600 focus:ring-teal-500 cursor-pointer"
+                      title="Select / Deselect all"
+                    />
+                  </th>
+                  <th className="py-3 px-4">Contractor / Company</th>
+                  <th className="py-3 px-4 w-52">Active Pricelist</th>
+                  <th className="py-3 px-4 w-60">Contractor Officer (سيلز)</th>
                   <th className="py-3 px-3 text-center w-24">Discount</th>
                   <th className="py-3 px-4 text-right w-28">Actions</th>
                 </tr>
@@ -226,35 +326,62 @@ export const ContractorManager: React.FC<ContractorManagerProps> = ({
               <tbody className="divide-y divide-slate-100 text-xs">
                 {filteredCompanies.map((company) => {
                   const localEdit = edits[company.id] || {};
+                  const currentName =
+                    localEdit.name !== undefined ? localEdit.name : company.name;
                   const currentYear =
                     localEdit.priceListYear !== undefined
                       ? localEdit.priceListYear
-                      : company.priceListYear || '2025';
+                      : company.priceListYear || '2026';
                   const currentOfficer =
                     localEdit.contractorOfficer !== undefined
                       ? localEdit.contractorOfficer
                       : company.contractorOfficer || '';
                   const isModified =
+                    (localEdit.name !== undefined && localEdit.name !== company.name) ||
                     (localEdit.priceListYear !== undefined && localEdit.priceListYear !== company.priceListYear) ||
                     (localEdit.contractorOfficer !== undefined && localEdit.contractorOfficer !== company.contractorOfficer);
                   const isSaving = savingIds[company.id];
                   const isSavedSuccess = savedSuccessIds[company.id];
+                  const isUndefinedOfficer = !company.contractorOfficer || company.contractorOfficer === 'غير محدد';
+                  const isChecked = selectedIds.has(company.id);
 
                   return (
                     <tr
                       key={company.id}
                       className={`hover:bg-slate-50/70 transition-colors ${
-                        isModified ? 'bg-amber-50/30' : ''
+                        isChecked ? 'bg-teal-50/40' : isModified ? 'bg-amber-50/30' : ''
                       }`}
                     >
-                      {/* Company Name & Aliases */}
-                      <td className="py-3 px-5">
-                        <div className="font-bold text-slate-900" dir="auto">
-                          {company.name}
+                      {/* Select Checkbox */}
+                      <td className="py-3 px-3 text-center">
+                        <input
+                          type="checkbox"
+                          checked={isChecked}
+                          onChange={() => handleToggleSelect(company.id)}
+                          className="rounded border-slate-300 text-teal-600 focus:ring-teal-500 cursor-pointer"
+                        />
+                      </td>
+
+                      {/* Company Name & Aliases (Editable) */}
+                      <td className="py-2.5 px-4">
+                        <div className="flex items-center gap-1.5" dir="auto">
+                          <input
+                            type="text"
+                            value={currentName}
+                            onChange={(e) => handleFieldChange(company.id, 'name', e.target.value)}
+                            placeholder="Contractor Name"
+                            dir="auto"
+                            className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-teal-600 transition-all shadow-2xs"
+                          />
+                          {isUndefinedOfficer && (
+                            <span className="shrink-0 text-[10px] bg-amber-50 text-amber-800 border border-amber-300 font-bold px-1.5 py-0.5 rounded shadow-2xs">
+                              غير محدد
+                            </span>
+                          )}
                         </div>
                         {company.aliases && company.aliases.length > 1 && (
-                          <div className="text-[10px] text-slate-400 truncate max-w-xs mt-0.5" dir="auto">
-                            Aliases: {company.aliases.filter((a) => a !== company.name).join(', ')}
+                          <div className="text-[10px] text-slate-400 truncate max-w-xs mt-1 pl-1" dir="auto">
+                            Aliases: {company.aliases.filter((a) => a !== currentName).join(', ')}
                           </div>
                         )}
                       </td>
@@ -337,6 +464,15 @@ export const ContractorManager: React.FC<ContractorManagerProps> = ({
       <AddCompanyModal
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
+        userEmail={userEmail}
+      />
+
+      {/* Merge Selected Companies Modal */}
+      <MergeCompaniesModal
+        isOpen={isMergeModalOpen}
+        selectedCompanies={companies.filter((c) => selectedIds.has(c.id))}
+        onClose={() => setIsMergeModalOpen(false)}
+        onMerged={() => setSelectedIds(new Set())}
         userEmail={userEmail}
       />
     </div>

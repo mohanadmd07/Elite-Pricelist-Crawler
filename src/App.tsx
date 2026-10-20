@@ -156,12 +156,12 @@ export default function App() {
   useEffect(() => {
     if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
       const handle = (window as any).requestIdleCallback(() => {
-        preloadPricelists('2025');
+        preloadPricelists('2026');
       });
       return () => (window as any).cancelIdleCallback(handle);
     } else {
       const timer = setTimeout(() => {
-        preloadPricelists('2025');
+        preloadPricelists('2026');
       }, 300);
       return () => clearTimeout(timer);
     }

@@ -4,6 +4,7 @@ import {
   FileCheck2,
   CheckCircle2,
   Clock,
+  AlertCircle,
   Pause,
   Play,
   Building2,
@@ -17,6 +18,7 @@ import {
   subscribeToApprovals,
   subscribeToAutomationSettings,
   setAutomationPaused,
+  triggerManualApprovalsSync,
 } from '../../services/approvalsFirebaseService';
 import { ApprovalsTable } from './ApprovalsTable';
 import { ContractorManager } from './ContractorManager';
@@ -41,6 +43,24 @@ export const ApprovalsHub: React.FC<ApprovalsHubProps> = ({
   });
   const [isTogglingPause, setIsTogglingPause] = useState(false);
   const [reportCopied, setReportCopied] = useState(false);
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [syncMessage, setSyncMessage] = useState<string | null>(null);
+
+  const handleManualSync = async () => {
+    try {
+      setIsSyncing(true);
+      setSyncMessage(null);
+      const res = await triggerManualApprovalsSync();
+      setSyncMessage(res.message || 'Sync complete!');
+      setTimeout(() => setSyncMessage(null), 4000);
+    } catch (err: any) {
+      console.error('Manual sync failed:', err);
+      setSyncMessage('Sync request failed');
+      setTimeout(() => setSyncMessage(null), 4000);
+    } finally {
+      setTimeout(() => setIsSyncing(false), 1200);
+    }
+  };
 
   // Subscribe to real-time approvals from Firestore (30-day rolling window)
   useEffect(() => {
@@ -99,10 +119,13 @@ export const ApprovalsHub: React.FC<ApprovalsHubProps> = ({
 
   const totalCount = filteredApprovals.length;
   const pendingApprovalCount = filteredApprovals.filter(
-    (a) => !a.hasExistingApproval && a.status !== 'answered'
+    (a) => !a.hasExistingApproval && !a.isRefused && a.status !== 'answered'
   ).length;
   const approvedReplyCount = filteredApprovals.filter(
-    (a) => Boolean(a.hasExistingApproval)
+    (a) => Boolean(a.hasExistingApproval) && !a.isRefused
+  ).length;
+  const refusedCount = filteredApprovals.filter(
+    (a) => Boolean(a.isRefused)
   ).length;
   const answeredCount = filteredApprovals.filter((a) => a.status === 'answered').length;
   const draftedCount = filteredApprovals.filter((a) => a.status === 'draft_created').length;
@@ -124,6 +147,7 @@ export const ApprovalsHub: React.FC<ApprovalsHubProps> = ({
 • Total Received: ${totalCount}
 • ⏳ Pending Approval: ${pendingApprovalCount}
 • ✅ Approved Replies ("لا مانع" / "Approved"): ${approvedReplyCount}
+• ❌ Refused / Not Covered (غير مغطى / مرفوض): ${refusedCount}
 • ✉️ Answered (Sent): ${answeredCount}
 • ✍️ Drafted in Outlook: ${draftedCount}
 
@@ -226,12 +250,48 @@ Generated via Elite Corporate Approvals Hub • 30-Day Rolling Active`;
               </>
             )}
           </button>
+
+          {/* Manual Sync Button */}
+          <button
+            onClick={handleManualSync}
+            disabled={isSyncing || Boolean(automationSettings.isSyncing)}
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer active:scale-98 shadow-xs border ${
+              isSyncing || automationSettings.isSyncing
+                ? 'bg-teal-50 border-teal-300 text-teal-800'
+                : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-300'
+            }`}
+            title="Scan Outlook / Exchange InApprovals folder immediately"
+          >
+            <RefreshCw size={13} className={isSyncing || automationSettings.isSyncing ? 'animate-spin text-teal-700' : 'text-slate-500'} />
+            <span>{isSyncing || automationSettings.isSyncing ? 'Syncing...' : 'Sync Emails Now'}</span>
+          </button>
         </div>
       </div>
 
+      {/* Live Syncing / Polling Indicator */}
+      {(isSyncing || Boolean(automationSettings.isSyncing)) && (
+        <div className="px-4 py-2.5 bg-teal-50 border border-teal-300/90 rounded-2xl text-xs font-bold text-teal-950 flex items-center justify-between shadow-2xs animate-pulse">
+          <div className="flex items-center gap-2">
+            <RefreshCw size={14} className="animate-spin text-teal-700 shrink-0" />
+            <span>جاري فحص وتحديث الموافقات مع البريد الإلكتروني (Outlook / Exchange)...</span>
+          </div>
+          <span className="text-[11px] text-teal-800 font-semibold bg-teal-100 px-2 py-0.5 rounded-full">Sync Active</span>
+        </div>
+      )}
+
+      {/* Sync Status Banner */}
+      {syncMessage && (
+        <div className="px-4 py-2.5 bg-emerald-50 border border-emerald-300/80 rounded-2xl text-xs font-bold text-emerald-950 flex items-center justify-between shadow-2xs animate-in fade-in">
+          <span>✓ {syncMessage}</span>
+          <button onClick={() => setSyncMessage(null)} className="text-emerald-700 hover:text-emerald-950 cursor-pointer">
+            ✕
+          </button>
+        </div>
+      )}
+
       {/* KPI Stats Cards (Visible when on feed tab) */}
       {activeTab === 'feed' && (
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
           {/* Total Received */}
           <div className="bg-white/95 backdrop-blur-md border border-slate-200/90 rounded-2xl p-4 sm:p-5 shadow-xs">
             <div className="flex items-center justify-between text-slate-500 mb-2">
@@ -262,7 +322,7 @@ Generated via Elite Corporate Approvals Hub • 30-Day Rolling Active`;
               {pendingApprovalCount}
             </div>
             <p className="text-[11px] text-slate-400 mt-1">
-              No replies / pending approval
+              Pending insurance reply
             </p>
           </div>
 
@@ -279,6 +339,24 @@ Generated via Elite Corporate Approvals Hub • 30-Day Rolling Active`;
             </div>
             <p className="text-[11px] text-emerald-600 font-medium mt-1">
               Confirmed (لا مانع / Approved)
+            </p>
+          </div>
+
+          {/* Refused / Not Covered */}
+          <div className="bg-white/95 backdrop-blur-md border border-slate-200/90 rounded-2xl p-4 sm:p-5 shadow-xs">
+            <div className="flex items-center justify-between text-slate-500 mb-2">
+              <span className="text-xs font-bold uppercase tracking-wider">Refused / Not Covered</span>
+              <div className="w-7 h-7 rounded-lg bg-rose-50 text-rose-800 flex items-center justify-center">
+                <AlertCircle size={14} />
+              </div>
+            </div>
+            <div className={`text-2xl sm:text-3xl font-black font-display ${
+              refusedCount > 0 ? 'text-rose-600' : 'text-slate-900'
+            }`}>
+              {refusedCount}
+            </div>
+            <p className="text-[11px] text-rose-600 font-medium mt-1">
+              Refused (غير مغطى / مرفوض)
             </p>
           </div>
 

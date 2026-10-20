@@ -12,11 +12,18 @@ import {
   User,
   ChevronRight,
   MessageSquare,
+  MessageCircle,
   Send,
   Calendar,
+  Sparkles,
+  ShieldCheck,
+  Coins,
+  HelpCircle,
 } from 'lucide-react';
 import { InpatientApprovalRecord } from '../../types';
 import { toggleApprovalStatus, triggerManualDraft } from '../../services/approvalsFirebaseService';
+import { generateCmWhatsappMessageAsync } from '../../lib/whatsapp-generator';
+import { stripSentFromSignatures } from '../../lib/arabic-normalizer';
 import { ViewDraftModal } from './ViewDraftModal';
 
 interface ApprovalsTableProps {
@@ -33,10 +40,42 @@ export const ApprovalsTable: React.FC<ApprovalsTableProps> = ({
   onDateFilterChange,
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<'all' | 'pending_approval' | 'approved_reply' | 'answered' | 'draft_created'>('all');
+  const [statusFilter, setStatusFilter] = useState<
+    | 'all'
+    | 'pending_approval'
+    | 'approved_reply'
+    | 'conditionally_approved'
+    | 'pending_information'
+    | 'refused'
+    | 'answered'
+    | 'draft_created'
+  >('all');
   const [viewingApproval, setViewingApproval] = useState<InpatientApprovalRecord | null>(null);
   const [togglingId, setTogglingId] = useState<string | null>(null);
   const [draftingManualId, setDraftingManualId] = useState<string | null>(null);
+  const [copiedWhatsappId, setCopiedWhatsappId] = useState<string | null>(null);
+
+  const handleCopyWhatsapp = async (record: InpatientApprovalRecord) => {
+    try {
+      const msg = await generateCmWhatsappMessageAsync(record);
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(msg);
+      } else {
+        const textarea = document.createElement('textarea');
+        textarea.value = msg;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+      }
+      setCopiedWhatsappId(record.id);
+      setTimeout(() => setCopiedWhatsappId(null), 2500);
+    } catch (err) {
+      console.error('Failed to copy CM WhatsApp message:', err);
+    }
+  };
 
   const handleToggleStatus = async (record: InpatientApprovalRecord) => {
     try {
@@ -108,11 +147,23 @@ export const ApprovalsTable: React.FC<ApprovalsTableProps> = ({
 
     // 2. Status filter
     if (statusFilter === 'pending_approval') {
-      // Pending approval: no approval reply found and not marked answered
-      if (a.hasExistingApproval || a.status === 'answered') return false;
+      if (
+        a.hasExistingApproval ||
+        a.isRefused ||
+        a.status === 'answered' ||
+        a.status === 'approved' ||
+        a.status === 'conditionally_approved'
+      )
+        return false;
     } else if (statusFilter === 'approved_reply') {
-      // Approved reply found (contains "لا مانع", "approve", "approved", "موافقة سعرية")
-      if (!a.hasExistingApproval) return false;
+      if ((!a.hasExistingApproval && a.status !== 'approved') || a.isRefused || a.status === 'refused')
+        return false;
+    } else if (statusFilter === 'conditionally_approved') {
+      if (a.status !== 'conditionally_approved' && a.status !== 'partially_approved') return false;
+    } else if (statusFilter === 'pending_information') {
+      if (a.status !== 'pending_information') return false;
+    } else if (statusFilter === 'refused') {
+      if (!a.isRefused && a.status !== 'refused') return false;
     } else if (statusFilter === 'answered') {
       if (a.status !== 'answered') return false;
     } else if (statusFilter === 'draft_created') {
@@ -263,9 +314,12 @@ export const ApprovalsTable: React.FC<ApprovalsTableProps> = ({
             onChange={(e) => setStatusFilter(e.target.value as any)}
             className="px-3 py-2 rounded-xl border border-slate-200 bg-slate-50/50 text-xs font-bold text-slate-700 focus:bg-white focus:outline-none focus:ring-2 focus:ring-teal-600 transition-all cursor-pointer"
           >
-            <option value="all">All Statuses</option>
-            <option value="pending_approval">⏳ Pending Approval</option>
-            <option value="approved_reply">✅ Approved Replies (لا مانع / Approved)</option>
+            <option value="all">All Statuses (جميع الحالات)</option>
+            <option value="approved_reply">✅ Approved (معتمد بالكامل)</option>
+            <option value="conditionally_approved">🛡️ Conditionally Approved (موافقة مشروطة)</option>
+            <option value="pending_information">❓ Info Requested (مطلوب استيفاء بيانات)</option>
+            <option value="pending_approval">⏳ Pending Approval (قيد المتابعة)</option>
+            <option value="refused">❌ Refused / Not Covered (غير مغطى / مرفوض)</option>
             <option value="answered">✉️ Answered (Sent)</option>
             <option value="draft_created">✍️ Draft Created</option>
           </select>
@@ -333,24 +387,60 @@ export const ApprovalsTable: React.FC<ApprovalsTableProps> = ({
                           {record.bed && <span>• Bed: {record.bed}</span>}
                         </div>
 
-                        {/* Existing Approval Reply Alert Banner */}
-                        {record.hasExistingApproval && record.existingApprovalSnippet && (
-                          <div className="mt-2 p-2.5 rounded-xl bg-emerald-50/90 border border-emerald-300 text-xs text-emerald-950 flex items-start gap-2 shadow-2xs">
-                            <CheckCircle2 size={15} className="text-emerald-600 shrink-0 mt-0.5" />
+                        {/* AI Executive Summary Banner */}
+                        {record.aiThreadSummary && (
+                          <div className="mt-2 p-2.5 rounded-xl bg-teal-50/80 border border-teal-200 text-xs text-slate-800 flex items-start gap-2 shadow-2xs">
+                            <Sparkles size={14} className="text-teal-700 shrink-0 mt-0.5" />
                             <div className="flex-1">
-                              <span className="font-bold text-emerald-800">رد الموافقة المستلم:</span>{' '}
-                              <span className="font-semibold text-emerald-950" dir="auto">"{record.existingApprovalSnippet}"</span>
+                              <div className="flex items-center gap-1.5 mb-0.5">
+                                <span className="font-extrabold text-[10px] text-teal-800 uppercase tracking-wider">الملخص الذكي (AI Summary):</span>
+                              </div>
+                              <p className="text-[11px] font-medium text-slate-700 leading-relaxed" dir="auto">
+                                {record.aiThreadSummary}
+                              </p>
                             </div>
                           </div>
                         )}
 
-                        {/* Has Discussion Replies (Non-approval) Alert Banner */}
-                        {record.hasReplies && !record.hasExistingApproval && record.replySnippet && (
+                        {/* Refused / Not Covered Alert Banner */}
+                        {record.isRefused && (
+                          <div className="mt-2 p-2.5 rounded-xl bg-rose-50/95 border border-rose-300 text-xs text-rose-950 flex items-start gap-2 shadow-2xs">
+                            <AlertCircle size={15} className="text-rose-600 shrink-0 mt-0.5" />
+                            <div className="flex-1">
+                              <span className="font-bold text-rose-800">رفض / غير مغطى:</span>{' '}
+                              <span className="font-semibold text-rose-950" dir="auto">
+                                "{stripSentFromSignatures(record.refusalSnippet || 'غير مغطى')}"
+                              </span>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Existing Approval Reply Alert Banner */}
+                        {record.hasExistingApproval && record.existingApprovalSnippet && !record.isRefused && (
+                          <div className="mt-2 p-2.5 rounded-xl bg-emerald-50/90 border border-emerald-300 text-xs text-emerald-950 flex items-start gap-2 shadow-2xs">
+                            <CheckCircle2 size={15} className="text-emerald-600 shrink-0 mt-0.5" />
+                            <div className="flex-1">
+                              <div>
+                                <span className="font-bold text-emerald-800">رد الموافقة المستلم:</span>{' '}
+                                <span className="font-semibold text-emerald-950" dir="auto">"{stripSentFromSignatures(record.existingApprovalSnippet)}"</span>
+                              </div>
+                              {record.creditLimitText && (
+                                <div className="mt-1.5 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-950 font-bold text-xs border border-emerald-300 shadow-2xs">
+                                  <span>💰 الحد الأقصى للموافقة:</span>
+                                  <span className="font-black text-emerald-950 underline decoration-emerald-500">{record.creditLimitText}</span>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Has Discussion Replies (Non-approval & Non-refusal) Alert Banner */}
+                        {record.hasReplies && !record.hasExistingApproval && !record.isRefused && record.replySnippet && record.replySnippet !== 'Thread has prior conversation/replies' && (
                           <div className="mt-2 p-2.5 rounded-xl bg-amber-50/90 border border-amber-300 text-xs text-amber-950 flex items-start gap-2 shadow-2xs">
                             <MessageSquare size={15} className="text-amber-600 shrink-0 mt-0.5" />
                             <div className="flex-1">
                               <span className="font-bold text-amber-800">يوجد ردود سابقة في المحادثة:</span>{' '}
-                              <span className="italic font-medium text-amber-950" dir="auto">"{record.replySnippet}"</span>
+                              <span className="italic font-medium text-amber-950" dir="auto">"{stripSentFromSignatures(record.replySnippet)}"</span>
                             </div>
                           </div>
                         )}
@@ -366,9 +456,33 @@ export const ApprovalsTable: React.FC<ApprovalsTableProps> = ({
                           <User size={11} className="text-slate-400 shrink-0" />
                           <span>سيلز: <strong className="text-slate-700">{record.contractorOfficer || 'غير محدد'}</strong></span>
                           <span className="text-[10px] text-teal-700 bg-teal-50 px-1 rounded ml-1 font-semibold">
-                            {record.priceListYear || '2025'}
+                            {record.priceListYear === 'Cash' ? '2026' : (record.priceListYear || '2026')}
                           </span>
                         </div>
+
+                        {/* Financial Terms Badges */}
+                        {((record.patientSharePercentage !== null && record.patientSharePercentage !== undefined) || record.approvedAmountLimit || record.coverageConditions) && (
+                          <div className="flex flex-wrap items-center gap-1.5 mt-2">
+                            {record.patientSharePercentage !== null && record.patientSharePercentage !== undefined && (
+                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-black bg-blue-50 text-blue-900 border border-blue-200 shadow-2xs">
+                                تحمل: {record.patientSharePercentage}%
+                              </span>
+                            )}
+                            {record.approvedAmountLimit && (
+                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-black bg-emerald-50 text-emerald-900 border border-emerald-200 shadow-2xs">
+                                سقف: {record.approvedAmountLimit.toLocaleString()} ج.م
+                              </span>
+                            )}
+                            {record.coverageConditions && (
+                              <span
+                                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-amber-50 text-amber-950 border border-amber-200 truncate max-w-[170px] shadow-2xs"
+                                title={record.coverageConditions}
+                              >
+                                {record.coverageConditions}
+                              </span>
+                            )}
+                          </div>
+                        )}
                       </td>
 
                       {/* Requested Services */}
@@ -399,14 +513,46 @@ export const ApprovalsTable: React.FC<ApprovalsTableProps> = ({
                             <Check size={12} className="text-emerald-600" />
                             Answered (Sent)
                           </span>
-                        ) : record.hasExistingApproval ? (
-                          /* Approval words found on reply: show the reply (under patient) and do NOT show pending! */
-                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-300 shadow-2xs">
-                            <CheckCircle2 size={12} className="text-emerald-600" />
-                            Approved Reply
+                        ) : record.status === 'conditionally_approved' ? (
+                          <div className="flex flex-col items-center gap-1">
+                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-teal-50 text-teal-900 border border-teal-300 shadow-2xs">
+                              <ShieldCheck size={12} className="text-teal-700" />
+                              موافقة مشروطة
+                            </span>
+                            {record.approvedAmountLimit && (
+                              <span className="text-[10px] font-bold text-teal-800 bg-teal-100 px-2 py-0.5 rounded-md">
+                                سقف: {record.approvedAmountLimit.toLocaleString()} ج.م
+                              </span>
+                            )}
+                          </div>
+                        ) : record.status === 'partially_approved' ? (
+                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-indigo-50 text-indigo-900 border border-indigo-300 shadow-2xs">
+                            <ShieldCheck size={12} className="text-indigo-700" />
+                            موافقة جزئية
                           </span>
+                        ) : record.status === 'pending_information' ? (
+                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-sky-50 text-sky-900 border border-sky-300 shadow-2xs">
+                            <HelpCircle size={12} className="text-sky-700" />
+                            مطلوب استيفاء بيانات
+                          </span>
+                        ) : record.isRefused || record.status === 'refused' ? (
+                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-rose-50 text-rose-800 border border-rose-300 shadow-2xs">
+                            <AlertCircle size={12} className="text-rose-600" />
+                            غير مغطى / مرفوض
+                          </span>
+                        ) : record.hasExistingApproval || record.status === 'approved' ? (
+                          <div className="flex flex-col items-center gap-1">
+                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-300 shadow-2xs">
+                              <CheckCircle2 size={12} className="text-emerald-600" />
+                              معتمد بالكامل
+                            </span>
+                            {record.approvedAmountLimit && (
+                              <span className="text-[10px] font-bold text-emerald-900 bg-emerald-100 px-2 py-0.5 rounded-md">
+                                💰 {record.approvedAmountLimit.toLocaleString()} ج.م
+                              </span>
+                            )}
+                          </div>
                         ) : (
-                          /* No replies or non-approval reply: show Pending Approval */
                           <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-50 text-amber-800 border border-amber-300 shadow-2xs">
                             <Clock size={12} className="text-amber-600" />
                             Pending Approval
@@ -422,6 +568,29 @@ export const ApprovalsTable: React.FC<ApprovalsTableProps> = ({
                       {/* Actions */}
                       <td className="py-3 px-5 text-right">
                         <div className="flex items-center justify-end gap-1.5">
+                          {/* CM Whatsapp Button */}
+                          <button
+                            onClick={() => handleCopyWhatsapp(record)}
+                            className={`px-2.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+                              copiedWhatsappId === record.id
+                                ? 'bg-emerald-600 text-white shadow-xs'
+                                : 'bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-300 hover:border-emerald-400'
+                            }`}
+                            title="Copy Case Manager WhatsApp Message"
+                          >
+                            {copiedWhatsappId === record.id ? (
+                              <>
+                                <Check size={13} className="text-white" />
+                                <span>Copied!</span>
+                              </>
+                            ) : (
+                              <>
+                                <MessageCircle size={13} className="text-emerald-700" />
+                                <span>CM Whatsapp</span>
+                              </>
+                            )}
+                          </button>
+
                           {/* Manual Draft Button (shown when reply or approval detected) */}
                           {record.status === 'pending_manual_draft' && (
                             <button

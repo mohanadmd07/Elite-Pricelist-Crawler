@@ -22,10 +22,12 @@ export const CopyableReportCard: React.FC<CopyableReportCardProps> = ({
     const lines: string[] = [];
 
     const priceListName = selectedCompany?.priceListYear
-      ? `Elite Hospital ${selectedCompany.priceListYear}`
+      ? (selectedCompany.priceListYear === 'Cash' || selectedCompany.priceListYear === '2026'
+          ? 'Elite Hospital 2026'
+          : `Elite Hospital ${selectedCompany.priceListYear}`)
       : results.length > 0
       ? Array.from(new Set(results.map((r) => r.sourceFile))).join(', ')
-      : 'Elite Hospital 2025';
+      : 'Elite Hospital 2026';
 
     const contractorName = selectedCompany ? selectedCompany.name : 'N/A';
     const discountName = selectedCompany ? `${selectedCompany.discount}%` : 'N/A';
