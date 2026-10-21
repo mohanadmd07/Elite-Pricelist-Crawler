@@ -1,5 +1,5 @@
 import { InpatientApprovalRecord } from '../types';
-import { cleanContractorName, stripSentFromSignatures } from './arabic-normalizer';
+import { cleanContractorName, stripSentFromSignatures, isAccommodationOrGenericFee } from './arabic-normalizer';
 import { generateCmWhatsappWithAI, isGeminiConfigured } from '../services/aiMatchService';
 
 /**
@@ -153,6 +153,7 @@ export function extractProcedureFromApprovalReply(text: string): string {
  *  - 'approved': a price approval was granted                (موافقة سعرية بمبلغ ...)
  */
 export function detectPriceApprovalMode(record: InpatientApprovalRecord): 'request' | 'approved' | null {
+  if (record.priceApprovalRequested) return 'request';
   const text = [
     record.existingApprovalSnippet,
     record.replySnippet,
@@ -273,8 +274,27 @@ export function generateCmWhatsappMessage(record: InpatientApprovalRecord): stri
     limitFormatted = ` (حد أقصى: ${record.approvedAmountLimit.toLocaleString('en-US')} ج.م)`;
   }
 
+  // Procedures unlisted in the contractor pricelist -> "مطلوب موافقة سعرية بمبلغ X" (X from another pricelist)
+  const unlisted = (record.matchedProcedures || []).filter(
+    (m) => m.status === 'unmatched' && (m.suggestedPrice || 0) > 0 && !isAccommodationOrGenericFee(m.serviceName)
+  );
+  const unlistedLines = unlisted.map((m) => {
+    const name = formatProcedureForCmWhatsapp(extractCleanProcedurePhrase(m.serviceName)) || m.serviceName;
+    const amt = ` بمبلغ ${(m.suggestedPrice as number).toLocaleString('en-US')} ج.م`;
+    return { name, text: `مطلوب موافقة سعرية${amt} على: ${name}` };
+  });
+  if (unlistedLines.length > 0 && !isApproved) {
+    const body =
+      unlistedLines.length === 1
+        ? unlistedLines[0].text
+        : unlistedLines.map((u) => u.text).join(' | ');
+    return `${line1}\n${line2}\n*${body}*`;
+  }
+
   const priceMode = detectPriceApprovalMode(record);
-  const priceAmount = formatPriceAmount(record);
+  const priceAmount = record.priceApprovalRequested && record.priceApprovalAmount
+    ? `${record.priceApprovalAmount.toLocaleString('en-US')} ج.م`
+    : formatPriceAmount(record);
   const priceText = priceAmount ? `موافقة سعرية بمبلغ ${priceAmount}` : 'موافقة سعرية';
 
   let line3 = '';
@@ -327,7 +347,7 @@ export async function generateCmWhatsappMessageAsync(record: InpatientApprovalRe
   }
 
   // 2. Try Gemini AI if configured (price-approval wording is deterministic, so skip AI for it)
-  if (isGeminiConfigured() && !detectPriceApprovalMode(record)) {
+  if (isGeminiConfigured() && !detectPriceApprovalMode(record) && !(record.matchedProcedures || []).some((m) => m.status === 'unmatched' && (m.suggestedPrice || 0) > 0)) {
     try {
       const aiMsg = await generateCmWhatsappWithAI(record);
       if (aiMsg && aiMsg.split('\n').length >= 3) {

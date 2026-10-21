@@ -73,7 +73,7 @@ function scoreCandidate(
   return score;
 }
 
-import { retrieveDynamicPricelistCandidates } from '../src/services/procedureService';
+import { retrieveDynamicPricelistCandidates, enrichUnmatchedWithReferencePrice } from '../src/services/procedureService';
 
 async function matchServices(services: Array<{ name: string; rawPrice: number }>, year: string, diagnosis?: string) {
   const results: Array<{ serviceName: string; matchedName: string; code?: string; status: 'matched' | 'unmatched' }> = [];
@@ -160,7 +160,10 @@ async function run() {
     }
 
     // 3. Re-match procedures against pricelist
-    const matched = await matchServices(record.requestedServices || [], record.priceListYear || '2025', record.diagnosis);
+    const matched = await enrichUnmatchedWithReferencePrice(
+      await matchServices(record.requestedServices || [], record.priceListYear || '2025', record.diagnosis),
+      record.requestedServices || []
+    );
     record.matchedProcedures = matched;
 
     // 4. Re-build draft reply

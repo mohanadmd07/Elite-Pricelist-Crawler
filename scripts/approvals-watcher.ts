@@ -33,7 +33,7 @@ import { db } from '../src/firebase';
 import { normalizeArabic, cleanContractorName, normalizeText, stripSentFromSignatures, cleanHisProcedureQuery, extractOriginalRequestDate, hasAntibodyConflict, hasLabInvestigationConflict } from '../src/lib/arabic-normalizer';
 import { extractCleanProcedurePhrase, generateCmWhatsappMessage, extractProcedureFromApprovalReply } from '../src/lib/whatsapp-generator';
 import { loadCompanies } from '../src/services/companyService';
-import { searchAllProcedures, retrieveDynamicPricelistCandidates } from '../src/services/procedureService';
+import { searchAllProcedures, retrieveDynamicPricelistCandidates, enrichUnmatchedWithReferencePrice } from '../src/services/procedureService';
 import {
   matchProceduresWithAI,
   isGeminiConfigured,
@@ -1377,7 +1377,7 @@ export function buildDraftReplyText(
   priceListYear: string,
   contractor: string,
   officer: string,
-  matchedProcedures: Array<{ serviceName: string; matchedName: string; status: 'matched' | 'unmatched' }>
+  matchedProcedures: Array<{ serviceName: string; matchedName: string; status: 'matched' | 'unmatched'; suggestedPrice?: number }>
 ): string {
   const matchedLines = matchedProcedures
     .filter((p) => p.status === 'matched')
@@ -1386,7 +1386,7 @@ export function buildDraftReplyText(
 
   const unmatchedLines = matchedProcedures
     .filter((p) => p.status === 'unmatched')
-    .map((p) => ` - ${p.serviceName}`)
+    .map((p) => ` - ${p.serviceName}${(p as any).suggestedPrice ? ` : مطلوب موافقة سعرية بمبلغ ${Number((p as any).suggestedPrice).toLocaleString('en-US')} ج.م` : ''}`)
     .join('\n');
 
   const displayYear =
@@ -1403,7 +1403,7 @@ Corporate Email: corporate@elitehospital.org
 ${matchedLines || 'لا توجد إجراءات مطابقة مباشرة باللائحة'}`;
 
   if (unmatchedLines) {
-    text += `\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n${unmatchedLines}]`;
+    text += `\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n${unmatchedLines}]`;
   }
 
   text += `\n\n@corporate@elitehospital.org`;
@@ -2546,6 +2546,25 @@ export async function runApprovalsCheckEws(force = false): Promise<void> {
         };
       });
 
+      // Replies from Mohamed Fekry (patient accounts) are INSTRUCTIONS (mostly "bring a price approval"),
+      // never an approval by the contractor. Keep them out of approval/status detection.
+      const isFekrySender = (sender: string) => /fekr[iy]|فكري/i.test(sender || '');
+      const fekryMessages = threadMessages.filter((m) => isFekrySender(m.sender));
+      const approvalThreadMessages = threadMessages.filter((m) => !isFekrySender(m.sender));
+      let priceApprovalRequested = false;
+      let priceApprovalAmount: number | null = null;
+      for (const m of fekryMessages) {
+        const txt = `${m.subject} ${m.body}`.normalize('NFKC');
+        if (/موافق[ةه]\s*سعري[ةه]|سعري[ةه]/i.test(txt)) {
+          priceApprovalRequested = true;
+          const amt =
+            extractCreditLimit(txt).limit ||
+            Number((txt.match(/(\d[\d,]*)\s*(?:ج\b|ج\.م|جنيه|egp|le\b)/i)?.[1] || '').replace(/,/g, '')) ||
+            null;
+          if (amt) priceApprovalAmount = amt;
+        }
+      }
+
       console.log(`[Approvals Watcher / EWS] Running Unified Contextual AI Agent for MRN: ${mrn} (${resolvedPatientName})...`);
 
       // Dynamically retrieve top candidates from the full catalog for this thread's pricelist year and requested services
@@ -2569,7 +2588,7 @@ export async function runApprovalsCheckEws(force = false): Promise<void> {
         priceListYear,
         diagnosis: resolvedDiagnosis,
         initialServices: effectiveInitialServices,
-        threadMessages,
+        threadMessages: approvalThreadMessages.length > 0 ? approvalThreadMessages : threadMessages,
         candidatePricelistRows: dynamicPricelistCandidates,
       };
 
@@ -2587,7 +2606,7 @@ export async function runApprovalsCheckEws(force = false): Promise<void> {
       // Extract credit limit and approval snippet across all thread messages
       let threadCreditLimit: { limit?: number; formatted?: string } = {};
       let threadApprovalSnippet = '';
-      for (const m of threadMessages) {
+      for (const m of approvalThreadMessages) {
         const cl = extractCreditLimit(m.body);
         if (cl.limit) threadCreditLimit = cl;
         const app = detectExistingApproval(m.body, m.subject);
@@ -2621,7 +2640,9 @@ export async function runApprovalsCheckEws(force = false): Promise<void> {
         priceListYear,
         contractorOfficer,
         requestedServices: threadInput.initialServices,
-        matchedProcedures: aiResult.matchedProcedures,
+        matchedProcedures: await enrichUnmatchedWithReferencePrice(aiResult.matchedProcedures, threadInput.initialServices),
+        priceApprovalRequested: priceApprovalRequested && !isRecordApproved,
+        priceApprovalAmount: priceApprovalRequested ? priceApprovalAmount : null,
         status: isRecordApproved ? 'approved' : aiResult.status,
         statusReasonArabic: isRecordApproved
           ? `تمت الموافقة واعتماد الحالة${finalLimit ? ` بحد أقصى ${finalLimit.toLocaleString('en-US')} ج.م` : ' باللائحة'}`
@@ -2632,7 +2653,7 @@ export async function runApprovalsCheckEws(force = false): Promise<void> {
         aiThreadSummary: isRecordApproved && !aiResult.executiveSummaryArabic.includes('تمت الموافقة')
           ? `طلب موافقة للمريض ${threadInput.patientName} (${contractorNormalized}). تمت الموافقة على الدخول والإجراء${replyApprovedProcedure ? ` (${replyApprovedProcedure})` : ''}${finalLimit ? ` بحد أقصى ${finalLimit.toLocaleString('en-US')} ج.م` : ' باللائحة'}. الحالة معتمدة ولا توجد متطلبات ناقصة.`
           : aiResult.executiveSummaryArabic,
-        draftBody: buildDraftReplyText(priceListYear, contractorNormalized, contractorOfficer, aiResult.matchedProcedures) || aiResult.suggestedDraftReply,
+        draftBody: buildDraftReplyText(priceListYear, contractorNormalized, contractorOfficer, await enrichUnmatchedWithReferencePrice(aiResult.matchedProcedures, threadInput.initialServices)) || aiResult.suggestedDraftReply,
         cmWhatsappMessage: aiResult.cmWhatsappMessage,
         draftedAt: record?.draftedAt || (aiResult.status === 'draft_created' ? new Date().toISOString() : null),
         hasReplies: threadMessages.some((m) => m.isReply),
@@ -2894,7 +2915,10 @@ export async function runApprovalsCheck(client?: ImapFlow, force = false): Promi
         );
 
         // Match Procedures
-        const matched = await matchRequestedProcedures(approvalData.requestedServices, priceListYear);
+        const matched = await enrichUnmatchedWithReferencePrice(
+          await matchRequestedProcedures(approvalData.requestedServices, priceListYear),
+          approvalData.requestedServices
+        );
 
         // Build Draft (always mentions corporate@elitehospital.org)
         const draftBody = buildDraftReplyText(priceListYear, contractorNormalized, contractorOfficer, matched);

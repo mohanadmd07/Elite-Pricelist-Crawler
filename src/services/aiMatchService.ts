@@ -306,7 +306,7 @@ export function analyzeThreadWithHeuristics(input: UnifiedThreadInput): UnifiedT
     .join('\n');
   const unmatchedLines = matchedProcedures
     .filter((p) => p.status === 'unmatched')
-    .map((p) => ` - ${p.serviceName}`)
+    .map((p) => ` - ${p.serviceName}${(p as any).suggestedPrice ? ` : مطلوب موافقة سعرية بمبلغ ${Number((p as any).suggestedPrice).toLocaleString('en-US')} ج.م` : ''}`)
     .join('\n');
 
   let suggestedDraftReply = `Price list: Elite Hospital ${year}
@@ -318,7 +318,7 @@ Corporate Email: corporate@elitehospital.org
 ${matchedLines || 'لا توجد إجراءات مطابقة مباشرة باللائحة'}`;
 
   if (unmatchedLines) {
-    suggestedDraftReply += `\n\n[⚠️ لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n${unmatchedLines}]`;
+    suggestedDraftReply += `\n\n[⚠️ الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n${unmatchedLines}]`;
   }
   suggestedDraftReply += `\n\n@corporate@elitehospital.org`;
 

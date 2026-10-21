@@ -35,7 +35,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض يوسف رمضان ابراهيم مسعود (هيئة الرقابة الادارية). توجد مراسلات متبادلة على الإيميل بانتظار التأكيد النهائي.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: هيئة الرقابة الادارية\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: هيئة الرقابة الادارية\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*يوسف رمضان ابراهيم مسعود* - Inpatient Bed\nهيئة الرقابة الادارية\n*المطلوب موافقة عمل إقامة بالقسم الداخلي (Inpatient Admission)*",
     "draftedAt": null,
     "hasReplies": true,
@@ -88,7 +88,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض سمر مصطفي بديع النحاس (جلوب ميد). توجد مراسلات متبادلة على الإيميل بانتظار التأكيد النهائي.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: جلوب ميد\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - حضرت المريضه تعاني من التهاب حاد بالمسالك البوليه و تحتاج للاقامه بالمستفشي و اخذ العلاجات الورديه و متابعه الحاله]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: جلوب ميد\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - حضرت المريضه تعاني من التهاب حاد بالمسالك البوليه و تحتاج للاقامه بالمستفشي و اخذ العلاجات الورديه و متابعه الحاله]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*سمر مصطفي بديع النحاس* - Bed 407 - FourthFloor\nجلوب ميد\n*المطلوب موافقة عمل حضرت المريضه تعاني من التهاب حاد بالمسالك البوليه و تحتاج للاقامه بالمستفشي و اخذ العلاجات الورديه و متابعه الحاله*",
     "draftedAt": null,
     "hasReplies": true,
@@ -141,7 +141,7 @@
     "approvedAmountLimit": 20000,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض سمر مصطفي بديع النحاس (جلوب ميد). تمت الموافقة على الدخول والإجراء بحد أقصى 20,000 ج.م. الحالة معتمدة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: جلوب ميد\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: جلوب ميد\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*سمر مصطفي بديع النحاس* - Inpatient Bed\nجلوب ميد\n*المطلوب موافقة عمل إقامة بالقسم الداخلي (Inpatient Admission)*",
     "draftedAt": null,
     "hasReplies": true,
@@ -301,7 +301,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض حمدى ابراهيم اسماعيل حسين (صحة وان). توجد مراسلات متبادلة على الإيميل بانتظار التأكيد النهائي.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: صحة وان\nالمسئول من قسم السيلز: محمد جابر\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - POST OPERATIVE BRAIN TUMOR SURGERY WITH LT LAG AND RT LOWER LAG]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: صحة وان\nالمسئول من قسم السيلز: محمد جابر\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - POST OPERATIVE BRAIN TUMOR SURGERY WITH LT LAG AND RT LOWER LAG]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*حمدى ابراهيم اسماعيل حسين* - Bed 4 - SICU\nصحة وان\n*المطلوب موافقة عمل POST OPERATIVE BRAIN TUMOR SURGERY WITH LT LAG AND RT LOWER LAG*",
     "draftedAt": null,
     "hasReplies": true,
@@ -345,7 +345,9 @@
       {
         "serviceName": "Methotrexate - Investigation",
         "matchedName": "Methotrexate - Investigation",
-        "status": "unmatched"
+        "status": "unmatched",
+        "suggestedPrice": 4815,
+        "suggestedFrom": "Methotrexate"
       }
     ],
     "status": "approved",
@@ -354,7 +356,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض عزه احمد احمد عبدالفتاح (جاسكو). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: جاسكو\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - Methotrexate - Investigation]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: جاسكو\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - Methotrexate - Investigation : مطلوب موافقة سعرية بمبلغ 4,815 ج.م]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*عزه احمد احمد عبدالفتاح* - Bed 15 - ICU\nجاسكو\n*تمت الموافقة على: Methotrexate - Investigation - موافقة سعرية*",
     "draftedAt": null,
     "hasReplies": true,
@@ -513,7 +515,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض صالح محمد امحمد الفلقي (عقد الرياض El Rayad). توجد مراسلات متبادلة على الإيميل بانتظار التأكيد النهائي.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: عقد الرياض El Rayad\nالمسئول من قسم السيلز: غير محدد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - استكمال جرعات المضاد الحيوي بالمستشفى]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: عقد الرياض El Rayad\nالمسئول من قسم السيلز: غير محدد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - استكمال جرعات المضاد الحيوي بالمستشفى]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*صالح محمد امحمد الفلقي* - Bed 323 - Zone B\nعقد الرياض El Rayad\n*المطلوب موافقة عمل استكمال جرعات المضاد الحيوي بالمستشفى*",
     "draftedAt": null,
     "hasReplies": true,
@@ -557,7 +559,9 @@
       {
         "serviceName": "Methotrexate - Investigation",
         "matchedName": "Methotrexate - Investigation",
-        "status": "unmatched"
+        "status": "unmatched",
+        "suggestedPrice": 4815,
+        "suggestedFrom": "Methotrexate"
       }
     ],
     "status": "approved",
@@ -566,7 +570,7 @@
     "approvedAmountLimit": 4815,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض عزه احمد احمد عبدالفتاح (جاسكو). تمت الموافقة على الدخول والإجراء بحد أقصى 4,815 ج.م. الحالة معتمدة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: جاسكو\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - Methotrexate - Investigation]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: جاسكو\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - Methotrexate - Investigation : مطلوب موافقة سعرية بمبلغ 4,815 ج.م]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*عزه احمد احمد عبدالفتاح* - Bed 15 - ICU\nجاسكو\n*تمت الموافقة على: Methotrexate - Investigation - موافقة سعرية بمبلغ 4,815 EGP*",
     "draftedAt": null,
     "hasReplies": true,
@@ -619,7 +623,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض فوزيه سليمان محمد طاهر (Hussem Medical). توجد مراسلات متبادلة على الإيميل بانتظار التأكيد النهائي.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: Hussem Medical\nالمسئول من قسم السيلز: غير محدد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - الحالة تحتاج الى سحب تحليل فيتامين د]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: Hussem Medical\nالمسئول من قسم السيلز: غير محدد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - الحالة تحتاج الى سحب تحليل فيتامين د]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*فوزيه سليمان محمد طاهر* - Bed 303 - Zone A\nHussem Medical\n*المطلوب موافقة عمل الحالة تحتاج الى سحب تحليل فيتامين د*",
     "draftedAt": null,
     "hasReplies": true,
@@ -937,7 +941,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض مديحه امين عبدالرؤف الاستانبولي (سوميد). توجد مراسلات متبادلة على الإيميل بانتظار التأكيد النهائي.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: سوميد\nالمسئول من قسم السيلز: محمد ابو الوفا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: سوميد\nالمسئول من قسم السيلز: محمد ابو الوفا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*مديحه امين عبدالرؤف الاستانبولي* - Inpatient Bed\nسوميد\n*المطلوب موافقة عمل إقامة بالقسم الداخلي (Inpatient Admission)*",
     "draftedAt": null,
     "hasReplies": true,
@@ -1149,7 +1153,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض عزه احمد احمد عبدالفتاح (جاسكو). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: جاسكو\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: جاسكو\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*عزه احمد احمد عبدالفتاح* - Inpatient Bed\nجاسكو\n*تمت الموافقة على: إقامة بالقسم الداخلي (Inpatient Admission)*",
     "draftedAt": null,
     "hasReplies": true,
@@ -1370,7 +1374,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض ليان محمد زكريا احمد (وزارة العدل). تم إرسال الطلب الأصلي وبانتظار رد جهة التعاقد.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: وزارة العدل\nالمسئول من قسم السيلز: ديانا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: وزارة العدل\nالمسئول من قسم السيلز: ديانا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*ليان محمد زكريا احمد* - Inpatient Bed\nوزارة العدل\n*المطلوب موافقة عمل إقامة بالقسم الداخلي (Inpatient Admission)*",
     "draftedAt": null,
     "hasReplies": false,
@@ -1476,7 +1480,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض ليان محمد زكريا احمد (وزارة العدل). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: وزارة العدل\nالمسئول من قسم السيلز: ديانا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: وزارة العدل\nالمسئول من قسم السيلز: ديانا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*ليان محمد زكريا احمد* - Inpatient Bed\nوزارة العدل\n*تمت الموافقة على: إقامة بالقسم الداخلي (Inpatient Admission)*",
     "draftedAt": null,
     "hasReplies": true,
@@ -1529,7 +1533,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض اكرم وائل محمد عبدالهادي (عنايه مصر). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: عنايه مصر\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: عنايه مصر\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*اكرم وائل محمد عبدالهادي* - Inpatient Bed\nعنايه مصر\n*المطلوب موافقة عمل إقامة بالقسم الداخلي (Inpatient Admission)*",
     "draftedAt": null,
     "hasReplies": true,
@@ -1582,7 +1586,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض زكي محمد زكى فرج (Next Care نكست كير). توجد مراسلات متبادلة على الإيميل بانتظار التأكيد النهائي.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: Next Care نكست كير\nالمسئول من قسم السيلز: ديانا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: Next Care نكست كير\nالمسئول من قسم السيلز: ديانا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*زكي محمد زكى فرج* - Inpatient Bed\nNext Care نكست كير\n*المطلوب موافقة عمل إقامة بالقسم الداخلي (Inpatient Admission)*",
     "draftedAt": null,
     "hasReplies": true,
@@ -1635,7 +1639,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض ايمان جمعه خميس محمود (بترول ابو قير). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: بترول ابو قير\nالمسئول من قسم السيلز: نادين\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: بترول ابو قير\nالمسئول من قسم السيلز: نادين\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*ايمان جمعه خميس محمود* - Inpatient Bed\nبترول ابو قير\n*تمت الموافقة على: إقامة بالقسم الداخلي (Inpatient Admission)*",
     "draftedAt": null,
     "hasReplies": true,
@@ -1741,8 +1745,8 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض نادر قدري محمد عبدالله (نكست كير Next Care). توجد مراسلات متبادلة على الإيميل بانتظار التأكيد النهائي.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: نكست كير Next Care\nالمسئول من قسم السيلز: أحمد حمزة\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - إقامة رعاية مركزة (ICU Admission)]\n\n@corporate@elitehospital.org",
-    "cmWhatsappMessage": "*نادر قدري محمد عبدالله* - Inpatient Bed\nنكست كير Next Care\n*المطلوب موافقة عمل إقامة رعاية مركزة (ICU Admission)*",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: نكست كير Next Care\nالمسئول من قسم السيلز: أحمد حمزة\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة رعاية مركزة (ICU Admission)]\n\n@corporate@elitehospital.org",
+    "cmWhatsappMessage": "*نادر قدري محمد عبدالله* - Inpatient Bed\nنكست كير Next Care\n*مطلوب موافقة سعرية بمبلغ 5,625 ج.م على: إقامة رعاية مركزة (ICU Admission)*",
     "draftedAt": null,
     "hasReplies": true,
     "replySnippet": "",
@@ -1756,7 +1760,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufPZAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "74c6a34f-e0cc-418d-a2a5-d63acd0198db@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": true,
+    "priceApprovalAmount": 5625
   },
   {
     "id": "mrn_0000269341_153d807b",
@@ -1794,7 +1800,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض طاهر محمد عبدالنظير محمد (عنايه مصر). توجد مراسلات متبادلة على الإيميل بانتظار التأكيد النهائي.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: عنايه مصر\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: عنايه مصر\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*طاهر محمد عبدالنظير محمد* - Inpatient Bed\nعنايه مصر\n*المطلوب موافقة عمل إقامة بالقسم الداخلي (Inpatient Admission)*",
     "draftedAt": null,
     "hasReplies": true,
@@ -2083,7 +2089,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufPuAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "a39e1df9-bbee-4524-ad9f-02d0813f1937@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000268561_ae46d1fe",
@@ -2207,7 +2215,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufP0AAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "46b900fe-32b0-45f9-845b-977cc472f6e5@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000268993_d0cb561b",
@@ -2298,7 +2308,7 @@
     "approvedAmountLimit": 60000,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض مروان مصطفى محمد كمال (جلوب ميد). تمت الموافقة على الدخول والإجراء بحد أقصى 60,000 ج.م. الحالة معتمدة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: جلوب ميد\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: جلوب ميد\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*مروان مصطفى محمد كمال* - Inpatient Bed\nجلوب ميد\n*تمت الموافقة على: إقامة بالقسم الداخلي (Inpatient Admission) (حد أقصى: 60,000 EGP)*",
     "draftedAt": null,
     "hasReplies": true,
@@ -2351,7 +2361,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض حبيبة حسام محمود محمد (شركة دريم مشرق للأغذية). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: شركة دريم مشرق للأغذية\nالمسئول من قسم السيلز: محمد جابر\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: شركة دريم مشرق للأغذية\nالمسئول من قسم السيلز: محمد جابر\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*حبيبة حسام محمود محمد* - Inpatient Bed\nدريم مشرق للأغذية\n*تمت الموافقة على: إقامة بالقسم الداخلي (Inpatient Admission)*",
     "draftedAt": null,
     "hasReplies": true,
@@ -2457,7 +2467,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض ياسر محمد محمود عبدالقادر (سيدبك). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: سيدبك\nالمسئول من قسم السيلز: نادين\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: سيدبك\nالمسئول من قسم السيلز: نادين\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*ياسر محمد محمود عبدالقادر* - Inpatient Bed\nسيدبك\n*تمت الموافقة على: إقامة بالقسم الداخلي (Inpatient Admission)*",
     "draftedAt": null,
     "hasReplies": true,
@@ -2784,7 +2794,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض السيد محمد السيد حسنين (خالدة للبترول). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: خالدة للبترول\nالمسئول من قسم السيلز: محمد ابو الوفا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\n1- قياس رسم سمع بالكمبيوتر (Computerized Audiogram)\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - حيث انه يعاني من عدم اتزان و دوخة]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: خالدة للبترول\nالمسئول من قسم السيلز: محمد ابو الوفا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\n1- قياس رسم سمع بالكمبيوتر (Computerized Audiogram)\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - حيث انه يعاني من عدم اتزان و دوخة]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*السيد محمد السيد حسنين* - Bed 322 - Zone B\nخالدة للبترول\n*تمت الموافقة على: رسم سمع واتزان حيث انه يعاني من عدم اتزان و دوخة و حيث انه يعاني من عدم اتزان و دوخة*",
     "draftedAt": null,
     "hasReplies": true,
@@ -2837,7 +2847,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض سامح السيد ابراهيم عبدالمولي (العامرية للبترول). توجد مراسلات متبادلة على الإيميل بانتظار التأكيد النهائي.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: العامرية للبترول\nالمسئول من قسم السيلز: محمد جابر\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: العامرية للبترول\nالمسئول من قسم السيلز: محمد جابر\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*سامح السيد ابراهيم عبدالمولي* - Inpatient Bed\nالعامرية للبترول\n*المطلوب موافقة عمل إقامة بالقسم الداخلي (Inpatient Admission)*",
     "draftedAt": null,
     "hasReplies": true,
@@ -2987,7 +2997,8 @@
       {
         "serviceName": "Physiotherapy Reservation",
         "matchedName": "Physiotherapy Reservation",
-        "status": "unmatched"
+        "status": "unmatched",
+        "suggestedPrice": 600
       }
     ],
     "status": "approved",
@@ -2996,7 +3007,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض تاج الدين فايز الشلقامي علي (ايثدكو). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: ايثدكو\nالمسئول من قسم السيلز: نادين\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - Physiotherapy Reservation]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: ايثدكو\nالمسئول من قسم السيلز: نادين\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - Physiotherapy Reservation : مطلوب موافقة سعرية بمبلغ 600 ج.م]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*تاج الدين فايز الشلقامي علي* - Bed 2 - ICU\nايثدكو\n*تمت الموافقة على: Physiotherapy Reservation*",
     "draftedAt": null,
     "hasReplies": true,
@@ -3049,7 +3060,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض السيد محمد السيد حسنين (شركة خالده للبترول). توجد مراسلات متبادلة على الإيميل بانتظار التأكيد النهائي.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: شركة خالده للبترول\nالمسئول من قسم السيلز: محمد ابو الوفا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: شركة خالده للبترول\nالمسئول من قسم السيلز: محمد ابو الوفا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*السيد محمد السيد حسنين* - Inpatient Bed\nخالده للبترول\n*المطلوب موافقة عمل إقامة بالقسم الداخلي (Inpatient Admission)*",
     "draftedAt": null,
     "hasReplies": true,
@@ -3102,7 +3113,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض محمد علي محمد احمد (Next Care نكست كير). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: Next Care نكست كير\nالمسئول من قسم السيلز: ديانا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - إقامة رعاية مركزة (ICU Admission)]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: Next Care نكست كير\nالمسئول من قسم السيلز: ديانا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة رعاية مركزة (ICU Admission)]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*محمد علي محمد احمد* - Inpatient Bed\nNext Care نكست كير\n*تمت الموافقة على: إقامة رعاية مركزة (ICU Admission)*",
     "draftedAt": null,
     "hasReplies": true,
@@ -3199,7 +3210,9 @@
       {
         "serviceName": "Levetiracetam (Tiratam, Keppra) Peak - Investigation",
         "matchedName": "Levetiracetam (Tiratam, Keppra) Peak - Investigation",
-        "status": "unmatched"
+        "status": "unmatched",
+        "suggestedPrice": 5625,
+        "suggestedFrom": "Levetiracetam (Tiratam, Keppra) Peak"
       }
     ],
     "status": "pending_manual_draft",
@@ -3208,8 +3221,8 @@
     "approvedAmountLimit": 5625,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض نادر قدري محمد عبدالله (نكست كير Next Care). تمت الموافقة على الدخول والإجراء بحد أقصى 5,625 ج.م. الحالة معتمدة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: نكست كير Next Care\nالمسئول من قسم السيلز: أحمد حمزة\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - Levetiracetam (Tiratam, Keppra) Peak - Investigation]\n\n@corporate@elitehospital.org",
-    "cmWhatsappMessage": "*نادر قدري محمد عبدالله* - Bed 4 - ICU\nنكست كير Next Care\n*المطلوب موافقة عمل Levetiracetam (Tiratam, Keppra) Peak - Investigation*",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: نكست كير Next Care\nالمسئول من قسم السيلز: أحمد حمزة\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - Levetiracetam (Tiratam, Keppra) Peak - Investigation : مطلوب موافقة سعرية بمبلغ 5,625 ج.م]\n\n@corporate@elitehospital.org",
+    "cmWhatsappMessage": "*نادر قدري محمد عبدالله* - Bed 4 - ICU\nنكست كير Next Care\n*مطلوب موافقة سعرية بمبلغ 5,625 ج.م على: Levetiracetam (Tiratam, Keppra) Peak - Investigation*",
     "draftedAt": null,
     "hasReplies": true,
     "replySnippet": "@mohamed Fekri .82-Altered mental status, unspecified SELECTED SERVICES: Service Name Price (EGP) Le",
@@ -3223,7 +3236,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufQsAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "18851dc5-7501-4b9a-8b8b-2bb91023b78a@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": true,
+    "priceApprovalAmount": 5625
   },
   {
     "id": "mrn_0000267870_e2cd7e44",
@@ -3261,7 +3276,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض ماجد محمد عبده رضوان (جاسكو). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: جاسكو\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: جاسكو\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*ماجد محمد عبده رضوان* - Inpatient Bed\nجاسكو\n*تمت الموافقة على: إقامة بالقسم الداخلي (Inpatient Admission)*",
     "draftedAt": null,
     "hasReplies": true,
@@ -3314,7 +3329,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض الاء محمد فتحي شعبان (بترومنت). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: بترومنت\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - إقامة رعاية مركزة (ICU Admission)]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: بترومنت\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة رعاية مركزة (ICU Admission)]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*الاء محمد فتحي شعبان* - Inpatient Bed\nبترومنت\n*تمت الموافقة على: إقامة رعاية مركزة (ICU Admission)*",
     "draftedAt": null,
     "hasReplies": true,
@@ -3358,7 +3373,9 @@
       {
         "serviceName": "Nutrionist Follow Up",
         "matchedName": "Nutrionist Follow Up",
-        "status": "unmatched"
+        "status": "unmatched",
+        "suggestedPrice": 100,
+        "suggestedFrom": "متابعة اخصائي التغذيه (Nutrionist Follow Up (Specialist))"
       }
     ],
     "status": "approved",
@@ -3367,7 +3384,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض شريف محمود حنفي محمود (بترول ابو قير). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: بترول ابو قير\nالمسئول من قسم السيلز: نادين\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - Nutrionist Follow Up]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: بترول ابو قير\nالمسئول من قسم السيلز: نادين\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - Nutrionist Follow Up : مطلوب موافقة سعرية بمبلغ 100 ج.م]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*شريف محمود حنفي محمود* - Bed 327 - Zone B\nبترول ابو قير\n*تمت الموافقة على: Nutrionist Follow Up*",
     "draftedAt": null,
     "hasReplies": true,
@@ -3464,7 +3481,9 @@
       {
         "serviceName": "Blood filteration",
         "matchedName": "Blood filteration",
-        "status": "unmatched"
+        "status": "unmatched",
+        "suggestedPrice": 700,
+        "suggestedFrom": "خدمة لفتره كيس دم (Blood Filteration Service)"
       }
     ],
     "status": "approved",
@@ -3473,7 +3492,7 @@
     "approvedAmountLimit": 2200,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض محمد علي محمد احمد (نكست كير Next Care). تمت الموافقة على الدخول والإجراء بحد أقصى 2,200 ج.م. الحالة معتمدة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: نكست كير Next Care\nالمسئول من قسم السيلز: أحمد حمزة\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - Blood filteration]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: نكست كير Next Care\nالمسئول من قسم السيلز: أحمد حمزة\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - Blood filteration : مطلوب موافقة سعرية بمبلغ 700 ج.م]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*محمد علي محمد احمد* - Bed 2 - ICU\nنكست كير Next Care\n*تمت الموافقة على: Blood filteration - موافقة سعرية بمبلغ 2,200 EGP*",
     "draftedAt": null,
     "hasReplies": true,
@@ -3541,7 +3560,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufROAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "b01cbd27-d935-449e-a794-26b831172e45@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000267389_1d084783",
@@ -3657,7 +3678,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufRPAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "2941347b-e513-430d-9c76-d2f21176b9de@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000195587_fc1c872a",
@@ -3695,7 +3718,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض كريم محمد احمد عبدالرحمن (مصر للطيران). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: مصر للطيران\nالمسئول من قسم السيلز: محمد ابو الوفا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - مد الاقامه لتلقي العلاجات الازمه وعمل التحاليل والفحوصات الازمه]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: مصر للطيران\nالمسئول من قسم السيلز: محمد ابو الوفا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - مد الاقامه لتلقي العلاجات الازمه وعمل التحاليل والفحوصات الازمه]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*كريم محمد احمد عبدالرحمن* - Bed 319 - Zone A\nمصر للطيران\n*تمت الموافقة على: مد الاقامه لتلقي العلاجات الازمه وعمل التحاليل والفحوصات الازمه*",
     "draftedAt": null,
     "hasReplies": true,
@@ -3801,7 +3824,7 @@
     "approvedAmountLimit": 20000,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض محمد رمضان السيد عباس (جلوب ميد). تمت الموافقة على الدخول والإجراء بحد أقصى 20,000 ج.م. الحالة معتمدة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: جلوب ميد\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: جلوب ميد\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*محمد رمضان السيد عباس* - Inpatient Bed\nجلوب ميد\n*تمت الموافقة على: إقامة بالقسم الداخلي (Inpatient Admission) (حد أقصى: 20,000 EGP)*",
     "draftedAt": null,
     "hasReplies": true,
@@ -3845,22 +3868,24 @@
       {
         "serviceName": "رسم مخ",
         "matchedName": "رسم مخ",
-        "status": "unmatched"
+        "status": "unmatched",
+        "suggestedPrice": 1812.5,
+        "suggestedFrom": "رسم مخ (E.E.G)"
       }
     ],
-    "status": "approved",
-    "statusReasonArabic": "تمت الموافقة واعتماد الحالة بحد أقصى 1,800 ج.م",
+    "status": "pending_manual_draft",
+    "statusReasonArabic": "مطلوب موافقة سعرية (تعليمات من حسابات المرضى وليست موافقة)",
     "patientSharePercentage": null,
     "approvedAmountLimit": 1800,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض نادر قدري محمد عبدالله (نكست كير Next Care). تمت الموافقة على الدخول والإجراء بحد أقصى 1,800 ج.م. الحالة معتمدة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: نكست كير Next Care\nالمسئول من قسم السيلز: أحمد حمزة\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - رسم مخ]\n\n@corporate@elitehospital.org",
-    "cmWhatsappMessage": "*نادر قدري محمد عبدالله* - Bed 4 - ICU\nنكست كير Next Care\n*تمت الموافقة على: رسم مخ - موافقة سعرية بمبلغ 1,800 EGP*",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: نكست كير Next Care\nالمسئول من قسم السيلز: أحمد حمزة\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - رسم مخ : مطلوب موافقة سعرية بمبلغ 1,812.5 ج.م]\n\n@corporate@elitehospital.org",
+    "cmWhatsappMessage": "*نادر قدري محمد عبدالله* - Bed 4 - ICU\nنكست كير Next Care\n*مطلوب موافقة سعرية بمبلغ 1,812.5 ج.م على: رسم مخ*",
     "draftedAt": null,
     "hasReplies": true,
     "replySnippet": "@patient account @mohamed Fekri .82-Altered mental status, unspecified SELECTED SERVICES: Service Na",
-    "hasExistingApproval": true,
-    "existingApprovalSnippet": "...بدالله (MRN: 0000216945) موافقه سعريه على رسم المخ بمبلغ 1800 ج لايطبق خصم التعاقد Mohamed Fekry Patient Accountant S...",
+    "hasExistingApproval": false,
+    "existingApprovalSnippet": "",
     "creditLimit": 1800,
     "creditLimitText": "1,800 EGP",
     "isRefused": false,
@@ -3869,7 +3894,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufRUAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "0e6b90cd-3ba0-47c2-9252-fc7225ee2f6d@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": true,
+    "priceApprovalAmount": 5625
   },
   {
     "id": "mrn_0000267870_ddeba5ad",
@@ -4066,7 +4093,7 @@
     "approvedAmountLimit": 85000,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض محمد حمدي محمد عبد الحميد (شركة صحة وان). تمت الموافقة على الدخول والإجراء بحد أقصى 85,000 ج.م. الحالة معتمدة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: شركة صحة وان\nالمسئول من قسم السيلز: محمد جابر\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: شركة صحة وان\nالمسئول من قسم السيلز: محمد جابر\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*محمد حمدي محمد عبد الحميد* - Inpatient Bed\nصحة وان\n*تمت الموافقة على: إقامة بالقسم الداخلي (Inpatient Admission) (حد أقصى: 85,000 EGP)*",
     "draftedAt": null,
     "hasReplies": true,
@@ -4119,7 +4146,7 @@
     "approvedAmountLimit": 40000,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض حسن سيداحمد عبدالمجيد سيداحمد (Med Right). تمت الموافقة على الدخول والإجراء بحد أقصى 40,000 ج.م. الحالة معتمدة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: Med Right\nالمسئول من قسم السيلز: نادين\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: Med Right\nالمسئول من قسم السيلز: نادين\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*حسن سيداحمد عبدالمجيد سيداحمد* - Inpatient Bed\nMed Right\n*المطلوب موافقة عمل إقامة بالقسم الداخلي (Inpatient Admission)*",
     "draftedAt": null,
     "hasReplies": true,
@@ -4172,7 +4199,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض حسام الدين محمد حسانين المسيري (العامرية للبترول). توجد مراسلات متبادلة على الإيميل بانتظار التأكيد النهائي.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: العامرية للبترول\nالمسئول من قسم السيلز: محمد جابر\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - ankle foot orthosis]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: العامرية للبترول\nالمسئول من قسم السيلز: محمد جابر\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - ankle foot orthosis]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*حسام الدين محمد حسانين المسيري* - Bed 316 - Zone A\nالعامرية للبترول\n*المطلوب موافقة عمل ankle foot orthosis*",
     "draftedAt": null,
     "hasReplies": true,
@@ -4216,7 +4243,9 @@
       {
         "serviceName": "Levetiracetam (Tiratam, Keppra) Trough - Investigation",
         "matchedName": "Levetiracetam (Tiratam, Keppra) Trough - Investigation",
-        "status": "unmatched"
+        "status": "unmatched",
+        "suggestedPrice": 5625,
+        "suggestedFrom": "Levetiracetam (Tiratam, Keppra) Trough"
       }
     ],
     "status": "pending_manual_draft",
@@ -4225,8 +4254,8 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض نادر قدري محمد عبدالله (نكست كير Next Care). توجد مراسلات متبادلة على الإيميل بانتظار التأكيد النهائي.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: نكست كير Next Care\nالمسئول من قسم السيلز: أحمد حمزة\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - Levetiracetam (Tiratam, Keppra) Trough - Investigation]\n\n@corporate@elitehospital.org",
-    "cmWhatsappMessage": "*نادر قدري محمد عبدالله* - Bed 4 - ICU\nنكست كير Next Care\n*المطلوب موافقة عمل Levetiracetam (Tiratam, Keppra) Trough - Investigation*",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: نكست كير Next Care\nالمسئول من قسم السيلز: أحمد حمزة\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - Levetiracetam (Tiratam, Keppra) Trough - Investigation : مطلوب موافقة سعرية بمبلغ 5,625 ج.م]\n\n@corporate@elitehospital.org",
+    "cmWhatsappMessage": "*نادر قدري محمد عبدالله* - Bed 4 - ICU\nنكست كير Next Care\n*مطلوب موافقة سعرية بمبلغ 5,625 ج.م على: Levetiracetam (Tiratam, Keppra) Trough - Investigation*",
     "draftedAt": null,
     "hasReplies": true,
     "replySnippet": "مكرر .82-Altered mental status, unspecified SELECTED SERVICES: Service Name Price (EGP) Levetiraceta",
@@ -4240,7 +4269,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufR+AAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "91be8608-eb50-4cb2-891f-b32870220a4e@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": true,
+    "priceApprovalAmount": 5625
   },
   {
     "id": "mrn_0000054665_fc65f7e6",
@@ -4420,7 +4451,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض الاء محمد فتحي شعبان (Petromaint). تمت الموافقة على الدخول والإجراء باللائحة. الحالة معتمدة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: Petromaint\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - h_pylori ag in stool]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: Petromaint\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - h_pylori ag in stool]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*الاء محمد فتحي شعبان* - Bed 328 - Zone B\nPetromaint\n*المطلوب موافقة عمل h_pylori ag in stool*",
     "draftedAt": null,
     "hasReplies": true,
@@ -4597,7 +4628,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض الاء محمد فتحي شعبان (Petromaint). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: Petromaint\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - injectafer 2vial (500mg ) in 250ml nacl]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: Petromaint\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - injectafer 2vial (500mg ) in 250ml nacl]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*الاء محمد فتحي شعبان* - Bed 328 - Zone B\nPetromaint\n*تمت الموافقة على: injectafer 2vial (500mg ) in 250ml nacl*",
     "draftedAt": null,
     "hasReplies": true,
@@ -4650,7 +4681,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض محمد قباري محمد احمد (شركة انربك). تمت الموافقة على الدخول والإجراء باللائحة. الحالة معتمدة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: شركة انربك\nالمسئول من قسم السيلز: أحمد حمزة\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - جراحة عاجلة لاستئصال الورم بالميكروسكوب الجراحي]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: شركة انربك\nالمسئول من قسم السيلز: أحمد حمزة\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - جراحة عاجلة لاستئصال الورم بالميكروسكوب الجراحي]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*محمد قباري محمد احمد* - Bed 321 - Zone B\nانربك\n*تمت الموافقة على: جراحة عاجلة لاستئصال الورم بالميكروسكوب الجراحي*",
     "draftedAt": null,
     "hasReplies": true,
@@ -5007,19 +5038,19 @@
         "status": "matched"
       }
     ],
-    "status": "approved",
-    "statusReasonArabic": "تمت الموافقة واعتماد الحالة باللائحة",
+    "status": "pending_manual_draft",
+    "statusReasonArabic": "مطلوب موافقة سعرية (تعليمات من حسابات المرضى وليست موافقة)",
     "patientSharePercentage": null,
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض نادر قدري محمد عبدالله (نكست كير Next Care). تمت الموافقة على الدخول والإجراء باللائحة. الحالة معتمدة ولا توجد متطلبات ناقصة.",
     "draftBody": "Price list: Elite Hospital 2025\nContractor: نكست كير Next Care\nالمسئول من قسم السيلز: أحمد حمزة\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\n1- CSF culture\n2- PCR panel for Meningitis, CSF ( Bacterial & Viral Panels)\n3- Lactate, CSF\n4- CSF analysis (Chemistry & cell count)\n5- Gram stain\n6- Cytology for fluids\n\n@corporate@elitehospital.org",
-    "cmWhatsappMessage": "*نادر قدري محمد عبدالله* - Bed 4 - ICU\nنكست كير Next Care\n*تمت الموافقة على: CSF culture - Investigation و PCR panel for Meningitis, CSF (Bacterial & Viral) - Investigation و Lactate, CSF - Investigation و CSF analysis (Chemistry & cell count) - Investigation و Gram stain - Investigation و Cytology for fluids - Investigation - موافقة سعرية*",
+    "cmWhatsappMessage": "*نادر قدري محمد عبدالله* - Bed 4 - ICU\nنكست كير Next Care\n*مطلوب موافقة سعرية بمبلغ 5,625 ج.م على: CSF culture - Investigation و PCR panel for Meningitis, CSF (Bacterial & Viral) - Investigation و Lactate, CSF - Investigation و CSF analysis (Chemistry & cell count) - Investigation و Gram stain - Investigation و Cytology for fluids - Investigation*",
     "draftedAt": null,
     "hasReplies": true,
     "replySnippet": "@mohamed Fekri @patient account .0-Dehydration, G20-Parkinson's disease, R41.82-Altered mental statu",
-    "hasExistingApproval": true,
-    "existingApprovalSnippet": "...CSF (Bacterial & Viral) موافقه سعريه ب 6875 ج لايطبق خصم التعاقد Mohamed Fekry Patient Accountant Supervisor Mobile:...",
+    "hasExistingApproval": false,
+    "existingApprovalSnippet": "",
     "creditLimit": null,
     "creditLimitText": null,
     "isRefused": false,
@@ -5028,7 +5059,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufSaAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "b421c5e5-36ea-4831-9761-46e55a567e74@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": true,
+    "priceApprovalAmount": 5625
   },
   {
     "id": "mrn_0000063963_76d8eb73",
@@ -5066,7 +5099,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض محمد حمدي محمد عبد الحميد (شركة صحة وان). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: شركة صحة وان\nالمسئول من قسم السيلز: محمد جابر\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - SHOKWAVE BALLON]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: شركة صحة وان\nالمسئول من قسم السيلز: محمد جابر\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - SHOKWAVE BALLON]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*محمد حمدي محمد عبد الحميد* - Bed 2 - CCU\nصحة وان\n*تمت الموافقة على: SHOKWAVE BALLON*",
     "draftedAt": null,
     "hasReplies": true,
@@ -5119,7 +5152,7 @@
     "approvedAmountLimit": 45000,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض محمد خليل ابراهيم عبدالصمد (جلوب ميد). تمت الموافقة على إجراء (استئصال الزائدة الدودية بالمنظار) بحد أقصى 45,000 ج.م. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: جلوب ميد\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - استئصال الزائدة الدودية بالمنظار]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: جلوب ميد\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - استئصال الزائدة الدودية بالمنظار]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*محمد خليل ابراهيم عبدالصمد* - Inpatient Bed\nجلوب ميد\n*تمت الموافقة على: استئصال الزائدة الدودية بالمنظار (حد أقصى: 45,000 EGP)*",
     "draftedAt": null,
     "hasReplies": true,
@@ -5163,7 +5196,9 @@
       {
         "serviceName": "رسم مخ حيث يعاني من اضراب بدرجه الوعي وتشنجات",
         "matchedName": "رسم مخ حيث يعاني من اضراب بدرجه الوعي وتشنجات",
-        "status": "unmatched"
+        "status": "unmatched",
+        "suggestedPrice": 1812.5,
+        "suggestedFrom": "رسم مخ (E.E.G)"
       }
     ],
     "status": "approved",
@@ -5172,7 +5207,7 @@
     "approvedAmountLimit": 1800,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض اشرف ياقوت سعد مصطفى (بدر الدين للبترول). تمت الموافقة على الدخول والإجراء بحد أقصى 1,800 ج.م. الحالة معتمدة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: بدر الدين للبترول\nالمسئول من قسم السيلز: محمد ابو الوفا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - رسم مخ حيث يعاني من اضراب بدرجه الوعي وتشنجات]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: بدر الدين للبترول\nالمسئول من قسم السيلز: محمد ابو الوفا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - رسم مخ حيث يعاني من اضراب بدرجه الوعي وتشنجات : مطلوب موافقة سعرية بمبلغ 1,812.5 ج.م]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*اشرف ياقوت سعد مصطفى* - Bed 8 - ICU\nبدر الدين للبترول\n*تمت الموافقة على: رسم مخ حيث يعاني من اضراب بدرجه الوعي وتشنجات - موافقة سعرية بمبلغ 1,800 EGP*",
     "draftedAt": null,
     "hasReplies": true,
@@ -5385,7 +5420,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض محمد جمال ابراهيم سليم (ميتلايف اليكو). تمت الموافقة على الدخول والإجراء باللائحة. الحالة معتمدة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2023\nContractor: ميتلايف اليكو\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2023\nContractor: ميتلايف اليكو\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*محمد جمال ابراهيم سليم* - Inpatient Bed\nميتلايف اليكو\n*المطلوب موافقة عمل إقامة بالقسم الداخلي (Inpatient Admission)*",
     "draftedAt": null,
     "hasReplies": true,
@@ -5447,7 +5482,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض الاء محمد فتحي شعبان (بترومنت). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: بترومنت\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - serum IgA\n - برجاء من سيادكم الموافقه على التحليل لتشخيص حاله الانيميا للضرورة القصوى]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: بترومنت\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - serum IgA\n - برجاء من سيادكم الموافقه على التحليل لتشخيص حاله الانيميا للضرورة القصوى]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*الاء محمد فتحي شعبان* - Bed 328 - Zone B\nبترومنت\n*تمت الموافقة على: serum IgA و برجاء من سيادكم الموافقه على التحليل لتشخيص حاله الانيميا للضرورة القصوى*",
     "draftedAt": null,
     "hasReplies": true,
@@ -5500,7 +5535,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض اسلام صالح السيد محمد (وادى النيل). توجد مراسلات متبادلة على الإيميل بانتظار التأكيد النهائي.",
-    "draftBody": "Price list: Elite Hospital 2024\nContractor: وادى النيل\nالمسئول من قسم السيلز: أحمد حمزة\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2024\nContractor: وادى النيل\nالمسئول من قسم السيلز: أحمد حمزة\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*اسلام صالح السيد محمد* - Inpatient Bed\nوادى النيل\n*المطلوب موافقة عمل إقامة بالقسم الداخلي (Inpatient Admission)*",
     "draftedAt": null,
     "hasReplies": true,
@@ -5553,7 +5588,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض هدي خميس عبداللطيف الهلباوي (غير محدد). توجد مراسلات متبادلة على الإيميل بانتظار التأكيد النهائي.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: غير محدد\nالمسئول من قسم السيلز: غير محدد (يتطلب تحديد منسق السيلز)\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: غير محدد\nالمسئول من قسم السيلز: غير محدد (يتطلب تحديد منسق السيلز)\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*هدي خميس عبداللطيف الهلباوي* - Inpatient Bed\nالتعاقد\n*المطلوب موافقة عمل إقامة بالقسم الداخلي (Inpatient Admission)*",
     "draftedAt": null,
     "hasReplies": true,
@@ -5710,7 +5745,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض ليان محمد زكريا احمد (وزراة العدل). تم إرسال الطلب الأصلي وبانتظار رد جهة التعاقد.",
-    "draftBody": "Price list: Elite Hospital 2024\nContractor: وزراة العدل\nالمسئول من قسم السيلز: ديانا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2024\nContractor: وزراة العدل\nالمسئول من قسم السيلز: ديانا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*ليان محمد زكريا احمد* - Inpatient Bed\nوزراة العدل\n*المطلوب موافقة عمل إقامة بالقسم الداخلي (Inpatient Admission)*",
     "draftedAt": null,
     "hasReplies": false,
@@ -5814,7 +5849,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض ليان محمد زكريا احمد (وزراة العدل). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2024\nContractor: وزراة العدل\nالمسئول من قسم السيلز: ديانا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2024\nContractor: وزراة العدل\nالمسئول من قسم السيلز: ديانا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*ليان محمد زكريا احمد* - Inpatient Bed\nوزراة العدل\n*تمت الموافقة على: إقامة بالقسم الداخلي (Inpatient Admission)*",
     "draftedAt": null,
     "hasReplies": true,
@@ -5866,7 +5901,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض اكرم وائل محمد عبدالهادي (عناية مصر). تمت الموافقة على الدخول والإجراء باللائحة. الحالة معتمدة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: عناية مصر\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: عناية مصر\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*اكرم وائل محمد عبدالهادي* - Inpatient Bed\nعناية مصر\n*المطلوب موافقة عمل إقامة بالقسم الداخلي (Inpatient Admission)*",
     "draftedAt": null,
     "hasReplies": true,
@@ -5918,7 +5953,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض زكي محمد زكى فرج (Next Care نكست كير). توجد مراسلات متبادلة على الإيميل بانتظار التأكيد النهائي.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: Next Care نكست كير\nالمسئول من قسم السيلز: ديانا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: Next Care نكست كير\nالمسئول من قسم السيلز: ديانا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*زكي محمد زكى فرج* - Inpatient Bed\nNext Care نكست كير\n*المطلوب موافقة عمل إقامة بالقسم الداخلي (Inpatient Admission)*",
     "draftedAt": null,
     "hasReplies": true,
@@ -5970,7 +6005,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض ايمان جمعه خميس محمود (بترول ابو قير). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: بترول ابو قير\nالمسئول من قسم السيلز: نادين\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: بترول ابو قير\nالمسئول من قسم السيلز: نادين\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*ايمان جمعه خميس محمود* - Inpatient Bed\nبترول ابو قير\n*تمت الموافقة على: إقامة بالقسم الداخلي (Inpatient Admission)*",
     "draftedAt": null,
     "hasReplies": true,
@@ -6074,8 +6109,8 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض نادر قدري محمد عبدالله (Next Care نكست كير). توجد مراسلات متبادلة على الإيميل بانتظار التأكيد النهائي.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: Next Care نكست كير\nالمسئول من قسم السيلز: ديانا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - إقامة رعاية مركزة (ICU Admission)]\n\n@corporate@elitehospital.org",
-    "cmWhatsappMessage": "*نادر قدري محمد عبدالله* - Inpatient Bed\nNext Care نكست كير\n*المطلوب موافقة عمل إقامة رعاية مركزة (ICU Admission)*",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: Next Care نكست كير\nالمسئول من قسم السيلز: ديانا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة رعاية مركزة (ICU Admission)]\n\n@corporate@elitehospital.org",
+    "cmWhatsappMessage": "*نادر قدري محمد عبدالله* - Inpatient Bed\nNext Care نكست كير\n*مطلوب موافقة سعرية بمبلغ 5,625 ج.م على: إقامة رعاية مركزة (ICU Admission)*",
     "draftedAt": null,
     "hasReplies": true,
     "replySnippet": "",
@@ -6088,7 +6123,9 @@
     "aiProcessingStatus": "processed",
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufPZAAA=",
     "lastExchangeChangeKey": null,
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": true,
+    "priceApprovalAmount": 5625
   },
   {
     "id": "mrn_0000269341_275cd64b",
@@ -6126,7 +6163,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض طاهر محمد عبدالنظير محمد (عناية مصر). توجد مراسلات متبادلة على الإيميل بانتظار التأكيد النهائي.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: عناية مصر\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: عناية مصر\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*طاهر محمد عبدالنظير محمد* - Inpatient Bed\nعناية مصر\n*المطلوب موافقة عمل إقامة بالقسم الداخلي (Inpatient Admission)*",
     "draftedAt": null,
     "hasReplies": true,
@@ -6409,7 +6446,9 @@
     "aiProcessingStatus": "processed",
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufPuAAA=",
     "lastExchangeChangeKey": null,
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000268561_6e952798",
@@ -6531,7 +6570,9 @@
     "aiProcessingStatus": "processed",
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufP0AAA=",
     "lastExchangeChangeKey": null,
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000268993_a5137af9",
@@ -6621,7 +6662,7 @@
     "approvedAmountLimit": 60000,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض مروان مصطفى محمد كمال (جلوب ميد). تمت الموافقة على الدخول والإجراء بحد أقصى 60,000 ج.م. الحالة معتمدة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: جلوب ميد\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: جلوب ميد\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*مروان مصطفى محمد كمال* - Inpatient Bed\nجلوب ميد\n*تمت الموافقة على: إقامة بالقسم الداخلي (Inpatient Admission) (حد أقصى: 60,000 EGP)*",
     "draftedAt": null,
     "hasReplies": true,
@@ -6673,7 +6714,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض حبيبة حسام محمود محمد (دريم مشرق). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: دريم مشرق\nالمسئول من قسم السيلز: محمد جابر\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: دريم مشرق\nالمسئول من قسم السيلز: محمد جابر\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*حبيبة حسام محمود محمد* - Inpatient Bed\nدريم مشرق\n*تمت الموافقة على: إقامة بالقسم الداخلي (Inpatient Admission)*",
     "draftedAt": null,
     "hasReplies": true,
@@ -6777,7 +6818,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض ياسر محمد محمود عبدالقادر (سيدبك). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: سيدبك\nالمسئول من قسم السيلز: نادين\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: سيدبك\nالمسئول من قسم السيلز: نادين\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*ياسر محمد محمود عبدالقادر* - Inpatient Bed\nسيدبك\n*تمت الموافقة على: إقامة بالقسم الداخلي (Inpatient Admission)*",
     "draftedAt": null,
     "hasReplies": true,
@@ -7098,7 +7139,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض السيد محمد السيد حسنين (خالدة للبترول). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: خالدة للبترول\nالمسئول من قسم السيلز: محمد ابو الوفا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\n1- قياس رسم سمع بالكمبيوتر (Computerized Audiogram)\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - حيث انه يعاني من عدم اتزان و دوخة]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: خالدة للبترول\nالمسئول من قسم السيلز: محمد ابو الوفا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\n1- قياس رسم سمع بالكمبيوتر (Computerized Audiogram)\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - حيث انه يعاني من عدم اتزان و دوخة]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*السيد محمد السيد حسنين* - Bed 322 - Zone B\nخالدة للبترول\n*تمت الموافقة على: رسم سمع واتزان حيث انه يعاني من عدم اتزان و دوخة و حيث انه يعاني من عدم اتزان و دوخة*",
     "draftedAt": null,
     "hasReplies": true,
@@ -7150,7 +7191,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض سامح السيد ابراهيم عبدالمولي (العامرية للبترول). توجد مراسلات متبادلة على الإيميل بانتظار التأكيد النهائي.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: العامرية للبترول\nالمسئول من قسم السيلز: محمد جابر\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: العامرية للبترول\nالمسئول من قسم السيلز: محمد جابر\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*سامح السيد ابراهيم عبدالمولي* - Inpatient Bed\nالعامرية للبترول\n*المطلوب موافقة عمل إقامة بالقسم الداخلي (Inpatient Admission)*",
     "draftedAt": null,
     "hasReplies": true,
@@ -7297,7 +7338,8 @@
       {
         "serviceName": "Physiotherapy Reservation",
         "matchedName": "Physiotherapy Reservation",
-        "status": "unmatched"
+        "status": "unmatched",
+        "suggestedPrice": 600
       }
     ],
     "status": "approved",
@@ -7306,7 +7348,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض تاج الدين فايز الشلقامي علي (ايثدكو). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: ايثدكو\nالمسئول من قسم السيلز: نادين\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - Physiotherapy Reservation]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: ايثدكو\nالمسئول من قسم السيلز: نادين\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - Physiotherapy Reservation : مطلوب موافقة سعرية بمبلغ 600 ج.م]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*تاج الدين فايز الشلقامي علي* - Bed 2 - ICU\nايثدكو\n*تمت الموافقة على: Physiotherapy Reservation*",
     "draftedAt": null,
     "hasReplies": true,
@@ -7358,7 +7400,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض السيد محمد السيد حسنين (خالدة للبترول). توجد مراسلات متبادلة على الإيميل بانتظار التأكيد النهائي.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: خالدة للبترول\nالمسئول من قسم السيلز: محمد ابو الوفا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: خالدة للبترول\nالمسئول من قسم السيلز: محمد ابو الوفا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*السيد محمد السيد حسنين* - Inpatient Bed\nخالدة للبترول\n*المطلوب موافقة عمل إقامة بالقسم الداخلي (Inpatient Admission)*",
     "draftedAt": null,
     "hasReplies": true,
@@ -7410,7 +7452,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض محمد علي محمد احمد (Next Care نكست كير). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: Next Care نكست كير\nالمسئول من قسم السيلز: ديانا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - إقامة رعاية مركزة (ICU Admission)]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: Next Care نكست كير\nالمسئول من قسم السيلز: ديانا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة رعاية مركزة (ICU Admission)]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*محمد علي محمد احمد* - Inpatient Bed\nNext Care نكست كير\n*تمت الموافقة على: إقامة رعاية مركزة (ICU Admission)*",
     "draftedAt": null,
     "hasReplies": true,
@@ -7505,7 +7547,9 @@
       {
         "serviceName": "Levetiracetam (Tiratam, Keppra) Peak - Investigation",
         "matchedName": "Levetiracetam (Tiratam, Keppra) Peak - Investigation",
-        "status": "unmatched"
+        "status": "unmatched",
+        "suggestedPrice": 5625,
+        "suggestedFrom": "Levetiracetam (Tiratam, Keppra) Peak"
       }
     ],
     "status": "pending_manual_draft",
@@ -7514,8 +7558,8 @@
     "approvedAmountLimit": 5625,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض نادر قدري محمد عبدالله (Next Care نكست كير). تمت الموافقة على الدخول والإجراء بحد أقصى 5,625 ج.م. الحالة معتمدة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: Next Care نكست كير\nالمسئول من قسم السيلز: ديانا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - Levetiracetam (Tiratam, Keppra) Peak - Investigation]\n\n@corporate@elitehospital.org",
-    "cmWhatsappMessage": "*نادر قدري محمد عبدالله* - Bed 4 - ICU\nNext Care نكست كير\n*المطلوب موافقة عمل Levetiracetam (Tiratam, Keppra) Peak - Investigation*",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: Next Care نكست كير\nالمسئول من قسم السيلز: ديانا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - Levetiracetam (Tiratam, Keppra) Peak - Investigation : مطلوب موافقة سعرية بمبلغ 5,625 ج.م]\n\n@corporate@elitehospital.org",
+    "cmWhatsappMessage": "*نادر قدري محمد عبدالله* - Bed 4 - ICU\nNext Care نكست كير\n*مطلوب موافقة سعرية بمبلغ 5,625 ج.م على: Levetiracetam (Tiratam, Keppra) Peak - Investigation*",
     "draftedAt": null,
     "hasReplies": true,
     "replySnippet": "@mohamed Fekri .82-Altered mental status, unspecified SELECTED SERVICES: Service Name Price (EGP) Le",
@@ -7528,7 +7572,9 @@
     "aiProcessingStatus": "processed",
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufQsAAA=",
     "lastExchangeChangeKey": null,
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": true,
+    "priceApprovalAmount": 5625
   },
   {
     "id": "mrn_0000267870_090163a9",
@@ -7566,7 +7612,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض ماجد محمد عبده رضوان (جاسكو). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: جاسكو\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: جاسكو\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*ماجد محمد عبده رضوان* - Inpatient Bed\nجاسكو\n*تمت الموافقة على: إقامة بالقسم الداخلي (Inpatient Admission)*",
     "draftedAt": null,
     "hasReplies": true,
@@ -7618,7 +7664,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض الاء محمد فتحي شعبان (بترومنت). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2024\nContractor: بترومنت\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - إقامة رعاية مركزة (ICU Admission)]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2024\nContractor: بترومنت\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة رعاية مركزة (ICU Admission)]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*الاء محمد فتحي شعبان* - Inpatient Bed\nبترومنت\n*تمت الموافقة على: إقامة رعاية مركزة (ICU Admission)*",
     "draftedAt": null,
     "hasReplies": true,
@@ -7661,7 +7707,9 @@
       {
         "serviceName": "Nutrionist Follow Up",
         "matchedName": "Nutrionist Follow Up",
-        "status": "unmatched"
+        "status": "unmatched",
+        "suggestedPrice": 100,
+        "suggestedFrom": "متابعة اخصائي التغذيه (Nutrionist Follow Up (Specialist))"
       }
     ],
     "status": "approved",
@@ -7670,7 +7718,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض شريف محمود حنفي محمود (بترول ابو قير). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: بترول ابو قير\nالمسئول من قسم السيلز: نادين\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - Nutrionist Follow Up]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: بترول ابو قير\nالمسئول من قسم السيلز: نادين\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - Nutrionist Follow Up : مطلوب موافقة سعرية بمبلغ 100 ج.م]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*شريف محمود حنفي محمود* - Bed 327 - Zone B\nبترول ابو قير\n*تمت الموافقة على: Nutrionist Follow Up*",
     "draftedAt": null,
     "hasReplies": true,
@@ -7765,7 +7813,9 @@
       {
         "serviceName": "Blood filteration",
         "matchedName": "Blood filteration",
-        "status": "unmatched"
+        "status": "unmatched",
+        "suggestedPrice": 700,
+        "suggestedFrom": "خدمة لفتره كيس دم (Blood Filteration Service)"
       }
     ],
     "status": "approved",
@@ -7774,7 +7824,7 @@
     "approvedAmountLimit": 2200,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض محمد علي محمد احمد (Next Care نكست كير). تمت الموافقة على الدخول والإجراء بحد أقصى 2,200 ج.م. الحالة معتمدة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: Next Care نكست كير\nالمسئول من قسم السيلز: ديانا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - Blood filteration]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: Next Care نكست كير\nالمسئول من قسم السيلز: ديانا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - Blood filteration : مطلوب موافقة سعرية بمبلغ 700 ج.م]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*محمد علي محمد احمد* - Bed 2 - ICU\nNext Care نكست كير\n*تمت الموافقة على: Blood filteration - موافقة سعرية بمبلغ 2,200 EGP*",
     "draftedAt": null,
     "hasReplies": true,
@@ -7840,7 +7890,9 @@
     "aiProcessingStatus": "processed",
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufROAAA=",
     "lastExchangeChangeKey": null,
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000267389_414da951",
@@ -7955,7 +8007,9 @@
     "aiProcessingStatus": "processed",
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufRPAAA=",
     "lastExchangeChangeKey": null,
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000195587_500a2696",
@@ -7993,7 +8047,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض كريم محمد احمد عبدالرحمن (مصر للطيران). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: مصر للطيران\nالمسئول من قسم السيلز: محمد ابو الوفا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - مد الاقامه لتلقي العلاجات الازمه وعمل التحاليل والفحوصات الازمه]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: مصر للطيران\nالمسئول من قسم السيلز: محمد ابو الوفا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - مد الاقامه لتلقي العلاجات الازمه وعمل التحاليل والفحوصات الازمه]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*كريم محمد احمد عبدالرحمن* - Bed 319 - Zone A\nمصر للطيران\n*تمت الموافقة على: مد الاقامه لتلقي العلاجات الازمه وعمل التحاليل والفحوصات الازمه*",
     "draftedAt": null,
     "hasReplies": true,
@@ -8097,7 +8151,7 @@
     "approvedAmountLimit": 20000,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض محمد رمضان السيد عباس (جلوب ميد). تمت الموافقة على الدخول والإجراء بحد أقصى 20,000 ج.م. الحالة معتمدة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: جلوب ميد\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: جلوب ميد\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*محمد رمضان السيد عباس* - Inpatient Bed\nجلوب ميد\n*تمت الموافقة على: إقامة بالقسم الداخلي (Inpatient Admission) (حد أقصى: 20,000 EGP)*",
     "draftedAt": null,
     "hasReplies": true,
@@ -8140,22 +8194,24 @@
       {
         "serviceName": "رسم مخ",
         "matchedName": "رسم مخ",
-        "status": "unmatched"
+        "status": "unmatched",
+        "suggestedPrice": 1812.5,
+        "suggestedFrom": "رسم مخ (E.E.G)"
       }
     ],
-    "status": "approved",
-    "statusReasonArabic": "تمت الموافقة واعتماد الحالة بحد أقصى 1,800 ج.م",
+    "status": "pending_manual_draft",
+    "statusReasonArabic": "مطلوب موافقة سعرية (تعليمات من حسابات المرضى وليست موافقة)",
     "patientSharePercentage": null,
     "approvedAmountLimit": 1800,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض نادر قدري محمد عبدالله (Next Care نكست كير). تمت الموافقة على الدخول والإجراء بحد أقصى 1,800 ج.م. الحالة معتمدة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: Next Care نكست كير\nالمسئول من قسم السيلز: ديانا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - رسم مخ]\n\n@corporate@elitehospital.org",
-    "cmWhatsappMessage": "*نادر قدري محمد عبدالله* - Bed 4 - ICU\nNext Care نكست كير\n*تمت الموافقة على: رسم مخ - موافقة سعرية بمبلغ 1,800 EGP*",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: Next Care نكست كير\nالمسئول من قسم السيلز: ديانا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - رسم مخ : مطلوب موافقة سعرية بمبلغ 1,812.5 ج.م]\n\n@corporate@elitehospital.org",
+    "cmWhatsappMessage": "*نادر قدري محمد عبدالله* - Bed 4 - ICU\nNext Care نكست كير\n*مطلوب موافقة سعرية بمبلغ 1,812.5 ج.م على: رسم مخ*",
     "draftedAt": null,
     "hasReplies": true,
     "replySnippet": "@patient account @mohamed Fekri .82-Altered mental status, unspecified SELECTED SERVICES: Service Na",
-    "hasExistingApproval": true,
-    "existingApprovalSnippet": "...بدالله (MRN: 0000216945) موافقه سعريه على رسم المخ بمبلغ 1800 ج لايطبق خصم التعاقد Mohamed Fekry Patient Accountant S...",
+    "hasExistingApproval": false,
+    "existingApprovalSnippet": "",
     "creditLimit": 1800,
     "creditLimitText": "1,800 EGP",
     "isRefused": false,
@@ -8163,7 +8219,9 @@
     "aiProcessingStatus": "processed",
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufRUAAA=",
     "lastExchangeChangeKey": null,
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": true,
+    "priceApprovalAmount": 5625
   },
   {
     "id": "mrn_0000267870_94299b29",
@@ -8357,7 +8415,7 @@
     "approvedAmountLimit": 85000,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض محمد حمدي محمد عبد الحميد (صحة وان). تمت الموافقة على الدخول والإجراء بحد أقصى 85,000 ج.م. الحالة معتمدة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: صحة وان\nالمسئول من قسم السيلز: محمد جابر\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: صحة وان\nالمسئول من قسم السيلز: محمد جابر\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*محمد حمدي محمد عبد الحميد* - Inpatient Bed\nصحة وان\n*تمت الموافقة على: إقامة بالقسم الداخلي (Inpatient Admission) (حد أقصى: 85,000 EGP)*",
     "draftedAt": null,
     "hasReplies": true,
@@ -8409,7 +8467,7 @@
     "approvedAmountLimit": 40000,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض حسن سيداحمد عبدالمجيد سيداحمد (ميدرايت). تمت الموافقة على الدخول والإجراء بحد أقصى 40,000 ج.م. الحالة معتمدة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: ميدرايت\nالمسئول من قسم السيلز: نادين\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: ميدرايت\nالمسئول من قسم السيلز: نادين\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*حسن سيداحمد عبدالمجيد سيداحمد* - Inpatient Bed\nميدرايت\n*المطلوب موافقة عمل إقامة بالقسم الداخلي (Inpatient Admission)*",
     "draftedAt": null,
     "hasReplies": true,
@@ -8461,7 +8519,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض حسام الدين محمد حسانين المسيري (العامرية للبترول). توجد مراسلات متبادلة على الإيميل بانتظار التأكيد النهائي.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: العامرية للبترول\nالمسئول من قسم السيلز: محمد جابر\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - ankle foot orthosis]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: العامرية للبترول\nالمسئول من قسم السيلز: محمد جابر\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - ankle foot orthosis]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*حسام الدين محمد حسانين المسيري* - Bed 316 - Zone A\nالعامرية للبترول\n*المطلوب موافقة عمل ankle foot orthosis*",
     "draftedAt": null,
     "hasReplies": true,
@@ -8504,7 +8562,9 @@
       {
         "serviceName": "Levetiracetam (Tiratam, Keppra) Trough - Investigation",
         "matchedName": "Levetiracetam (Tiratam, Keppra) Trough - Investigation",
-        "status": "unmatched"
+        "status": "unmatched",
+        "suggestedPrice": 5625,
+        "suggestedFrom": "Levetiracetam (Tiratam, Keppra) Trough"
       }
     ],
     "status": "pending_manual_draft",
@@ -8513,8 +8573,8 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض نادر قدري محمد عبدالله (Next Care نكست كير). توجد مراسلات متبادلة على الإيميل بانتظار التأكيد النهائي.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: Next Care نكست كير\nالمسئول من قسم السيلز: ديانا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - Levetiracetam (Tiratam, Keppra) Trough - Investigation]\n\n@corporate@elitehospital.org",
-    "cmWhatsappMessage": "*نادر قدري محمد عبدالله* - Bed 4 - ICU\nNext Care نكست كير\n*المطلوب موافقة عمل Levetiracetam (Tiratam, Keppra) Trough - Investigation*",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: Next Care نكست كير\nالمسئول من قسم السيلز: ديانا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - Levetiracetam (Tiratam, Keppra) Trough - Investigation : مطلوب موافقة سعرية بمبلغ 5,625 ج.م]\n\n@corporate@elitehospital.org",
+    "cmWhatsappMessage": "*نادر قدري محمد عبدالله* - Bed 4 - ICU\nNext Care نكست كير\n*مطلوب موافقة سعرية بمبلغ 5,625 ج.م على: Levetiracetam (Tiratam, Keppra) Trough - Investigation*",
     "draftedAt": null,
     "hasReplies": true,
     "replySnippet": "مكرر .82-Altered mental status, unspecified SELECTED SERVICES: Service Name Price (EGP) Levetiraceta",
@@ -8527,7 +8587,9 @@
     "aiProcessingStatus": "processed",
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufR+AAA=",
     "lastExchangeChangeKey": null,
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": true,
+    "priceApprovalAmount": 5625
   },
   {
     "id": "mrn_0000054665_8d99fb03",
@@ -8705,7 +8767,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض الاء محمد فتحي شعبان (بترومنت). تمت الموافقة على الدخول والإجراء باللائحة. الحالة معتمدة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2024\nContractor: بترومنت\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - h_pylori ag in stool]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2024\nContractor: بترومنت\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - h_pylori ag in stool]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*الاء محمد فتحي شعبان* - Bed 328 - Zone B\nبترومنت\n*المطلوب موافقة عمل h_pylori ag in stool*",
     "draftedAt": null,
     "hasReplies": true,
@@ -8766,7 +8828,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض الاء محمد فتحي شعبان (بترومنت). تمت الموافقة على الدخول والإجراء باللائحة. الحالة معتمدة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2024\nContractor: بترومنت\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - serum IgA\n - برجاء من سيادكم الموافقه على التحليل لتشخيص حاله الانيميا للضرورة القصوى]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2024\nContractor: بترومنت\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - serum IgA\n - برجاء من سيادكم الموافقه على التحليل لتشخيص حاله الانيميا للضرورة القصوى]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*الاء محمد فتحي شعبان* - Bed 328 - Zone B\nبترومنت\n*المطلوب موافقة عمل serum IgA و برجاء من سيادكم الموافقه على التحليل لتشخيص حاله الانيميا للضرورة القصوى*",
     "draftedAt": null,
     "hasReplies": true,
@@ -8940,7 +9002,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض الاء محمد فتحي شعبان (بترومنت). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2024\nContractor: بترومنت\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - injectafer 2vial (500mg ) in 250ml nacl]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2024\nContractor: بترومنت\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - injectafer 2vial (500mg ) in 250ml nacl]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*الاء محمد فتحي شعبان* - Bed 328 - Zone B\nبترومنت\n*تمت الموافقة على: injectafer 2vial (500mg ) in 250ml nacl*",
     "draftedAt": null,
     "hasReplies": true,
@@ -8992,7 +9054,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض محمد قباري محمد احمد (انربك). تمت الموافقة على الدخول والإجراء باللائحة. الحالة معتمدة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: انربك\nالمسئول من قسم السيلز: أحمد حمزة\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - جراحة عاجلة لاستئصال الورم بالميكروسكوب الجراحي]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: انربك\nالمسئول من قسم السيلز: أحمد حمزة\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - جراحة عاجلة لاستئصال الورم بالميكروسكوب الجراحي]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*محمد قباري محمد احمد* - Bed 321 - Zone B\nانربك\n*تمت الموافقة على: جراحة عاجلة لاستئصال الورم بالميكروسكوب الجراحي*",
     "draftedAt": null,
     "hasReplies": true,
@@ -9343,19 +9405,19 @@
         "status": "matched"
       }
     ],
-    "status": "approved",
-    "statusReasonArabic": "تمت الموافقة واعتماد الحالة باللائحة",
+    "status": "pending_manual_draft",
+    "statusReasonArabic": "مطلوب موافقة سعرية (تعليمات من حسابات المرضى وليست موافقة)",
     "patientSharePercentage": null,
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض نادر قدري محمد عبدالله (Next Care نكست كير). تمت الموافقة على الدخول والإجراء باللائحة. الحالة معتمدة ولا توجد متطلبات ناقصة.",
     "draftBody": "Price list: Elite Hospital 2025\nContractor: Next Care نكست كير\nالمسئول من قسم السيلز: ديانا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\n1- CSF culture\n2- PCR panel for Meningitis, CSF ( Bacterial & Viral Panels)\n3- Lactate, CSF\n4- CSF analysis (Chemistry & cell count)\n5- Gram stain\n6- Cytology for fluids\n\n@corporate@elitehospital.org",
-    "cmWhatsappMessage": "*نادر قدري محمد عبدالله* - Bed 4 - ICU\nNext Care نكست كير\n*تمت الموافقة على: CSF culture - Investigation و PCR panel for Meningitis, CSF (Bacterial & Viral) - Investigation و Lactate, CSF - Investigation و CSF analysis (Chemistry & cell count) - Investigation و Gram stain - Investigation و Cytology for fluids - Investigation - موافقة سعرية*",
+    "cmWhatsappMessage": "*نادر قدري محمد عبدالله* - Bed 4 - ICU\nNext Care نكست كير\n*مطلوب موافقة سعرية بمبلغ 5,625 ج.م على: CSF culture - Investigation و PCR panel for Meningitis, CSF (Bacterial & Viral) - Investigation و Lactate, CSF - Investigation و CSF analysis (Chemistry & cell count) - Investigation و Gram stain - Investigation و Cytology for fluids - Investigation*",
     "draftedAt": null,
     "hasReplies": true,
     "replySnippet": "@mohamed Fekri @patient account .0-Dehydration, G20-Parkinson's disease, R41.82-Altered mental statu",
-    "hasExistingApproval": true,
-    "existingApprovalSnippet": "...CSF (Bacterial & Viral) موافقه سعريه ب 6875 ج لايطبق خصم التعاقد Mohamed Fekry Patient Accountant Supervisor Mobile:...",
+    "hasExistingApproval": false,
+    "existingApprovalSnippet": "",
     "creditLimit": null,
     "creditLimitText": null,
     "isRefused": false,
@@ -9363,7 +9425,9 @@
     "aiProcessingStatus": "processed",
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufSaAAA=",
     "lastExchangeChangeKey": null,
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": true,
+    "priceApprovalAmount": 5625
   },
   {
     "id": "mrn_0000063963_6f95af52",
@@ -9401,7 +9465,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض محمد حمدي محمد عبد الحميد (صحة وان). توجد مراسلات متبادلة على الإيميل بانتظار التأكيد النهائي.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: صحة وان\nالمسئول من قسم السيلز: محمد جابر\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - SHOKWAVE BALLON]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: صحة وان\nالمسئول من قسم السيلز: محمد جابر\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - SHOKWAVE BALLON]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*محمد حمدي محمد عبد الحميد* - Bed 2 - CCU\nصحة وان\n*المطلوب موافقة عمل SHOKWAVE BALLON*",
     "draftedAt": null,
     "hasReplies": true,
@@ -9453,7 +9517,7 @@
     "approvedAmountLimit": 45000,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض محمد خليل ابراهيم عبدالصمد (جلوب ميد). تمت الموافقة على إجراء (استئصال الزائدة الدودية بالمنظار) بحد أقصى 45,000 ج.م. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: جلوب ميد\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - استئصال الزائدة الدودية بالمنظار]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: جلوب ميد\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - استئصال الزائدة الدودية بالمنظار]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*محمد خليل ابراهيم عبدالصمد* - Inpatient Bed\nجلوب ميد\n*تمت الموافقة على: استئصال الزائدة الدودية بالمنظار (حد أقصى: 45,000 EGP)*",
     "draftedAt": null,
     "hasReplies": true,
@@ -9496,7 +9560,9 @@
       {
         "serviceName": "رسم مخ حيث يعاني من اضراب بدرجه الوعي وتشنجات",
         "matchedName": "رسم مخ حيث يعاني من اضراب بدرجه الوعي وتشنجات",
-        "status": "unmatched"
+        "status": "unmatched",
+        "suggestedPrice": 1812.5,
+        "suggestedFrom": "رسم مخ (E.E.G)"
       }
     ],
     "status": "approved",
@@ -9505,7 +9571,7 @@
     "approvedAmountLimit": 1800,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض اشرف ياقوت سعد مصطفى (بدر الدين للبترول). تمت الموافقة على الدخول والإجراء بحد أقصى 1,800 ج.م. الحالة معتمدة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: بدر الدين للبترول\nالمسئول من قسم السيلز: محمد ابو الوفا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  لم يتم العثور على الإجراءات التالية في لائحة أسعار التعاقد:\n - رسم مخ حيث يعاني من اضراب بدرجه الوعي وتشنجات]\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: بدر الدين للبترول\nالمسئول من قسم السيلز: محمد ابو الوفا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - رسم مخ حيث يعاني من اضراب بدرجه الوعي وتشنجات : مطلوب موافقة سعرية بمبلغ 1,812.5 ج.م]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*اشرف ياقوت سعد مصطفى* - Bed 8 - ICU\nبدر الدين للبترول\n*تمت الموافقة على: رسم مخ حيث يعاني من اضراب بدرجه الوعي وتشنجات - موافقة سعرية بمبلغ 1,800 EGP*",
     "draftedAt": null,
     "hasReplies": true,

@@ -108,6 +108,9 @@ export interface InpatientApprovalRecord {
     matchedName: string;
     code?: string;
     status: 'matched' | 'unmatched';
+    /** For unlisted procedures: price of the same procedure in another pricelist (EGP) */
+    suggestedPrice?: number;
+    suggestedFrom?: string;
   }>;
   status: ApprovalGranularStatus;
   draftBody: string;
@@ -126,6 +129,9 @@ export interface InpatientApprovalRecord {
   replySnippet?: string;
   hasExistingApproval?: boolean;
   existingApprovalSnippet?: string;
+  /** Instruction (e.g. from patient accounts) that a price approval (موافقة سعرية) must be brought */
+  priceApprovalRequested?: boolean;
+  priceApprovalAmount?: number | null;
   isRefused?: boolean;
   refusalSnippet?: string;
   manualDraftRequested?: boolean;

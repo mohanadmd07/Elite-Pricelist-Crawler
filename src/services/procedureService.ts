@@ -712,3 +712,46 @@ export async function retrieveDynamicPricelistCandidates(
 
   return topCandidates;
 }
+
+
+/**
+ * For procedures that are NOT listed in the contractor's pricelist, find the same procedure in the
+ * other hospital pricelists (cash 2026 first) and attach its price, so the reply can state
+ * "مطلوب موافقة سعرية بمبلغ X". Falls back to the HIS requested price when no reference is found.
+ */
+export async function enrichUnmatchedWithReferencePrice<
+  T extends { serviceName: string; status: 'matched' | 'unmatched'; suggestedPrice?: number; suggestedFrom?: string }
+>(matched: T[], requestedServices: Array<{ name: string; rawPrice?: number }>): Promise<T[]> {
+  const out: T[] = [];
+  for (const m of matched) {
+    if (m.status !== 'unmatched' || isAccommodationOrGenericFee(m.serviceName)) {
+      out.push(m);
+      continue;
+    }
+    const srv = requestedServices.find((r) => r.name === m.serviceName) || { name: m.serviceName, rawPrice: 0 };
+    let price: number | undefined;
+    let from: string | undefined;
+    for (const year of ['2026', '2025', '2024', '2023']) {
+      try {
+        const cands = await retrieveDynamicPricelistCandidates(year, [srv], undefined, 10);
+        const top = cands.find(
+          (c) =>
+            c.score >= 35 &&
+            (c.price || 0) > 0 &&
+            !hasAntibodyConflict(srv.name, c.nameEnglish || '') &&
+            !hasLabInvestigationConflict(srv.name, c.nameEnglish || '')
+        );
+        if (top) {
+          price = Number(top.price);
+          from = top.nameArabic ? `${top.nameArabic} (${top.nameEnglish})` : top.nameEnglish;
+          break;
+        }
+      } catch {
+        /* try next pricelist */
+      }
+    }
+    if (!price && srv.rawPrice && srv.rawPrice > 0) price = srv.rawPrice;
+    out.push({ ...m, suggestedPrice: price, suggestedFrom: from });
+  }
+  return out;
+}
