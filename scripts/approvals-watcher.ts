@@ -1255,6 +1255,11 @@ export function detectExistingApproval(
 
   const credit = extractCreditLimit(combined);
 
+  // "خارج التعاقد" = the service is outside the contract -> a price approval (موافقة سعرية بمبلغ X) is REQUIRED, not granted
+  if (/خارج\s*(?:ال)?تعاقد/.test(normalized)) {
+    return { hasApproval: false, snippet: '' };
+  }
+
   // A *request* for approval ("الرجاء الموافقة", "برجاء الموافقة على...") is PENDING, not an approval.
   const approvalSearchText = normalized.replace(
     /(?:الرجاء|رجاء|برجاء|نرجو|يرجي|يرجى|المطلوب|مطلوب|نطلب|طلب)\s+(?:من\s+سيادتكم\s+)?(?:ال)?موافق[ةه]?(?![\u0600-\u06FF])/g,
@@ -2553,9 +2558,11 @@ export async function runApprovalsCheckEws(force = false): Promise<void> {
       const approvalThreadMessages = threadMessages.filter((m) => !isFekrySender(m.sender));
       let priceApprovalRequested = false;
       let priceApprovalAmount: number | null = null;
-      for (const m of fekryMessages) {
+      for (const m of threadMessages) {
         const txt = `${m.subject} ${m.body}`.normalize('NFKC');
-        if (/موافق[ةه]\s*سعري[ةه]|سعري[ةه]/i.test(txt)) {
+        const outOfContract = /خارج\s*(?:ال)?[تط]عاقد/i.test(txt);
+        if (!isFekrySender(m.sender) && !outOfContract) continue;
+        if (outOfContract || /موافق[ةه]\s*سعري[ةه]|سعري[ةه]/i.test(txt)) {
           priceApprovalRequested = true;
           const amt =
             extractCreditLimit(txt).limit ||

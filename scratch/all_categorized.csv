@@ -3235,28 +3235,28 @@ year,name,arabic,price,original_section,category,cat_source,key
 2024,Sodium Na (urine),,205.0,General,Laboratory,exact,sodium na urine
 2024,Soluble Liver Abs SLA - Ab,,650.0,General,Laboratory,exact,soluble liver abs sla ab
 2024,Soluble Transferrin receptor,,450.0,General,Laboratory,exact,soluble transferrin receptor
-2024,Banana IgE - Food Allergy,,550.0,General,Procedures,keyword,banana ige food allergy
-2024,Casein IgE - Milk Allergy,,500.0,General,Procedures,keyword,casein ige milk allergy
-2024,Cat dander epithelium IgE - Inhalant Allergy,,550.0,General,Procedures,keyword,cat dander epithelium ige inhalant allergy
-2024,Chocolate IgE - Food Allergy,,550.0,General,Procedures,keyword,chocolate ige food allergy
-2024,Cockroach IgE - Inhalant Allergy,,550.0,General,Procedures,keyword,cockroach ige inhalant allergy
-2024,Coffee IgE - Food Allergy,,550.0,General,Procedures,keyword,coffee ige food allergy
-2024,Dermatophagoides pteronyssinus IgE - Inhalant Allergy,,550.0,General,Dental & Derma,keyword,dermatophagoides pteronyssinus ige inhalant allergy
-2024,Dermatophagoides farinae IgE - Inhalant Allergy,,550.0,General,Dental & Derma,keyword,dermatophagoides farinae ige inhalant allergy
-2024,Dog dander IgE - Inhalant Allergy,,550.0,General,Procedures,keyword,dog dander ige inhalant allergy
-2024,Egg white IgE - Food Allergy,,550.0,General,Procedures,keyword,egg white ige food allergy
-2024,Gluten IgE - Food allergy,,550.0,General,Procedures,keyword,gluten ige food allergy
-2024,House dust Bencard - Inhalant Allergy,,550.0,General,Procedures,keyword,house dust bencard inhalant allergy
-2024,House dust Greer - Inhalant Allergy,,550.0,General,Procedures,keyword,house dust greer inhalant allergy
+2024,Banana IgE - Food Allergy,,550.0,General,Laboratory,keyword,banana ige food allergy
+2024,Casein IgE - Milk Allergy,,500.0,General,Laboratory,keyword,casein ige milk allergy
+2024,Cat dander epithelium IgE - Inhalant Allergy,,550.0,General,Laboratory,keyword,cat dander epithelium ige inhalant allergy
+2024,Chocolate IgE - Food Allergy,,550.0,General,Laboratory,keyword,chocolate ige food allergy
+2024,Cockroach IgE - Inhalant Allergy,,550.0,General,Laboratory,keyword,cockroach ige inhalant allergy
+2024,Coffee IgE - Food Allergy,,550.0,General,Laboratory,keyword,coffee ige food allergy
+2024,Dermatophagoides pteronyssinus IgE - Inhalant Allergy,,550.0,General,Laboratory,keyword,dermatophagoides pteronyssinus ige inhalant allergy
+2024,Dermatophagoides farinae IgE - Inhalant Allergy,,550.0,General,Laboratory,keyword,dermatophagoides farinae ige inhalant allergy
+2024,Dog dander IgE - Inhalant Allergy,,550.0,General,Laboratory,keyword,dog dander ige inhalant allergy
+2024,Egg white IgE - Food Allergy,,550.0,General,Laboratory,keyword,egg white ige food allergy
+2024,Gluten IgE - Food allergy,,550.0,General,Laboratory,keyword,gluten ige food allergy
+2024,House dust Bencard - Inhalant Allergy,,550.0,General,Laboratory,keyword,house dust bencard inhalant allergy
+2024,House dust Greer - Inhalant Allergy,,550.0,General,Laboratory,keyword,house dust greer inhalant allergy
 2024,Specific IgE for Lemon,,550.0,General,Laboratory,exact,specific ige for lemon
-2024,Mango IgE - Food Allergy,,550.0,General,Procedures,keyword,mango ige food allergy
-2024,Milk IgE - Milk Allergy,,450.0,General,Procedures,keyword,milk ige milk allergy
+2024,Mango IgE - Food Allergy,,550.0,General,Laboratory,keyword,mango ige food allergy
+2024,Milk IgE - Milk Allergy,,450.0,General,Laboratory,keyword,milk ige milk allergy
 2024,specific IgE for mosquito,,550.0,General,Laboratory,exact,specific ige for mosquito
-2024,Salmon IgE - Food Allergy,,550.0,General,Procedures,keyword,salmon ige food allergy
-2024,Shrimp IgE - Food Allergy,,550.0,General,Procedures,keyword,shrimp ige food allergy
-2024,Wheat IgE - Food Allergy,,500.0,General,Procedures,keyword,wheat ige food allergy
-2024,Wool IgE - Contact Allergy,,550.0,General,Procedures,keyword,wool ige contact allergy
-2024,Dermatophagoides microceras IgE - Inhalant Allergy,,550.0,General,Dental & Derma,keyword,dermatophagoides microceras ige inhalant allergy
+2024,Salmon IgE - Food Allergy,,550.0,General,Laboratory,keyword,salmon ige food allergy
+2024,Shrimp IgE - Food Allergy,,550.0,General,Laboratory,keyword,shrimp ige food allergy
+2024,Wheat IgE - Food Allergy,,500.0,General,Laboratory,keyword,wheat ige food allergy
+2024,Wool IgE - Contact Allergy,,550.0,General,Laboratory,keyword,wool ige contact allergy
+2024,Dermatophagoides microceras IgE - Inhalant Allergy,,550.0,General,Laboratory,keyword,dermatophagoides microceras ige inhalant allergy
 2024,Sperm DNA Fragmentation test,,2005.0,General,Laboratory,exact,sperm dna fragmentation test
 2024,Sputum Culture,,650.0,General,Laboratory,exact,sputum culture
 2024,Squamous cell carcinoma antigen (SCC),,3500.0,General,Laboratory,exact,squamous cell carcinoma antigen scc
@@ -3352,26 +3352,26 @@ year,name,arabic,price,original_section,category,cat_source,key
 2024,ZN Stain for Acid Fast Bacilli,,205.0,General,Laboratory,exact,zn stain for acid fast bacilli
 2024,Gluten IgG - Food Allergy,,550.0,General,Laboratory,keyword,gluten igg food allergy
 2024,Milk & Gluten IgE Panel By Immunoblot technique - Allergy,,550.0,General,Laboratory,keyword,milk gluten ige panel by immunoblot technique allergy
-2024,House dust Hollister-Stier - Inhalant Allergy,,550.0,General,Procedures,keyword,house dust hollister stier inhalant allergy
-2024,Cacao IgE - Food Allergy,,550.0,General,Procedures,keyword,cacao ige food allergy
+2024,House dust Hollister-Stier - Inhalant Allergy,,550.0,General,Laboratory,keyword,house dust hollister stier inhalant allergy
+2024,Cacao IgE - Food Allergy,,550.0,General,Laboratory,keyword,cacao ige food allergy
 2024,a Lactalbumin IgE - Milk Allergy,,550.0,General,Laboratory,keyword,a lactalbumin ige milk allergy
-2024,Lactoglobulin IgE - Milk Allergy,,550.0,General,Procedures,keyword,lactoglobulin ige milk allergy
+2024,Lactoglobulin IgE - Milk Allergy,,550.0,General,Laboratory,keyword,lactoglobulin ige milk allergy
 2024,Food Intolerance - IgG Food print 220 - Allergy,,550.0,General,Laboratory,keyword,food intolerance igg food print 220 allergy
 2024,Food Intolerance - IgG Food print 48 - Allergy,,550.0,General,Laboratory,keyword,food intolerance igg food print 48 allergy
-2024,Whey IgE - Milk Allergy,,550.0,General,Procedures,keyword,whey ige milk allergy
-2024,Alternaria tenuis IgE - Inhalant Allergy,,550.0,General,Procedures,keyword,alternaria tenuis ige inhalant allergy
-2024,Aspergillus fumigatus IgE - Inhalant Allergy,,550.0,General,Procedures,keyword,aspergillus fumigatus ige inhalant allergy
-2024,Candida albicans IgE - Inhalant Allergy,,550.0,General,Procedures,keyword,candida albicans ige inhalant allergy
-2024,Penicilloyl G IgE - Drug Allergy,,550.0,General,Procedures,keyword,penicilloyl g ige drug allergy
+2024,Whey IgE - Milk Allergy,,550.0,General,Laboratory,keyword,whey ige milk allergy
+2024,Alternaria tenuis IgE - Inhalant Allergy,,550.0,General,Laboratory,keyword,alternaria tenuis ige inhalant allergy
+2024,Aspergillus fumigatus IgE - Inhalant Allergy,,550.0,General,Laboratory,keyword,aspergillus fumigatus ige inhalant allergy
+2024,Candida albicans IgE - Inhalant Allergy,,550.0,General,Laboratory,keyword,candida albicans ige inhalant allergy
+2024,Penicilloyl G IgE - Drug Allergy,,550.0,General,Laboratory,keyword,penicilloyl g ige drug allergy
 2024,"Insulin, Human IgE - Drug Allergy",,550.0,General,Laboratory,keyword,insulin human ige drug allergy
-2024,Ampicillin IgE - Drug Allergy,,550.0,General,Procedures,keyword,ampicillin ige drug allergy
-2024,Amoxicillin IgE - Drug Allergy,,550.0,General,Procedures,keyword,amoxicillin ige drug allergy
-2024,Strawberry IgE - Food Allergy,,550.0,General,Procedures,keyword,strawberry ige food allergy
-2024,Penicillium notatum - Inhalant Allergy,,550.0,General,Procedures,keyword,penicillium notatum inhalant allergy
-2024,Specific IgE - Food Allergy,,550.0,General,Procedures,keyword,specific ige food allergy
-2024,Specific IgE - Inhalant Allergy,,550.0,General,Procedures,keyword,specific ige inhalant allergy
-2024,Specific IgE - Contact Allergy,,550.0,General,Procedures,keyword,specific ige contact allergy
-2024,Egg yolk IgE - Food Allergy,,550.0,General,Procedures,keyword,egg yolk ige food allergy
+2024,Ampicillin IgE - Drug Allergy,,550.0,General,Laboratory,keyword,ampicillin ige drug allergy
+2024,Amoxicillin IgE - Drug Allergy,,550.0,General,Laboratory,keyword,amoxicillin ige drug allergy
+2024,Strawberry IgE - Food Allergy,,550.0,General,Laboratory,keyword,strawberry ige food allergy
+2024,Penicillium notatum - Inhalant Allergy,,550.0,General,Laboratory,keyword,penicillium notatum inhalant allergy
+2024,Specific IgE - Food Allergy,,550.0,General,Laboratory,keyword,specific ige food allergy
+2024,Specific IgE - Inhalant Allergy,,550.0,General,Laboratory,keyword,specific ige inhalant allergy
+2024,Specific IgE - Contact Allergy,,550.0,General,Laboratory,keyword,specific ige contact allergy
+2024,Egg yolk IgE - Food Allergy,,550.0,General,Laboratory,keyword,egg yolk ige food allergy
 2024,X - Ray Abdomen,أشعة علي البطن,280.0,General,Radiology,exact,x ray abdomen
 2024,X - Ray Ankle Joint (AP&LAT),أشعة علي عظام الكاحل (أمامي خلفي جانبي),280.0,General,Radiology,exact,x ray ankle joint ap lat
 2024,X - Ray Arm One Side (AP&LAT),أشعة علي عظام الذراعين جانب واحد أمامي خلفي جانبي),190.0,General,Radiology,exact,x ray arm one side ap lat
@@ -4322,13 +4322,13 @@ year,name,arabic,price,original_section,category,cat_source,key
 2025,Special Attender,جليس خاص,720.0,General,Inpatient Services,exact,special attender
 2025,Special Nurse 24 Hour,تمريض خاص 24 ساعة,2100.0,General,Inpatient Services,fuzzy,special nurse 24 hour
 2025,Special Nurse 12 Hour,تمريض خاص 12 ساعة,1500.0,General,Inpatient Services,fuzzy,special nurse 12 hour
-2025,Operating room fees - Simple,فتح غرفة العمليات - بسيطة,700.0,General,Inpatient Services,keyword,operating room fees simple
-2025,Operating room fees - Minor,فتح غرفة العمليات - صغري,1000.0,General,Inpatient Services,keyword,operating room fees minor
-2025,Operating room fees - Moderate,فتح غرفة العمليات - متوسطة,2200.0,General,Inpatient Services,keyword,operating room fees moderate
-2025,Operating room fees - Major,فتح غرفة العمليات - كبري,3500.0,General,Inpatient Services,keyword,operating room fees major
-2025,Operating room fees - Special skill,فتح غرفة العمليات - مهارة,5300.0,General,Inpatient Services,keyword,operating room fees special skill
-2025,Operating room fees - Special nature,فتح غرفة العمليات - طابع خاص,7200.0,General,Inpatient Services,keyword,operating room fees special nature
-2025,Operating room fees - Advanced,فتح غرفة العمليات - متقدمة,9000.0,General,Inpatient Services,keyword,operating room fees advanced
+2025,Operating room fees - Simple,فتح غرفة العمليات - بسيطة,700.0,General,Procedures,keyword,operating room fees simple
+2025,Operating room fees - Minor,فتح غرفة العمليات - صغري,1000.0,General,Procedures,keyword,operating room fees minor
+2025,Operating room fees - Moderate,فتح غرفة العمليات - متوسطة,2200.0,General,Procedures,keyword,operating room fees moderate
+2025,Operating room fees - Major,فتح غرفة العمليات - كبري,3500.0,General,Procedures,keyword,operating room fees major
+2025,Operating room fees - Special skill,فتح غرفة العمليات - مهارة,5300.0,General,Procedures,keyword,operating room fees special skill
+2025,Operating room fees - Special nature,فتح غرفة العمليات - طابع خاص,7200.0,General,Procedures,keyword,operating room fees special nature
+2025,Operating room fees - Advanced,فتح غرفة العمليات - متقدمة,9000.0,General,Procedures,keyword,operating room fees advanced
 2025,Extra half hour - From simple to major,نصف ساعة إضافي بالعمليات - من بسيطة الي كبري,450.0,General,Procedures,keyword,extra half hour from simple to major
 2025,Extra half hour - Special skill,نصف ساعة إضافي بالعمليات - مهارة,550.0,General,Procedures,keyword,extra half hour special skill
 2025,Extra half hour - Special nature,نصف ساعة إضافي بالعمليات - طابع خاص,550.0,General,Procedures,keyword,extra half hour special nature

@@ -167,6 +167,8 @@ export function detectPriceApprovalMode(record: InpatientApprovalRecord): 'reque
     .replace(/[إأآ]/g, 'ا')
     .replace(/ة/g, 'ه')
     .replace(/ى/g, 'ي');
+  // "خارج التعاقد" (out of contract) => a price approval must be brought
+  if (/خارج\s*(?:ال)?تعاقد/.test(text)) return 'request';
   if (!/موافق[ةه]?\s+سعري[ةه]?/.test(text)) return null;
   const isRequest =
     /(?:احضار|لاحضار|بإحضار|باحضار|عمل|اعمل|لعمل|مطلوب|المطلوب|يجب|سوف\s+يتم|سيتم|برجاء|الرجاء|نرجو)\s+(?:يتم\s+)?(?:احضار\s+)?(?:اصل\s+)?موافق[ةه]?\s+سعري[ةه]?/.test(text);
