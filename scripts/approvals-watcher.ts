@@ -1260,7 +1260,7 @@ export function detectExistingApproval(
     /(?:الرجاء|رجاء|برجاء|نرجو|يرجي|يرجى|المطلوب|مطلوب|نطلب|طلب)\s+(?:من\s+سيادتكم\s+)?(?:ال)?موافق[ةه]?(?![\u0600-\u06FF])/g,
     ' '
   ).replace(
-    /(?:يجب|سوف|سيتم|يتم|لاحضار|احضار|بإحضار|باحضار|برجاء\s+احضار)\s+(?:يتم\s+)?(?:احضار\s+)?(?:اصل\s+)?(?:ال)?موافق[ةه]?(?:\s+سعري[ةه])?(?![\u0600-\u06FF])/g,
+    /(?:يجب|سوف|سيتم|يتم|لاحضار|احضار|بإحضار|باحضار|عمل|اعمل|لعمل|برجاء\s+احضار)\s+(?:يتم\s+)?(?:احضار\s+)?(?:اصل\s+)?(?:ال)?موافق[ةه]?(?:\s+سعري[ةه])?(?![\u0600-\u06FF])/g,
     ' '
   );
 
@@ -1303,7 +1303,8 @@ export function detectExistingApproval(
   }
 
   // If a monetary credit limit was detected with approval context
-  if (credit.limit) {
+  // (ignore amounts that belong to a *request* to bring/make a price approval)
+  if (credit.limit && approvalSearchText === normalized) {
     return {
       hasApproval: true,
       snippet: stripSentFromSignatures(combined.substring(0, 120)).trim(),

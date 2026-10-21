@@ -464,6 +464,8 @@ YOUR TASKS:
      Line 3:
        - If approved: *تمت الموافقة على: <Procedure Name in Arabic/English> (حد أقصى: <limit>)*
        - If pending: *المطلوب موافقة <action verb: عمل / سحب تحليل / إجراء> <Procedure Name in Arabic with English>*
+       - If the approval is a price approval ("موافقة سعرية بمبلغ X"): NEVER say "الحد الأقصى" / "سقف" / "حد أقصى"; write *تمت الموافقة على: <Procedure> - موافقة سعرية بمبلغ X*
+       - If someone must bring/make a price approval ("إحضار / عمل موافقة سعرية بمبلغ X"): write *مطلوب موافقة سعرية بمبلغ X على: <Procedure>*
 
 6. RESILIENCE & EDGE CASE RULES:
    - Automated Out of Office (OOO) / System auto-replies: Set isAutoReply to true. Do NOT treat OOO as a clinical or operational decision!

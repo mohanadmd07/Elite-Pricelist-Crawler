@@ -148,6 +148,37 @@ export function extractProcedureFromApprovalReply(text: string): string {
 }
 
 /**
+ * Detects "price approval" (موافقة سعرية) wording in the thread snippets.
+ *  - 'request':  someone must bring / make a price approval  (إحضار / عمل موافقة سعرية بمبلغ ...)
+ *  - 'approved': a price approval was granted                (موافقة سعرية بمبلغ ...)
+ */
+export function detectPriceApprovalMode(record: InpatientApprovalRecord): 'request' | 'approved' | null {
+  const text = [
+    record.existingApprovalSnippet,
+    record.replySnippet,
+    record.aiThreadSummary,
+    record.statusReasonArabic,
+    record.coverageConditions,
+  ]
+    .filter(Boolean)
+    .join(' ')
+    .normalize('NFKC')
+    .replace(/[إأآ]/g, 'ا')
+    .replace(/ة/g, 'ه')
+    .replace(/ى/g, 'ي');
+  if (!/موافق[ةه]?\s+سعري[ةه]?/.test(text)) return null;
+  const isRequest =
+    /(?:احضار|لاحضار|بإحضار|باحضار|عمل|اعمل|لعمل|مطلوب|المطلوب|يجب|سوف\s+يتم|سيتم|برجاء|الرجاء|نرجو)\s+(?:يتم\s+)?(?:احضار\s+)?(?:اصل\s+)?موافق[ةه]?\s+سعري[ةه]?/.test(text);
+  return isRequest ? 'request' : 'approved';
+}
+
+function formatPriceAmount(record: InpatientApprovalRecord): string {
+  if (record.creditLimitText) return record.creditLimitText;
+  const n = record.creditLimit || record.approvedAmountLimit;
+  return n && n > 0 ? `${n.toLocaleString('en-US')} ج.م` : '';
+}
+
+/**
  * Generates the standardized Case Manager (CM) WhatsApp message format:
  * 
  * *السيد محمد السيد حسنين* - Bed 322 - Zone B
@@ -242,8 +273,18 @@ export function generateCmWhatsappMessage(record: InpatientApprovalRecord): stri
     limitFormatted = ` (حد أقصى: ${record.approvedAmountLimit.toLocaleString('en-US')} ج.م)`;
   }
 
+  const priceMode = detectPriceApprovalMode(record);
+  const priceAmount = formatPriceAmount(record);
+  const priceText = priceAmount ? `موافقة سعرية بمبلغ ${priceAmount}` : 'موافقة سعرية';
+
   let line3 = '';
-  if (isApproved) {
+  if (priceMode === 'request') {
+    // "إحضار / عمل موافقة سعرية بمبلغ معين" -> "مطلوب موافقة سعرية بالمبلغ المعين"
+    line3 = `*مطلوب ${priceText}${procText ? ` على: ${procText}` : ''}*`;
+  } else if (isApproved && priceMode === 'approved') {
+    // "موافقة سعرية بمبلغ معين" -> state it as a price approval, not as a max limit / ceiling
+    line3 = `*تمت الموافقة على: ${procText} - ${priceText}*`;
+  } else if (isApproved) {
     line3 = `*تمت الموافقة على: ${procText}${limitFormatted}*`;
   } else {
     let actionPrefix = '';
@@ -285,8 +326,8 @@ export async function generateCmWhatsappMessageAsync(record: InpatientApprovalRe
     return record.cmWhatsappMessage.trim();
   }
 
-  // 2. Try Gemini AI if configured
-  if (isGeminiConfigured()) {
+  // 2. Try Gemini AI if configured (price-approval wording is deterministic, so skip AI for it)
+  if (isGeminiConfigured() && !detectPriceApprovalMode(record)) {
     try {
       const aiMsg = await generateCmWhatsappWithAI(record);
       if (aiMsg && aiMsg.split('\n').length >= 3) {
