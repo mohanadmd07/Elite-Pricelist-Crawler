@@ -874,7 +874,7 @@
     "matchedProcedures": [
       {
         "serviceName": "جلسه علاج طبيعي يوميا 4 اطراف وصدر لتحسين الحركه والقدره علي التنفس ورفع كفاءه العضلات",
-        "matchedName": "جلسة علاج بالليزر علي مكان واحد (Laser Session / One Site)",
+        "matchedName": "جلسة عنايه صدر + 4 أطراف (Chest +4 Limbs Session)",
         "status": "matched"
       }
     ],
@@ -884,7 +884,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض حمدى ابراهيم اسماعيل حسين (صحة وان). توجد مراسلات متبادلة على الإيميل بانتظار التأكيد النهائي.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: صحة وان\nالمسئول من قسم السيلز: محمد جابر\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\n1- جلسة علاج بالليزر علي مكان واحد (Laser Session / One Site)\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: صحة وان\nالمسئول من قسم السيلز: محمد جابر\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\n1- جلسة عنايه صدر + 4 أطراف (Chest +4 Limbs Session)\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*حمدى ابراهيم اسماعيل حسين* - Bed 4 - SICU\nصحة وان\n*المطلوب موافقة عمل جلسه علاج طبيعي يوميا 4 اطراف وصدر لتحسين الحركه والقدره علي التنفس ورفع كفاءه العضلات*",
     "draftedAt": null,
     "hasReplies": true,

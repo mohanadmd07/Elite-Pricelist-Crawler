@@ -386,6 +386,21 @@ export function hasLabInvestigationConflict(query: string, candidate: string): b
     if (isCLactate && (/chemistry & cell count|cell count/i.test(q))) return true;
   }
 
+  // 6b. Single-site modality sessions (magnetic / laser / ultrasound ... "one site") vs
+  //     physiotherapy chest-and-limbs care sessions
+  const oneSiteRe = /(?:one|two|three|\d+)\s*sites?|مكان\s*واحد|مكانين|ثلاث[ةه]?\s*اماكن|مغناطيس|magnetic|ليزر|laser/i;
+  const physioQueryRe = /physio|physical therapy|علاج\s*طبيع|عنايه\s*صدر|عناية\s*صدر|اطراف|أطراف|limbs/i;
+  if (oneSiteRe.test(c) && !oneSiteRe.test(q) && physioQueryRe.test(q) && !/ليزر|laser|مغناطيس|magnetic/i.test(q)) return true;
+
+  // 6. Laser session vs Physiotherapy / chest-and-limbs care session
+  const isQLaser = /\blaser\b|ليزر/i.test(q);
+  const isCLaser = /\blaser\b|ليزر/i.test(c);
+  if (isQLaser !== isCLaser) {
+    const physioRe = /physio|physical therapy|علاج\s*طبيع|عنايه\s*صدر|عناية\s*صدر|chest\s*\+|اطراف|أطراف|limbs?/i;
+    if (isCLaser && physioRe.test(q)) return true;
+    if (isQLaser && physioRe.test(c)) return true;
+  }
+
   return false;
 }
 

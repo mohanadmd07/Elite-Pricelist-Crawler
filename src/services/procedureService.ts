@@ -662,6 +662,14 @@ export async function retrieveDynamicPricelistCandidates(
         score = Math.floor(score * 0.2);
       }
 
+      // Physiotherapy / chest care session with N limbs -> "Chest + N Limbs Session"
+      const qAllText = `${cleanQ} ${qEng} ${qAra}`;
+      if (/علاج\s*طبيع|physio|عنايه\s*صدر|عناية\s*صدر/i.test(qAllText) && /chest\s*\+\s*\d\s*limbs?/i.test(item.nameEnglish || '')) {
+        const qLimbs = qAllText.match(/(\d)\s*(?:اطراف|أطراف|limbs?)/i)?.[1];
+        const rowLimbs = (item.nameEnglish || '').match(/\+\s*(\d)\s*limbs?/i)?.[1];
+        if (/صدر|chest/i.test(qAllText) && qLimbs && qLimbs === rowLimbs) score = Math.max(score, 80);
+      }
+
       if (score > 15) {
         const existing = candidateScores.get(idx);
         if (!existing || score > existing.maxScore) {
