@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   Inbox,
   FileCheck2,
@@ -84,6 +84,16 @@ export const ApprovalsHub: React.FC<ApprovalsHubProps> = ({
   const [reportCopied, setReportCopied] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
   const [syncMessage, setSyncMessage] = useState<string | null>(null);
+
+  // Prevent button from being permanently locked if a background sync crashed or timed out (> 2 minutes ago)
+  const isSyncActive = useMemo(() => {
+    if (isSyncing) return true;
+    if (!automationSettings.isSyncing) return false;
+    const lastRun = automationSettings.lastRunAt;
+    if (!lastRun) return true;
+    const lastRunTime = lastRun.toDate ? lastRun.toDate().getTime() : new Date(lastRun).getTime();
+    return Date.now() - lastRunTime < 120000;
+  }, [isSyncing, automationSettings.isSyncing, automationSettings.lastRunAt]);
 
   const handleManualSync = async () => {
     try {
@@ -324,22 +334,22 @@ Generated via Elite Corporate Approvals Hub • 30-Day Rolling Active`;
           {/* Manual Sync Button */}
           <button
             onClick={handleManualSync}
-            disabled={isSyncing || Boolean(automationSettings.isSyncing)}
+            disabled={isSyncActive}
             className={`px-3.5 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer active:scale-98 shadow-xs border ${
-              isSyncing || automationSettings.isSyncing
+              isSyncActive
                 ? 'bg-teal-50 border-teal-300 text-teal-800'
                 : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-300'
             }`}
             title="Scan Outlook / Exchange InApprovals folder immediately"
           >
-            <RefreshCw size={13} className={isSyncing || automationSettings.isSyncing ? 'animate-spin text-teal-700' : 'text-slate-500'} />
-            <span>{isSyncing || automationSettings.isSyncing ? 'Syncing...' : 'Sync Emails Now'}</span>
+            <RefreshCw size={13} className={isSyncActive ? 'animate-spin text-teal-700' : 'text-slate-500'} />
+            <span>{isSyncActive ? 'Syncing...' : 'Sync Emails Now'}</span>
           </button>
         </div>
       </div>
 
       {/* Live Syncing / Polling Indicator */}
-      {(isSyncing || Boolean(automationSettings.isSyncing)) && (
+      {isSyncActive && (
         <div className="px-4 py-2.5 bg-teal-50 border border-teal-300/90 rounded-2xl text-xs font-bold text-teal-950 flex items-center justify-between shadow-2xs animate-pulse">
           <div className="flex items-center gap-2">
             <RefreshCw size={14} className="animate-spin text-teal-700 shrink-0" />

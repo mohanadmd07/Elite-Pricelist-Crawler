@@ -1255,6 +1255,25 @@ export function detectExistingApproval(
 
   const credit = extractCreditLimit(combined);
 
+  // A *request* for approval ("الرجاء الموافقة", "برجاء الموافقة على...") is PENDING, not an approval.
+  const approvalSearchText = normalized.replace(
+    /(?:الرجاء|رجاء|برجاء|نرجو|يرجي|يرجى|المطلوب|مطلوب|نطلب|طلب)\s+(?:من\s+سيادتكم\s+)?(?:ال)?موافق[ةه]?(?![\u0600-\u06FF])/g,
+    ' '
+  ).replace(
+    /(?:يجب|سوف|سيتم|يتم|لاحضار|احضار|بإحضار|باحضار|برجاء\s+احضار)\s+(?:يتم\s+)?(?:احضار\s+)?(?:اصل\s+)?(?:ال)?موافق[ةه]?(?:\s+سعري[ةه])?(?![\u0600-\u06FF])/g,
+    ' '
+  );
+
+  // Attached approval reply: "مرفق الموافقه", "مرفق تقرير الموافقه السعريه"
+  const attachedIdx = approvalSearchText.search(/مرفق\s+(?:تقرير\s+)?(?:ال)?موافق/);
+  if (attachedIdx !== -1) {
+    const start = Math.max(0, attachedIdx - 25);
+    const end = Math.min(combined.length, attachedIdx + 80);
+    let snippet = stripSentFromSignatures(combined.substring(start, end)).trim();
+    if (start > 0) snippet = '...' + snippet;
+    return { hasApproval: true, snippet, creditLimit: credit.limit, creditLimitText: credit.formatted };
+  }
+
   for (const kw of APPROVAL_KEYWORDS) {
     const kwNorm = kw
       .normalize('NFKC')
@@ -1262,7 +1281,11 @@ export function detectExistingApproval(
       .replace(/[إأآ]/g, 'ا')
       .replace(/ة/g, 'ه');
 
-    const idx = normalized.indexOf(kwNorm);
+    // Bare 'موافق' must be a whole word (not a prefix of الموافقة / موافقة)
+    const idx =
+      kwNorm === 'موافق'
+        ? approvalSearchText.search(/(?<![\u0600-\u06FF])موافق(?![\u0600-\u06FF])/)
+        : approvalSearchText.indexOf(kwNorm);
     if (idx !== -1) {
       const start = Math.max(0, idx - 25);
       const end = Math.min(combined.length, idx + kw.length + 80);
@@ -2327,8 +2350,8 @@ export async function runApprovalsCheckEws(force = false): Promise<void> {
       }, new Date(0));
       const finalReceivedAt = mostRecentDate.getTime() > 0 ? Timestamp.fromDate(mostRecentDate) : (record?.receivedAt || serverTimestamp());
 
-      // If threadHash is identical to existing record, update receivedAt if changed and skip heavy processing immediately
-      if (record && record.threadHash === threadHash && record.aiProcessingStatus === 'processed') {
+      // If threadHash is identical to existing record, update receivedAt if changed and skip heavy processing immediately (unless force requested)
+      if (!force && record && record.threadHash === threadHash && record.aiProcessingStatus === 'processed') {
         const existingDate =
           record.receivedAt && (record.receivedAt as any).toDate
             ? (record.receivedAt as any).toDate().getTime()
@@ -2720,6 +2743,16 @@ export async function runApprovalsCheckEws(force = false): Promise<void> {
         {
           isSyncing: false,
           syncError: err?.message || String(err),
+        },
+        { merge: true }
+      );
+    } catch {}
+  } finally {
+    try {
+      await setDoc(
+        doc(db, 'settings', 'approvals_automation'),
+        {
+          isSyncing: false,
         },
         { merge: true }
       );
