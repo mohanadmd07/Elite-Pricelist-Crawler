@@ -9,9 +9,9 @@ export function calculateDiscountedPrice(
 ): CalculatedPrice | null {
   if (!priceStr) return null;
 
-  // Convert Eastern Arabic numerals (٠-٩) to Western (0-9)
-  const cleanPriceStr = priceStr.replace(/[٠-٩]/g, (d) =>
-    '٠١٢٣٤٥٦٧٨٩'.indexOf(d).toString()
+  // Convert Eastern Arabic and Arabic-Indic numerals to Western (0-9)
+  const cleanPriceStr = priceStr.replace(/[\u0660-\u0669\u06F0-\u06F9٠-٩]/g, (d) =>
+    String(d.charCodeAt(0) & 0xf)
   );
 
   const numericPart = cleanPriceStr.replace(/[^0-9.]/g, '');

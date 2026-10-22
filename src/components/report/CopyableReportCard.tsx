@@ -40,40 +40,32 @@ export const CopyableReportCard: React.FC<CopyableReportCardProps> = ({
     lines.push(`Contractor Discount: ${discountName}`);
     lines.push('');
 
-    // 1. Found procedures
-    const foundProcs = selectedProcedures.filter((proc) => {
+    const resultMatchesProcedure = (r: ProcedureResult, proc: SelectedProcedure): boolean => {
       const pNorm = proc.name.toLowerCase().trim();
-      return results.some((r) => {
-        const rReq = (r.requestedProcedureName || '').toLowerCase().trim();
-        if (rReq && rReq === pNorm) return true;
-        const rEng = r.nameEnglish.toLowerCase();
-        return rEng.includes(pNorm) || pNorm.includes(rEng);
-      });
-    });
+      const rReq = (r.requestedProcedureName || '').toLowerCase().trim();
+      if (rReq) return rReq === pNorm;
+      return (
+        r.nameEnglish.toLowerCase().trim() === pNorm ||
+        (proc.arabic ? r.nameArabic.toLowerCase().trim() === proc.arabic.toLowerCase().trim() : false)
+      );
+    };
+
+    // 1. Found procedures
+    const foundProcs = selectedProcedures.filter((proc) =>
+      results.some((r) => resultMatchesProcedure(r, proc))
+    );
 
     // 2. Unmatched procedures
-    const notFoundProcs = selectedProcedures.filter((proc) => {
-      const pNorm = proc.name.toLowerCase().trim();
-      return !results.some((r) => {
-        const rReq = (r.requestedProcedureName || '').toLowerCase().trim();
-        if (rReq && rReq === pNorm) return true;
-        const rEng = r.nameEnglish.toLowerCase();
-        return rEng.includes(pNorm) || pNorm.includes(rEng);
-      });
-    });
+    const notFoundProcs = selectedProcedures.filter(
+      (proc) => !results.some((r) => resultMatchesProcedure(r, proc))
+    );
 
     if (foundProcs.length > 0) {
       lines.push('الإجراءات المتواجدة بلائحة أسعار التعاقد:');
       let index = 1;
 
       foundProcs.forEach((proc) => {
-        const pNorm = proc.name.toLowerCase().trim();
-        const matches = results.filter((r) => {
-          const rReq = (r.requestedProcedureName || '').toLowerCase().trim();
-          if (rReq && rReq === pNorm) return true;
-          const rEng = r.nameEnglish.toLowerCase();
-          return rEng.includes(pNorm) || pNorm.includes(rEng);
-        });
+        const matches = results.filter((r) => resultMatchesProcedure(r, proc));
 
         matches.forEach((match) => {
           const cleanArabic = cleanNamePrefix(match.nameArabic);

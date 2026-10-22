@@ -42,6 +42,7 @@ export interface SearchStatus {
   pendingCount: number;
   isExtendingToAI: boolean;
   stage: 'idle' | 'local' | 'ai' | 'done';
+  aiError?: string;
 }
 
 export interface CalculatedPrice {

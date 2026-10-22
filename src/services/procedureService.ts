@@ -76,11 +76,32 @@ export async function getCashData(year: '2023' | '2024' | '2025' | '2026'): Prom
 /**
  * Cache key generator for multi-tier AI matching cache
  */
+function normalizeCatalogYear(year: string | undefined): string {
+  if (!year) return 'all';
+  return year === 'Cash' ? '2026' : year;
+}
+
 function getCacheKey(year: string | undefined, name: string, arabic?: string): string {
-  const y = year || 'all';
+  const y = normalizeCatalogYear(year);
   const n = normalizeText(name);
   const a = arabic ? normalizeArabic(arabic) : '';
   return `${y}:${n}:${a}`;
+}
+
+function hasClinicalMismatch(
+  queryEngNorm: string,
+  queryAraNorm: string,
+  rowEngNorm: string,
+  rowAraNorm: string
+): boolean {
+  const queryCombined = `${queryEngNorm} ${queryAraNorm}`;
+  const rowCombined = `${rowEngNorm} ${rowAraNorm}`;
+  const isTeeQuery = /transesophageal|tee\b|t\.e\.e|مريء|المريء|بالمنظار/i.test(queryCombined);
+  const isTeeRow = /transesophageal|tee\b|t\.e\.e|مريء|المريء|بالمنظار/i.test(rowCombined);
+  if (isTeeQuery !== isTeeRow) return true;
+  if (hasAntibodyConflict(queryCombined, rowCombined)) return true;
+  if (hasLabInvestigationConflict(queryCombined, rowCombined)) return true;
+  return false;
 }
 
 function loadStorageCache(): Record<string, ProcedureResult[]> {
@@ -173,20 +194,7 @@ function scoreCandidate(
   queryAraNorm: string,
   tokens: string[]
 ): number {
-  // TEE (Transesophageal Echocardiography) vs Surface Echo (TTE) mismatch protection:
-  const isTeeQuery = /transesophageal|tee\b|t\.e\.e|مريء|المريء|بالمنظار/i.test(queryEngNorm + ' ' + queryAraNorm);
-  const isTeeRow = /transesophageal|tee\b|t\.e\.e|مريء|المريء|بالمنظار/i.test(rowEngNorm + ' ' + rowAraNorm);
-  if (isTeeQuery !== isTeeRow) {
-    return 0;
-  }
-
-  // Immunoglobulin Isotype conflict protection (e.g. IgG vs IgA)
-  if (hasAntibodyConflict(queryEngNorm + ' ' + queryAraNorm, rowEngNorm + ' ' + rowAraNorm)) {
-    return 0;
-  }
-
-  // Laboratory investigation modality conflict protection (e.g. CSF culture vs CSF analysis)
-  if (hasLabInvestigationConflict(queryEngNorm + ' ' + queryAraNorm, rowEngNorm + ' ' + rowAraNorm)) {
+  if (hasClinicalMismatch(queryEngNorm, queryAraNorm, rowEngNorm, rowAraNorm)) {
     return 0;
   }
 
@@ -250,6 +258,10 @@ export function searchLocalPricelist(
       const itemEng = normalizeText(item.nameEnglish);
       const itemAra = normalizeArabic(item.nameArabic);
 
+      if (hasClinicalMismatch(qEng || qEngRaw, qAra, itemEng, itemAra)) {
+        continue;
+      }
+
       const isExactEng = Boolean(qEng && (itemEng === qEng || itemEng === qEngRaw));
       const isExactAra = Boolean(qAra && itemAra === qAra);
 
@@ -300,6 +312,7 @@ export async function searchAllProcedures(
     foundCount: number;
     pendingCount: number;
     isExtendingToAI: boolean;
+    aiError?: string;
   }) => void
 ): Promise<ProcedureResult[]> {
   const normalizedYear = activeYear === 'Cash' ? '2026' : activeYear;
@@ -486,19 +499,43 @@ export async function searchAllProcedures(
         try {
           // Query Gemini with ultra-compact indexed candidate list
           const newAiMatches = await matchProceduresWithAI(stillUnmatched, candidatePool);
-          geminiResults.push(...newAiMatches);
+          const clinicallyValidMatches = newAiMatches.filter((match) => {
+            const proc = stillUnmatched.find(
+              (p) => p.name.toLowerCase() === (match.requestedProcedureName || '').toLowerCase()
+            );
+            const qEng = normalizeText(cleanHisProcedureQuery(proc?.name || match.requestedProcedureName || ''));
+            const qAra = proc?.arabic ? normalizeArabic(proc.arabic) : '';
+            return !hasClinicalMismatch(
+              qEng,
+              qAra,
+              normalizeText(match.nameEnglish),
+              normalizeArabic(match.nameArabic)
+            );
+          });
+          geminiResults.push(...clinicallyValidMatches);
 
           // Save newly found matches to multi-tier cache
           for (const proc of stillUnmatched) {
-            const matchesForProc = newAiMatches.filter(
+            const matchesForProc = clinicallyValidMatches.filter(
               (m) => m.requestedProcedureName?.toLowerCase() === proc.name.toLowerCase()
             );
             if (matchesForProc.length > 0) {
               setCachedAIResults(activeYear, proc.name, proc.arabic, matchesForProc);
             }
           }
-        } catch (aiErr) {
+        } catch (aiErr: any) {
+          const aiMessage = aiErr?.message || String(aiErr);
           console.warn('[Procedure Service] Semantic AI matching skipped/failed:', aiErr);
+          onProgress?.({
+            stage: localResults.length > 0 ? 'done' : 'ai',
+            foundCount: localResults.length,
+            pendingCount: stillUnmatched.length,
+            isExtendingToAI: false,
+            aiError: aiMessage,
+          });
+          if (localResults.length === 0) {
+            throw aiErr;
+          }
         }
       }
     }
@@ -541,10 +578,11 @@ export async function retrieveDynamicPricelistCandidates(
   maxTotalCandidates: number = 30
 ): Promise<Array<{ id: number; nameEnglish: string; nameArabic?: string; sectionName?: string; price?: number; score: number }>> {
   // 1. Resolve normalized year
-  let validYear: '2023' | '2024' | '2025' | '2026' = '2025';
-  if (year === '2026' || year === 'Cash') validYear = '2026';
+  let validYear: '2023' | '2024' | '2025' | '2026' = '2026';
+  if (year === '2025') validYear = '2025';
   else if (year === '2024') validYear = '2024';
   else if (year === '2023') validYear = '2023';
+  else if (year === '2026' || year === 'Cash' || !year) validYear = '2026';
 
   let catalog: ProcedureResult[] = [];
   try {

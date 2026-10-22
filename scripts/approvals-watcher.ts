@@ -1834,8 +1834,9 @@ export async function ewsGetItemsBatch(itemIds: string[]) {
       const messageBlocks = [...xml.matchAll(/<t:Message>([\s\S]*?)<\/t:Message>/g)];
       return messageBlocks.map((mb) => {
         const block = mb[1];
-        const idMatch = block.match(/<t:ItemId Id="([^"]+)"/);
+        const idMatch = block.match(/<t:ItemId Id="([^"]+)"(?:\s+ChangeKey="([^"]+)")?/);
         const itemId = idMatch ? idMatch[1] : '';
+        const changeKey = idMatch?.[2] || '';
         const subject = block.match(/<t:Subject>([^<]*)<\/t:Subject>/)?.[1] || '';
         const messageId = block.match(/<t:InternetMessageId>([^<]*)<\/t:InternetMessageId>/)?.[1] || `<${itemId}@exchange>`;
         const from = block.match(/<t:From>[\s\S]*?<t:EmailAddress>([^<]+)<\/t:EmailAddress>/)?.[1] || '';
@@ -1861,6 +1862,7 @@ export async function ewsGetItemsBatch(itemIds: string[]) {
           conversationId,
           conversationTopic,
           receivedAt,
+          changeKey: changeKey || undefined,
         };
       });
     } catch (err: any) {

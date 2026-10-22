@@ -1,5 +1,404 @@
 [
   {
+    "id": "mrn_0000216945_5003b623",
+    "conversationId": "8f132651-b082-41e1-a1a4-c2d71316e0d9@elite-exchange.elitehospital.org",
+    "messageId": "&lt;8f132651-b082-41e1-a1a4-c2d71316e0d9@Elite-Exchange.elitehospital.org&gt;",
+    "exchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufUZAAA=",
+    "exchangeChangeKey": null,
+    "receivedAt": "2026-10-22T09:20:43.000Z",
+    "patientName": "نادر قدري محمد عبدالله",
+    "mrn": "0000216945",
+    "diagnosis": "E86.0-Dehydration, A41.9-Sepsis, unspecified organism, G20-Parkinson's disease, R41.82-Altered mental status, unspecified, F44.5-Conversion disorder with seizures or convuls, I25.8-Other forms of chronic ischemic heart diseas",
+    "admissionType": "Inpatient",
+    "bed": "Bed 4 - ICU",
+    "physician": "Hany sameer",
+    "contractorRaw": "Next Care نكست كير",
+    "contractorNormalized": "Next Care نكست كير",
+    "priceListYear": "2025",
+    "contractorOfficer": "ديانا",
+    "requestedServices": [
+      {
+        "name": "Consultant Observation",
+        "rawPrice": 1200
+      }
+    ],
+    "matchedProcedures": [
+      {
+        "serviceName": "Consultant Observation",
+        "matchedName": "مرور استشاري (Consultant Observation)",
+        "status": "matched"
+      }
+    ],
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null,
+    "status": "pending_manual_draft",
+    "statusReasonArabic": "توجد ردود ومحادثة جارية على الإيميل تتطلب مراجعة منسق السيلز",
+    "patientSharePercentage": null,
+    "approvedAmountLimit": null,
+    "coverageConditions": "",
+    "aiThreadSummary": "طلب موافقة للمريض نادر قدري محمد عبدالله (Next Care نكست كير). توجد مراسلات متبادلة على الإيميل بانتظار التأكيد النهائي.",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: Next Care نكست كير\nالمسئول من قسم السيلز: ديانا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\n1- مرور استشاري (Consultant Observation)\n\n@corporate@elitehospital.org",
+    "cmWhatsappMessage": "*نادر قدري محمد عبدالله* - Bed 4 - ICU\nNext Care نكست كير\n*المطلوب موافقة عمل Consultant Observation*",
+    "draftedAt": null,
+    "hasReplies": true,
+    "replySnippet": "غير مغطي .0-Dehydration, A41.9-Sepsis, unspecified organism, G20-Parkinson's disease, R41.82-Altered",
+    "hasExistingApproval": false,
+    "existingApprovalSnippet": "توجد ردود ومحادثة جارية على الإيميل تتطلب مراجعة منسق السيلز",
+    "creditLimit": null,
+    "creditLimitText": null,
+    "isRefused": false,
+    "threadHash": "817eef0a2b7bc9b348a9ed177bfffd11",
+    "aiProcessingStatus": "processed",
+    "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufUdAAA=",
+    "lastExchangeChangeKey": null,
+    "threadKey": "8f132651-b082-41e1-a1a4-c2d71316e0d9@elite-exchange.elitehospital.org"
+  },
+  {
+    "id": "mrn_0000090899_0d47752f",
+    "conversationId": "14cb7fd4-3871-428f-aff6-20cb8ea19d61@elite-exchange.elitehospital.org",
+    "messageId": "&lt;14cb7fd4-3871-428f-aff6-20cb8ea19d61@Elite-Exchange.elitehospital.org&gt;",
+    "exchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufUSAAA=",
+    "exchangeChangeKey": null,
+    "receivedAt": "2026-10-22T09:22:05.000Z",
+    "patientName": "محمد عمرو انور احمد",
+    "mrn": "0000090899",
+    "diagnosis": "C40.32-Malignant neoplasm of short bones of left l",
+    "admissionType": "Inpatient",
+    "bed": "Bed 2 - PICU",
+    "physician": "Ahmed Naeem",
+    "contractorRaw": "سيدى كرير للبتروكيماويات ( سيدبك )",
+    "contractorNormalized": "سيدبك",
+    "priceListYear": "2025",
+    "contractorOfficer": "نادين",
+    "requestedServices": [
+      {
+        "name": "Consultant Observation",
+        "rawPrice": 1200
+      }
+    ],
+    "matchedProcedures": [
+      {
+        "serviceName": "Consultant Observation",
+        "matchedName": "مرور استشاري (Consultant Observation)",
+        "status": "matched"
+      }
+    ],
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null,
+    "status": "approved",
+    "statusReasonArabic": "تمت الموافقة واعتماد الحالة باللائحة",
+    "patientSharePercentage": null,
+    "approvedAmountLimit": null,
+    "coverageConditions": "",
+    "aiThreadSummary": "طلب موافقة للمريض محمد عمرو انور احمد (سيدبك). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: سيدبك\nالمسئول من قسم السيلز: نادين\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\n1- مرور استشاري (Consultant Observation)\n\n@corporate@elitehospital.org",
+    "cmWhatsappMessage": "*محمد عمرو انور احمد* - Bed 2 - PICU\nسيدبك\n*تمت الموافقة على: Consultant Observation*",
+    "draftedAt": null,
+    "hasReplies": true,
+    "replySnippet": "@CORPORATE .32-Malignant neoplasm of short bones of left l SELECTED SERVICES: Service Name Price (EG",
+    "hasExistingApproval": true,
+    "existingApprovalSnippet": "...ر احمد (MRN: 0000090899) لا مانع .org> Sent: Thursday, 22 October 2026 12:20:34 To: HIS Notifications ; Duty Man...",
+    "creditLimit": null,
+    "creditLimitText": null,
+    "isRefused": false,
+    "threadHash": "2ecc9c4cd9588a24fe42312439b005d8",
+    "aiProcessingStatus": "processed",
+    "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufUeAAA=",
+    "lastExchangeChangeKey": null,
+    "threadKey": "14cb7fd4-3871-428f-aff6-20cb8ea19d61@elite-exchange.elitehospital.org"
+  },
+  {
+    "id": "mrn_0000195587_c9f2c50f",
+    "conversationId": "a2ffc542-6481-4f6b-8c38-68cd1e3c1539@elite-exchange.elitehospital.org",
+    "messageId": "&lt;a2ffc542-6481-4f6b-8c38-68cd1e3c1539@Elite-Exchange.elitehospital.org&gt;",
+    "exchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufUKAAA=",
+    "exchangeChangeKey": null,
+    "receivedAt": "2026-10-22T08:20:10.000Z",
+    "patientName": "كريم محمد احمد عبدالرحمن",
+    "mrn": "0000195587",
+    "diagnosis": "C43-Malignant melanoma of skin",
+    "admissionType": "Inpatient",
+    "bed": "Bed 315 - Zone A",
+    "physician": "Hesham Ahmed Gaballah Elghazaly",
+    "contractorRaw": "مصر للطيران للخطوط الجوية بالاسكندرية",
+    "contractorNormalized": "مصر للطيران",
+    "priceListYear": "2025",
+    "contractorOfficer": "محمد ابو الوفا",
+    "requestedServices": [
+      {
+        "name": "Nutrionist Follow Up",
+        "rawPrice": 330
+      },
+      {
+        "name": "Nutrition Reservation",
+        "rawPrice": 720
+      }
+    ],
+    "matchedProcedures": [
+      {
+        "serviceName": "Nutrionist Follow Up",
+        "matchedName": "Nutrionist Follow Up",
+        "status": "unmatched",
+        "suggestedPrice": 100,
+        "suggestedFrom": "متابعة اخصائي التغذيه (Nutrionist Follow Up (Specialist))"
+      },
+      {
+        "serviceName": "Nutrition Reservation",
+        "matchedName": "Nutrition Reservation",
+        "status": "unmatched",
+        "suggestedPrice": 720
+      }
+    ],
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null,
+    "status": "approved",
+    "statusReasonArabic": "تمت الموافقة واعتماد الحالة باللائحة",
+    "patientSharePercentage": null,
+    "approvedAmountLimit": null,
+    "coverageConditions": "",
+    "aiThreadSummary": "طلب موافقة للمريض كريم محمد احمد عبدالرحمن (مصر للطيران). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: مصر للطيران\nالمسئول من قسم السيلز: محمد ابو الوفا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - Nutrionist Follow Up : مطلوب موافقة سعرية بمبلغ 100 ج.م\n - Nutrition Reservation : مطلوب موافقة سعرية بمبلغ 720 ج.م]\n\n@corporate@elitehospital.org",
+    "cmWhatsappMessage": "*كريم محمد احمد عبدالرحمن* - Bed 315 - Zone A\nمصر للطيران\n*تمت الموافقة على: Nutrionist Follow Up و Nutrition Reservation*",
+    "draftedAt": null,
+    "hasReplies": true,
+    "replySnippet": "@CORPORATE .00 Nutrition Reservation 720.00 TOTAL AMOUNT: 1050.00 EGP Request Details metastatic mel",
+    "hasExistingApproval": true,
+    "existingApprovalSnippet": "...الرحمن (MRN: 0000195587) لا مانع .00 Nutrition Reservation 720.00 TOTAL AMOUNT: 1050.00 EGP Request Details meta...",
+    "creditLimit": null,
+    "creditLimitText": null,
+    "isRefused": false,
+    "threadHash": "bc4534c5a75ebdb049ddbf7a00e8557f",
+    "aiProcessingStatus": "processed",
+    "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufUTAAA=",
+    "lastExchangeChangeKey": null,
+    "threadKey": "a2ffc542-6481-4f6b-8c38-68cd1e3c1539@elite-exchange.elitehospital.org"
+  },
+  {
+    "id": "mrn_0000195587_d6a0cb7a",
+    "conversationId": "3d304d85-dd45-45f6-b669-d48e5e8e514b@elite-exchange.elitehospital.org",
+    "messageId": "&lt;3d304d85-dd45-45f6-b669-d48e5e8e514b@Elite-Exchange.elitehospital.org&gt;",
+    "exchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufUJAAA=",
+    "exchangeChangeKey": null,
+    "receivedAt": "2026-10-22T07:38:18.000Z",
+    "patientName": "كريم محمد احمد عبدالرحمن",
+    "mrn": "0000195587",
+    "diagnosis": "C43-Malignant melanoma of skin",
+    "admissionType": "Inpatient",
+    "bed": "Bed 315 - Zone A",
+    "physician": "Hesham Ahmed Gaballah Elghazaly",
+    "contractorRaw": "مصر للطيران للخطوط الجوية بالاسكندرية",
+    "contractorNormalized": "مصر للطيران",
+    "priceListYear": "2025",
+    "contractorOfficer": "محمد ابو الوفا",
+    "requestedServices": [
+      {
+        "name": "years male, Metastatic Melanoma to liver and brain",
+        "rawPrice": 0
+      }
+    ],
+    "matchedProcedures": [
+      {
+        "serviceName": "years male, Metastatic Melanoma to liver and brain",
+        "matchedName": "years male, Metastatic Melanoma to liver and brain",
+        "status": "unmatched"
+      }
+    ],
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null,
+    "status": "pending_manual_draft",
+    "statusReasonArabic": "توجد ردود ومحادثة جارية على الإيميل تتطلب مراجعة منسق السيلز",
+    "patientSharePercentage": null,
+    "approvedAmountLimit": null,
+    "coverageConditions": "",
+    "aiThreadSummary": "طلب موافقة للمريض كريم محمد احمد عبدالرحمن (مصر للطيران). توجد مراسلات متبادلة على الإيميل بانتظار التأكيد النهائي.",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: مصر للطيران\nالمسئول من قسم السيلز: محمد ابو الوفا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - years male, Metastatic Melanoma to liver and brain]\n\n@corporate@elitehospital.org",
+    "cmWhatsappMessage": "*كريم محمد احمد عبدالرحمن* - Bed 315 - Zone A\nمصر للطيران\n*المطلوب موافقة عمل years male, Metastatic Melanoma to liver and brain*",
+    "draftedAt": null,
+    "hasReplies": true,
+    "replySnippet": "@CORPORATE",
+    "hasExistingApproval": false,
+    "existingApprovalSnippet": "توجد ردود ومحادثة جارية على الإيميل تتطلب مراجعة منسق السيلز",
+    "creditLimit": null,
+    "creditLimitText": null,
+    "isRefused": false,
+    "threadHash": "e69fe52210ca2f00679de60677b7497e",
+    "aiProcessingStatus": "processed",
+    "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufUOAAA=",
+    "lastExchangeChangeKey": null,
+    "threadKey": "3d304d85-dd45-45f6-b669-d48e5e8e514b@elite-exchange.elitehospital.org"
+  },
+  {
+    "id": "mrn_0000268359_29f3e6c0",
+    "conversationId": "3f4e2844-1d2e-4f70-b153-95a643b3e591@elite-exchange.elitehospital.org",
+    "messageId": "&lt;3f4e2844-1d2e-4f70-b153-95a643b3e591@Elite-Exchange.elitehospital.org&gt;",
+    "exchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufUHAAA=",
+    "exchangeChangeKey": null,
+    "receivedAt": "2026-10-22T09:22:16.000Z",
+    "patientName": "شفيق محمد رشاد عبدالحق",
+    "mrn": "0000268359",
+    "diagnosis": "C34-Malignant neoplasm of bronchus and lung",
+    "admissionType": "Inpatient",
+    "bed": "Bed 402 B - FourthFloor",
+    "physician": "Eslam Elsayed Mahmoud Mohamed Ramadan",
+    "contractorRaw": "خالده للبترول",
+    "contractorNormalized": "خالدة للبترول",
+    "priceListYear": "2025",
+    "contractorOfficer": "محمد ابو الوفا",
+    "requestedServices": [
+      {
+        "name": "Blood Transfusion (not including blood cost)",
+        "rawPrice": 880
+      }
+    ],
+    "matchedProcedures": [
+      {
+        "serviceName": "Blood Transfusion (not including blood cost)",
+        "matchedName": "نقل دم غير متضمن كيس الدم (Blood Transfusion (not including blood cost))",
+        "status": "matched"
+      }
+    ],
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null,
+    "status": "approved",
+    "statusReasonArabic": "تمت الموافقة واعتماد الحالة باللائحة",
+    "patientSharePercentage": null,
+    "approvedAmountLimit": null,
+    "coverageConditions": "",
+    "aiThreadSummary": "طلب موافقة للمريض شفيق محمد رشاد عبدالحق (خالدة للبترول). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: خالدة للبترول\nالمسئول من قسم السيلز: محمد ابو الوفا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\n1- نقل دم غير متضمن كيس الدم (Blood Transfusion (not including blood cost))\n\n@corporate@elitehospital.org",
+    "cmWhatsappMessage": "*شفيق محمد رشاد عبدالحق* - Bed 402 B - FourthFloor\nخالدة للبترول\n*تمت الموافقة على: Blood Transfusion (not including blood cost)*",
+    "draftedAt": null,
+    "hasReplies": true,
+    "replySnippet": "@CORPORATE .00 TOTAL AMOUNT: 880.00 EGP Request Details يحتاج المريض لنقل كيس دم",
+    "hasExistingApproval": true,
+    "existingApprovalSnippet": "...بدالحق (MRN: 0000268359) لا مانع .00 TOTAL AMOUNT: 880.00 EGP Request Details يحتاج المريض لنقل كيس دم",
+    "creditLimit": null,
+    "creditLimitText": null,
+    "isRefused": false,
+    "threadHash": "c0270b90d43044650f6ba40d91fc91d6",
+    "aiProcessingStatus": "processed",
+    "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufUfAAA=",
+    "lastExchangeChangeKey": null,
+    "threadKey": "3f4e2844-1d2e-4f70-b153-95a643b3e591@elite-exchange.elitehospital.org"
+  },
+  {
+    "id": "mrn_0000270136_e5334dbf",
+    "conversationId": "79b3f23c-4dd1-4253-a607-4b3ad160e391@elite-exchange.elitehospital.org",
+    "messageId": "&lt;79b3f23c-4dd1-4253-a607-4b3ad160e391@Elite-Exchange.elitehospital.org&gt;",
+    "exchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufUFAAA=",
+    "exchangeChangeKey": null,
+    "receivedAt": "2026-10-22T09:06:15.000Z",
+    "patientName": "رمضان محمد عثمان دحروج",
+    "mrn": "0000270136",
+    "diagnosis": "Clinical Inpatient Evaluation",
+    "admissionType": "Inpatient",
+    "bed": "Inpatient Bed",
+    "physician": "Hospital Staff",
+    "contractorRaw": "وزاره العدل المصرية",
+    "contractorNormalized": "وزراة العدل",
+    "priceListYear": "2024",
+    "contractorOfficer": "ديانا",
+    "requestedServices": [
+      {
+        "name": "إقامة بالقسم الداخلي (Inpatient Admission)",
+        "rawPrice": 0
+      }
+    ],
+    "matchedProcedures": [
+      {
+        "serviceName": "إقامة بالقسم الداخلي (Inpatient Admission)",
+        "matchedName": "إقامة بالقسم الداخلي (Inpatient Admission)",
+        "status": "unmatched"
+      }
+    ],
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null,
+    "status": "approved",
+    "statusReasonArabic": "تمت الموافقة واعتماد الحالة باللائحة",
+    "patientSharePercentage": null,
+    "approvedAmountLimit": null,
+    "coverageConditions": "",
+    "aiThreadSummary": "طلب موافقة للمريض رمضان محمد عثمان دحروج (وزراة العدل). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
+    "draftBody": "Price list: Elite Hospital 2024\nContractor: وزراة العدل\nالمسئول من قسم السيلز: ديانا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
+    "cmWhatsappMessage": "*رمضان محمد عثمان دحروج* - Inpatient Bed\nوزراة العدل\n*تمت الموافقة على: إقامة بالقسم الداخلي (Inpatient Admission)*",
+    "draftedAt": null,
+    "hasReplies": true,
+    "replySnippet": "@Corporate",
+    "hasExistingApproval": true,
+    "existingApprovalSnippet": "تمت الموافقة واعتماد الحالة باللائحة",
+    "creditLimit": null,
+    "creditLimitText": null,
+    "isRefused": false,
+    "threadHash": "394252db860e7c0a8ae03014ce1cf9a6",
+    "aiProcessingStatus": "processed",
+    "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufUYAAA=",
+    "lastExchangeChangeKey": null,
+    "threadKey": "79b3f23c-4dd1-4253-a607-4b3ad160e391@elite-exchange.elitehospital.org"
+  },
+  {
+    "id": "mrn_0000270096_c47afbae",
+    "conversationId": "543b0e69-b24a-4814-88ef-7e508524aa6c@elite-exchange.elitehospital.org",
+    "messageId": "&lt;543b0e69-b24a-4814-88ef-7e508524aa6c@Elite-Exchange.elitehospital.org&gt;",
+    "exchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufUEAAA=",
+    "exchangeChangeKey": null,
+    "receivedAt": "2026-10-22T07:45:00.000Z",
+    "patientName": "مديحه امين عبدالرؤف الاستانبولي",
+    "mrn": "0000270096",
+    "diagnosis": "K29-Gastritis and duodenitis, M05-Rheumatoid arthritis with rheumatoid factor, E86.0-Dehydration, E08-Diabetes mellitus due to underlying condition, E87.6-Hypokalemia",
+    "admissionType": "Inpatient",
+    "bed": "Bed 329 - Zone B",
+    "physician": "Mohamed Gamal Tawfik Hassan",
+    "contractorRaw": "سوميد",
+    "contractorNormalized": "سوميد",
+    "priceListYear": "2025",
+    "contractorOfficer": "محمد ابو الوفا",
+    "requestedServices": [
+      {
+        "name": "Blood Culture - Aerobic - Investigation",
+        "rawPrice": 1000
+      },
+      {
+        "name": "Urine Culture - Investigation",
+        "rawPrice": 1065
+      }
+    ],
+    "matchedProcedures": [
+      {
+        "serviceName": "Blood Culture - Aerobic - Investigation",
+        "matchedName": "Blood Culture - Aerobic",
+        "status": "matched"
+      },
+      {
+        "serviceName": "Urine Culture - Investigation",
+        "matchedName": "Urine Culture",
+        "status": "matched"
+      }
+    ],
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null,
+    "status": "approved",
+    "statusReasonArabic": "تمت الموافقة واعتماد الحالة باللائحة",
+    "patientSharePercentage": null,
+    "approvedAmountLimit": null,
+    "coverageConditions": "",
+    "aiThreadSummary": "طلب موافقة للمريض مديحه امين عبدالرؤف الاستانبولي (سوميد). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: سوميد\nالمسئول من قسم السيلز: محمد ابو الوفا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\n1- Blood Culture - Aerobic\n2- Urine Culture\n\n@corporate@elitehospital.org",
+    "cmWhatsappMessage": "*مديحه امين عبدالرؤف الاستانبولي* - Bed 329 - Zone B\nسوميد\n*تمت الموافقة على: Blood Culture - Aerobic - Investigation و Urine Culture - Investigation*",
+    "draftedAt": null,
+    "hasReplies": true,
+    "replySnippet": "@CORPORATE .0-Dehydration, E08-Diabetes mellitus due to underlying condition, E87.6-Hypokalemia SELE",
+    "hasExistingApproval": true,
+    "existingApprovalSnippet": "...انبولي (MRN: 0000270096) لا مانع في حال تواجد التحاليل داخل التعاقد .0-Dehydration, E08-Diabetes mellitus due to...",
+    "creditLimit": null,
+    "creditLimitText": null,
+    "isRefused": false,
+    "threadHash": "2bc4141aa94fad1fb844503ab89e8543",
+    "aiProcessingStatus": "processed",
+    "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufUQAAA=",
+    "lastExchangeChangeKey": null,
+    "threadKey": "543b0e69-b24a-4814-88ef-7e508524aa6c@elite-exchange.elitehospital.org"
+  },
+  {
     "id": "mrn_0000269928_935c0e2c",
     "conversationId": "1471f016-898d-439f-9ced-44f9d6841361@elite-exchange.elitehospital.org",
     "messageId": "&lt;1471f016-898d-439f-9ced-44f9d6841361@Elite-Exchange.elitehospital.org&gt;",
@@ -50,7 +449,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufTOAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "1471f016-898d-439f-9ced-44f9d6841361@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000269920_73a77c31",
@@ -92,7 +493,7 @@
     "cmWhatsappMessage": "*سمر مصطفي بديع النحاس* - Bed 407 - FourthFloor\nجلوب ميد\n*المطلوب موافقة عمل حضرت المريضه تعاني من التهاب حاد بالمسالك البوليه و تحتاج للاقامه بالمستفشي و اخذ العلاجات الورديه و متابعه الحاله*",
     "draftedAt": null,
     "hasReplies": true,
-    "replySnippet": "الموافقه صادره علي مقدم خمه اخر .0-Urinary tract infection, site not specified Request Details حضرت",
+    "replySnippet": "الموافقه صادره علي مقدم خمه اخر .0-Urinary tract infection, site not specified Request Details حضرت ",
     "hasExistingApproval": false,
     "existingApprovalSnippet": "توجد ردود ومحادثة جارية على الإيميل تتطلب مراجعة منسق السيلز",
     "creditLimit": null,
@@ -103,7 +504,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufTQAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "aef29121-c72d-44ba-9e59-df4584c46fca@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000269920_d30b8ccc",
@@ -135,19 +538,19 @@
         "status": "unmatched"
       }
     ],
-    "status": "pending_manual_draft",
-    "statusReasonArabic": "بانتظار الموافقة (طلب موافقة وليس رد معتمد)",
+    "status": "approved",
+    "statusReasonArabic": "تمت الموافقة واعتماد الحالة بحد أقصى 20,000 ج.م",
     "patientSharePercentage": null,
     "approvedAmountLimit": 20000,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض سمر مصطفي بديع النحاس (جلوب ميد). تمت الموافقة على الدخول والإجراء بحد أقصى 20,000 ج.م. الحالة معتمدة ولا توجد متطلبات ناقصة.",
     "draftBody": "Price list: Elite Hospital 2025\nContractor: جلوب ميد\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
-    "cmWhatsappMessage": "*سمر مصطفي بديع النحاس* - Inpatient Bed\nجلوب ميد\n*المطلوب موافقة عمل إقامة بالقسم الداخلي (Inpatient Admission)*",
+    "cmWhatsappMessage": "*سمر مصطفي بديع النحاس* - Inpatient Bed\nجلوب ميد\n*تمت الموافقة على: إقامة بالقسم الداخلي (Inpatient Admission) (حد أقصى: 20,000 EGP)*",
     "draftedAt": null,
     "hasReplies": true,
     "replySnippet": "الموافقة صادرة على مقدم خدمة آخر",
-    "hasExistingApproval": false,
-    "existingApprovalSnippet": "",
+    "hasExistingApproval": true,
+    "existingApprovalSnippet": "Re: Inpatient Approval Request لامانع من الدخول طوارئ لتلقي العلاج التحفظى لحالة ارتفاع بدرجةا لحرارة و التھاب مجري البو",
     "creditLimit": 20000,
     "creditLimitText": "20,000 EGP",
     "isRefused": false,
@@ -156,7 +559,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufTRAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "2a16a6b7-c2e9-42f4-ac34-7af31476729d@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000269928_b260e2b1",
@@ -252,7 +657,7 @@
     "cmWhatsappMessage": "*يوسف رمضان ابراهيم مسعود* - Bed 406 - FourthFloor\nهيئة الرقابة الادارية\n*تمت الموافقة على: HCV Ab - Investigation و HBs-Ag - Investigation و HIV 1+2+O Ab - Investigation و ANA (IFA) - Investigation و Anti-DNA (d.s) - Investigation و CMV IgM - Investigation و EBV (Epstein Barr virus) IgM - Investigation*",
     "draftedAt": null,
     "hasReplies": true,
-    "replySnippet": "@mohamed Fekri .4-Other primary thrombocytopenia SELECTED SERVICES: Service Name Price (EGP) HCV Ab",
+    "replySnippet": "@mohamed Fekri .4-Other primary thrombocytopenia SELECTED SERVICES: Service Name Price (EGP) HCV Ab ",
     "hasExistingApproval": true,
     "existingApprovalSnippet": "...مسعود (MRN: 0000269928) مرفق الموافقه .4-Other primary thrombocytopenia SELECTED SERVICES: Service Name",
     "creditLimit": null,
@@ -263,7 +668,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufTXAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "1850929c-3ffe-4d9d-8e69-0abe92437cc2@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000268671_e05f43e5",
@@ -316,7 +723,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufTYAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "adde9f64-940a-4015-9280-1e8e74da3a46@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000266421_5aca110a",
@@ -357,12 +766,12 @@
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض عزه احمد احمد عبدالفتاح (جاسكو). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
     "draftBody": "Price list: Elite Hospital 2025\nContractor: جاسكو\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - Methotrexate - Investigation : مطلوب موافقة سعرية بمبلغ 4,815 ج.م]\n\n@corporate@elitehospital.org",
-    "cmWhatsappMessage": "*عزه احمد احمد عبدالفتاح* - Bed 15 - ICU\nجاسكو\n*تمت الموافقة على: Methotrexate - Investigation - موافقة سعرية*",
+    "cmWhatsappMessage": "*عزه احمد احمد عبدالفتاح* - Bed 15 - ICU\nجاسكو\n*تمت الموافقة على: Methotrexate - Investigation*",
     "draftedAt": null,
     "hasReplies": true,
     "replySnippet": "@CORPORATE @mohamed Fekri .82-Altered mental status, unspecified SELECTED SERVICES: Service Name Pri",
     "hasExistingApproval": true,
-    "existingApprovalSnippet": "...000266421) خارج التعاقد بموافقه سعريه ب السعر المذكور فى الميل Mohamed Fekry Patient Accounts Supervisor 01010326990...",
+    "existingApprovalSnippet": "تمت الموافقة واعتماد الحالة باللائحة",
     "creditLimit": null,
     "creditLimitText": null,
     "isRefused": false,
@@ -371,7 +780,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufTaAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "8a4342bc-2e62-4bda-ac71-79221757ab63@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000207549_f2308cd4",
@@ -424,7 +835,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufTlAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "e8341402-bb38-41ad-af9c-c7537a36fda3@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000195587_38db690e",
@@ -432,7 +845,7 @@
     "messageId": "&lt;852abb9b-0875-41f8-9dca-3a403f31660c@Elite-Exchange.elitehospital.org&gt;",
     "exchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufTsAAA=",
     "exchangeChangeKey": null,
-    "receivedAt": "2026-10-21T13:21:24.000Z",
+    "receivedAt": "2026-10-22T09:22:30.000Z",
     "patientName": "كريم محمد احمد عبدالرحمن",
     "mrn": "0000195587",
     "diagnosis": "C43-Malignant melanoma of skin",
@@ -456,28 +869,30 @@
         "status": "matched"
       }
     ],
-    "status": "pending_manual_draft",
-    "statusReasonArabic": "توجد ردود ومحادثة جارية على الإيميل تتطلب مراجعة منسق السيلز",
+    "status": "approved",
+    "statusReasonArabic": "تمت الموافقة واعتماد الحالة باللائحة",
     "patientSharePercentage": null,
     "approvedAmountLimit": null,
     "coverageConditions": "",
-    "aiThreadSummary": "طلب موافقة للمريض كريم محمد احمد عبدالرحمن (مصر للطيران). توجد مراسلات متبادلة على الإيميل بانتظار التأكيد النهائي.",
+    "aiThreadSummary": "طلب موافقة للمريض كريم محمد احمد عبدالرحمن (مصر للطيران). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
     "draftBody": "Price list: Elite Hospital 2025\nContractor: مصر للطيران\nالمسئول من قسم السيلز: محمد ابو الوفا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\n1- تركيب قسطرة وريد مركزي (CVP Catheter Insertion)\n\n@corporate@elitehospital.org",
-    "cmWhatsappMessage": "*كريم محمد احمد عبدالرحمن* - Bed 315 - Zone A\nمصر للطيران\n*المطلوب موافقة عمل CVP Catheter Insertion*",
+    "cmWhatsappMessage": "*كريم محمد احمد عبدالرحمن* - Bed 315 - Zone A\nمصر للطيران\n*تمت الموافقة على: CVP Catheter Insertion*",
     "draftedAt": null,
     "hasReplies": true,
     "replySnippet": "@CORPORATE @Mohamed Said @mohamed Fekri @patient account .00 TOTAL AMOUNT: 2000.00 EGP Request Detai",
-    "hasExistingApproval": false,
-    "existingApprovalSnippet": "توجد ردود ومحادثة جارية على الإيميل تتطلب مراجعة منسق السيلز",
+    "hasExistingApproval": true,
+    "existingApprovalSnippet": "...الرحمن (MRN: 0000195587) لا مانع .00 TOTAL AMOUNT: 2000.00 EGP Request Details الحالة تحتاج إلى تركيب CVP لصعوبة...",
     "creditLimit": null,
     "creditLimitText": null,
     "isRefused": false,
-    "threadHash": "135ddb3ee24b442fe7363adaf54c944d",
+    "threadHash": "52033ca9e7de4f654071226846664ca6",
     "aiProcessingStatus": "processed",
-    "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufTtAAA=",
+    "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufUgAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "852abb9b-0875-41f8-9dca-3a403f31660c@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000017506_4528b94b",
@@ -530,7 +945,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufTvAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "d7aa09b3-5fa1-42d7-b946-e829a5c77f4b@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000266421_02ecc09b",
@@ -564,19 +981,19 @@
         "suggestedFrom": "Methotrexate"
       }
     ],
-    "status": "approved",
-    "statusReasonArabic": "تمت الموافقة واعتماد الحالة بحد أقصى 4,815 ج.م",
+    "status": "pending_manual_draft",
+    "statusReasonArabic": "توجد ردود ومحادثة جارية على الإيميل تتطلب مراجعة منسق السيلز",
     "patientSharePercentage": null,
     "approvedAmountLimit": 4815,
     "coverageConditions": "",
-    "aiThreadSummary": "طلب موافقة للمريض عزه احمد احمد عبدالفتاح (جاسكو). تمت الموافقة على الدخول والإجراء بحد أقصى 4,815 ج.م. الحالة معتمدة ولا توجد متطلبات ناقصة.",
+    "aiThreadSummary": "طلب موافقة للمريض عزه احمد احمد عبدالفتاح (جاسكو). توجد مراسلات متبادلة على الإيميل بانتظار التأكيد النهائي.",
     "draftBody": "Price list: Elite Hospital 2025\nContractor: جاسكو\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - Methotrexate - Investigation : مطلوب موافقة سعرية بمبلغ 4,815 ج.م]\n\n@corporate@elitehospital.org",
-    "cmWhatsappMessage": "*عزه احمد احمد عبدالفتاح* - Bed 15 - ICU\nجاسكو\n*تمت الموافقة على: Methotrexate - Investigation - موافقة سعرية بمبلغ 4,815 EGP*",
+    "cmWhatsappMessage": "*عزه احمد احمد عبدالفتاح* - Bed 15 - ICU\nجاسكو\n*مطلوب موافقة سعرية بمبلغ 4,815 ج.م على: Methotrexate - Investigation*",
     "draftedAt": null,
     "hasReplies": true,
     "replySnippet": "@patient account @CORPORATE @Ziad Khaled @mohamed Fekri .82-Altered mental status, unspecified SELEC",
-    "hasExistingApproval": true,
-    "existingApprovalSnippet": "...0000266421) خارج التعاقد موافقه سعريه على التحليل بمبلغ 4815 ج لايطبق خصم التعاقد Mohamed Fekry Patient Accountant Su...",
+    "hasExistingApproval": false,
+    "existingApprovalSnippet": "توجد ردود ومحادثة جارية على الإيميل تتطلب مراجعة منسق السيلز",
     "creditLimit": 4815,
     "creditLimitText": "4,815 EGP",
     "isRefused": false,
@@ -585,7 +1002,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufTxAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "22bf4d0e-e9b4-4fe1-b245-bfe64bd5547d@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": true,
+    "priceApprovalAmount": 4815
   },
   {
     "id": "mrn_0000060854_236aa672",
@@ -593,7 +1012,7 @@
     "messageId": "&lt;d424835d-64eb-4fb2-9bcf-bb17db36dc35@Elite-Exchange.elitehospital.org&gt;",
     "exchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufTyAAA=",
     "exchangeChangeKey": null,
-    "receivedAt": "2026-10-21T16:30:18.000Z",
+    "receivedAt": "2026-10-22T09:14:16.000Z",
     "patientName": "فوزيه سليمان محمد طاهر",
     "mrn": "0000060854",
     "diagnosis": "C67-Malignant neoplasm of bladder",
@@ -617,28 +1036,30 @@
         "status": "unmatched"
       }
     ],
-    "status": "pending_manual_draft",
-    "statusReasonArabic": "توجد ردود ومحادثة جارية على الإيميل تتطلب مراجعة منسق السيلز",
+    "status": "approved",
+    "statusReasonArabic": "تمت الموافقة واعتماد الحالة باللائحة",
     "patientSharePercentage": null,
     "approvedAmountLimit": null,
     "coverageConditions": "",
-    "aiThreadSummary": "طلب موافقة للمريض فوزيه سليمان محمد طاهر (Hussem Medical). توجد مراسلات متبادلة على الإيميل بانتظار التأكيد النهائي.",
+    "aiThreadSummary": "طلب موافقة للمريض فوزيه سليمان محمد طاهر (Hussem Medical). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
     "draftBody": "Price list: Elite Hospital 2025\nContractor: Hussem Medical\nالمسئول من قسم السيلز: غير محدد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - الحالة تحتاج الى سحب تحليل فيتامين د]\n\n@corporate@elitehospital.org",
-    "cmWhatsappMessage": "*فوزيه سليمان محمد طاهر* - Bed 303 - Zone A\nHussem Medical\n*المطلوب موافقة عمل الحالة تحتاج الى سحب تحليل فيتامين د*",
+    "cmWhatsappMessage": "*فوزيه سليمان محمد طاهر* - Bed 303 - Zone A\nHussem Medical\n*تمت الموافقة على: الحالة تحتاج الى سحب تحليل فيتامين د*",
     "draftedAt": null,
     "hasReplies": true,
     "replySnippet": "@MedicalTourism",
-    "hasExistingApproval": false,
-    "existingApprovalSnippet": "توجد ردود ومحادثة جارية على الإيميل تتطلب مراجعة منسق السيلز",
+    "hasExistingApproval": true,
+    "existingApprovalSnippet": "...د طاهر (MRN: 0000060854) لا مانع تعليمات ا ابراهيم",
     "creditLimit": null,
     "creditLimitText": null,
     "isRefused": false,
-    "threadHash": "f751fbe4760b3e5e5791328c84f05eeb",
+    "threadHash": "88f468d8007163aa556496c4bfde34fe",
     "aiProcessingStatus": "processed",
-    "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufT1AAA=",
+    "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufUaAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "d424835d-64eb-4fb2-9bcf-bb17db36dc35@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000060854_7e163d7b",
@@ -691,7 +1112,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufT2AAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "ff0c322c-28bc-433d-afcd-af3aa5897b58@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000256332_e61b9f7b",
@@ -719,8 +1142,8 @@
     "matchedProcedures": [
       {
         "serviceName": "تعاني من ضعف عام في العضلات والصدر وتورم بالطرفين السفلين وصعوبه في الحركه السريريه وتحتاج الي عمل جلسه علاج طبيعي 4 اطراف و صدر",
-        "matchedName": "جلسة عنايه صدر + 4 أطراف (Chest +4 Limbs Session)",
-        "status": "matched"
+        "matchedName": "تعاني من ضعف عام في العضلات والصدر وتورم بالطرفين السفلين وصعوبه في الحركه السريريه وتحتاج الي عمل جلسه علاج طبيعي 4 اطراف و صدر",
+        "status": "unmatched"
       }
     ],
     "status": "pending_manual_draft",
@@ -729,7 +1152,7 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض هاله احمد شيبه حسين (Blue Dot). توجد مراسلات متبادلة على الإيميل بانتظار التأكيد النهائي.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: Blue Dot\nالمسئول من قسم السيلز: غير محدد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\n1- جلسة عنايه صدر + 4 أطراف (Chest +4 Limbs Session)\n\n@corporate@elitehospital.org",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: Blue Dot\nالمسئول من قسم السيلز: غير محدد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - تعاني من ضعف عام في العضلات والصدر وتورم بالطرفين السفلين وصعوبه في الحركه السريريه وتحتاج الي عمل جلسه علاج طبيعي 4 اطراف و صدر]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*هاله احمد شيبه حسين* - Bed 7 - ICU\nBlue Dot\n*المطلوب موافقة عمل تعاني من ضعف عام في العضلات والصدر وتورم بالطرفين السفلين وصعوبه في الحركه السريريه وتحتاج الي عمل جلسه علاج طبيعي 4 اطراف و صدر*",
     "draftedAt": null,
     "hasReplies": true,
@@ -744,7 +1167,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufT5AAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "b911ef7d-afb4-4e9b-b468-178a9c659cba@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000207549_12bb0783",
@@ -752,7 +1177,7 @@
     "messageId": "&lt;44e186b4-e096-4ab1-a91e-98565f97efe8@Elite-Exchange.elitehospital.org&gt;",
     "exchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufT6AAA=",
     "exchangeChangeKey": null,
-    "receivedAt": "2026-10-21T18:04:32.000Z",
+    "receivedAt": "2026-10-22T08:27:19.000Z",
     "patientName": "محمد جمال ابراهيم سليم",
     "mrn": "0000207549",
     "diagnosis": "J12-Viral pneumonia, not elsewhere classified",
@@ -777,27 +1202,29 @@
       }
     ],
     "status": "approved",
-    "statusReasonArabic": "تمت الموافقة واعتماد الحالة بحد أقصى 10,000 ج.م",
+    "statusReasonArabic": "تمت الموافقة واعتماد الحالة بحد أقصى 25,000 ج.م",
     "patientSharePercentage": null,
-    "approvedAmountLimit": 10000,
+    "approvedAmountLimit": 25000,
     "coverageConditions": "",
-    "aiThreadSummary": "طلب موافقة للمريض محمد جمال ابراهيم سليم (ميتلايف اليكو). تمت الموافقة على الدخول والإجراء بحد أقصى 10,000 ج.م. الحالة معتمدة ولا توجد متطلبات ناقصة.",
+    "aiThreadSummary": "طلب موافقة للمريض محمد جمال ابراهيم سليم (ميتلايف اليكو). تمت الموافقة على الدخول والإجراء بحد أقصى 25,000 ج.م. الحالة معتمدة ولا توجد متطلبات ناقصة.",
     "draftBody": "Price list: Elite Hospital 2023\nContractor: ميتلايف اليكو\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\n1- PCR for TB - GeneXpert\n\n@corporate@elitehospital.org",
-    "cmWhatsappMessage": "*محمد جمال ابراهيم سليم* - Bed 318 - Zone A\nميتلايف اليكو\n*تمت الموافقة على: PCR for TB - GeneXpert - Investigation - موافقة سعرية بمبلغ 10,000 EGP*",
+    "cmWhatsappMessage": "*محمد جمال ابراهيم سليم* - Bed 318 - Zone A\nميتلايف اليكو\n*تمت الموافقة على: PCR for TB - GeneXpert - Investigation (حد أقصى: 25,000 EGP)*",
     "draftedAt": null,
     "hasReplies": true,
     "replySnippet": "",
     "hasExistingApproval": true,
-    "existingApprovalSnippet": "...م سليم (MRN: 0000207549) موافقه سعريه بمبلغ 10000ج على التحليل المذكور لايطبق خصم التعاقد Mohamed Fekry Patient Accou...",
-    "creditLimit": 10000,
-    "creditLimitText": "10,000 EGP",
+    "existingApprovalSnippet": "...م سليم (MRN: 0000207549) مرفق الموافقه السعريه بنفس الحد الاقصي25الف .org>; Duty Manager ; Nursing Superv",
+    "creditLimit": 25000,
+    "creditLimitText": "25,000 EGP",
     "isRefused": false,
-    "threadHash": "947cdca64593d9993547c051bd5ea567",
+    "threadHash": "68f76a443c7f32c9c67c07cec3f3f943",
     "aiProcessingStatus": "processed",
-    "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufT8AAA=",
+    "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufUUAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "44e186b4-e096-4ab1-a91e-98565f97efe8@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": 10000
   },
   {
     "id": "mrn_0000054665_1ce0c685",
@@ -850,7 +1277,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufT9AAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "390be655-86b3-4d93-9855-87651e15b593@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000268671_7e0c7c9c",
@@ -878,8 +1307,10 @@
     "matchedProcedures": [
       {
         "serviceName": "جلسه علاج طبيعي يوميا 4 اطراف وصدر لتحسين الحركه والقدره علي التنفس ورفع كفاءه العضلات",
-        "matchedName": "جلسة عنايه صدر + 4 أطراف (Chest +4 Limbs Session)",
-        "status": "matched"
+        "matchedName": "جلسه علاج طبيعي يوميا 4 اطراف وصدر لتحسين الحركه والقدره علي التنفس ورفع كفاءه العضلات",
+        "status": "unmatched",
+        "suggestedPrice": 1150,
+        "suggestedFrom": "جلسة عنايه صدر + 4 أطراف (Chest +4 Limbs Session)"
       }
     ],
     "status": "pending_manual_draft",
@@ -888,8 +1319,8 @@
     "approvedAmountLimit": null,
     "coverageConditions": "",
     "aiThreadSummary": "طلب موافقة للمريض حمدى ابراهيم اسماعيل حسين (صحة وان). توجد مراسلات متبادلة على الإيميل بانتظار التأكيد النهائي.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: صحة وان\nالمسئول من قسم السيلز: محمد جابر\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\n1- جلسة عنايه صدر + 4 أطراف (Chest +4 Limbs Session)\n\n@corporate@elitehospital.org",
-    "cmWhatsappMessage": "*حمدى ابراهيم اسماعيل حسين* - Bed 4 - SICU\nصحة وان\n*المطلوب موافقة عمل جلسه علاج طبيعي يوميا 4 اطراف وصدر لتحسين الحركه والقدره علي التنفس ورفع كفاءه العضلات*",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: صحة وان\nالمسئول من قسم السيلز: محمد جابر\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - جلسه علاج طبيعي يوميا 4 اطراف وصدر لتحسين الحركه والقدره علي التنفس ورفع كفاءه العضلات : مطلوب موافقة سعرية بمبلغ 1,150 ج.م]\n\n@corporate@elitehospital.org",
+    "cmWhatsappMessage": "*حمدى ابراهيم اسماعيل حسين* - Bed 4 - SICU\nصحة وان\n*مطلوب موافقة سعرية بمبلغ 1,150 ج.م على: جلسه علاج طبيعي يوميا 4 اطراف وصدر لتحسين الحركه والقدره علي التنفس ورفع كفاءه العضلات*",
     "draftedAt": null,
     "hasReplies": true,
     "replySnippet": "ﻋﻤﻞ ﺟﻠﺴﺎت ﻋﻼج ﻃﺒﻴﻌﻲ والحد الاقضي لهذة الموافقة 130 الف جنية ويرجي الافادة في حالة طلب رفع الحد الاقص",
@@ -903,7 +1334,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufT+AAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "83c13b15-7c48-41e1-a398-7c40632d0652@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000270096_58435eaa",
@@ -911,7 +1344,7 @@
     "messageId": "&lt;0a5be2e0-f532-4b60-a9a9-4faf419a49ba@Elite-Exchange.elitehospital.org&gt;",
     "exchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufT/AAA=",
     "exchangeChangeKey": null,
-    "receivedAt": "2026-10-21T19:37:19.000Z",
+    "receivedAt": "2026-10-22T07:37:42.000Z",
     "patientName": "مديحه امين عبدالرؤف الاستانبولي",
     "mrn": "0000270096",
     "diagnosis": "Clinical Inpatient Evaluation",
@@ -935,28 +1368,30 @@
         "status": "unmatched"
       }
     ],
-    "status": "pending_manual_draft",
-    "statusReasonArabic": "توجد ردود ومحادثة جارية على الإيميل تتطلب مراجعة منسق السيلز",
+    "status": "approved",
+    "statusReasonArabic": "تمت الموافقة واعتماد الحالة باللائحة",
     "patientSharePercentage": null,
     "approvedAmountLimit": null,
     "coverageConditions": "",
-    "aiThreadSummary": "طلب موافقة للمريض مديحه امين عبدالرؤف الاستانبولي (سوميد). توجد مراسلات متبادلة على الإيميل بانتظار التأكيد النهائي.",
+    "aiThreadSummary": "طلب موافقة للمريض مديحه امين عبدالرؤف الاستانبولي (سوميد). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
     "draftBody": "Price list: Elite Hospital 2025\nContractor: سوميد\nالمسئول من قسم السيلز: محمد ابو الوفا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
-    "cmWhatsappMessage": "*مديحه امين عبدالرؤف الاستانبولي* - Inpatient Bed\nسوميد\n*المطلوب موافقة عمل إقامة بالقسم الداخلي (Inpatient Admission)*",
+    "cmWhatsappMessage": "*مديحه امين عبدالرؤف الاستانبولي* - Inpatient Bed\nسوميد\n*تمت الموافقة على: إقامة بالقسم الداخلي (Inpatient Admission)*",
     "draftedAt": null,
     "hasReplies": true,
-    "replySnippet": "",
-    "hasExistingApproval": false,
-    "existingApprovalSnippet": "توجد ردود ومحادثة جارية على الإيميل تتطلب مراجعة منسق السيلز",
+    "replySnippet": "لا مانع",
+    "hasExistingApproval": true,
+    "existingApprovalSnippet": "...patient Approval Request لا مانع",
     "creditLimit": null,
     "creditLimitText": null,
     "isRefused": false,
-    "threadHash": "48eee17f1a3d49bb2a77a859f1e357ed",
+    "threadHash": "73d598ff23a9fa3da624a314e081bee0",
     "aiProcessingStatus": "processed",
-    "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufUAAAA=",
+    "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufUMAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "0a5be2e0-f532-4b60-a9a9-4faf419a49ba@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000187599_afe7811e",
@@ -1009,7 +1444,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufTBAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "e77278ec-5766-4b02-a2ac-2da8b766f319@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000187599_5c624f30",
@@ -1062,7 +1499,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufS+AAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "6aeef89e-5d1d-4416-849f-51b9b900984e@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000060854_201451e0",
@@ -1070,7 +1509,7 @@
     "messageId": "&lt;5aefaa37-552c-4dd1-b6df-f97a161e7500@Elite-Exchange.elitehospital.org&gt;",
     "exchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufS7AAA=",
     "exchangeChangeKey": null,
-    "receivedAt": "2026-10-21T06:58:54.000Z",
+    "receivedAt": "2026-10-22T09:50:52.000Z",
     "patientName": "فوزيه سليمان محمد طاهر",
     "mrn": "0000060854",
     "diagnosis": "C67-Malignant neoplasm of bladder",
@@ -1090,32 +1529,36 @@
     "matchedProcedures": [
       {
         "serviceName": "Portacath insertion Intervention Radiology",
-        "matchedName": "تركيب جهاز بورت كاث (Porta Cath Insertion Intervention Radiology)",
-        "status": "matched"
+        "matchedName": "Portacath insertion Intervention Radiology",
+        "status": "unmatched",
+        "suggestedPrice": 23040,
+        "suggestedFrom": "تركيب بورت كاث (Portacath Insertion)"
       }
     ],
-    "status": "pending_manual_draft",
-    "statusReasonArabic": "توجد ردود ومحادثة جارية على الإيميل تتطلب مراجعة منسق السيلز",
+    "status": "approved",
+    "statusReasonArabic": "تمت الموافقة واعتماد الحالة باللائحة",
     "patientSharePercentage": null,
     "approvedAmountLimit": null,
     "coverageConditions": "",
-    "aiThreadSummary": "طلب موافقة للمريض فوزيه سليمان محمد طاهر (Hussem Medical). توجد مراسلات متبادلة على الإيميل بانتظار التأكيد النهائي.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: Hussem Medical\nالمسئول من قسم السيلز: غير محدد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\n1- تركيب جهاز بورت كاث (Porta Cath Insertion Intervention Radiology)\n\n@corporate@elitehospital.org",
-    "cmWhatsappMessage": "*فوزيه سليمان محمد طاهر* - Bed 303 - Zone A\nHussem Medical\n*المطلوب موافقة عمل Portacath insertion Intervention Radiology*",
+    "aiThreadSummary": "طلب موافقة للمريض فوزيه سليمان محمد طاهر (Hussem Medical). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: Hussem Medical\nالمسئول من قسم السيلز: غير محدد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - Portacath insertion Intervention Radiology : مطلوب موافقة سعرية بمبلغ 23,040 ج.م]\n\n@corporate@elitehospital.org",
+    "cmWhatsappMessage": "*فوزيه سليمان محمد طاهر* - Bed 303 - Zone A\nHussem Medical\n*تمت الموافقة على: Portacath insertion Intervention Radiology*",
     "draftedAt": null,
     "hasReplies": true,
     "replySnippet": "@MedicalTourism .00 TOTAL AMOUNT: 23000.00 EGP Request Details METS BLADDER Ca ON CTH LSAT ONE WAS O",
-    "hasExistingApproval": false,
-    "existingApprovalSnippet": "توجد ردود ومحادثة جارية على الإيميل تتطلب مراجعة منسق السيلز",
+    "hasExistingApproval": true,
+    "existingApprovalSnippet": "...د طاهر (MRN: 0000060854) Approved Kind regards, Zina Ibrahim Medical Tourism Department Elite Hospital – Alexandr...",
     "creditLimit": null,
     "creditLimitText": null,
     "isRefused": false,
-    "threadHash": "6a925c0dd61484a2aaba3ce4185842e7",
+    "threadHash": "e3a5b38b768911fecb5a1af60b4f1c8d",
     "aiProcessingStatus": "processed",
-    "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufTLAAA=",
+    "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufUiAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "5aefaa37-552c-4dd1-b6df-f97a161e7500@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000266421_6b101b43",
@@ -1168,7 +1611,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufTnAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "8ac594a5-cc7a-44ab-946a-b67cf0083715@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000017506_1e0456eb",
@@ -1230,7 +1675,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufS4AAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "94476811-6f27-4768-8af0-3e58d29b0a58@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000017506_7809e54a",
@@ -1283,7 +1730,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufTcAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "d50c0460-3106-4249-a128-a38986a4c61f@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000189895_528a40cf",
@@ -3181,13 +3630,15 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufQpAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "4a6d15ec-5189-4bcd-9cfa-c7066b488028@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000216945_7ab2b4ef",
     "conversationId": "18851dc5-7501-4b9a-8b8b-2bb91023b78a@elite-exchange.elitehospital.org",
-    "messageId": "&lt;18851dc5-7501-4b9a-8b8b-2bb91023b78a@Elite-Exchange.elitehospital.org&gt;",
-    "exchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufQmAAA=",
+    "messageId": "&lt;15d228e20abf4d90abb3ee2920054fc9@elitehospital.org&gt;",
+    "exchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufQsAAA=",
     "exchangeChangeKey": null,
     "receivedAt": "2026-10-19T06:47:14.000Z",
     "patientName": "نادر قدري محمد عبدالله",
@@ -3197,9 +3648,9 @@
     "bed": "Bed 4 - ICU",
     "physician": "Hany sameer",
     "contractorRaw": "Next Care نكست كير",
-    "contractorNormalized": "نكست كير Next Care",
+    "contractorNormalized": "Next Care نكست كير",
     "priceListYear": "2025",
-    "contractorOfficer": "أحمد حمزة",
+    "contractorOfficer": "ديانا",
     "requestedServices": [
       {
         "name": "Levetiracetam (Tiratam, Keppra) Peak - Investigation",
@@ -3216,22 +3667,22 @@
       }
     ],
     "status": "pending_manual_draft",
-    "statusReasonArabic": "خارج التعاقد - مطلوب موافقة سعرية",
+    "statusReasonArabic": "توجد ردود ومحادثة جارية على الإيميل تتطلب مراجعة منسق السيلز",
     "patientSharePercentage": null,
     "approvedAmountLimit": 5625,
     "coverageConditions": "",
-    "aiThreadSummary": "طلب موافقة للمريض نادر قدري محمد عبدالله (نكست كير Next Care). تمت الموافقة على الدخول والإجراء بحد أقصى 5,625 ج.م. الحالة معتمدة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: نكست كير Next Care\nالمسئول من قسم السيلز: أحمد حمزة\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - Levetiracetam (Tiratam, Keppra) Peak - Investigation : مطلوب موافقة سعرية بمبلغ 5,625 ج.م]\n\n@corporate@elitehospital.org",
-    "cmWhatsappMessage": "*نادر قدري محمد عبدالله* - Bed 4 - ICU\nنكست كير Next Care\n*مطلوب موافقة سعرية بمبلغ 5,625 ج.م على: Levetiracetam (Tiratam, Keppra) Peak - Investigation*",
+    "aiThreadSummary": "طلب موافقة للمريض نادر قدري محمد عبدالله (Next Care نكست كير). توجد مراسلات متبادلة على الإيميل بانتظار التأكيد النهائي.",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: Next Care نكست كير\nالمسئول من قسم السيلز: ديانا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - Levetiracetam (Tiratam, Keppra) Peak - Investigation : مطلوب موافقة سعرية بمبلغ 5,625 ج.م]\n\n@corporate@elitehospital.org",
+    "cmWhatsappMessage": "*نادر قدري محمد عبدالله* - Bed 4 - ICU\nNext Care نكست كير\n*مطلوب موافقة سعرية بمبلغ 5,625 ج.م على: Levetiracetam (Tiratam, Keppra) Peak - Investigation*",
     "draftedAt": null,
     "hasReplies": true,
-    "replySnippet": "@mohamed Fekri .82-Altered mental status, unspecified SELECTED SERVICES: Service Name Price (EGP) Le",
+    "replySnippet": "خارج التعاقد يجب احضار موافقه سعريه بمبلغ 5625 ج لايطبق خصم التعاقد Mohamed Fekry Patient Accountant",
     "hasExistingApproval": false,
-    "existingApprovalSnippet": "",
+    "existingApprovalSnippet": "توجد ردود ومحادثة جارية على الإيميل تتطلب مراجعة منسق السيلز",
     "creditLimit": 5625,
     "creditLimitText": "5,625 EGP",
     "isRefused": false,
-    "threadHash": "a6045f885157447e70700b431c682826",
+    "threadHash": "d0adeb3e4439e19a6114003c6dbb6bdc",
     "aiProcessingStatus": "processed",
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufQsAAA=",
     "lastExchangeChangeKey": null,
@@ -3243,8 +3694,8 @@
   {
     "id": "mrn_0000267870_e2cd7e44",
     "conversationId": "34adb499-097a-49ee-9e02-399f6229d971@elite-exchange.elitehospital.org",
-    "messageId": "&lt;34adb499-097a-49ee-9e02-399f6229d971@Elite-Exchange.elitehospital.org&gt;",
-    "exchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufQnAAA=",
+    "messageId": "&lt;PAXP193MB1502B3C004996B221AE3710BF1982@PAXP193MB1502.EURP193.PROD.OUTLOOK.COM&gt;",
+    "exchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufQuAAA=",
     "exchangeChangeKey": null,
     "receivedAt": "2026-10-19T07:54:42.000Z",
     "patientName": "ماجد محمد عبده رضوان",
@@ -3253,7 +3704,7 @@
     "admissionType": "Inpatient",
     "bed": "Inpatient Bed",
     "physician": "Hospital Staff",
-    "contractorRaw": "شركة جاسكو",
+    "contractorRaw": "جاسكو",
     "contractorNormalized": "جاسكو",
     "priceListYear": "2025",
     "contractorOfficer": "زياد",
@@ -3286,18 +3737,20 @@
     "creditLimit": null,
     "creditLimitText": null,
     "isRefused": false,
-    "threadHash": "df7e89a63756b8016124d6e27afbd58f",
+    "threadHash": "6131d9cd800f3c9778ef2efda4045852",
     "aiProcessingStatus": "processed",
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufQuAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "34adb499-097a-49ee-9e02-399f6229d971@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000086215_29e34a49",
     "conversationId": "637bc103-2a20-4a3d-951f-a40dd291b9d5@elite-exchange.elitehospital.org",
-    "messageId": "&lt;PAXP193MB1502107820938D4F895D86BFF1982@PAXP193MB1502.EURP193.PROD.OUTLOOK.COM&gt;",
-    "exchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufQvAAA=",
+    "messageId": "&lt;f16827d631e74d868fb81ecf935b7c88@elitehospital.org&gt;",
+    "exchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufTmAAA=",
     "exchangeChangeKey": null,
     "receivedAt": "2026-10-21T11:53:32.000Z",
     "patientName": "الاء محمد فتحي شعبان",
@@ -3319,32 +3772,34 @@
     "matchedProcedures": [
       {
         "serviceName": "إقامة رعاية مركزة (ICU Admission)",
-        "matchedName": "إقامة رعاية مركزة (ICU Admission)",
-        "status": "unmatched"
+        "matchedName": "العناية المركزة (ICU)",
+        "status": "matched"
       }
     ],
-    "status": "approved",
-    "statusReasonArabic": "تمت الموافقة واعتماد الحالة باللائحة",
+    "status": "pending_manual_draft",
+    "statusReasonArabic": "توجد ردود ومحادثة جارية على الإيميل تتطلب مراجعة منسق السيلز",
     "patientSharePercentage": null,
     "approvedAmountLimit": null,
     "coverageConditions": "",
-    "aiThreadSummary": "طلب موافقة للمريض الاء محمد فتحي شعبان (بترومنت). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: بترومنت\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة رعاية مركزة (ICU Admission)]\n\n@corporate@elitehospital.org",
-    "cmWhatsappMessage": "*الاء محمد فتحي شعبان* - Inpatient Bed\nبترومنت\n*تمت الموافقة على: إقامة رعاية مركزة (ICU Admission)*",
+    "aiThreadSummary": "طلب موافقة للمريض الاء محمد فتحي شعبان (بترومنت). توجد مراسلات متبادلة على الإيميل بانتظار التأكيد النهائي.",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: بترومنت\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\n1- العناية المركزة (ICU)\n\n@corporate@elitehospital.org",
+    "cmWhatsappMessage": "*الاء محمد فتحي شعبان* - Inpatient Bed\nبترومنت\n*المطلوب موافقة عمل إقامة رعاية مركزة (ICU Admission)*",
     "draftedAt": null,
     "hasReplies": true,
-    "replySnippet": "لا مانع برجاء تسليم التقريرللاهل لاحضار اصل الموافقه الطوارئ والحجز .(Petromaint) بترومنت (الاسكندري",
-    "hasExistingApproval": true,
-    "existingApprovalSnippet": "...patient Approval Request لا مانع برجاء تسليم التقريرللاهل لاحضار اصل الموافقه الطوارئ والحجز .(Petromaint) بتروم...",
+    "replySnippet": "@Ziad Khaled .(Petromaint) بترومنت (الاسكندرية للصيانة البترولية) Visit Type: Emergency",
+    "hasExistingApproval": false,
+    "existingApprovalSnippet": "توجد ردود ومحادثة جارية على الإيميل تتطلب مراجعة منسق السيلز",
     "creditLimit": null,
     "creditLimitText": null,
     "isRefused": false,
-    "threadHash": "347c54620e7b3ec36a87c055037b194f",
+    "threadHash": "385c3722a5aade3b9198280a72cb7121",
     "aiProcessingStatus": "processed",
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufTmAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "637bc103-2a20-4a3d-951f-a40dd291b9d5@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000266839_72465fd6",
@@ -3388,7 +3843,7 @@
     "cmWhatsappMessage": "*شريف محمود حنفي محمود* - Bed 327 - Zone B\nبترول ابو قير\n*تمت الموافقة على: Nutrionist Follow Up*",
     "draftedAt": null,
     "hasReplies": true,
-    "replySnippet": "@CORPORATE .00 TOTAL AMOUNT: 330.00 EGP Request Details الحاله تعاني من ورم غير حميد بالكبد وارتفاع",
+    "replySnippet": "@CORPORATE .00 TOTAL AMOUNT: 330.00 EGP Request Details الحاله تعاني من ورم غير حميد بالكبد وارتفاع ",
     "hasExistingApproval": true,
     "existingApprovalSnippet": "...محمود (MRN: 0000266839) لا مانع .org> Sent: Monday, 19 October 2026 12:00:06 To: HIS Notifications ; Duty Manag...",
     "creditLimit": null,
@@ -3399,7 +3854,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufQ2AAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "b7ad0043-7fae-4196-b669-b96410ad56ee@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000269362_9c60e54f",
@@ -3452,7 +3909,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufQ4AAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "792b046f-00b5-40be-b43d-fcf0f3fe4ed3@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000054665_77fb95d1",
@@ -3468,9 +3927,9 @@
     "bed": "Bed 2 - ICU",
     "physician": "Hany sameer",
     "contractorRaw": "Next Care نكست كير",
-    "contractorNormalized": "نكست كير Next Care",
+    "contractorNormalized": "Next Care نكست كير",
     "priceListYear": "2025",
-    "contractorOfficer": "أحمد حمزة",
+    "contractorOfficer": "ديانا",
     "requestedServices": [
       {
         "name": "Blood filteration",
@@ -3486,28 +3945,30 @@
         "suggestedFrom": "خدمة لفتره كيس دم (Blood Filteration Service)"
       }
     ],
-    "status": "approved",
-    "statusReasonArabic": "تمت الموافقة واعتماد الحالة بحد أقصى 2,200 ج.م",
+    "status": "pending_manual_draft",
+    "statusReasonArabic": "توجد ردود ومحادثة جارية على الإيميل تتطلب مراجعة منسق السيلز",
     "patientSharePercentage": null,
-    "approvedAmountLimit": 2200,
+    "approvedAmountLimit": null,
     "coverageConditions": "",
-    "aiThreadSummary": "طلب موافقة للمريض محمد علي محمد احمد (نكست كير Next Care). تمت الموافقة على الدخول والإجراء بحد أقصى 2,200 ج.م. الحالة معتمدة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: نكست كير Next Care\nالمسئول من قسم السيلز: أحمد حمزة\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - Blood filteration : مطلوب موافقة سعرية بمبلغ 700 ج.م]\n\n@corporate@elitehospital.org",
-    "cmWhatsappMessage": "*محمد علي محمد احمد* - Bed 2 - ICU\nنكست كير Next Care\n*تمت الموافقة على: Blood filteration - موافقة سعرية بمبلغ 2,200 EGP*",
+    "aiThreadSummary": "طلب موافقة للمريض محمد علي محمد احمد (Next Care نكست كير). توجد مراسلات متبادلة على الإيميل بانتظار التأكيد النهائي.",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: Next Care نكست كير\nالمسئول من قسم السيلز: ديانا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - Blood filteration : مطلوب موافقة سعرية بمبلغ 700 ج.م]\n\n@corporate@elitehospital.org",
+    "cmWhatsappMessage": "*محمد علي محمد احمد* - Bed 2 - ICU\nNext Care نكست كير\n*مطلوب موافقة سعرية بمبلغ 700 ج.م على: Blood filteration*",
     "draftedAt": null,
     "hasReplies": true,
     "replySnippet": "@mohamed Fekri @patient account .9-Acute kidney failure, unspecified, N39.0-Urinary tract infection,",
-    "hasExistingApproval": true,
-    "existingApprovalSnippet": "...د احمد (MRN: 0000054665) موافقه سعريه على فلتره الدم بمبلغ 2200ج لكل كيس على حده Mohamed Fekry Patient Accountant Sup...",
-    "creditLimit": 2200,
-    "creditLimitText": "2,200 EGP",
+    "hasExistingApproval": false,
+    "existingApprovalSnippet": "توجد ردود ومحادثة جارية على الإيميل تتطلب مراجعة منسق السيلز",
+    "creditLimit": null,
+    "creditLimitText": null,
     "isRefused": false,
     "threadHash": "bb97435581a43c980bab1ac9e3bf592a",
     "aiProcessingStatus": "processed",
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufRNAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "826921ed-c317-45a1-99e0-6f339ceaa3d3@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": true,
+    "priceApprovalAmount": 2200
   },
   {
     "id": "mrn_0000269249_c67771be",
@@ -3539,22 +4000,22 @@
         "status": "matched"
       }
     ],
-    "status": "refused",
-    "statusReasonArabic": "تم رصد رفض أو عدم تغطية للإجراء من قبل جهة التعاقد",
+    "status": "pending_manual_draft",
+    "statusReasonArabic": "توجد ردود ومحادثة جارية على الإيميل تتطلب مراجعة منسق السيلز",
     "patientSharePercentage": null,
     "approvedAmountLimit": null,
     "coverageConditions": "",
-    "aiThreadSummary": "طلب موافقة للمريض فرحات عبدالحميد محمد ابلال (المرضي الكاش MT). تم رفض تغطية الإجراء من قبل جهة التأمين.",
+    "aiThreadSummary": "طلب موافقة للمريض فرحات عبدالحميد محمد ابلال (المرضي الكاش MT). توجد مراسلات متبادلة على الإيميل بانتظار التأكيد النهائي.",
     "draftBody": "Price list: Elite Hospital 2026\nContractor: المرضي الكاش MT\nالمسئول من قسم السيلز: غير محدد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\n1- رسم مخ (E.E.G)\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*فرحات عبدالحميد محمد ابلال* - Bed 5 - ICU\nالمرضي الكاش MT\n*المطلوب موافقة عمل رسم مخ*",
     "draftedAt": null,
     "hasReplies": true,
     "replySnippet": "الحالة كاش @patient account @mohamed Fekri .1-Chronic respiratory failure, G54.2-Cervical root disor",
     "hasExistingApproval": false,
-    "existingApprovalSnippet": "تم رصد رفض أو عدم تغطية للإجراء من قبل جهة التعاقد",
+    "existingApprovalSnippet": "توجد ردود ومحادثة جارية على الإيميل تتطلب مراجعة منسق السيلز",
     "creditLimit": null,
     "creditLimitText": null,
-    "isRefused": true,
+    "isRefused": false,
     "threadHash": "6a4cecb4f22959cf31f67cba1c47f963",
     "aiProcessingStatus": "processed",
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufROAAA=",
@@ -3567,8 +4028,8 @@
   {
     "id": "mrn_0000267389_1d084783",
     "conversationId": "2941347b-e513-430d-9c76-d2f21176b9de@elite-exchange.elitehospital.org",
-    "messageId": "&lt;2941347b-e513-430d-9c76-d2f21176b9de@Elite-Exchange.elitehospital.org&gt;",
-    "exchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufQ6AAA=",
+    "messageId": "&lt;d0269f9a007f4e25a3c6643500e29ed5@elitehospital.org&gt;",
+    "exchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufRPAAA=",
     "exchangeChangeKey": null,
     "receivedAt": "2026-10-19T11:42:00.000Z",
     "patientName": "ماجدة السيد علي حسنين",
@@ -3578,7 +4039,7 @@
     "bed": "Bed 314 - Zone A",
     "physician": "Mohamed Bayoumi",
     "contractorRaw": "نقابة المهندسين",
-    "contractorNormalized": "نقابه المهندسين",
+    "contractorNormalized": "نقابة المهندسين",
     "priceListYear": "2025",
     "contractorOfficer": "ديانا",
     "requestedServices": [
@@ -3657,23 +4118,23 @@
         "status": "matched"
       }
     ],
-    "status": "pending_manual_draft",
-    "statusReasonArabic": "بانتظار الموافقة (طلب موافقة وليس رد معتمد)",
+    "status": "refused",
+    "statusReasonArabic": "تم رصد رفض أو عدم تغطية للإجراء من قبل جهة التعاقد",
     "patientSharePercentage": null,
     "approvedAmountLimit": null,
     "coverageConditions": "",
-    "aiThreadSummary": "طلب موافقة للمريض ماجدة السيد علي حسنين (نقابه المهندسين). تمت الموافقة على الدخول والإجراء باللائحة. الحالة معتمدة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: نقابه المهندسين\nالمسئول من قسم السيلز: ديانا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\n1- CSF culture\n2- CSF analysis (Chemistry & cell count)\n3- PCR panel for Meningitis, CSF ( Bacterial & Viral Panels)\n4- ANA (IFA)\n5- Anti-DNA (d's)\n6- Anti-cyclic citrullinated peptide (Anti-CCP)\n7- Complement 3 (C3)\n8- Complement 4 (C4)\n\n@corporate@elitehospital.org",
-    "cmWhatsappMessage": "*ماجدة السيد علي حسنين* - Bed 314 - Zone A\nنقابه المهندسين\n*المطلوب موافقة عمل CSF culture - Investigation و CSF analysis (Chemistry & cell count) - Investigation و PCR panel for Meningitis, CSF (Bacterial & Viral) - Investigation و ANA (IFA) - Investigation و Anti-DNA (d.s) - Investigation و Anti-cyclic citrulinated peptide (Anti-CCP) - Investigation و Complement 3 (C3) - Investigation و Complement 4 (C4) - Investigation*",
+    "aiThreadSummary": "طلب موافقة للمريض ماجدة السيد علي حسنين (نقابة المهندسين). تم رفض تغطية الإجراء من قبل جهة التأمين.",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: نقابة المهندسين\nالمسئول من قسم السيلز: ديانا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\n1- CSF culture\n2- CSF analysis (Chemistry & cell count)\n3- PCR panel for Meningitis, CSF ( Bacterial & Viral Panels)\n4- ANA (IFA)\n5- Anti-DNA (d's)\n6- Anti-cyclic citrullinated peptide (Anti-CCP)\n7- Complement 3 (C3)\n8- Complement 4 (C4)\n\n@corporate@elitehospital.org",
+    "cmWhatsappMessage": "*ماجدة السيد علي حسنين* - Bed 314 - Zone A\nنقابة المهندسين\n*المطلوب موافقة عمل CSF culture - Investigation و CSF analysis (Chemistry & cell count) - Investigation و PCR panel for Meningitis, CSF (Bacterial & Viral) - Investigation و ANA (IFA) - Investigation و Anti-DNA (d.s) - Investigation و Anti-cyclic citrulinated peptide (Anti-CCP) - Investigation و Complement 3 (C3) - Investigation و Complement 4 (C4) - Investigation*",
     "draftedAt": null,
     "hasReplies": true,
-    "replySnippet": "الحالة كاش @patient account @mohamed Fekri .0-Guillain-Barre syndrome, R53.1-Weakness SELECTED SERVI",
+    "replySnippet": "غير مغطى برجاء ارسال الاهل للتغطيه Mohamed Fekry Patient Accountant Supervisor Mobile: &#43;20101032",
     "hasExistingApproval": false,
-    "existingApprovalSnippet": "",
+    "existingApprovalSnippet": "تم رصد رفض أو عدم تغطية للإجراء من قبل جهة التعاقد",
     "creditLimit": null,
     "creditLimitText": null,
-    "isRefused": false,
-    "threadHash": "c60b09aff73639578664dd434545f869",
+    "isRefused": true,
+    "threadHash": "fb10b15c029a164d7f8eddccbee113b9",
     "aiProcessingStatus": "processed",
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufRPAAA=",
     "lastExchangeChangeKey": null,
@@ -3733,7 +4194,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufRQAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "a9e9c75c-3614-4eb4-b015-a00cbf7f9099@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000267855_42fee51f",
@@ -3749,7 +4212,7 @@
     "bed": "Bed 8 - ICU",
     "physician": "Hany sameer",
     "contractorRaw": "Bapetco Badr El Din Petroleum Co بابتيكو بدر الدين للبترول",
-    "contractorNormalized": "Bapetco - Badr El Din للبترول",
+    "contractorNormalized": "بدر الدين للبترول",
     "priceListYear": "2025",
     "contractorOfficer": "محمد ابو الوفا",
     "requestedServices": [
@@ -3770,9 +4233,9 @@
     "patientSharePercentage": null,
     "approvedAmountLimit": null,
     "coverageConditions": "",
-    "aiThreadSummary": "طلب موافقة للمريض اشرف ياقوت سعد مصطفى (Bapetco - Badr El Din للبترول). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: Bapetco - Badr El Din للبترول\nالمسئول من قسم السيلز: محمد ابو الوفا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\n1- سلاب معصم (Wrist Slab)\n\n@corporate@elitehospital.org",
-    "cmWhatsappMessage": "*اشرف ياقوت سعد مصطفى* - Bed 8 - ICU\nBapetco Badr El Din للبترول\n*تمت الموافقة على: Wrist SLAB*",
+    "aiThreadSummary": "طلب موافقة للمريض اشرف ياقوت سعد مصطفى (بدر الدين للبترول). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: بدر الدين للبترول\nالمسئول من قسم السيلز: محمد ابو الوفا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\n1- سلاب معصم (Wrist Slab)\n\n@corporate@elitehospital.org",
+    "cmWhatsappMessage": "*اشرف ياقوت سعد مصطفى* - Bed 8 - ICU\nبدر الدين للبترول\n*تمت الموافقة على: Wrist SLAB*",
     "draftedAt": null,
     "hasReplies": true,
     "replySnippet": "@CORPORATE .X7-Direct infection of ankle and foot in infec, R65.21-Severe sepsis with septic shock S",
@@ -3786,7 +4249,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufRSAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "25377ce3-92c5-4a16-b9f4-431d27dd3e17@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000269566_387b97c7",
@@ -3830,7 +4295,7 @@
     "hasReplies": true,
     "replySnippet": ".Location: ER Description: Patient Barcode: 0000269566 Patient Name: محمد رمضان السيد عباس Contracto",
     "hasExistingApproval": true,
-    "existingApprovalSnippet": "...Approval Request مرفق الموافقه بحد اقصي 20 الف .Location: ER Description: Patient Barcode: 0000269566 Patient...",
+    "existingApprovalSnippet": "...patient Approval Request مرفق الموافقه بحد اقصي 20 الف .Location: ER Description: Patient Barcode: 000026",
     "creditLimit": 20000,
     "creditLimitText": "20,000 EGP",
     "isRefused": false,
@@ -3839,7 +4304,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufRTAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "b51d202e-10b3-4f5a-8f9b-b0acf13a5a6c@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000216945_17ed112c",
@@ -3855,9 +4322,9 @@
     "bed": "Bed 4 - ICU",
     "physician": "Hany sameer",
     "contractorRaw": "Next Care نكست كير",
-    "contractorNormalized": "نكست كير Next Care",
+    "contractorNormalized": "Next Care نكست كير",
     "priceListYear": "2025",
-    "contractorOfficer": "أحمد حمزة",
+    "contractorOfficer": "ديانا",
     "requestedServices": [
       {
         "name": "رسم مخ",
@@ -3874,20 +4341,20 @@
       }
     ],
     "status": "pending_manual_draft",
-    "statusReasonArabic": "خارج التعاقد - مطلوب موافقة سعرية",
+    "statusReasonArabic": "توجد ردود ومحادثة جارية على الإيميل تتطلب مراجعة منسق السيلز",
     "patientSharePercentage": null,
-    "approvedAmountLimit": 1800,
+    "approvedAmountLimit": null,
     "coverageConditions": "",
-    "aiThreadSummary": "طلب موافقة للمريض نادر قدري محمد عبدالله (نكست كير Next Care). تمت الموافقة على الدخول والإجراء بحد أقصى 1,800 ج.م. الحالة معتمدة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: نكست كير Next Care\nالمسئول من قسم السيلز: أحمد حمزة\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - رسم مخ : مطلوب موافقة سعرية بمبلغ 1,812.5 ج.م]\n\n@corporate@elitehospital.org",
-    "cmWhatsappMessage": "*نادر قدري محمد عبدالله* - Bed 4 - ICU\nنكست كير Next Care\n*مطلوب موافقة سعرية بمبلغ 1,812.5 ج.م على: رسم مخ*",
+    "aiThreadSummary": "طلب موافقة للمريض نادر قدري محمد عبدالله (Next Care نكست كير). توجد مراسلات متبادلة على الإيميل بانتظار التأكيد النهائي.",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: Next Care نكست كير\nالمسئول من قسم السيلز: ديانا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - رسم مخ : مطلوب موافقة سعرية بمبلغ 1,812.5 ج.م]\n\n@corporate@elitehospital.org",
+    "cmWhatsappMessage": "*نادر قدري محمد عبدالله* - Bed 4 - ICU\nNext Care نكست كير\n*مطلوب موافقة سعرية بمبلغ 1,812.5 ج.م على: رسم مخ*",
     "draftedAt": null,
     "hasReplies": true,
     "replySnippet": "@patient account @mohamed Fekri .82-Altered mental status, unspecified SELECTED SERVICES: Service Na",
     "hasExistingApproval": false,
-    "existingApprovalSnippet": "",
-    "creditLimit": 1800,
-    "creditLimitText": "1,800 EGP",
+    "existingApprovalSnippet": "توجد ردود ومحادثة جارية على الإيميل تتطلب مراجعة منسق السيلز",
+    "creditLimit": null,
+    "creditLimitText": null,
     "isRefused": false,
     "threadHash": "a6a86f085709845fdcdabafc9e1b3d77",
     "aiProcessingStatus": "processed",
@@ -3896,13 +4363,13 @@
     "threadKey": "0e6b90cd-3ba0-47c2-9252-fc7225ee2f6d@elite-exchange.elitehospital.org",
     "refusalSnippet": "",
     "priceApprovalRequested": true,
-    "priceApprovalAmount": 5625
+    "priceApprovalAmount": 1800
   },
   {
     "id": "mrn_0000267870_ddeba5ad",
     "conversationId": "f177dbfe-22af-490f-a142-205371cab885@elite-exchange.elitehospital.org",
-    "messageId": "&lt;f177dbfe-22af-490f-a142-205371cab885@Elite-Exchange.elitehospital.org&gt;",
-    "exchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufQtAAA=",
+    "messageId": "&lt;PAXP193MB150261A50195237EE7EF6426F1982@PAXP193MB1502.EURP193.PROD.OUTLOOK.COM&gt;",
+    "exchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufRYAAA=",
     "exchangeChangeKey": null,
     "receivedAt": "2026-10-19T16:05:35.000Z",
     "patientName": "ماجد محمد عبده رضوان",
@@ -3911,7 +4378,7 @@
     "admissionType": "Inpatient",
     "bed": "Bed 1 - CCU",
     "physician": "Mahmoud Shehata",
-    "contractorRaw": "شركة جاسكو",
+    "contractorRaw": "جاسكو",
     "contractorNormalized": "جاسكو",
     "priceListYear": "2025",
     "contractorOfficer": "زياد",
@@ -3944,12 +4411,14 @@
     "creditLimit": 9600,
     "creditLimitText": "9,600 EGP",
     "isRefused": false,
-    "threadHash": "6622f4509335bd6f10891db7612640af",
+    "threadHash": "04e3362fa69e3c6f08786c6822229626",
     "aiProcessingStatus": "processed",
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufRYAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "f177dbfe-22af-490f-a142-205371cab885@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000060854_6999851d",
@@ -4002,7 +4471,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufRbAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "b539f3d7-d83d-449e-ac81-f48833a23a46@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000017506_66789af4",
@@ -4055,7 +4526,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufReAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "d625d23d-e3ae-4c98-afac-a42b77703199@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000063963_e2efb563",
@@ -4071,7 +4544,7 @@
     "bed": "Inpatient Bed",
     "physician": "Hospital Staff",
     "contractorRaw": "صحة وان",
-    "contractorNormalized": "شركة صحة وان",
+    "contractorNormalized": "صحة وان",
     "priceListYear": "2025",
     "contractorOfficer": "محمد جابر",
     "requestedServices": [
@@ -4092,8 +4565,8 @@
     "patientSharePercentage": null,
     "approvedAmountLimit": 85000,
     "coverageConditions": "",
-    "aiThreadSummary": "طلب موافقة للمريض محمد حمدي محمد عبد الحميد (شركة صحة وان). تمت الموافقة على الدخول والإجراء بحد أقصى 85,000 ج.م. الحالة معتمدة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: شركة صحة وان\nالمسئول من قسم السيلز: محمد جابر\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
+    "aiThreadSummary": "طلب موافقة للمريض محمد حمدي محمد عبد الحميد (صحة وان). تمت الموافقة على الدخول والإجراء بحد أقصى 85,000 ج.م. الحالة معتمدة ولا توجد متطلبات ناقصة.",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: صحة وان\nالمسئول من قسم السيلز: محمد جابر\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*محمد حمدي محمد عبد الحميد* - Inpatient Bed\nصحة وان\n*تمت الموافقة على: إقامة بالقسم الداخلي (Inpatient Admission) (حد أقصى: 85,000 EGP)*",
     "draftedAt": null,
     "hasReplies": true,
@@ -4108,7 +4581,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufRjAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "e0e57143-f83c-4df3-b31e-3b20ddc6c3ff@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000253547_896ed588",
@@ -4124,7 +4599,7 @@
     "bed": "Inpatient Bed",
     "physician": "Hospital Staff",
     "contractorRaw": "Med Right ميد رايت",
-    "contractorNormalized": "Med Right",
+    "contractorNormalized": "ميدرايت",
     "priceListYear": "2025",
     "contractorOfficer": "نادين",
     "requestedServices": [
@@ -4140,19 +4615,19 @@
         "status": "unmatched"
       }
     ],
-    "status": "pending_manual_draft",
-    "statusReasonArabic": "بانتظار الموافقة (طلب موافقة وليس رد معتمد)",
+    "status": "approved",
+    "statusReasonArabic": "تمت الموافقة واعتماد الحالة بحد أقصى 40,000 ج.م",
     "patientSharePercentage": null,
     "approvedAmountLimit": 40000,
     "coverageConditions": "",
-    "aiThreadSummary": "طلب موافقة للمريض حسن سيداحمد عبدالمجيد سيداحمد (Med Right). تمت الموافقة على الدخول والإجراء بحد أقصى 40,000 ج.م. الحالة معتمدة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: Med Right\nالمسئول من قسم السيلز: نادين\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
-    "cmWhatsappMessage": "*حسن سيداحمد عبدالمجيد سيداحمد* - Inpatient Bed\nMed Right\n*المطلوب موافقة عمل إقامة بالقسم الداخلي (Inpatient Admission)*",
+    "aiThreadSummary": "طلب موافقة للمريض حسن سيداحمد عبدالمجيد سيداحمد (ميدرايت). تمت الموافقة على الدخول والإجراء بحد أقصى 40,000 ج.م. الحالة معتمدة ولا توجد متطلبات ناقصة.",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: ميدرايت\nالمسئول من قسم السيلز: نادين\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
+    "cmWhatsappMessage": "*حسن سيداحمد عبدالمجيد سيداحمد* - Inpatient Bed\nميدرايت\n*تمت الموافقة على: إقامة بالقسم الداخلي (Inpatient Admission) (حد أقصى: 40,000 EGP)*",
     "draftedAt": null,
     "hasReplies": true,
     "replySnippet": "دخول من الطوارئ و الحجز لعمل تثبيت لكسر باصبع البنصر اليد اليسري بواسطه اسالك معدنيه بحد اقصي 40 الف",
-    "hasExistingApproval": false,
-    "existingApprovalSnippet": "",
+    "hasExistingApproval": true,
+    "existingApprovalSnippet": "Fw: Inpatient Approval Request دخول من الطوارئ و الحجز لعمل تثبيت لكسر باصبع البنصر اليد اليسري بواسطه اسالك معدنيه بحد",
     "creditLimit": 40000,
     "creditLimitText": "40,000 EGP",
     "isRefused": false,
@@ -4161,7 +4636,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufRwAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "ce78b6f3-2808-4bdc-baf3-f4fc863973f4@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000026741_1ee2b96b",
@@ -4214,7 +4691,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufTiAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "4bba5a1c-a663-47e3-b063-7075f65bc599@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000216945_55dec7fc",
@@ -4230,9 +4709,9 @@
     "bed": "Bed 4 - ICU",
     "physician": "Hany sameer",
     "contractorRaw": "Next Care نكست كير",
-    "contractorNormalized": "نكست كير Next Care",
+    "contractorNormalized": "Next Care نكست كير",
     "priceListYear": "2025",
-    "contractorOfficer": "أحمد حمزة",
+    "contractorOfficer": "ديانا",
     "requestedServices": [
       {
         "name": "Levetiracetam (Tiratam, Keppra) Trough - Investigation",
@@ -4249,18 +4728,18 @@
       }
     ],
     "status": "pending_manual_draft",
-    "statusReasonArabic": "خارج التعاقد - مطلوب موافقة سعرية",
+    "statusReasonArabic": "توجد ردود ومحادثة جارية على الإيميل تتطلب مراجعة منسق السيلز",
     "patientSharePercentage": null,
     "approvedAmountLimit": null,
     "coverageConditions": "",
-    "aiThreadSummary": "طلب موافقة للمريض نادر قدري محمد عبدالله (نكست كير Next Care). توجد مراسلات متبادلة على الإيميل بانتظار التأكيد النهائي.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: نكست كير Next Care\nالمسئول من قسم السيلز: أحمد حمزة\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - Levetiracetam (Tiratam, Keppra) Trough - Investigation : مطلوب موافقة سعرية بمبلغ 5,625 ج.م]\n\n@corporate@elitehospital.org",
-    "cmWhatsappMessage": "*نادر قدري محمد عبدالله* - Bed 4 - ICU\nنكست كير Next Care\n*مطلوب موافقة سعرية بمبلغ 5,625 ج.م على: Levetiracetam (Tiratam, Keppra) Trough - Investigation*",
+    "aiThreadSummary": "طلب موافقة للمريض نادر قدري محمد عبدالله (Next Care نكست كير). توجد مراسلات متبادلة على الإيميل بانتظار التأكيد النهائي.",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: Next Care نكست كير\nالمسئول من قسم السيلز: ديانا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - Levetiracetam (Tiratam, Keppra) Trough - Investigation : مطلوب موافقة سعرية بمبلغ 5,625 ج.م]\n\n@corporate@elitehospital.org",
+    "cmWhatsappMessage": "*نادر قدري محمد عبدالله* - Bed 4 - ICU\nNext Care نكست كير\n*مطلوب موافقة سعرية بمبلغ 5,625 ج.م على: Levetiracetam (Tiratam, Keppra) Trough - Investigation*",
     "draftedAt": null,
     "hasReplies": true,
     "replySnippet": "مكرر .82-Altered mental status, unspecified SELECTED SERVICES: Service Name Price (EGP) Levetiraceta",
     "hasExistingApproval": false,
-    "existingApprovalSnippet": "",
+    "existingApprovalSnippet": "توجد ردود ومحادثة جارية على الإيميل تتطلب مراجعة منسق السيلز",
     "creditLimit": null,
     "creditLimitText": null,
     "isRefused": false,
@@ -4270,8 +4749,8 @@
     "lastExchangeChangeKey": null,
     "threadKey": "91be8608-eb50-4cb2-891f-b32870220a4e@elite-exchange.elitehospital.org",
     "refusalSnippet": "",
-    "priceApprovalRequested": true,
-    "priceApprovalAmount": 5625
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000054665_fc65f7e6",
@@ -4287,9 +4766,9 @@
     "bed": "Bed 2 - ICU",
     "physician": "Hany sameer",
     "contractorRaw": "Next Care نكست كير",
-    "contractorNormalized": "نكست كير Next Care",
+    "contractorNormalized": "Next Care نكست كير",
     "priceListYear": "2025",
-    "contractorOfficer": "أحمد حمزة",
+    "contractorOfficer": "ديانا",
     "requestedServices": [
       {
         "name": "HBs-Ag - Investigation",
@@ -4326,9 +4805,9 @@
     "patientSharePercentage": null,
     "approvedAmountLimit": null,
     "coverageConditions": "",
-    "aiThreadSummary": "طلب موافقة للمريض محمد علي محمد احمد (نكست كير Next Care). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: نكست كير Next Care\nالمسئول من قسم السيلز: أحمد حمزة\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\n1- HBs-Ag\n2- HCV Ab\n3- HIV 1+2+O Ab\n\n@corporate@elitehospital.org",
-    "cmWhatsappMessage": "*محمد علي محمد احمد* - Bed 2 - ICU\nنكست كير Next Care\n*تمت الموافقة على: HBs-Ag - Investigation و HCV Ab - Investigation و HIV 1+2+O Ab - Investigation*",
+    "aiThreadSummary": "طلب موافقة للمريض محمد علي محمد احمد (Next Care نكست كير). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: Next Care نكست كير\nالمسئول من قسم السيلز: ديانا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\n1- HBs-Ag\n2- HCV Ab\n3- HIV 1+2+O Ab\n\n@corporate@elitehospital.org",
+    "cmWhatsappMessage": "*محمد علي محمد احمد* - Bed 2 - ICU\nNext Care نكست كير\n*تمت الموافقة على: HBs-Ag - Investigation و HCV Ab - Investigation و HIV 1+2+O Ab - Investigation*",
     "draftedAt": null,
     "hasReplies": true,
     "replySnippet": "لا مانع من عمل التحاليل تعليمات ا ديانا .9-Acute kidney failure, unspecified, N39.0-Urinary tract in",
@@ -4342,7 +4821,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufSAAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "3d34dd79-4d22-4e47-bd21-1c7e3254d4e0@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000263839_20607abb",
@@ -4413,7 +4894,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufSBAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "6b3cff1f-e189-4fc0-93df-5cbd150e83ba@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000086215_4a38cd82",
@@ -4429,7 +4912,7 @@
     "bed": "Bed 328 - Zone B",
     "physician": "Hany sameer",
     "contractorRaw": "Alexandria Petroleum Maintenance CO.(Petromaint) بترومنت (الاسكندرية للصيانة البترولية)",
-    "contractorNormalized": "Petromaint",
+    "contractorNormalized": "بترومنت",
     "priceListYear": "2025",
     "contractorOfficer": "زياد",
     "requestedServices": [
@@ -4441,23 +4924,23 @@
     "matchedProcedures": [
       {
         "serviceName": "h_pylori ag in stool",
-        "matchedName": "h_pylori ag in stool",
-        "status": "unmatched"
+        "matchedName": "Stool Analysis",
+        "status": "matched"
       }
     ],
     "status": "pending_manual_draft",
-    "statusReasonArabic": "بانتظار الموافقة (طلب موافقة وليس رد معتمد)",
+    "statusReasonArabic": "توجد ردود ومحادثة جارية على الإيميل تتطلب مراجعة منسق السيلز",
     "patientSharePercentage": null,
     "approvedAmountLimit": null,
     "coverageConditions": "",
-    "aiThreadSummary": "طلب موافقة للمريض الاء محمد فتحي شعبان (Petromaint). تمت الموافقة على الدخول والإجراء باللائحة. الحالة معتمدة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: Petromaint\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - h_pylori ag in stool]\n\n@corporate@elitehospital.org",
-    "cmWhatsappMessage": "*الاء محمد فتحي شعبان* - Bed 328 - Zone B\nPetromaint\n*المطلوب موافقة عمل h_pylori ag in stool*",
+    "aiThreadSummary": "طلب موافقة للمريض الاء محمد فتحي شعبان (بترومنت). توجد مراسلات متبادلة على الإيميل بانتظار التأكيد النهائي.",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: بترومنت\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\n1- Stool Analysis\n\n@corporate@elitehospital.org",
+    "cmWhatsappMessage": "*الاء محمد فتحي شعبان* - Bed 328 - Zone B\nبترومنت\n*المطلوب موافقة عمل h_pylori ag in stool*",
     "draftedAt": null,
     "hasReplies": true,
     "replySnippet": "@CORPORATE @mohamed Fekri .(Petromaint) بترومنت (الاسكندرية للصيانة البترولية) Diagnosis D64.9-Anemi",
     "hasExistingApproval": false,
-    "existingApprovalSnippet": "",
+    "existingApprovalSnippet": "توجد ردود ومحادثة جارية على الإيميل تتطلب مراجعة منسق السيلز",
     "creditLimit": null,
     "creditLimitText": null,
     "isRefused": false,
@@ -4466,7 +4949,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufSDAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "dffb490f-c227-4b43-93ad-e51229b3d176@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000267855_c82ea570",
@@ -4482,7 +4967,7 @@
     "bed": "Bed 8 - ICU",
     "physician": "Hany sameer",
     "contractorRaw": "Bapetco Badr El Din Petroleum Co بابتيكو بدر الدين للبترول",
-    "contractorNormalized": "Bapetco - Badr El Din للبترول",
+    "contractorNormalized": "بدر الدين للبترول",
     "priceListYear": "2025",
     "contractorOfficer": "محمد ابو الوفا",
     "requestedServices": [
@@ -4521,9 +5006,9 @@
     "patientSharePercentage": null,
     "approvedAmountLimit": null,
     "coverageConditions": "",
-    "aiThreadSummary": "طلب موافقة للمريض اشرف ياقوت سعد مصطفى (Bapetco - Badr El Din للبترول). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: Bapetco - Badr El Din للبترول\nالمسئول من قسم السيلز: محمد ابو الوفا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\n1- HBs-Ag\n2- HCV Ab\n3- HIV 1+2+O Ab\n\n@corporate@elitehospital.org",
-    "cmWhatsappMessage": "*اشرف ياقوت سعد مصطفى* - Bed 8 - ICU\nBapetco Badr El Din للبترول\n*تمت الموافقة على: HBs-Ag - Investigation و HCV Ab - Investigation و HIV 1+2+O Ab - Investigation*",
+    "aiThreadSummary": "طلب موافقة للمريض اشرف ياقوت سعد مصطفى (بدر الدين للبترول). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: بدر الدين للبترول\nالمسئول من قسم السيلز: محمد ابو الوفا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\n1- HBs-Ag\n2- HCV Ab\n3- HIV 1+2+O Ab\n\n@corporate@elitehospital.org",
+    "cmWhatsappMessage": "*اشرف ياقوت سعد مصطفى* - Bed 8 - ICU\nبدر الدين للبترول\n*تمت الموافقة على: HBs-Ag - Investigation و HCV Ab - Investigation و HIV 1+2+O Ab - Investigation*",
     "draftedAt": null,
     "hasReplies": true,
     "replySnippet": "@CORPORATE @mohamed Fekri .X7-Direct infection of ankle and foot in infec, R65.21-Severe sepsis with",
@@ -4537,7 +5022,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufSGAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "1b9171ae-2c7b-4ca6-b766-51d9718255a7@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000054665_2127ee15",
@@ -4553,9 +5040,9 @@
     "bed": "Bed 2 - ICU",
     "physician": "Hany sameer",
     "contractorRaw": "Next Care نكست كير",
-    "contractorNormalized": "نكست كير Next Care",
+    "contractorNormalized": "Next Care نكست كير",
     "priceListYear": "2025",
-    "contractorOfficer": "أحمد حمزة",
+    "contractorOfficer": "ديانا",
     "requestedServices": [
       {
         "name": "Image guided PCN (Single)",
@@ -4574,9 +5061,9 @@
     "patientSharePercentage": null,
     "approvedAmountLimit": null,
     "coverageConditions": "",
-    "aiThreadSummary": "طلب موافقة للمريض محمد علي محمد احمد (نكست كير Next Care). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: نكست كير Next Care\nالمسئول من قسم السيلز: أحمد حمزة\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\n1- تركيب أنبوبة تصريف الكلي عن طريق الجلد جانبين (Image Guided PCN (single))\n\n@corporate@elitehospital.org",
-    "cmWhatsappMessage": "*محمد علي محمد احمد* - Bed 2 - ICU\nنكست كير Next Care\n*تمت الموافقة على: Image guided PCN (Single)*",
+    "aiThreadSummary": "طلب موافقة للمريض محمد علي محمد احمد (Next Care نكست كير). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: Next Care نكست كير\nالمسئول من قسم السيلز: ديانا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\n1- تركيب أنبوبة تصريف الكلي عن طريق الجلد جانبين (Image Guided PCN (single))\n\n@corporate@elitehospital.org",
+    "cmWhatsappMessage": "*محمد علي محمد احمد* - Bed 2 - ICU\nNext Care نكست كير\n*تمت الموافقة على: Image guided PCN (Single)*",
     "draftedAt": null,
     "hasReplies": true,
     "replySnippet": "@mohamed Fekri .9-Acute kidney failure, unspecified, N39.0-Urinary tract infection, site not specifi",
@@ -4590,7 +5077,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufSHAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "4cd291ed-4569-4b0c-98cb-561a54826268@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000086215_dcc05e29",
@@ -4606,7 +5095,7 @@
     "bed": "Bed 328 - Zone B",
     "physician": "Hany sameer",
     "contractorRaw": "Alexandria Petroleum Maintenance CO.(Petromaint) بترومنت (الاسكندرية للصيانة البترولية)",
-    "contractorNormalized": "Petromaint",
+    "contractorNormalized": "بترومنت",
     "priceListYear": "2025",
     "contractorOfficer": "زياد",
     "requestedServices": [
@@ -4627,12 +5116,12 @@
     "patientSharePercentage": null,
     "approvedAmountLimit": null,
     "coverageConditions": "",
-    "aiThreadSummary": "طلب موافقة للمريض الاء محمد فتحي شعبان (Petromaint). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: Petromaint\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - injectafer 2vial (500mg ) in 250ml nacl]\n\n@corporate@elitehospital.org",
-    "cmWhatsappMessage": "*الاء محمد فتحي شعبان* - Bed 328 - Zone B\nPetromaint\n*تمت الموافقة على: injectafer 2vial (500mg ) in 250ml nacl*",
+    "aiThreadSummary": "طلب موافقة للمريض الاء محمد فتحي شعبان (بترومنت). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: بترومنت\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - injectafer 2vial (500mg ) in 250ml nacl]\n\n@corporate@elitehospital.org",
+    "cmWhatsappMessage": "*الاء محمد فتحي شعبان* - Bed 328 - Zone B\nبترومنت\n*تمت الموافقة على: injectafer 2vial (500mg ) in 250ml nacl*",
     "draftedAt": null,
     "hasReplies": true,
-    "replySnippet": "@CORPORATE .(Petromaint) بترومنت (الاسكندرية للصيانة البترولية) Diagnosis D64.9-Anemia, unspecified",
+    "replySnippet": "@CORPORATE .(Petromaint) بترومنت (الاسكندرية للصيانة البترولية) Diagnosis D64.9-Anemia, unspecified ",
     "hasExistingApproval": true,
     "existingApprovalSnippet": "...شعبان (MRN: 0000086215) لا مانع طبقا للتعاقد .org> Sent: Tuesday, 20 October 2026 09:49:41 To: HIS Notification...",
     "creditLimit": null,
@@ -4643,7 +5132,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufSIAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "efae0ebb-bb5b-482c-83f3-0708b4c7e33d@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000255431_2dd73824",
@@ -4659,7 +5150,7 @@
     "bed": "Bed 321 - Zone B",
     "physician": "Hany sameer",
     "contractorRaw": "أنربك",
-    "contractorNormalized": "شركة انربك",
+    "contractorNormalized": "انربك",
     "priceListYear": "2025",
     "contractorOfficer": "أحمد حمزة",
     "requestedServices": [
@@ -4680,14 +5171,14 @@
     "patientSharePercentage": null,
     "approvedAmountLimit": null,
     "coverageConditions": "",
-    "aiThreadSummary": "طلب موافقة للمريض محمد قباري محمد احمد (شركة انربك). تمت الموافقة على الدخول والإجراء باللائحة. الحالة معتمدة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: شركة انربك\nالمسئول من قسم السيلز: أحمد حمزة\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - جراحة عاجلة لاستئصال الورم بالميكروسكوب الجراحي]\n\n@corporate@elitehospital.org",
+    "aiThreadSummary": "طلب موافقة للمريض محمد قباري محمد احمد (انربك). تمت الموافقة على الدخول والإجراء باللائحة. الحالة معتمدة ولا توجد متطلبات ناقصة.",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: انربك\nالمسئول من قسم السيلز: أحمد حمزة\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - جراحة عاجلة لاستئصال الورم بالميكروسكوب الجراحي]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*محمد قباري محمد احمد* - Bed 321 - Zone B\nانربك\n*تمت الموافقة على: جراحة عاجلة لاستئصال الورم بالميكروسكوب الجراحي*",
     "draftedAt": null,
     "hasReplies": true,
     "replySnippet": "@CORPORATE @mohamed Fekri",
     "hasExistingApproval": true,
-    "existingApprovalSnippet": "...0000255431) مرفق تقرير الموافقه السعريه",
+    "existingApprovalSnippet": "...د احمد (MRN: 0000255431) مرفق تقرير الموافقه السعريه",
     "creditLimit": null,
     "creditLimitText": null,
     "isRefused": false,
@@ -4696,13 +5187,15 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufSJAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "ea655481-d4a9-4f76-a723-797b65fe26a1@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000256332_cfa4f179",
     "conversationId": "7e92bd8d-74ca-499c-8848-440b52aff808@elite-exchange.elitehospital.org",
-    "messageId": "&lt;7e92bd8d-74ca-499c-8848-440b52aff808@Elite-Exchange.elitehospital.org&gt;",
-    "exchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufQ1AAA=",
+    "messageId": "&lt;7196c8e0650047b8a24ce2a6f1abfbb0@elitehospital.org&gt;",
+    "exchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufSKAAA=",
     "exchangeChangeKey": null,
     "receivedAt": "2026-10-20T08:58:52.000Z",
     "patientName": "هاله احمد شيبه حسين",
@@ -4738,18 +5231,20 @@
     "cmWhatsappMessage": "*هاله احمد شيبه حسين* - Bed 7 - ICU\nBlue Dot\n*المطلوب موافقة عمل Special Nurse*",
     "draftedAt": null,
     "hasReplies": true,
-    "replySnippet": "@MedicalTourism .00 TOTAL AMOUNT: 2310.00 EGP Request Details المريضه تحتاج الي تمريض خاص بالغرفه",
+    "replySnippet": "غير مغطي بناءا علي افاده ا غباري .00 TOTAL AMOUNT: 2310.00 EGP Request Details المريضه تحتاج الي تمر",
     "hasExistingApproval": false,
     "existingApprovalSnippet": "توجد ردود ومحادثة جارية على الإيميل تتطلب مراجعة منسق السيلز",
     "creditLimit": null,
     "creditLimitText": null,
     "isRefused": false,
-    "threadHash": "47f63cb1cc10b16ba86724e1bf891776",
+    "threadHash": "00a4e4769d12e7e3b8e57105467e3df7",
     "aiProcessingStatus": "processed",
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufSKAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "7e92bd8d-74ca-499c-8848-440b52aff808@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000267855_408a5e55",
@@ -4765,7 +5260,7 @@
     "bed": "Bed 8 - ICU",
     "physician": "Hany sameer",
     "contractorRaw": "Bapetco Badr El Din Petroleum Co بابتيكو بدر الدين للبترول",
-    "contractorNormalized": "Bapetco - Badr El Din للبترول",
+    "contractorNormalized": "بدر الدين للبترول",
     "priceListYear": "2025",
     "contractorOfficer": "محمد ابو الوفا",
     "requestedServices": [
@@ -4781,19 +5276,19 @@
         "status": "matched"
       }
     ],
-    "status": "pending_manual_draft",
-    "statusReasonArabic": "بانتظار الموافقة (طلب موافقة وليس رد معتمد)",
+    "status": "approved",
+    "statusReasonArabic": "تمت الموافقة واعتماد الحالة باللائحة",
     "patientSharePercentage": null,
     "approvedAmountLimit": null,
     "coverageConditions": "",
-    "aiThreadSummary": "طلب موافقة للمريض اشرف ياقوت سعد مصطفى (Bapetco - Badr El Din للبترول). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: Bapetco - Badr El Din للبترول\nالمسئول من قسم السيلز: محمد ابو الوفا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\n1- شق حنجري بالمنظار بالعناية (Endoscopic (Bedside) Tracheostomy)\n\n@corporate@elitehospital.org",
-    "cmWhatsappMessage": "*اشرف ياقوت سعد مصطفى* - Bed 8 - ICU\nBapetco Badr El Din للبترول\n*المطلوب موافقة عمل Endoscopic(Bedside) Tracheostomy*",
+    "aiThreadSummary": "طلب موافقة للمريض اشرف ياقوت سعد مصطفى (بدر الدين للبترول). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: بدر الدين للبترول\nالمسئول من قسم السيلز: محمد ابو الوفا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\n1- شق حنجري بالمنظار بالعناية (Endoscopic (Bedside) Tracheostomy)\n\n@corporate@elitehospital.org",
+    "cmWhatsappMessage": "*اشرف ياقوت سعد مصطفى* - Bed 8 - ICU\nبدر الدين للبترول\n*تمت الموافقة على: Endoscopic(Bedside) Tracheostomy*",
     "draftedAt": null,
     "hasReplies": true,
     "replySnippet": "@CORPORATE @mohamed Fekri .X7-Direct infection of ankle and foot in infec, R65.21-Severe sepsis with",
-    "hasExistingApproval": false,
-    "existingApprovalSnippet": "",
+    "hasExistingApproval": true,
+    "existingApprovalSnippet": "...مصطفى (MRN: 0000267855) ‏لا مانع .X7-Direct infection of ankle and foot in infec, R65.21-Severe sepsis with sept...",
     "creditLimit": null,
     "creditLimitText": null,
     "isRefused": false,
@@ -4802,7 +5297,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufSLAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "776a018f-6d25-4a92-a16d-593eb3ea30f3@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000255431_b7ccf3f6",
@@ -4818,7 +5315,7 @@
     "bed": "Bed 321 - Zone B",
     "physician": "Hany sameer",
     "contractorRaw": "أنربك",
-    "contractorNormalized": "شركة انربك",
+    "contractorNormalized": "انربك",
     "priceListYear": "2025",
     "contractorOfficer": "أحمد حمزة",
     "requestedServices": [
@@ -4839,8 +5336,8 @@
     "patientSharePercentage": null,
     "approvedAmountLimit": null,
     "coverageConditions": "",
-    "aiThreadSummary": "طلب موافقة للمريض محمد قباري محمد احمد (شركة انربك). توجد مراسلات متبادلة على الإيميل بانتظار التأكيد النهائي.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: شركة انربك\nالمسئول من قسم السيلز: أحمد حمزة\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\n1- مرور استشاري (Consultant Observation)\n\n@corporate@elitehospital.org",
+    "aiThreadSummary": "طلب موافقة للمريض محمد قباري محمد احمد (انربك). توجد مراسلات متبادلة على الإيميل بانتظار التأكيد النهائي.",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: انربك\nالمسئول من قسم السيلز: أحمد حمزة\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\n1- مرور استشاري (Consultant Observation)\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*محمد قباري محمد احمد* - Bed 321 - Zone B\nانربك\n*المطلوب موافقة عمل Consultant Observation*",
     "draftedAt": null,
     "hasReplies": true,
@@ -4855,7 +5352,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufSQAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "2d5264ef-96b1-4417-a2c3-01250432a798@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000017506_1439faab",
@@ -4908,7 +5407,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufSSAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "90f69118-24aa-48cc-aec4-65a3b0ee030d@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000090899_74ba9348",
@@ -4961,7 +5462,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufSTAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "0c55c169-50ad-4b79-8c0c-c3a21486edc5@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000216945_a770298c",
@@ -4977,9 +5480,9 @@
     "bed": "Bed 4 - ICU",
     "physician": "Hany sameer",
     "contractorRaw": "Next Care نكست كير",
-    "contractorNormalized": "نكست كير Next Care",
+    "contractorNormalized": "Next Care نكست كير",
     "priceListYear": "2025",
-    "contractorOfficer": "أحمد حمزة",
+    "contractorOfficer": "ديانا",
     "requestedServices": [
       {
         "name": "CSF culture - Investigation",
@@ -5039,18 +5542,18 @@
       }
     ],
     "status": "pending_manual_draft",
-    "statusReasonArabic": "خارج التعاقد - مطلوب موافقة سعرية",
+    "statusReasonArabic": "توجد ردود ومحادثة جارية على الإيميل تتطلب مراجعة منسق السيلز",
     "patientSharePercentage": null,
     "approvedAmountLimit": null,
     "coverageConditions": "",
-    "aiThreadSummary": "طلب موافقة للمريض نادر قدري محمد عبدالله (نكست كير Next Care). تمت الموافقة على الدخول والإجراء باللائحة. الحالة معتمدة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: نكست كير Next Care\nالمسئول من قسم السيلز: أحمد حمزة\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\n1- CSF culture\n2- PCR panel for Meningitis, CSF ( Bacterial & Viral Panels)\n3- Lactate, CSF\n4- CSF analysis (Chemistry & cell count)\n5- Gram stain\n6- Cytology for fluids\n\n@corporate@elitehospital.org",
-    "cmWhatsappMessage": "*نادر قدري محمد عبدالله* - Bed 4 - ICU\nنكست كير Next Care\n*مطلوب موافقة سعرية بمبلغ 5,625 ج.م على: CSF culture - Investigation و PCR panel for Meningitis, CSF (Bacterial & Viral) - Investigation و Lactate, CSF - Investigation و CSF analysis (Chemistry & cell count) - Investigation و Gram stain - Investigation و Cytology for fluids - Investigation*",
+    "aiThreadSummary": "طلب موافقة للمريض نادر قدري محمد عبدالله (Next Care نكست كير). توجد مراسلات متبادلة على الإيميل بانتظار التأكيد النهائي.",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: Next Care نكست كير\nالمسئول من قسم السيلز: ديانا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\n1- CSF culture\n2- PCR panel for Meningitis, CSF ( Bacterial & Viral Panels)\n3- Lactate, CSF\n4- CSF analysis (Chemistry & cell count)\n5- Gram stain\n6- Cytology for fluids\n\n@corporate@elitehospital.org",
+    "cmWhatsappMessage": "*نادر قدري محمد عبدالله* - Bed 4 - ICU\nNext Care نكست كير\n*مطلوب موافقة سعرية على: CSF culture - Investigation و PCR panel for Meningitis, CSF (Bacterial & Viral) - Investigation و Lactate, CSF - Investigation و CSF analysis (Chemistry & cell count) - Investigation و Gram stain - Investigation و Cytology for fluids - Investigation*",
     "draftedAt": null,
     "hasReplies": true,
     "replySnippet": "@mohamed Fekri @patient account .0-Dehydration, G20-Parkinson's disease, R41.82-Altered mental statu",
     "hasExistingApproval": false,
-    "existingApprovalSnippet": "",
+    "existingApprovalSnippet": "توجد ردود ومحادثة جارية على الإيميل تتطلب مراجعة منسق السيلز",
     "creditLimit": null,
     "creditLimitText": null,
     "isRefused": false,
@@ -5061,7 +5564,7 @@
     "threadKey": "b421c5e5-36ea-4831-9761-46e55a567e74@elite-exchange.elitehospital.org",
     "refusalSnippet": "",
     "priceApprovalRequested": true,
-    "priceApprovalAmount": 5625
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000063963_76d8eb73",
@@ -5069,7 +5572,7 @@
     "messageId": "&lt;8d91e460-2ed9-418a-9750-209ce419617b@Elite-Exchange.elitehospital.org&gt;",
     "exchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufScAAA=",
     "exchangeChangeKey": null,
-    "receivedAt": "2026-10-20T11:05:14.000Z",
+    "receivedAt": "2026-10-22T05:59:19.000Z",
     "patientName": "محمد حمدي محمد عبد الحميد",
     "mrn": "0000063963",
     "diagnosis": "E11-Type 2 diabetes mellitus, I21.4-Non-ST elevation (NSTEMI) myocardial infarct",
@@ -5077,12 +5580,16 @@
     "bed": "Bed 2 - CCU",
     "physician": "Ahmed Said Taha Mousa",
     "contractorRaw": "صحة وان",
-    "contractorNormalized": "شركة صحة وان",
+    "contractorNormalized": "صحة وان",
     "priceListYear": "2025",
     "contractorOfficer": "محمد جابر",
     "requestedServices": [
       {
         "name": "SHOKWAVE BALLON",
+        "rawPrice": 0
+      },
+      {
+        "name": "مع استخدام البالونه التصادميه لتفتيت التكلسات الموجوده بالدعامه",
         "rawPrice": 0
       }
     ],
@@ -5091,6 +5598,11 @@
         "serviceName": "SHOKWAVE BALLON",
         "matchedName": "SHOKWAVE BALLON",
         "status": "unmatched"
+      },
+      {
+        "serviceName": "مع استخدام البالونه التصادميه لتفتيت التكلسات الموجوده بالدعامه",
+        "matchedName": "مع استخدام البالونه التصادميه لتفتيت التكلسات الموجوده بالدعامه",
+        "status": "unmatched"
       }
     ],
     "status": "approved",
@@ -5098,9 +5610,9 @@
     "patientSharePercentage": null,
     "approvedAmountLimit": null,
     "coverageConditions": "",
-    "aiThreadSummary": "طلب موافقة للمريض محمد حمدي محمد عبد الحميد (شركة صحة وان). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
-    "draftBody": "Price list: Elite Hospital 2025\nContractor: شركة صحة وان\nالمسئول من قسم السيلز: محمد جابر\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - SHOKWAVE BALLON]\n\n@corporate@elitehospital.org",
-    "cmWhatsappMessage": "*محمد حمدي محمد عبد الحميد* - Bed 2 - CCU\nصحة وان\n*تمت الموافقة على: SHOKWAVE BALLON*",
+    "aiThreadSummary": "طلب موافقة للمريض محمد حمدي محمد عبد الحميد (صحة وان). تمت الموافقة باللائحة. الحالة معتمدة ومكتملة ولا توجد متطلبات ناقصة.",
+    "draftBody": "Price list: Elite Hospital 2025\nContractor: صحة وان\nالمسئول من قسم السيلز: محمد جابر\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - SHOKWAVE BALLON\n - مع استخدام البالونه التصادميه لتفتيت التكلسات الموجوده بالدعامه]\n\n@corporate@elitehospital.org",
+    "cmWhatsappMessage": "*محمد حمدي محمد عبد الحميد* - Bed 2 - CCU\nصحة وان\n*تمت الموافقة على: SHOKWAVE BALLON و مع استخدام البالونه التصادميه لتفتيت التكلسات الموجوده بالدعامه*",
     "draftedAt": null,
     "hasReplies": true,
     "replySnippet": "@mohamed Fekri @patient account .4-Non-ST elevation (NSTEMI) myocardial infarct Request Details تم د",
@@ -5109,12 +5621,14 @@
     "creditLimit": null,
     "creditLimitText": null,
     "isRefused": false,
-    "threadHash": "80d104995271db23366e3c437baf2426",
+    "threadHash": "6908340bd008ea01c9af5e41a8da6f79",
     "aiProcessingStatus": "processed",
-    "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufSdAAA=",
+    "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufUIAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "8d91e460-2ed9-418a-9750-209ce419617b@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000268638_a908629c",
@@ -5167,7 +5681,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufSeAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "0f847828-8ace-4c46-8824-ce27d9c2184b@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000267855_d4b80f8b",
@@ -5175,7 +5691,7 @@
     "messageId": "&lt;4e51141c-8322-40be-9eb3-4f2d734db7d5@Elite-Exchange.elitehospital.org&gt;",
     "exchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufSgAAA=",
     "exchangeChangeKey": null,
-    "receivedAt": "2026-10-21T10:24:51.000Z",
+    "receivedAt": "2026-10-22T09:25:22.000Z",
     "patientName": "اشرف ياقوت سعد مصطفى",
     "mrn": "0000267855",
     "diagnosis": "M01.X7-Direct infection of ankle and foot in infec, R65.21-Severe sepsis with septic shock",
@@ -5202,27 +5718,29 @@
       }
     ],
     "status": "approved",
-    "statusReasonArabic": "تمت الموافقة واعتماد الحالة بحد أقصى 1,800 ج.م",
+    "statusReasonArabic": "تمت الموافقة واعتماد الحالة باللائحة",
     "patientSharePercentage": null,
-    "approvedAmountLimit": 1800,
+    "approvedAmountLimit": null,
     "coverageConditions": "",
-    "aiThreadSummary": "طلب موافقة للمريض اشرف ياقوت سعد مصطفى (بدر الدين للبترول). تمت الموافقة على الدخول والإجراء بحد أقصى 1,800 ج.م. الحالة معتمدة ولا توجد متطلبات ناقصة.",
+    "aiThreadSummary": "طلب موافقة للمريض اشرف ياقوت سعد مصطفى (بدر الدين للبترول). تمت الموافقة على الدخول والإجراء باللائحة. الحالة معتمدة ولا توجد متطلبات ناقصة.",
     "draftBody": "Price list: Elite Hospital 2025\nContractor: بدر الدين للبترول\nالمسئول من قسم السيلز: محمد ابو الوفا\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - رسم مخ حيث يعاني من اضراب بدرجه الوعي وتشنجات : مطلوب موافقة سعرية بمبلغ 1,812.5 ج.م]\n\n@corporate@elitehospital.org",
-    "cmWhatsappMessage": "*اشرف ياقوت سعد مصطفى* - Bed 8 - ICU\nبدر الدين للبترول\n*تمت الموافقة على: رسم مخ حيث يعاني من اضراب بدرجه الوعي وتشنجات - موافقة سعرية بمبلغ 1,800 EGP*",
+    "cmWhatsappMessage": "*اشرف ياقوت سعد مصطفى* - Bed 8 - ICU\nبدر الدين للبترول\n*تمت الموافقة على: رسم مخ حيث يعاني من اضراب بدرجه الوعي وتشنجات*",
     "draftedAt": null,
     "hasReplies": true,
     "replySnippet": "@mohamed Fekri @patient account @Mohamed Said .X7-Direct infection of ankle and foot in infec, R65.2",
     "hasExistingApproval": true,
-    "existingApprovalSnippet": "...مصطفى (MRN: 0000267855) موافقه سعريه بمبلغ 1800 ج لايطبق خصم التعاقد Mohamed Fekry Patient Accounts Supervisor 01010...",
-    "creditLimit": 1800,
-    "creditLimitText": "1,800 EGP",
+    "existingApprovalSnippet": "...مصطفى (MRN: 0000267855) مرفق الموافقه .X7-Direct infection of ankle and foot in infec, R65.21-Severe sep",
+    "creditLimit": null,
+    "creditLimitText": null,
     "isRefused": false,
-    "threadHash": "b2cbb674f95987f49b39b4d48c50f130",
+    "threadHash": "bf4681ebac10e3d80ada2749e30af2ba",
     "aiProcessingStatus": "processed",
-    "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufTgAAA=",
+    "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufUhAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "4e51141c-8322-40be-9eb3-4f2d734db7d5@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": 1800
   },
   {
     "id": "mrn_0000086215_bcf9a621",
@@ -5329,7 +5847,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufThAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "1f6580b3-da4c-4640-b692-0a33e17e5337@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000268638_ebb63384",
@@ -5382,7 +5902,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufSnAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "22e6c332-c6e8-4772-8a8c-b5dff25683fb@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000207549_a5f4f0df",
@@ -5415,18 +5937,18 @@
       }
     ],
     "status": "pending_manual_draft",
-    "statusReasonArabic": "بانتظار الموافقة (طلب موافقة وليس رد معتمد)",
+    "statusReasonArabic": "توجد ردود ومحادثة جارية على الإيميل تتطلب مراجعة منسق السيلز",
     "patientSharePercentage": null,
     "approvedAmountLimit": null,
     "coverageConditions": "",
-    "aiThreadSummary": "طلب موافقة للمريض محمد جمال ابراهيم سليم (ميتلايف اليكو). تمت الموافقة على الدخول والإجراء باللائحة. الحالة معتمدة ولا توجد متطلبات ناقصة.",
+    "aiThreadSummary": "طلب موافقة للمريض محمد جمال ابراهيم سليم (ميتلايف اليكو). توجد مراسلات متبادلة على الإيميل بانتظار التأكيد النهائي.",
     "draftBody": "Price list: Elite Hospital 2023\nContractor: ميتلايف اليكو\nالمسئول من قسم السيلز: زياد\nCorporate Email: corporate@elitehospital.org\n \nالإجراءات المتواجدة بلائحة أسعار التعاقد:\nلا توجد إجراءات مطابقة مباشرة باللائحة\n\n[⚠️  الإجراءات التالية غير مدرجة في لائحة أسعار التعاقد (مطلوب موافقة سعرية):\n - إقامة بالقسم الداخلي (Inpatient Admission)]\n\n@corporate@elitehospital.org",
     "cmWhatsappMessage": "*محمد جمال ابراهيم سليم* - Inpatient Bed\nميتلايف اليكو\n*المطلوب موافقة عمل إقامة بالقسم الداخلي (Inpatient Admission)*",
     "draftedAt": null,
     "hasReplies": true,
     "replySnippet": ".Location: ER Description: Patient Barcode: 0000207549 Patient Name: محمد جمال ابراهيم سليم Contract",
     "hasExistingApproval": false,
-    "existingApprovalSnippet": "",
+    "existingApprovalSnippet": "توجد ردود ومحادثة جارية على الإيميل تتطلب مراجعة منسق السيلز",
     "creditLimit": null,
     "creditLimitText": null,
     "isRefused": false,
@@ -5435,7 +5957,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufS0AAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "293e60ef-2946-451f-b3ed-5ff0548968e2@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000086215_53b3f9e0",
@@ -5497,7 +6021,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufTjAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "37a84a4e-406b-4eb9-aec3-d7cd2364dddf@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000269848_f92b9df4",
@@ -5550,7 +6076,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufSyAAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "8b98d1a6-168a-4369-a53f-92f9444c089e@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000187599_32cf0f94",
@@ -5603,7 +6131,9 @@
     "lastExchangeItemId": "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgBGAAAAAAA4U9epEFcNRbR5QhtWJDZyBwCVKjW+UMYOTr9U/HR/zy7WAAActvclAACVKjW+UMYOTr9U/HR/zy7WAAFgufS6AAA=",
     "lastExchangeChangeKey": null,
     "threadKey": "a964cd72-441b-4216-ad10-3d84a08fef38@elite-exchange.elitehospital.org",
-    "refusalSnippet": ""
+    "refusalSnippet": "",
+    "priceApprovalRequested": false,
+    "priceApprovalAmount": null
   },
   {
     "id": "mrn_0000017506_70e16abb",

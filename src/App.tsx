@@ -48,6 +48,7 @@ import { OutlookTipsCard } from './components/report/OutlookTipsCard';
 import { AiSettingsModal } from './components/modals/AiSettingsModal';
 import { ApprovalsHub } from './components/approvals/ApprovalsHub';
 import { Inbox, Search as SearchIcon } from 'lucide-react';
+import { SyncCircuitBreaker } from './utils';
 
 export default function App() {
   const [user, setUser] = useState<User | null>(null);
@@ -98,7 +99,7 @@ export default function App() {
     { name: 'Elite Hospital 2023', path: '/2023.pdf' },
   ];
 
-  // Auth listener
+  // Auth listener with recovery
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
@@ -107,32 +108,51 @@ export default function App() {
     return () => unsubscribe();
   }, []);
 
-  // Real-time search history listener utilizing persistent multi-tab disk cache
+  // Robust real-time search history listener with circuit breaker & error recovery
   useEffect(() => {
-    if (!user) {
-      setRecentSearches([]);
-      return;
-    }
+    if (!user?.uid) { setRecentSearches([]); return; }
+    let unsubscribe: (() => void) | undefined;
+    let retryTimer: ReturnType<typeof setTimeout> | undefined;
+    let cancelled = false;
+    const breaker = new SyncCircuitBreaker(5, 30000);
 
-    const searchesRef = collection(db, 'users', user.uid, 'searches');
-    const q = query(searchesRef, orderBy('timestamp', 'desc'), limit(8));
-
-    const unsubscribe = onSnapshot(
-      q,
-      (snapshot) => {
-        const searches: UserSearchRecord[] = snapshot.docs.map((docItem) => ({
-          id: docItem.id,
-          ...(docItem.data() as Omit<UserSearchRecord, 'id'>),
-        }));
-        setRecentSearches(searches);
-      },
-      (err) => {
-        console.warn('History subscription error:', err);
+    const attempt = () => {
+      if (cancelled) return;
+      const searchesRef = collection(db, 'users', user.uid, 'searches');
+      const q = query(searchesRef, orderBy('timestamp', 'desc'), limit(8));
+      try {
+        unsubscribe = onSnapshot(q,
+          (snapshot) => {
+            breaker.onSuccess();
+            const searches: UserSearchRecord[] = snapshot.docs.map((docItem: { id: string; data: () => any }) => ({
+              id: docItem.id, ...(docItem.data() as Omit<UserSearchRecord, 'id'>),
+            }));
+            setRecentSearches(searches);
+          },
+          (err) => {
+            console.error('History subscription error:', err);
+            breaker.onFailure();
+            if (unsubscribe) { try { unsubscribe(); } catch {} unsubscribe = undefined; }
+            if (cancelled) return;
+            const delay = breaker.state === 'open' ? 30000 : 5000;
+            retryTimer = setTimeout(attempt, delay);
+          }
+        );
+      } catch (err: any) {
+        console.error('Listener setup error:', err.message || err);
+        breaker.onFailure();
+        if (cancelled) return;
+        retryTimer = setTimeout(attempt, breaker.state === 'open' ? 30000 : 5000);
       }
-    );
+    };
 
-    return () => unsubscribe();
-  }, [user]);
+    attempt();
+    return () => {
+      cancelled = true;
+      if (retryTimer) clearTimeout(retryTimer);
+      if (unsubscribe) unsubscribe();
+    };
+  }, [user?.uid]);
 
   // Check PDF status on mount
   useEffect(() => {
@@ -263,11 +283,15 @@ export default function App() {
 
     try {
       const activeYear = selectedCompany?.priceListYear;
+      let aiError: string | undefined;
       const combinedResults = await searchAllProcedures(
         selectedProcedures,
         activeYear,
         aiSearchEnabled,
-        (progress) => setSearchStatus(progress)
+        (progress) => {
+          setSearchStatus(progress);
+          if (progress.aiError) aiError = progress.aiError;
+        }
       );
 
       setResults(combinedResults);
@@ -282,7 +306,9 @@ export default function App() {
         console.warn('Failed to save search history:', err)
       );
 
-      if (combinedResults.length === 0) {
+      if (aiError) {
+        setError(aiError);
+      } else if (combinedResults.length === 0) {
         setError('No procedures matching your search items were found in the pricelists.');
       }
     } catch (err: any) {
@@ -667,7 +693,7 @@ export default function App() {
                 <OutlookTipsCard />
 
                 {/* Error Banner */}
-                {error && results.length === 0 && (
+                {error && (
                   <div
                     className="bg-rose-50 border border-rose-200 rounded-2xl p-6 flex flex-col sm:flex-row items-start justify-between gap-4 text-rose-900 text-left shadow-xs"
                     role="alert"

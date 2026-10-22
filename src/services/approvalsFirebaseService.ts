@@ -74,6 +74,7 @@ export function subscribeToApprovals(
   onError?: (err: Error) => void
 ): () => void {
   let isSubscribed = true;
+  const fallbackUnsubscribers: Array<() => void> = [];
 
   // 1. Initial fast-hydration from local watcher API if available
   if (isLocalEnvironment()) {
@@ -141,8 +142,10 @@ export function subscribeToApprovals(
     },
     (error) => {
       console.warn('[Approvals Service] Ordered approvals query failed, falling back to base query:', error);
-      // Fallback query without orderBy in case of missing compound index
-      onSnapshot(
+      // Fallback query without orderBy in case of missing compound index.
+      // Track the fallback unsubscribe so it is torn down on cleanup (prevents listener leak).
+      let unsubFallback: (() => void) | undefined;
+      unsubFallback = onSnapshot(
         colRef,
         (snap) => {
           const records: InpatientApprovalRecord[] = [];
@@ -171,12 +174,16 @@ export function subscribeToApprovals(
           onError?.(fallbackErr);
         }
       );
+      fallbackUnsubscribers.push(unsubFallback);
     }
   );
 
   return () => {
     isSubscribed = false;
     unsubFirestore();
+    // Tear down any fallback listeners created by the error path
+    fallbackUnsubscribers.forEach((fn) => { try { fn(); } catch {} });
+    fallbackUnsubscribers.length = 0;
   };
 }
 
