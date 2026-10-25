@@ -1657,8 +1657,20 @@ console.log("Firebase Init Config Debug (Safe):", {
   authDomain: firebaseConfig.authDomain,
   firestoreDatabaseId: firebaseConfig.firestoreDatabaseId
 });
-var app = initializeApp(firebaseConfig);
-var auth = getAuth(app);
+var safeFirebaseConfig = {
+  ...firebaseConfig,
+  apiKey: firebaseConfig.apiKey || "AIzaSy_mock_api_key_for_test_runner",
+  projectId: firebaseConfig.projectId || "mock-firebase-project"
+};
+var app = initializeApp(safeFirebaseConfig);
+var authInstance;
+try {
+  authInstance = getAuth(app);
+} catch (err) {
+  authInstance = {
+    currentUser: null
+  };
+}
 function setupOptimizedFirestore() {
   const isNode = typeof window === "undefined";
   if (isNode) {

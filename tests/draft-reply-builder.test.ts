@@ -1,4 +1,10 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
+
+vi.mock('../src/firebase', () => ({
+  auth: { currentUser: null },
+  db: {},
+}));
+
 import { buildDraftReplyText, buildDraftReplyFromRecord } from '../src/lib/draftReplyBuilder';
 import { generateCmWhatsappMessage } from '../src/lib/whatsapp-generator';
 import { normalizeApprovalRecord } from '../src/services/approvalsFirebaseService';
