@@ -120,7 +120,6 @@ function toFirestoreValue(val) {
 }
 
 async function upsertFirestoreDoc(id, record) {
-  const docUrl = `${baseUrl}/${id}`;
   const fields = {
     id: toFirestoreValue(record.id),
     exchangeMessageId: toFirestoreValue(record.exchange_message_id),
@@ -151,6 +150,9 @@ async function upsertFirestoreDoc(id, record) {
     isRefused: toFirestoreValue(record.is_refused),
     updatedAt: toFirestoreValue(record.updated_at),
   };
+
+  const maskQuery = Object.keys(fields).map(f => `updateMask.fieldPaths=${encodeURIComponent(f)}`).join('&');
+  const docUrl = `${baseUrl}/${id}?${maskQuery}`;
 
   const res = await fetch(docUrl, {
     method: 'PATCH',
