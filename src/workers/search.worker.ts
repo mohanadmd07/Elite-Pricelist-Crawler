@@ -32,8 +32,8 @@ function hasClinicalMismatch(
 ): boolean {
   const queryCombined = `${queryEngNorm} ${queryAraNorm}`;
   const rowCombined = `${rowEngNorm} ${rowAraNorm}`;
-  const isTeeQuery = /transesophageal|tee\b|t\.e\.e|مريء|المريء|بالمنظار/i.test(queryCombined);
-  const isTeeRow = /transesophageal|tee\b|t\.e\.e|مريء|المريء|بالمنظار/i.test(rowCombined);
+  const isTeeQuery = /\b(?:transesophageal|tee|t\.e\.e)\b|ايكو مريئي|عبر المريء/i.test(queryCombined);
+  const isTeeRow = /\b(?:transesophageal|tee|t\.e\.e)\b|ايكو مريئي|عبر المريء/i.test(rowCombined);
   if (isTeeQuery !== isTeeRow) return true;
   if (hasAntibodyConflict(queryCombined, rowCombined)) return true;
   if (hasLabInvestigationConflict(queryCombined, rowCombined)) return true;

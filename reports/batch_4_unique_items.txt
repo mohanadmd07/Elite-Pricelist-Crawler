@@ -1,0 +1,542 @@
+100 g Oral Glucose Tolerance Test, pregnant OGTT |  | Years: 2023,2024,2025,2026 | Rows: 4
+17-Ketosteroids, Urine |  | Years: 2023,2024,2026 | Rows: 3
+17-OH-progestrone |  | Years: 2023,2024,2025,2026 | Rows: 4
+24 hrs Protein in urine |  | Years: 2023,2024,2026 | Rows: 3
+24 hrs. Protein in urine |  | Years: 2025 | Rows: 1
+24-hour urine copper |  | Years: 2023,2024,2025,2026 | Rows: 4
+5-hydroxyindol acetic acid (5-HIAA) |  | Years: 2023,2024,2025,2026 | Rows: 4
+5-nucleotidase |  | Years: 2023,2024,2025,2026 | Rows: 4
+75 g Oral Glucose Tolerance Test, pregnant (OGTT) |  | Years: 2023,2024,2025,2026 | Rows: 4
+75g Oral Glucose Tolerance Test NonPregnant OGTT |  | Years: 2023,2024,2026 | Rows: 3
+75g Oral Glucose Tolerance Test Nonpregnant OGTT |  | Years: 2025 | Rows: 1
+A/G Ratio |  | Years: 2023,2024,2025,2026 | Rows: 4
+ABO Typing |  | Years: 2023 | Rows: 1
+ABO Typing & RH Typing |  | Years: 2023 | Rows: 1
+ABO typing |  | Years: 2024,2025,2026 | Rows: 3
+ABO typing & RH typing |  | Years: 2024,2025,2026 | Rows: 3
+ACTH (AM) |  | Years: 2023 | Rows: 1
+ACTH (PM) |  | Years: 2023 | Rows: 1
+ACTH (am) |  | Years: 2024,2025,2026 | Rows: 3
+ACTH (pm) |  | Years: 2024,2025,2026 | Rows: 3
+ADAMTS13 |  | Years: 2023,2024 | Rows: 2
+ALT |  | Years: 2023,2024,2025,2026 | Rows: 4
+ASO ( Latex) |  | Years: 2023 | Rows: 1
+ASO ( Nephelometric) |  | Years: 2023,2026 | Rows: 2
+ASO (Latex) |  | Years: 2024 | Rows: 1
+ASO (Nephelometric) |  | Years: 2024,2025 | Rows: 2
+AST |  | Years: 2023,2024,2025,2026 | Rows: 4
+Acetone in Urine |  | Years: 2023 | Rows: 1
+Acetone in urine |  | Years: 2024,2026 | Rows: 2
+Acetone in urine (fasting) |  | Years: 2025 | Rows: 1
+Acetone/Glucose in urine |  | Years: 2023,2024,2025,2026 | Rows: 4
+Acid phosphatase |  | Years: 2023,2024,2025,2026 | Rows: 4
+Acrosin activity |  | Years: 2023,2024,2025,2026 | Rows: 4
+Acti- Fibro test |  | Years: 2023,2024 | Rows: 2
+Activated portion-C resistance |  | Years: 2025 | Rows: 1
+Activated protein C resistance |  | Years: 2026 | Rows: 1
+Activated protin-C resistance |  | Years: 2023,2024 | Rows: 2
+Adenosine deaminase (ADA) - CSF |  | Years: 2023,2024,2025,2026 | Rows: 4
+Adenosine deaminase (ADA) - Pericardial |  | Years: 2023,2024,2025,2026 | Rows: 4
+Adenosine deaminase (ADA) - Peritoneal |  | Years: 2023,2024,2025,2026 | Rows: 4
+Adenosine deaminase (ADA) - Pleural |  | Years: 2023,2024,2025,2026 | Rows: 4
+Albumin |  | Years: 2023,2024,2025,2026 | Rows: 4
+Albumin/Creatinine Ratio (ACR) |  | Years: 2023,2025 | Rows: 2
+Albumine/Creatinine Ratio (ACR) |  | Years: 2024,2026 | Rows: 2
+Alcohol (Serum) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Alcohol (Urine) |  | Years: 2024,2025 | Rows: 2
+Aldolase (serum) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Aldosterone |  | Years: 2023,2024,2025,2026 | Rows: 4
+Aldosterone/Renin Ratio |  | Years: 2024,2025,2026 | Rows: 3
+Alkaline Phosphatase |  | Years: 2023,2024,2025,2026 | Rows: 4
+Alpha-1-anti trypsin (Serum) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Alpha-1-anti trypsin (Stool) |  | Years: 2023,2024,2026 | Rows: 3
+Alpha-Fetoprotein (AFP) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Amphetamine |  | Years: 2023,2024,2025,2026 | Rows: 4
+Amylase (Peritoneal - Ascitic) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Amylase (Serum) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Amylase in Urine |  | Years: 2023,2024,2025,2026 | Rows: 4
+Androstenedione |  | Years: 2023,2024,2025,2026 | Rows: 4
+Angiotensin converting enzyme (ACE) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Anti PLA2R (Anti-phospholipase A2 receptor) |  | Years: 2024 | Rows: 1
+Anti PLA2R (Anti-phospholipaseA2 receptor) |  | Years: 2026 | Rows: 1
+Anti- RNP |  | Years: 2023,2024,2025,2026 | Rows: 4
+Anti-Cardiolioin IgM |  | Years: 2023 | Rows: 1
+Anti-Deaminated gluten peptide (anti-DGP) IgA |  | Years: 2023,2024,2025,2026 | Rows: 4
+Anti-Deaminated gluten peptide (anti-DGP) IgG |  | Years: 2023,2024,2025,2026 | Rows: 4
+Anti-HDV (total) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Anti-HDV IgM |  | Years: 2023,2024,2025,2026 | Rows: 4
+Anti-HEV (total) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Anti-HEV IgM |  | Years: 2023,2024,2025,2026 | Rows: 4
+Anti-He |  | Years: 2025 | Rows: 1
+Anti-Keratin Ab (AKA) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Anti-NMDA receptors (IFA) |  | Years: 2023,2024 | Rows: 2
+Anti-Platelets Ab |  | Years: 2023,2024,2025,2026 | Rows: 4
+Anti-Sperm Ab IgA |  | Years: 2023,2024,2025,2026 | Rows: 4
+Anti-Sperm Ab IgG |  | Years: 2023,2024,2025,2026 | Rows: 4
+Anti-Thrombin III |  | Years: 2023,2024,2025,2026 | Rows: 4
+Anti-diuretic hormone (ADH) |  | Years: 2023,2024,2026 | Rows: 3
+Anti-gastric parietal Ab |  | Years: 2023,2024,2025,2026 | Rows: 4
+Anti-glomerular basement membrane (anti-GBM) |  | Years: 2023,2024 | Rows: 2
+Anti-histone Ab |  | Years: 2023,2024,2025,2026 | Rows: 4
+Anti-jo-I |  | Years: 2023,2026 | Rows: 2
+Anti-jo-l |  | Years: 2024,2025 | Rows: 2
+Anti-mullerian Hormone (AMH) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Anti-myeloperoxidase |  | Years: 2023,2024,2026 | Rows: 3
+Anti-neuronal Ab |  | Years: 2023,2024,2026 | Rows: 3
+Anti-perinuclear factor (APF) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Anti-reticulin Ab |  | Years: 2023,2024 | Rows: 2
+Anti-ribosomal P |  | Years: 2023,2024,2025,2026 | Rows: 4
+Anti-sperm Ab IgM |  | Years: 2023,2024,2025,2026 | Rows: 4
+Anti-ss-A/Ro |  | Years: 2023,2024,2025,2026 | Rows: 4
+Anti-ss-B/La |  | Years: 2023,2024,2025,2026 | Rows: 4
+Anti-striated muscle Ab |  | Years: 2023,2024,2025,2026 | Rows: 4
+Apolipoprotein A1 |  | Years: 2023,2024,2025,2026 | Rows: 4
+Apolipoprotein B |  | Years: 2023,2024,2025,2026 | Rows: 4
+Arterial Blood Gas (ABG) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Arterial Blood Gas (ABG) with lactate |  | Years: 2025,2026 | Rows: 2
+Ascitic Fluid Examination (chemistry & cell count) |  | Years: 2023,2024,2025,2026 | Rows: 4
+B-HCG (quantitative) |  | Years: 2023,2024,2025,2026 | Rows: 4
+B2-microglobulin (serum) |  | Years: 2023,2024,2025,2026 | Rows: 4
+B2-microglobulin (urine) |  | Years: 2023,2024,2025,2026 | Rows: 4
+BCR- ABL Major |  | Years: 2023 | Rows: 1
+BUN |  | Years: 2023,2024,2025,2026 | Rows: 4
+Barbiturates |  | Years: 2023,2024,2025,2026 | Rows: 4
+Bence jones protein |  | Years: 2023,2024,2025,2026 | Rows: 4
+Benzodiazepines |  | Years: 2023,2024,2025,2026 | Rows: 4
+Beta trace protein |  | Years: 2023,2024,2025,2026 | Rows: 4
+Bicarbonate |  | Years: 2023,2024,2025,2026 | Rows: 4
+Bile acids |  | Years: 2023,2024,2025,2026 | Rows: 4
+Bleeding Time |  | Years: 2023 | Rows: 1
+Bleeding time |  | Years: 2024,2025,2026 | Rows: 3
+Blood Filteration Service | خدمة لفتره كيس دم | Years: 2024 | Rows: 1
+Blood Transfusion (not including blood cost) | نقل دم غير متضمن كيس الدم | Years: 2025 | Rows: 1
+Bone Alkaline Phosphatase |  | Years: 2023,2024,2025,2026 | Rows: 4
+Bone Marrow Aspiration | شفط سائل النخاع | Years: 2025 | Rows: 1
+Bone Marrow Aspiration Procedure (Doesnot include the price of the laboratory test & doesn't include the medication & consumables) | اجراء اخذ عينة من النخاع لا يشمل سعر التحليل او المستلزمات و الادوية ) | Years: 2024 | Rows: 1
+Bone Marrow aspirate |  | Years: 2023,2024,2025 | Rows: 3
+Bone Marrow aspirate examination |  | Years: 2026 | Rows: 1
+C-Peptide (Fasting) |  | Years: 2023,2024,2025,2026 | Rows: 4
+C-Peptide (P.P) |  | Years: 2023,2024,2025,2026 | Rows: 4
+CBC (Complete Blood Picture) |  | Years: 2023,2024,2025,2026 | Rows: 4
+CEA |  | Years: 2023,2024,2025,2026 | Rows: 4
+CK (HMW) |  | Years: 2023,2024,2025 | Rows: 3
+CK (Pan) |  | Years: 2023,2024,2025 | Rows: 3
+CK-MB |  | Years: 2023,2024,2025,2026 | Rows: 4
+CKD4 |  | Years: 2023,2024,2025,2026 | Rows: 4
+CPK |  | Years: 2023,2024,2025,2026 | Rows: 4
+CRP |  | Years: 2023,2024,2025,2026 | Rows: 4
+CSF IgG index |  | Years: 2024,2025,2026 | Rows: 3
+CYFRA 21 |  | Years: 2023,2024,2026 | Rows: 3
+Ca 19.9 |  | Years: 2023,2024,2025,2026 | Rows: 4
+Ca 242 |  | Years: 2023,2024,2025 | Rows: 3
+Ca 72.4 |  | Years: 2023,2024,2026 | Rows: 3
+Ca 742 |  | Years: 2026 | Rows: 1
+Ca125 |  | Years: 2023,2024,2025,2026 | Rows: 4
+Ca15.3 |  | Years: 2023,2024,2025,2026 | Rows: 4
+Calcitonin |  | Years: 2023,2024,2025,2026 | Rows: 4
+Calcium (urine) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Calcium, Ionized |  | Years: 2023,2026 | Rows: 2
+Calcium, Total |  | Years: 2023,2024,2025,2026 | Rows: 4
+Calcium, lonized |  | Years: 2024,2025 | Rows: 2
+Calcium/Creatinine ratio |  | Years: 2023,2024,2025,2026 | Rows: 4
+Calprotectin in stool |  | Years: 2023,2024,2025,2026 | Rows: 4
+Cannabinoids |  | Years: 2023,2024,2025,2026 | Rows: 4
+Carrier Screening DUO |  | Years: 2023,2024 | Rows: 2
+Carrier Screening SOLO female |  | Years: 2023 | Rows: 1
+Carrier Screening SOLO male |  | Years: 2023,2024 | Rows: 2
+Casein IgG |  | Years: 2023 | Rows: 1
+Catecholamines, blood (Adren, Nor-adren) |  | Years: 2023,2024,2026 | Rows: 3
+Ceruloplasmin |  | Years: 2023,2024,2025,2026 | Rows: 4
+Chloride (CSF) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Chloride (serum) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Chloride (urine) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Cholesterol |  | Years: 2023,2024,2025,2026 | Rows: 4
+Cholinesterase (Serum) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Chromogranin A |  | Years: 2023,2024 | Rows: 2
+Citrate in urine |  | Years: 2023,2024,2025,2026 | Rows: 4
+Clotting Time |  | Years: 2023 | Rows: 1
+Clotting time |  | Years: 2024,2025,2026 | Rows: 3
+Cocaine Screening |  | Years: 2023,2024,2025,2026 | Rows: 4
+Cold agglutinins |  | Years: 2023,2024,2025 | Rows: 3
+Complement 3 (C3) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Complement 4 (C4) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Copper in serum |  | Years: 2023,2024,2025,2026 | Rows: 4
+Cortisol (A.M) |  | Years: 2023 | Rows: 1
+Cortisol (P.M) |  | Years: 2023 | Rows: 1
+Cortisol (a.m.) |  | Years: 2024,2025,2026 | Rows: 3
+Cortisol (p.m.) |  | Years: 2024,2025,2026 | Rows: 3
+Creatinine |  | Years: 2023,2024,2025,2026 | Rows: 4
+Creatinine Clearance |  | Years: 2023,2024,2025,2026 | Rows: 4
+CrossMatching |  | Years: 2023 | Rows: 1
+Cryoglobulin |  | Years: 2023,2024,2025,2026 | Rows: 4
+Cryptosporidia |  | Years: 2023,2024,2025,2026 | Rows: 4
+Cyclosporine (Sandimmune) Peak |  | Years: 2024 | Rows: 1
+Cyclosporine (Sandimmune) Trough |  | Years: 2024 | Rows: 1
+Cyclosporine (Sandimmune)Peak |  | Years: 2023 | Rows: 1
+Cyclosporine (Sandimmune)Trough |  | Years: 2023 | Rows: 1
+D-dimer |  | Years: 2023,2024,2025,2026 | Rows: 4
+DHEA (Dehydroepiandrosterone) |  | Years: 2023,2024,2025,2026 | Rows: 4
+DHEA-S (Dehydroepiandrosterone sulphate) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Dengue Fever (Flavivirus) Ag |  | Years: 2023,2024,2026 | Rows: 3
+Dengue Fever (Flavivirus) IgG |  | Years: 2023,2024,2026 | Rows: 3
+Dengue Fever (Flavivirus) IgM |  | Years: 2023,2024,2025,2026 | Rows: 4
+Digoxin (Lanoxin) Peak |  | Years: 2023,2024,2025,2026 | Rows: 4
+Digoxin (Lanoxin) Trough |  | Years: 2023,2024,2025,2026 | Rows: 4
+Dihydrotestosterone (DHT) |  | Years: 2024,2025 | Rows: 2
+Dihydrotestosterone(DHT) |  | Years: 2023,2026 | Rows: 2
+Direct Coombs test |  | Years: 2023,2024,2025,2026 | Rows: 4
+Double test |  | Years: 2023,2024,2025,2026 | Rows: 4
+Drugs of Abuse Profile |  | Years: 2023,2024,2025,2026 | Rows: 4
+Dysmorphic RBCs in urine |  | Years: 2023,2024,2025,2026 | Rows: 4
+EBNA-IgG |  | Years: 2023,2024,2025,2026 | Rows: 4
+EMA (Endomysia antibody IgG) |  | Years: 2025 | Rows: 1
+EMA Endomysia antibody IgA |  | Years: 2025 | Rows: 1
+ESBL Screening |  | Years: 2023,2024 | Rows: 2
+ESR 1st hour |  | Years: 2023,2024,2025,2026 | Rows: 4
+ESR 2nd hour |  | Years: 2023,2024,2025,2026 | Rows: 4
+Erythropoietin |  | Years: 2023,2024,2026 | Rows: 3
+Estradiol (E2) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Estriol (E3) |  | Years: 2023,2024,2026 | Rows: 3
+Estrogen receptor (ER) - IHНС |  | Years: 2025 | Rows: 1
+Everolimus (Certican) |  | Years: 2023,2024,2026 | Rows: 3
+Extended Metabolic Screening |  | Years: 2023,2024 | Rows: 2
+Extended Metabolic Screening Rush |  | Years: 2023,2024 | Rows: 2
+FSH |  | Years: 2023,2024,2025,2026 | Rows: 4
+Factor II |  | Years: 2023,2024,2026 | Rows: 3
+Factor IX |  | Years: 2023,2024,2026 | Rows: 3
+Factor V |  | Years: 2023,2024,2026 | Rows: 3
+Factor VII |  | Years: 2023,2024,2026 | Rows: 3
+Factor VIII |  | Years: 2023,2024,2026 | Rows: 3
+Factor X |  | Years: 2023,2024,2026 | Rows: 3
+Factor XI |  | Years: 2023,2024,2026 | Rows: 3
+Factor XII |  | Years: 2023,2024,2026 | Rows: 3
+Factor XIII |  | Years: 2023,2024,2025,2026 | Rows: 4
+Fasciola Ab (ELISA) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Fasciola-Ab (IHA) |  | Years: 2023,2026 | Rows: 2
+Fasting blood Glucose |  | Years: 2023,2024,2025,2026 | Rows: 4
+Fat Globules in stool |  | Years: 2023 | Rows: 1
+Fat globules in stool |  | Years: 2024,2025,2026 | Rows: 3
+Ferritin |  | Years: 2023,2024,2025,2026 | Rows: 4
+Fibrinogen |  | Years: 2023,2024,2025,2026 | Rows: 4
+Fibrinogen Degradation products (FDP) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Fibro Max |  | Years: 2023,2024 | Rows: 2
+Filaria film |  | Years: 2023,2024,2025,2026 | Rows: 4
+Filarial Abs |  | Years: 2023,2024,2025,2026 | Rows: 4
+Folic Acid (Folate) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Food Panel Allergens |  | Years: 2023,2024 | Rows: 2
+Free Androgen Index |  | Years: 2024,2025,2026 | Rows: 3
+Free B-HCG |  | Years: 2023,2024,2025,2026 | Rows: 4
+Free Metanephrine |  | Years: 2023,2024 | Rows: 2
+Free Normetanephrine |  | Years: 2023,2024 | Rows: 2
+Free PSA / Total PSA |  | Years: 2023,2024,2025,2026 | Rows: 4
+Free Protein S |  | Years: 2023,2024,2025,2026 | Rows: 4
+Free T3 |  | Years: 2023,2024,2025,2026 | Rows: 4
+Free T4 |  | Years: 2023,2024,2025,2026 | Rows: 4
+Free cortisol in urine |  | Years: 2023,2024,2025,2026 | Rows: 4
+Free kappa / lambda light chain ratio (serum) |  | Years: 2025,2026 | Rows: 2
+Free kappa / lambda light chain ratio (urine) |  | Years: 2025,2026 | Rows: 2
+Free kappa light chain (serum) |  | Years: 2025,2026 | Rows: 2
+Free kappa light chain (urine) |  | Years: 2025,2026 | Rows: 2
+Free lambda light chain (serum) |  | Years: 2025,2026 | Rows: 2
+Free lambda light chain (urine) |  | Years: 2025,2026 | Rows: 2
+Fresh Prostatic Smear |  | Years: 2023,2024,2025,2026 | Rows: 4
+Fructosamine |  | Years: 2023,2024,2025,2026 | Rows: 4
+Fructose in Semen (Qualitative) |  | Years: 2025 | Rows: 1
+Fructose in Semen (Qualititative) |  | Years: 2023,2024,2026 | Rows: 3
+Fructose in Semen (Quantitative) |  | Years: 2023,2024,2025,2026 | Rows: 4
+G6PD |  | Years: 2023,2024,2025,2026 | Rows: 4
+GFR by Cystatin C |  | Years: 2023,2024,2025,2026 | Rows: 4
+GGT |  | Years: 2023,2024,2025,2026 | Rows: 4
+GH suppression test by glucose |  | Years: 2023,2024 | Rows: 2
+Gastrin Hormone |  | Years: 2023,2024,2025,2026 | Rows: 4
+Giardia Lamblia Ag in stool |  | Years: 2023,2024,2025,2026 | Rows: 4
+Glucose (urine) |  | Years: 2023 | Rows: 1
+Glucose in Urine |  | Years: 2023 | Rows: 1
+Glucose in urine |  | Years: 2024,2025,2026 | Rows: 3
+Growth Hormone suppression test by glucose |  | Years: 2025,2026 | Rows: 2
+Growth hormone (Basal) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Growth hormone Growth Stimulation Test after clonidine (0,60,90 min) |  | Years: 2024,2025,2026 | Rows: 3
+Growth hormone stimulation test (After Exercise) |  | Years: 2023 | Rows: 1
+Growth hormone stimulation test (after clonidine) |  | Years: 2023 | Rows: 1
+Growth hormone stimulation test (after clonidine) 6 samples |  | Years: 2025 | Rows: 1
+Growth hormone stimulation test (after exercise) |  | Years: 2024,2025,2026 | Rows: 3
+Growth hormone stimulation test after clonidine (six samples) |  | Years: 2024,2026 | Rows: 2
+H.Pylori - IgA |  | Years: 2023,2024,2025,2026 | Rows: 4
+H.Pylori-Ag (Qualitative) |  | Years: 2023,2024,2025,2026 | Rows: 4
+H.Pylori-Ag (Quantitative) |  | Years: 2023,2024,2025,2026 | Rows: 4
+H.Pylori-IgG |  | Years: 2023,2024,2025,2026 | Rows: 4
+H.Pylori-IgM |  | Years: 2023,2024,2025,2026 | Rows: 4
+HAV - IgM |  | Years: 2023,2024,2025,2026 | Rows: 4
+HAV-Ab (total) |  | Years: 2023,2024,2025,2026 | Rows: 4
+HDL-C |  | Years: 2023,2024,2025,2026 | Rows: 4
+HOMA IR |  | Years: 2023,2024,2025,2026 | Rows: 4
+Haemoglobin |  | Years: 2023,2024,2026 | Rows: 3
+Haptoglobin |  | Years: 2023,2024,2025,2026 | Rows: 4
+Hb Electrophoresis |  | Years: 2023,2024,2025,2026 | Rows: 4
+HbA1C (DCCT) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Hematocrit (Ht) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Hemoglobin |  | Years: 2025 | Rows: 1
+Hemoglobin % |  | Years: 2023 | Rows: 1
+Heparin (Anti-factor X) |  | Years: 2023,2024,2026 | Rows: 3
+Herpes simplex 1+2 IgG |  | Years: 2023,2024,2025,2026 | Rows: 4
+Herpes simplex 1+2 IgM |  | Years: 2023,2024,2025,2026 | Rows: 4
+Homocysteine |  | Years: 2023,2024,2025,2026 | Rows: 4
+IGM-COVID |  | Years: 2023,2024 | Rows: 2
+IL-6 (Interleukin 6) |  | Years: 2023,2024 | Rows: 2
+IgG index |  | Years: 2023 | Rows: 1
+IgG-COVID (antispike antibody) |  | Years: 2023,2024 | Rows: 2
+Immunoglobulin-A (IgA) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Immunoglobulin-G (IgG) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Immunoglobulin-G1 (IgG1) |  | Years: 2023,2024,2026 | Rows: 3
+Immunoglobulin-G2 (IgG2) |  | Years: 2023,2024,2026 | Rows: 3
+Immunoglobulin-G3 (IgG3) |  | Years: 2023,2024,2026 | Rows: 3
+Immunoglobulin-G4 (IgG4) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Immunoglobulin-M (IgM) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Immunophenotyping (Acute panel) |  | Years: 2023,2024,2026 | Rows: 3
+Immunophenotyping (Chronic panel) |  | Years: 2023,2024,2026 | Rows: 3
+Immunophenotyping (Myeloma panel) |  | Years: 2023,2024,2026 | Rows: 3
+Immunophenotyping for MRD |  | Years: 2026 | Rows: 1
+Indirect Coombs test |  | Years: 2023,2024,2025,2026 | Rows: 4
+Inhalation Panel Allergens |  | Years: 2023 | Rows: 1
+Inhibin A |  | Years: 2023,2024,2025,2026 | Rows: 4
+Inhibin B |  | Years: 2023,2024 | Rows: 2
+Insulin like growth factor-1(IGF-1) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Insulin-Ab |  | Years: 2023,2024,2025,2026 | Rows: 4
+Intact PTH (PTH 1-84) |  | Years: 2023,2024,2026 | Rows: 3
+Intact PTH (ΡΤΗ 1-84) |  | Years: 2025 | Rows: 1
+Intrinsic Factor Ab |  | Years: 2023,2024,2026 | Rows: 3
+Iron |  | Years: 2023,2024,2025,2026 | Rows: 4
+KOH examination for fungi |  | Years: 2023,2024,2025,2026 | Rows: 4
+LAP (Leucocyte alkaline phosphatase) score |  | Years: 2023,2024,2025,2026 | Rows: 4
+LDH |  | Years: 2023,2024,2025,2026 | Rows: 4
+LDL - C |  | Years: 2023,2024,2025,2026 | Rows: 4
+LH |  | Years: 2023,2024,2025,2026 | Rows: 4
+Lactate |  | Years: 2025,2026 | Rows: 2
+Lactate / Pyruvate ratio, Blood |  | Years: 2023,2024,2025,2026 | Rows: 4
+Lactate, Blood |  | Years: 2023,2024 | Rows: 2
+Lactate, CSF |  | Years: 2023,2024,2025,2026 | Rows: 4
+Lactoferrin in Stool |  | Years: 2023,2024,2025,2026 | Rows: 4
+Lead in blood |  | Years: 2024,2025,2026 | Rows: 3
+Legionella Ag |  | Years: 2023,2024,2026 | Rows: 3
+Leptin |  | Years: 2023,2024,2025,2026 | Rows: 4
+Leptospira IgG |  | Years: 2023,2024 | Rows: 2
+Leptospira IgM |  | Years: 2023,2024 | Rows: 2
+Levetiracetam (Tiratam, Keppra) Peak |  | Years: 2023,2024,2026 | Rows: 3
+Levetiracetam (Tiratam, Keppra) Trough |  | Years: 2023,2024,2026 | Rows: 3
+Lipase (serum) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Lipid Profile |  | Years: 2023,2024,2025,2026 | Rows: 4
+Lipoprotein (a) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Lithium |  | Years: 2023,2024,2025,2026 | Rows: 4
+Lupus Anticoaggulant |  | Years: 2023,2024,2026 | Rows: 3
+MRSA Axillary Screening |  | Years: 2023 | Rows: 1
+MRSA Inguinal Sreening |  | Years: 2023 | Rows: 1
+MRSA Nasal Screening |  | Years: 2023 | Rows: 1
+MRSA axillary screening |  | Years: 2024,2025,2026 | Rows: 3
+MRSA inguinal screening |  | Years: 2024,2025,2026 | Rows: 3
+MRSA nasal screening |  | Years: 2024,2025,2026 | Rows: 3
+Magnesium (CSF) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Magnesium (Serum) |  | Years: 2023 | Rows: 1
+Magnesium (serum) |  | Years: 2024,2025,2026 | Rows: 3
+Magnesium (urine) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Malaria film |  | Years: 2023,2024,2025,2026 | Rows: 4
+Malaria-Abs |  | Years: 2023,2024,2025,2026 | Rows: 4
+Mannan Ag for Candida |  | Years: 2023,2024,2026 | Rows: 3
+Mar test (Indirect) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Mar test (direct) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Measles IgG |  | Years: 2023,2024,2025,2026 | Rows: 4
+Measles IgM |  | Years: 2023,2024,2025,2026 | Rows: 4
+Methadone |  | Years: 2023,2024,2025,2026 | Rows: 4
+Methotrexate |  | Years: 2023,2024,2026 | Rows: 3
+Microalbuminuria |  | Years: 2023,2024,2025,2026 | Rows: 4
+Monospot Test |  | Years: 2023,2024,2025,2026 | Rows: 4
+More than a single Blood Transfusion Procedure / Day (Not Including Blood Bag) | اجراء نقل اكثر من كيس دم يوم غير متضمن ثمن الكيس الدم) | Years: 2024 | Rows: 1
+Mumps IgG |  | Years: 2023,2024,2025,2026 | Rows: 4
+Mumps IgM |  | Years: 2023,2024,2025,2026 | Rows: 4
+Myogenin |  | Years: 2023,2024,2026 | Rows: 3
+NIPT |  | Years: 2023,2024 | Rows: 2
+NK cells (CD16/56) |  | Years: 2025 | Rows: 1
+NK cells(CD16/56) |  | Years: 2023,2024,2026 | Rows: 3
+Neuron specific enolase (NSE) |  | Years: 2023,2024,2025,2026 | Rows: 4
+O'Sullivan's test (Glucose Challenge Test) |  | Years: 2023 | Rows: 1
+O'Sullivan's test (Glucose challenge test) |  | Years: 2024,2025,2026 | Rows: 3
+Occult Blood in Stool |  | Years: 2023,2024,2025,2026 | Rows: 4
+Oligoclonal bands in CSF |  | Years: 2023,2024,2026 | Rows: 3
+Opiate (morphine, Heroin) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Osmotic fragility |  | Years: 2023,2024,2025,2026 | Rows: 4
+Osteocalcin |  | Years: 2023,2024,2025,2026 | Rows: 4
+Oxalate in urine |  | Years: 2023,2024,2025,2026 | Rows: 4
+Oxidative Stress Level |  | Years: 2023,2024,2025,2026 | Rows: 4
+PIVKA II (protein induced by vitamin K absence) |  | Years: 2023,2024,2026 | Rows: 3
+PSA (Total) |  | Years: 2023 | Rows: 1
+PSA (free) |  | Years: 2023,2024,2025,2026 | Rows: 4
+PSA (total) |  | Years: 2024,2025,2026 | Rows: 3
+PT (Prothrombin Time) |  | Years: 2023,2024,2025,2026 | Rows: 4
+PTH (Parathormone) |  | Years: 2023,2024,2025,2026 | Rows: 4
+PTT (Partial Thromboplastin Time) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Pancreatic Amylase in Urine |  | Years: 2023 | Rows: 1
+Pancreatic Elastase |  | Years: 2023 | Rows: 1
+Pancreatic amylase in Urine |  | Years: 2024,2025,2026 | Rows: 3
+Pancreatic elastase |  | Years: 2024,2025,2026 | Rows: 3
+Parvovirus B19 IgG |  | Years: 2023,2024,2026 | Rows: 3
+Parvovirus B19 IgM |  | Years: 2023,2024,2026 | Rows: 3
+Paternity Test |  | Years: 2023,2024 | Rows: 2
+Pathology Consultation |  | Years: 2023,2024,2025,2026 | Rows: 4
+Pericardial Fluid |  | Years: 2024,2025,2026 | Rows: 3
+Pericardial Fluid Examination |  | Years: 2023 | Rows: 1
+Phenobarbitone |  | Years: 2023,2024,2026 | Rows: 3
+Phenytion (Epanutine) Peak |  | Years: 2023,2024,2026 | Rows: 3
+Phenytion (Epanutine) Trough |  | Years: 2023,2024,2026 | Rows: 3
+Phosphorous |  | Years: 2023,2024,2025,2026 | Rows: 4
+Phosphorous (urine) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Platelet function |  | Years: 2023,2024,2025,2026 | Rows: 4
+Platelets |  | Years: 2023,2024,2025,2026 | Rows: 4
+Pleural Fluid Examination (Left side) |  | Years: 2024,2025,2026 | Rows: 3
+Pleural Fluid Examination (Right side) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Pleural Fluid Examination(Left side) |  | Years: 2023 | Rows: 1
+Pneumocystis carinii |  | Years: 2023,2024,2026 | Rows: 3
+Porphobilinogen in urine |  | Years: 2023,2024 | Rows: 2
+Porphyrins in urine |  | Years: 2023,2024,2026 | Rows: 3
+Post Coital Test | اختبار ما بعد الجماع | Years: 2023,2024,2025,2026 | Rows: 6
+Post Prandial Blood Glucose |  | Years: 2023,2024,2025,2026 | Rows: 4
+Potassium (K+) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Potassium (urine) |  | Years: 2024,2025,2026 | Rows: 3
+Prealbumin ( Trans-thyritin) |  | Years: 2023,2026 | Rows: 2
+Prealbumin (Trans-thyritin) |  | Years: 2024,2025 | Rows: 2
+Pregnancy test (Serum) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Pregnancy test (Urine) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Pro-BNP |  | Years: 2023,2024,2025,2026 | Rows: 4
+Procalcitonin PCT-Q |  | Years: 2023,2024,2025,2026 | Rows: 4
+Progesterone |  | Years: 2023,2024,2025,2026 | Rows: 4
+Prolactin |  | Years: 2023,2024,2025,2026 | Rows: 4
+Prostatic acid phosphatase |  | Years: 2023,2024,2025,2026 | Rows: 4
+Protein C |  | Years: 2023,2024,2025,2026 | Rows: 4
+Protein S |  | Years: 2023,2024,2025,2026 | Rows: 4
+Protein immunofixation (serum) |  | Years: 2023,2024,2026 | Rows: 3
+Protein immunofixation (urine) |  | Years: 2026 | Rows: 1
+Protein/Creatinine Ratio |  | Years: 2025 | Rows: 1
+Protein/Creatnine Ratio |  | Years: 2023,2024,2026 | Rows: 3
+Pyruvate, Blood |  | Years: 2023,2024,2025,2026 | Rows: 4
+Pyruvate, CSF |  | Years: 2023,2024,2025,2026 | Rows: 4
+Quadruple test |  | Years: 2023,2024,2026 | Rows: 3
+Quantiferon |  | Years: 2023,2024,2025,2026 | Rows: 4
+RF ( Latex) |  | Years: 2023 | Rows: 1
+RF (Latex) |  | Years: 2024 | Rows: 1
+RF (Nephelometric) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Random Blood Glucose |  | Years: 2023,2024,2025,2026 | Rows: 4
+Reducing substance (Stool) |  | Years: 2023 | Rows: 1
+Reducing substance (Urine) |  | Years: 2023 | Rows: 1
+Reducing substance (stool) |  | Years: 2024,2025,2026 | Rows: 3
+Reducing substance (urine) |  | Years: 2024,2025,2026 | Rows: 3
+Renin |  | Years: 2023,2024,2025,2026 | Rows: 4
+Reticulin Stain |  | Years: 2023,2024,2025,2026 | Rows: 4
+Reticulocytes |  | Years: 2023,2024,2025,2026 | Rows: 4
+Rh Typing |  | Years: 2023 | Rows: 1
+Rh typing |  | Years: 2024,2025,2026 | Rows: 3
+Rose Waaler (RW) |  | Years: 2023,2024,2026 | Rows: 3
+Rose Waler (RW) |  | Years: 2025 | Rows: 1
+S. Protein Electrophoresis |  | Years: 2023,2024,2025,2026 | Rows: 4
+S.Bilirubin (Direct) |  | Years: 2023,2024,2025,2026 | Rows: 4
+S.Bilirubin (Indirect) |  | Years: 2023,2024,2025,2026 | Rows: 4
+S.Bilirubin (Total) |  | Years: 2023,2024,2025,2026 | Rows: 4
+S.Insulin (Fasting) |  | Years: 2023,2024,2025,2026 | Rows: 4
+S.Insulin (Post Prandial) |  | Years: 2023,2024,2025,2026 | Rows: 4
+S.Myoglobin |  | Years: 2023,2024,2025,2026 | Rows: 4
+S.Thyroglobulin |  | Years: 2023,2024,2025,2026 | Rows: 4
+SRY gene |  | Years: 2023,2024 | Rows: 2
+Semen By CASA |  | Years: 2023,2024,2026 | Rows: 3
+Serum IGg |  | Years: 2023,2024,2025,2026 | Rows: 4
+Serum IGm |  | Years: 2023,2024,2025,2026 | Rows: 4
+Serum Osmolality (By Osmometer) |  | Years: 2023 | Rows: 1
+Serum osmolality (by osmometer) |  | Years: 2024 | Rows: 1
+Sex hormone binding globulin (SHBG) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Sickling Test |  | Years: 2023 | Rows: 1
+Sickling test |  | Years: 2024 | Rows: 1
+Sodium (Na+) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Sodium Na (urine) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Soluble Liver Abs SLA - Ab |  | Years: 2023,2024,2025,2026 | Rows: 4
+Soluble Transferrin receptor |  | Years: 2023,2024,2025,2026 | Rows: 4
+Synovial fluid examination |  | Years: 2024,2025,2026 | Rows: 3
+Syphilis Ab |  | Years: 2023,2024,2025,2026 | Rows: 4
+T3 |  | Years: 2023,2024,2025,2026 | Rows: 4
+T4 |  | Years: 2023,2024,2025,2026 | Rows: 4
+TIBC |  | Years: 2023,2024,2025,2026 | Rows: 4
+TRANSCUTANEOUS MEASUREMENT OF BILIRUBIN | قياس الصفراء بالجهاز من خلال الجلد الطفل حديث الولادة | Years: 2024 | Rows: 1
+TSH |  | Years: 2023,2024,2025,2026 | Rows: 4
+TSH Receptor antibody (TRAB) |  | Years: 2024 | Rows: 1
+TSH Receptor antibody (TRAb) |  | Years: 2023,2025,2026 | Rows: 3
+Tacrolimus (FK 506 or Prograf) Peak |  | Years: 2023,2024,2026 | Rows: 3
+Tacrolimus (FK 506 or Prograf) Trough |  | Years: 2023,2024,2026 | Rows: 3
+Test for Assessment of Sterilization Efficiency |  | Years: 2023,2024,2025,2026 | Rows: 4
+Testosterone (Free) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Testosterone (Total) |  | Years: 2023 | Rows: 1
+Testosterone (total) |  | Years: 2024,2025,2026 | Rows: 3
+Thrombin Time |  | Years: 2023,2024,2025,2026 | Rows: 4
+Thyroid Anti-thyroglobulin Ab |  | Years: 2023,2024,2025,2026 | Rows: 4
+Thyroid anti-microsomal Ab |  | Years: 2023,2024,2025,2026 | Rows: 4
+Thyroid-Anti-Peroxidase Ab (TPO) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Total Kappa light chain (serum) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Total Kappa light chain (urine) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Total Lambda light chain (serum) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Total Lambda light chain (urine) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Total Metanephrine |  | Years: 2023,2024 | Rows: 2
+Total Normetanephrine |  | Years: 2023,2024 | Rows: 2
+Total Protein |  | Years: 2023,2024,2025,2026 | Rows: 4
+Toxocara canis Ab |  | Years: 2023,2024,2026 | Rows: 3
+Transferrin |  | Years: 2023,2024,2025,2026 | Rows: 4
+Transferrin saturation |  | Years: 2023,2024,2025,2026 | Rows: 4
+Trichinella spiralis Ab |  | Years: 2023,2024,2026 | Rows: 3
+Triglycerides |  | Years: 2023,2024,2025,2026 | Rows: 4
+Triple test |  | Years: 2023,2024,2025,2026 | Rows: 4
+Troponin- (high sensitive) |  | Years: 2025 | Rows: 1
+Troponin-1 |  | Years: 2024 | Rows: 1
+Troponin-I |  | Years: 2023 | Rows: 1
+Troponin-I (high sensitive) |  | Years: 2026 | Rows: 1
+Troponin-T |  | Years: 2023,2024,2025,2026 | Rows: 4
+Ttf_1 |  | Years: 2023,2024,2025,2026 | Rows: 4
+Tuberclin (Mantoux test) |  | Years: 2023,2024 | Rows: 2
+Urea |  | Years: 2023,2024,2025,2026 | Rows: 4
+Urea Clearance |  | Years: 2023,2024,2025,2026 | Rows: 4
+Urea breath test |  | Years: 2023,2024,2025,2026 | Rows: 4
+Uric Acid (urine) |  | Years: 2023 | Rows: 1
+Uric acid |  | Years: 2023,2024,2025,2026 | Rows: 4
+Uric acid (urine) |  | Years: 2024,2025,2026 | Rows: 3
+Urine Osmolality (by osmometer) |  | Years: 2023,2024 | Rows: 2
+Urine Specific Gravity |  | Years: 2023 | Rows: 1
+Urine specific gravity |  | Years: 2024,2025,2026 | Rows: 3
+VLDL |  | Years: 2023,2024,2025,2026 | Rows: 4
+VMA |  | Years: 2023,2024,2025,2026 | Rows: 4
+Valporic acid (Depakine) Peak |  | Years: 2023,2024,2026 | Rows: 3
+Valporic acid (Depakine) Trough |  | Years: 2023,2024,2026 | Rows: 3
+Valproic acid (Depakine) Peak |  | Years: 2025 | Rows: 1
+Valproic acid (Depakine) Trough |  | Years: 2025 | Rows: 1
+Varicella (chicken pox) IgG |  | Years: 2023,2024,2025,2026 | Rows: 4
+Varicella (chicken pox) IgM |  | Years: 2023,2024,2025,2026 | Rows: 4
+Venous Blood Gas (VBG) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Vimentin |  | Years: 2023,2024,2025 | Rows: 3
+Vitamin B12 |  | Years: 2023,2024,2025,2026 | Rows: 4
+Vitamin D (1, 25-OH vitamin D) |  | Years: 2023 | Rows: 1
+Vitamin D (1,25-OH Vitamin D) |  | Years: 2024 | Rows: 1
+Vitamin D (25-OH vitamin D) |  | Years: 2023,2024,2025,2026 | Rows: 4
+Von Willebrand factor activity |  | Years: 2023,2024,2026 | Rows: 3
+Von Willebrand factor concentration |  | Years: 2023,2024,2026 | Rows: 3
+WBCS |  | Years: 2024,2025 | Rows: 2
+WBCS (Total & Differential) Body fluid |  | Years: 2023 | Rows: 1
+WBCS (Total & differential) Body fluid |  | Years: 2024,2025,2026 | Rows: 3
+WBCs |  | Years: 2023,2026 | Rows: 2
+Washed Blood Bag | خدمة غسيل كيس الدم | Years: 2024 | Rows: 1
+Weil-Felix Test (Ox-19 Ab)2 |  | Years: 2023,2024,2025,2026 | Rows: 4
+Whole Exome Sequencing WES |  | Years: 2023 | Rows: 1
+Whole exome sequencing WES |  | Years: 2024 | Rows: 1
+Y Chromosom micro deletion test |  | Years: 2024,2026 | Rows: 2
+Y Chromosome microdeletion |  | Years: 2023 | Rows: 1
+Zinc (Serum) |  | Years: 2023,2024,2025,2026 | Rows: 4
+creatine kinase (CPK) |  | Years: 2023,2024,2025,2026 | Rows: 4
+free kappa / lamda ratio (serum) |  | Years: 2023 | Rows: 1
+free kappa / lamda ratio (urnie) |  | Years: 2023,2024 | Rows: 2
+free kappa light chain (serum) |  | Years: 2023,2024 | Rows: 2
+free kappa light chain (urine) |  | Years: 2023,2024 | Rows: 2
+free kappa/lamda ratio (serum) |  | Years: 2024 | Rows: 1
+free lambda light chain (serum) |  | Years: 2023,2024 | Rows: 2
+free lambda light chain (urine) |  | Years: 2023,2024 | Rows: 2
+protein immunofixation (urine) |  | Years: 2023,2024 | Rows: 2
+Β.Α.Ε.Ρ Test | جهد مستثار علي جذع المخ | Years: 2024 | Rows: 1

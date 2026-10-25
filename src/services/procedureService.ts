@@ -113,8 +113,9 @@ function hasClinicalMismatch(
 ): boolean {
   const queryCombined = `${queryEngNorm} ${queryAraNorm}`;
   const rowCombined = `${rowEngNorm} ${rowAraNorm}`;
-  const isTeeQuery = /transesophageal|tee\b|t\.e\.e|مريء|المريء|بالمنظار/i.test(queryCombined);
-  const isTeeRow = /transesophageal|tee\b|t\.e\.e|مريء|المريء|بالمنظار/i.test(rowCombined);
+  // Isolated safety check: TEE (transesophageal echo) must never match surface TTE or unrelated endoscopy
+  const isTeeQuery = /\b(?:transesophageal|tee|t\.e\.e)\b|ايكو مريئي|عبر المريء/i.test(queryCombined);
+  const isTeeRow = /\b(?:transesophageal|tee|t\.e\.e)\b|ايكو مريئي|عبر المريء/i.test(rowCombined);
   if (isTeeQuery !== isTeeRow) return true;
   if (hasAntibodyConflict(queryCombined, rowCombined)) return true;
   if (hasLabInvestigationConflict(queryCombined, rowCombined)) return true;
@@ -254,6 +255,12 @@ function scoreCandidate(
   return score;
 }
 
+const GENERIC_MODALITY_TERMS = new Set([
+  'ct', 'mri', 'sonar', 'doppler', 'duplex', 'ultrasound',
+  'computed tomography', 'magnetic resonance imaging',
+  'اشعه مقطعيه', 'اشعة مقطعية', 'رنين مغناطيسي', 'موجات صوتيه', 'موجات صوتية', 'سونار', 'دوبلر', 'دوبلكس'
+]);
+
 export function searchLocalPricelist(
   cashList: ProcedureResult[],
   requestedProcedures: { name: string; arabic?: string }[]
@@ -265,6 +272,7 @@ export function searchLocalPricelist(
     const qEng = normalizeText(cleanEng);
     const qEngRaw = normalizeText(proc.name);
     const qAra = proc.arabic ? normalizeArabic(proc.arabic) : '';
+    const synonyms = expandMedicalSynonyms(cleanEng || proc.name);
 
     if (!qEng && !qAra && !qEngRaw) continue;
 
@@ -298,15 +306,101 @@ export function searchLocalPricelist(
           ...item,
           requestedProcedureName: proc.name,
         });
+        continue;
+      }
+
+      // Check clinical synonym expansions (e.g. CXR -> X - Ray Chest, CTPA -> CT Pulmonary Angio)
+      if (synonyms.length > 0) {
+        let isSynMatch = false;
+        let isExactSynMatch = false;
+        for (const syn of synonyms) {
+          const normSynEn = normalizeText(syn);
+          const normSynAr = normalizeArabic(syn);
+          if (normSynEn && !GENERIC_MODALITY_TERMS.has(normSynEn) && normSynEn !== qEng) {
+            if (itemEng === normSynEn) {
+              isExactSynMatch = true;
+              break;
+            } else if (normSynEn.length >= 5 && itemEng.includes(normSynEn)) {
+              isSynMatch = true;
+              break;
+            }
+          }
+          if (normSynAr && !GENERIC_MODALITY_TERMS.has(normSynAr) && normSynAr !== qAra) {
+            if (itemAra === normSynAr) {
+              isExactSynMatch = true;
+              break;
+            } else if (normSynAr.length >= 5 && itemAra.includes(normSynAr)) {
+              isSynMatch = true;
+              break;
+            }
+          }
+        }
+        if (isExactSynMatch) {
+          exactMatches.push({
+            ...item,
+            requestedProcedureName: proc.name,
+          });
+        } else if (isSynMatch) {
+          partialMatches.push({
+            ...item,
+            requestedProcedureName: proc.name,
+          });
+        }
       }
     }
 
     if (exactMatches.length > 0) {
-      finalResults.push(...exactMatches);
+      const sortedExact = exactMatches.sort((a, b) => {
+        const aEng = normalizeText(a.nameEnglish);
+        const bEng = normalizeText(b.nameEnglish);
+        const aAra = normalizeArabic(a.nameArabic);
+        const bAra = normalizeArabic(b.nameArabic);
+
+        const stemToken = (t: string) => t.replace(/^(?:و|ف)?(?:ال)?/, '');
+        const qTokens = (qEng + ' ' + qAra).split(/\s+/).map(stemToken).filter((t) => t.length >= 3);
+        const aTokens = (aEng + ' ' + aAra).split(/\s+/).map(stemToken).filter((t) => t.length >= 3);
+        const bTokens = (bEng + ' ' + bAra).split(/\s+/).map(stemToken).filter((t) => t.length >= 3);
+        const aCount = qTokens.filter((t) => aTokens.some((at) => at === t || at.includes(t) || t.includes(at))).length;
+        const bCount = qTokens.filter((t) => bTokens.some((bt) => bt === t || bt.includes(t) || t.includes(bt))).length;
+        if (aCount !== bCount) {
+          return bCount - aCount;
+        }
+        return b.nameEnglish.length - a.nameEnglish.length;
+      });
+      finalResults.push(...sortedExact);
     } else if (partialMatches.length > 0) {
       const sortedPartials = partialMatches.sort((a, b) => {
         const aEng = normalizeText(a.nameEnglish);
         const bEng = normalizeText(b.nameEnglish);
+        const aAra = normalizeArabic(a.nameArabic);
+        const bAra = normalizeArabic(b.nameArabic);
+
+        // Action verb consistency check: insertion vs removal
+        const qAction = /insertion|تركيب|بذل|drainage/i.test(qEng + ' ' + qAra) ? 'insert' :
+                        /removal|رفع|استخراج|ازالة/i.test(qEng + ' ' + qAra) ? 'remove' : null;
+        if (qAction === 'insert') {
+          const aHas = /insertion|تركيب|بذل|drainage/i.test(aEng + ' ' + aAra);
+          const bHas = /insertion|تركيب|بذل|drainage/i.test(bEng + ' ' + bAra);
+          if (aHas && !bHas) return -1;
+          if (!aHas && bHas) return 1;
+        } else if (qAction === 'remove') {
+          const aHas = /removal|رفع|استخراج|ازالة/i.test(aEng + ' ' + aAra);
+          const bHas = /removal|رفع|استخراج|ازالة/i.test(bEng + ' ' + bAra);
+          if (aHas && !bHas) return -1;
+          if (!aHas && bHas) return 1;
+        }
+
+        // Multi-organ specificity: query with multiple targets (e.g. abdomen + pelvis) ranks combined items higher
+        const stemToken = (t: string) => t.replace(/^(?:و|ف)?(?:ال)?/, '');
+        const qTokens = (qEng + ' ' + qAra).split(/\s+/).map(stemToken).filter((t) => t.length >= 3);
+        const aTokens = (aEng + ' ' + aAra).split(/\s+/).map(stemToken).filter((t) => t.length >= 3);
+        const bTokens = (bEng + ' ' + bAra).split(/\s+/).map(stemToken).filter((t) => t.length >= 3);
+        const aCount = qTokens.filter((t) => aTokens.some((at) => at === t || at.includes(t) || t.includes(at))).length;
+        const bCount = qTokens.filter((t) => bTokens.some((bt) => bt === t || bt.includes(t) || t.includes(bt))).length;
+        if (aCount !== bCount) {
+          return bCount - aCount;
+        }
+
         const aStarts = qEng && aEng.startsWith(qEng);
         const bStarts = qEng && bEng.startsWith(qEng);
         if (aStarts && !bStarts) return -1;

@@ -692,6 +692,257 @@ function cleanHisProcedureQuery(query2) {
   }
   return trimmed.replace(/\s*-\s*investigation\b/gi, "").replace(/\binvestigation\b/gi, "").replace(/\s*-\s*procedure\b/gi, "").replace(/\s*-\s*service\b/gi, "").replace(/\s*-\s*profile\b/gi, "").replace(/\b(citrulinated)\b/gi, "citrullinated").replace(/\(d\.s\)/gi, "(d's)").replace(/\s+/g, " ").trim();
 }
+var MEDICAL_SYNONYMS = {
+  // Cardiology / Cath Lab / Interventions
+  "pci": ["therapeutic cardiac catheter", "balloon diltation+stent", "balloon dilatation", "\u0642\u0633\u0637\u0631\u0629 \u0627\u0644\u0642\u0644\u0628 \u0627\u0644\u0639\u0644\u0627\u062C\u064A\u0629", "\u062F\u0639\u0627\u0645\u0629", "\u062A\u0648\u0633\u064A\u0639 \u0628\u0627\u0644\u0628\u0627\u0644\u0648\u0646"],
+  "staged pci": ["therapeutic cardiac catheter", "balloon diltation+stent", "\u0642\u0633\u0637\u0631\u0629 \u0627\u0644\u0642\u0644\u0628 \u0627\u0644\u0639\u0644\u0627\u062C\u064A\u0629", "\u062F\u0639\u0627\u0645\u0629"],
+  "primary pci": ["therapeutic cardiac catheter", "\u0642\u0633\u0637\u0631\u0629 \u0627\u0644\u0642\u0644\u0628 \u0627\u0644\u0639\u0644\u0627\u062C\u064A\u0629", "\u062F\u0639\u0627\u0645\u0629"],
+  "ptca": ["therapeutic cardiac catheter", "balloon dilatation", "\u0642\u0633\u0637\u0631\u0629 \u0627\u0644\u0642\u0644\u0628 \u0627\u0644\u0639\u0644\u0627\u062C\u064A\u0629"],
+  "coronary angiography": ["diagnostic cardiac catheter", "\u0642\u0633\u0637\u0631\u0629 \u0627\u0644\u0642\u0644\u0628 \u0627\u0644\u062A\u0634\u062E\u064A\u0635\u064A\u0629", "\u0642\u0633\u0637\u0631\u0629 \u062A\u0634\u062E\u064A\u0635\u064A\u0629"],
+  "cardiac catheter": ["diagnostic cardiac catheter", "\u0642\u0633\u0637\u0631\u0629 \u0627\u0644\u0642\u0644\u0628 \u0627\u0644\u062A\u0634\u062E\u064A\u0635\u064A\u0629", "\u0642\u0633\u0637\u0631\u0629 \u0627\u0644\u0642\u0644\u0628 \u0627\u0644\u0639\u0644\u0627\u062C\u064A\u0629"],
+  "\u0642\u0633\u0637\u0631\u0629 \u0642\u0644\u0628": ["diagnostic cardiac catheter", "therapeutic cardiac catheter", "\u0642\u0633\u0637\u0631\u0629 \u0627\u0644\u0642\u0644\u0628 \u0627\u0644\u062A\u0634\u062E\u064A\u0635\u064A\u0629", "\u0642\u0633\u0637\u0631\u0629 \u0627\u0644\u0642\u0644\u0628 \u0627\u0644\u0639\u0644\u0627\u062C\u064A\u0629"],
+  "\u0642\u0633\u0637\u0631\u0629 \u062A\u0634\u062E\u064A\u0635\u064A\u0629": ["diagnostic cardiac catheter", "\u0642\u0633\u0637\u0631\u0629 \u0627\u0644\u0642\u0644\u0628 \u0627\u0644\u062A\u0634\u062E\u064A\u0635\u064A\u0629"],
+  "\u0642\u0633\u0637\u0631\u0629 \u0639\u0644\u0627\u062C\u064A\u0629": ["therapeutic cardiac catheter", "balloon diltation+stent", "\u0642\u0633\u0637\u0631\u0629 \u0627\u0644\u0642\u0644\u0628 \u0627\u0644\u0639\u0644\u0627\u062C\u064A\u0629"],
+  "cabg": ["open heart", "\u0627\u0644\u0642\u0644\u0628 \u0627\u0644\u0645\u0641\u062A\u0648\u062D"],
+  "open heart": ["open heart", "\u0627\u0644\u0642\u0644\u0628 \u0627\u0644\u0645\u0641\u062A\u0648\u062D"],
+  "\u0642\u0644\u0628 \u0645\u0641\u062A\u0648\u062D": ["open heart"],
+  "tee": ["transesophageal echocardiography", "\u0645\u0648\u062C\u0627\u062A \u0641\u0648\u0642 \u0635\u0648\u062A\u064A\u0629 \u0639\u0644\u0649 \u0627\u0644\u0642\u0644\u0628 \u0639\u0646 \u0637\u0631\u064A\u0642 \u0627\u0644\u0645\u0631\u064A\u0621"],
+  "\u0645\u0631\u064A\u0621": ["transesophageal echocardiography", "tee"],
+  "tte": ["echocardiography", "\u0645\u0648\u062C\u0627\u062A \u0641\u0648\u0642 \u0635\u0648\u062A\u064A\u0629 \u0639\u0644\u064A \u0627\u0644\u0642\u0644\u0628", "\u0627\u064A\u0643\u0648"],
+  "echo": ["echocardiography", "\u0645\u0648\u062C\u0627\u062A \u0641\u0648\u0642 \u0635\u0648\u062A\u064A\u0629 \u0639\u0644\u064A \u0627\u0644\u0642\u0644\u0628", "\u0627\u064A\u0643\u0648"],
+  "echocardiography": ["echocardiography", "\u0645\u0648\u062C\u0627\u062A \u0641\u0648\u0642 \u0635\u0648\u062A\u064A\u0629 \u0639\u0644\u064A \u0627\u0644\u0642\u0644\u0628", "\u0627\u064A\u0643\u0648"],
+  "\u0627\u064A\u0643\u0648": ["echocardiography", "echo", "\u0645\u0648\u062C\u0627\u062A \u0641\u0648\u0642 \u0635\u0648\u062A\u064A\u0629 \u0639\u0644\u064A \u0627\u0644\u0642\u0644\u0628"],
+  "pacemaker": ["single chamber pacemaker", "dual chamber pacemaker", "\u0645\u0646\u0638\u0645 \u0636\u0631\u0628\u0627\u062A \u0627\u0644\u0642\u0644\u0628"],
+  "\u0645\u0646\u0638\u0645 \u0636\u0631\u0628\u0627\u062A": ["pacemaker", "\u0645\u0646\u0638\u0645 \u0636\u0631\u0628\u0627\u062A \u0627\u0644\u0642\u0644\u0628"],
+  "ablation": ["simple ablation", "cryo ablation", "\u062F\u0631\u0627\u0633\u0629 \u0643\u0647\u0631\u0648\u0641\u0633\u064A\u0648\u0644\u0648\u062C\u064A\u0627 \u0627\u0644\u0642\u0644\u0628 \u0648\u0627\u0644\u0643\u064A"],
+  "\u0643\u0647\u0631\u0648\u0641\u0633\u064A\u0648\u0644\u0648\u062C\u064A\u0627": ["ablation", "\u062F\u0631\u0627\u0633\u0629 \u0643\u0647\u0631\u0648\u0641\u0633\u064A\u0648\u0644\u0648\u062C\u064A\u0627 \u0627\u0644\u0642\u0644\u0628"],
+  // Endoscopy / GIT
+  "colonoscopy": ["lower git endoscopy", "\u0645\u0646\u0638\u0627\u0631 \u0642\u0648\u0644\u0648\u0646", "\u0645\u0646\u0638\u0627\u0631 \u0627\u0644\u0642\u0648\u0644\u0648\u0646"],
+  "\u0645\u0646\u0638\u0627\u0631 \u0642\u0648\u0644\u0648\u0646": ["lower git endoscopy", "colonoscopy"],
+  "gastroscopy": ["upper git endoscopy", "\u0645\u0646\u0638\u0627\u0631 \u0645\u0639\u062F\u0629", "\u0645\u0646\u0638\u0627\u0631 \u0627\u0644\u0645\u0639\u062F\u0629"],
+  "\u0645\u0646\u0638\u0627\u0631 \u0645\u0639\u062F\u0629": ["upper git endoscopy", "gastroscopy"],
+  "ogd": ["upper git endoscopy", "\u0645\u0646\u0638\u0627\u0631 \u0645\u0639\u062F\u0629"],
+  "upper endoscopy": ["upper git endoscopy", "\u0645\u0646\u0638\u0627\u0631 \u062C\u0647\u0627\u0632 \u0647\u0636\u0645\u064A \u0639\u0644\u0648\u064A"],
+  "lower endoscopy": ["lower git endoscopy", "\u0645\u0646\u0638\u0627\u0631 \u062C\u0647\u0627\u0632 \u0647\u0636\u0645\u064A \u0633\u0641\u0644\u064A"],
+  "ercp": ["ercp diagnostic", "ercp with stent", "\u0645\u0646\u0638\u0627\u0631 \u062A\u0634\u062E\u064A\u0635\u064A \u0644\u0644\u0642\u0646\u0648\u0627\u062A \u0627\u0644\u0645\u0631\u0627\u0631\u064A\u0629", "\u0645\u0646\u0638\u0627\u0631 \u0642\u0646\u0648\u0627\u062A \u0645\u0631\u0627\u0631\u064A\u0629"],
+  "\u0642\u0646\u0648\u0627\u062A \u0645\u0631\u0627\u0631\u064A\u0629": ["ercp", "\u0645\u0646\u0638\u0627\u0631 \u0642\u0646\u0648\u0627\u062A \u0645\u0631\u0627\u0631\u064A\u0629"],
+  "polypectomy": ["removal of duodenal polyps", "\u0625\u0632\u0627\u0644\u0629 \u0632\u0648\u0627\u0626\u062F \u0628\u0627\u0644\u0642\u0648\u0644\u0648\u0646", "\u0627\u0633\u062A\u0626\u0635\u0627\u0644 \u0632\u0648\u0627\u0626\u062F"],
+  "\u0632\u0648\u0627\u0626\u062F \u0628\u0627\u0644\u0642\u0648\u0644\u0648\u0646": ["removal of duodenal polyps", "polypectomy"],
+  "gastric balloon": ["gastric balloon insertion", "\u062A\u0631\u0643\u064A\u0628 \u0628\u0627\u0644\u0648\u0646 \u0645\u0639\u062F\u0629"],
+  "\u0628\u0627\u0644\u0648\u0646 \u0645\u0639\u062F\u0629": ["gastric balloon"],
+  // General Surgery / Laparoscopy
+  "cholecystectomy": ["\u0627\u0633\u062A\u0626\u0635\u0627\u0644 \u0627\u0644\u0645\u0631\u0627\u0631\u0629", "\u0645\u0631\u0627\u0631\u0629 \u0628\u0627\u0644\u0645\u0646\u0638\u0627\u0631", "gallbladder"],
+  "\u0627\u0633\u062A\u0626\u0635\u0627\u0644 \u0627\u0644\u0645\u0631\u0627\u0631\u0629": ["cholecystectomy", "laparoscopic cholecystectomy", "\u0645\u0631\u0627\u0631\u0629"],
+  "\u0645\u0631\u0627\u0631\u0629": ["cholecystectomy", "\u0627\u0633\u062A\u0626\u0635\u0627\u0644 \u0627\u0644\u0645\u0631\u0627\u0631\u0629"],
+  "appendectomy": ["\u0627\u0633\u062A\u0626\u0635\u0627\u0644 \u0627\u0644\u0632\u0627\u0626\u062F\u0629", "\u0632\u0627\u0626\u062F\u0629 \u062F\u0648\u062F\u064A\u0629"],
+  "\u0627\u0633\u062A\u0626\u0635\u0627\u0644 \u0627\u0644\u0632\u0627\u0626\u062F\u0629": ["appendectomy", "\u0632\u0627\u0626\u062F\u0629 \u062F\u0648\u062F\u064A\u0629"],
+  "\u0632\u0627\u0626\u062F\u0629": ["appendectomy", "\u0627\u0633\u062A\u0626\u0635\u0627\u0644 \u0627\u0644\u0632\u0627\u0626\u062F\u0629"],
+  "hernia": ["\u0641\u062A\u0642", "hernioplasty", "repair of hernia", "\u0627\u0635\u0644\u0627\u062D \u0641\u062A\u0642"],
+  "hernioplasty": ["hernia", "\u0641\u062A\u0642", "\u0627\u0635\u0644\u0627\u062D \u0641\u062A\u0642"],
+  "\u0641\u062A\u0642": ["hernia", "hernioplasty", "\u0627\u0635\u0644\u0627\u062D \u0641\u062A\u0642"],
+  "splenectomy": ["\u0627\u0633\u062A\u0626\u0635\u0627\u0644 \u0637\u062D\u0627\u0644"],
+  "\u0637\u062D\u0627\u0644": ["splenectomy", "\u0627\u0633\u062A\u0626\u0635\u0627\u0644 \u0637\u062D\u0627\u0644"],
+  "thyroidectomy": ["\u0627\u0633\u062A\u0626\u0635\u0627\u0644 \u0627\u0644\u063A\u062F\u0629 \u0627\u0644\u062F\u0631\u0642\u064A\u0629", "\u063A\u062F\u0629 \u062F\u0631\u0642\u064A\u0629"],
+  "\u063A\u062F\u0629 \u062F\u0631\u0642\u064A\u0629": ["thyroidectomy", "\u0627\u0633\u062A\u0626\u0635\u0627\u0644 \u0627\u0644\u063A\u062F\u0629 \u0627\u0644\u062F\u0631\u0642\u064A\u0629"],
+  "mastectomy": ["\u0627\u0633\u062A\u0626\u0635\u0627\u0644 \u062B\u062F\u064A", "\u0623\u0648\u0631\u0627\u0645 \u0627\u0644\u062B\u062F\u064A"],
+  "fistula": ["\u0646\u0627\u0633\u0648\u0631", "\u0627\u0633\u062A\u0626\u0635\u0627\u0644 \u0646\u0627\u0633\u0648\u0631"],
+  "\u0646\u0627\u0633\u0648\u0631": ["fistula", "\u0627\u0633\u062A\u0626\u0635\u0627\u0644 \u0646\u0627\u0633\u0648\u0631"],
+  "fissure": ["\u0634\u0631\u062E", "\u0639\u0644\u0627\u062C \u0634\u0631\u062E \u0634\u0631\u062C\u064A"],
+  "\u0634\u0631\u062E": ["fissure"],
+  "hemorrhoids": ["\u0628\u0648\u0627\u0633\u064A\u0631", "\u0627\u0633\u062A\u0626\u0635\u0627\u0644 \u0628\u0648\u0627\u0633\u064A\u0631"],
+  "\u0628\u0648\u0627\u0633\u064A\u0631": ["hemorrhoids"],
+  // Neurology / Neurophysiology
+  "eeg": ["electroencephalography", "\u0631\u0633\u0645 \u0645\u062E", "\u0631\u0633\u0645 \u0627\u0644\u0645\u062E"],
+  "electroencephalography": ["eeg", "\u0631\u0633\u0645 \u0645\u062E"],
+  "\u0631\u0633\u0645 \u0645\u062E": ["eeg", "electroencephalography", "\u0631\u0633\u0645 \u0627\u0644\u0645\u062E"],
+  "emg": ["electromyography", "\u0631\u0633\u0645 \u0639\u0636\u0644\u0627\u062A"],
+  "\u0631\u0633\u0645 \u0639\u0636\u0644\u0627\u062A": ["emg", "electromyography"],
+  "ncs": ["nerve conduction", "\u0633\u0631\u0639\u0629 \u062A\u0648\u0635\u064A\u0644 \u0627\u0644\u0623\u0639\u0635\u0627\u0628"],
+  "\u0631\u0633\u0645 \u0627\u0639\u0635\u0627\u0628": ["ncs", "nerve conduction", "\u0633\u0631\u0639\u0629 \u062A\u0648\u0635\u064A\u0644 \u0627\u0644\u0623\u0639\u0635\u0627\u0628"],
+  // Urology
+  "cystoscopy": ["\u0645\u0646\u0638\u0627\u0631 \u0645\u062B\u0627\u0646\u0629"],
+  "\u0645\u0646\u0638\u0627\u0631 \u0645\u062B\u0627\u0646\u0629": ["cystoscopy"],
+  "turp": ["\u0627\u0633\u062A\u0626\u0635\u0627\u0644 \u0628\u0631\u0648\u0633\u062A\u0627\u062A\u0627 \u0628\u0627\u0644\u0645\u0646\u0638\u0627\u0631", "\u0628\u0631\u0648\u0633\u062A\u0627\u062A\u0627"],
+  "\u0628\u0631\u0648\u0633\u062A\u0627\u062A\u0627": ["turp", "prostatectomy", "\u0627\u0633\u062A\u0626\u0635\u0627\u0644 \u0628\u0631\u0648\u0633\u062A\u0627\u062A\u0627"],
+  "ureteroscopy": ["\u0645\u0646\u0638\u0627\u0631 \u062D\u0627\u0644\u0628", "\u062A\u0641\u062A\u064A\u062A \u062D\u0635\u0648\u0629 \u0628\u0627\u0644\u0644\u064A\u0632\u0631"],
+  "\u0645\u0646\u0638\u0627\u0631 \u062D\u0627\u0644\u0628": ["ureteroscopy"],
+  "dj stent": ["\u062F\u0639\u0627\u0645\u0629 \u062D\u0627\u0644\u0628"],
+  "\u062F\u0639\u0627\u0645\u0629 \u062D\u0627\u0644\u0628": ["dj stent"],
+  // Radiology
+  "ct": ["\u0627\u0634\u0639\u0629 \u0645\u0642\u0637\u0639\u064A\u0629", "\u0623\u0634\u0639\u0629 \u0645\u0642\u0637\u0639\u064A\u0629", "computed tomography"],
+  "\u0645\u0642\u0637\u0639\u064A\u0629": ["ct", "computed tomography", "\u0623\u0634\u0639\u0629 \u0645\u0642\u0637\u0639\u064A\u0629"],
+  "mri": ["\u0631\u0646\u064A\u0646 \u0645\u063A\u0646\u0627\u0637\u064A\u0633\u064A", "\u0623\u0634\u0639\u0629 \u0627\u0644\u0631\u0646\u064A\u0646 \u0627\u0644\u0645\u063A\u0646\u0627\u0637\u064A\u0633\u064A"],
+  "\u0631\u0646\u064A\u0646": ["mri", "magnetic resonance imaging"],
+  "doppler": ["\u062F\u0648\u0628\u0644\u0631", "\u062F\u0648\u0628\u0644\u0643\u0633 \u0645\u0644\u0648\u0646"],
+  "\u062F\u0648\u0628\u0644\u0631": ["doppler", "duplex"],
+  "sonar": ["\u0645\u0648\u062C\u0627\u062A \u0635\u0648\u062A\u064A\u0629", "\u0633\u0648\u0646\u0627\u0631"],
+  "\u0633\u0648\u0646\u0627\u0631": ["ultrasound", "sonar", "\u0645\u0648\u062C\u0627\u062A \u0635\u0648\u062A\u064A\u0629"],
+  "cxr": ["x - ray chest", "x-ray chest", "chest x-ray", "\u0623\u0634\u0639\u0629 \u0639\u0644\u064A \u0627\u0644\u0635\u062F\u0631"],
+  "kub": ["x - ray abdomen", "urography", "\u0623\u0634\u0639\u0629 \u0639\u0644\u064A \u0627\u0644\u0628\u0637\u0646"],
+  "ctpa": ["ct pulmonary angiography", "\u062A\u0635\u0648\u064A\u0631 \u0627\u0644\u0634\u0631\u064A\u0627\u0646 \u0627\u0644\u0631\u0626\u0648\u064A \u0628\u0627\u0644\u0623\u0634\u0639\u0629 \u0627\u0644\u0645\u0642\u0637\u0639\u064A\u0629"],
+  "mrcp": ["magnetic resonance cholangiopancreatography", "\u0623\u0634\u0639\u0629 \u0631\u0646\u064A\u0646 \u0645\u063A\u0646\u0627\u0637\u064A\u0633\u064A \u0639\u0644\u064A \u0627\u0644\u0642\u0646\u0648\u0627\u062A \u0627\u0644\u0645\u0631\u0627\u0631\u064A\u0629"],
+  "triphasic": ["triphasic ct", "ct liver triphasic", "\u0623\u0634\u0639\u0629 \u0645\u0642\u0637\u0639\u064A\u0629 \u062D\u0644\u0632\u0648\u0646\u064A\u0629 \u0639\u0644\u064A \u0634\u0631\u0627\u064A\u064A\u0646 \u0627\u0644\u0643\u0628\u062F", "\u062A\u0631\u0627\u064A\u0641\u0627\u0632\u064A\u0643"],
+  "\u062A\u0631\u0627\u064A\u0641\u0627\u0632\u064A\u0643": ["triphasic ct", "ct liver triphasic", "\u0623\u0634\u0639\u0629 \u0645\u0642\u0637\u0639\u064A\u0629 \u062D\u0644\u0632\u0648\u0646\u064A\u0629 \u0639\u0644\u064A \u0634\u0631\u0627\u064A\u064A\u0646 \u0627\u0644\u0643\u0628\u062F"],
+  "hsg": ["hysterosalpingography", "\u0627\u0634\u0639\u0629 \u0628\u0627\u0644\u0635\u0628\u063A\u0629 \u0639\u0644\u0649 \u0627\u0644\u0631\u062D\u0645 \u0648\u0627\u0644\u0627\u0646\u0627\u0628\u064A\u0628"],
+  "ivu": ["intravenous pyelogram", "\u0627\u0634\u0639\u0629 \u0628\u0627\u0644\u0635\u0628\u063A\u0629 \u0639\u0644\u0649 \u0627\u0644\u0645\u0633\u0627\u0644\u0643 \u0627\u0644\u0628\u0648\u0644\u064A\u0629"],
+  "ivp": ["intravenous pyelogram", "\u0627\u0634\u0639\u0629 \u0628\u0627\u0644\u0635\u0628\u063A\u0629 \u0639\u0644\u0649 \u0627\u0644\u0645\u0633\u0627\u0644\u0643 \u0627\u0644\u0628\u0648\u0644\u064A\u0629"],
+  "bmft": ["barium meal follow through", "\u0627\u0634\u0639\u0629 \u0628\u0627\u0631\u064A\u0648\u0645 \u0639\u0644\u0649 \u0627\u0644\u0627\u0645\u0639\u0627\u0621 \u0627\u0644\u062F\u0642\u064A\u0642\u0629"],
+  "barium swallow": ["barium swallow", "\u0627\u0634\u0639\u0629 \u0628\u0627\u0644\u0628\u0627\u0631\u064A\u0648\u0645 \u0639\u0644\u0649 \u0627\u0644\u0645\u0631\u064A\u0621"],
+  "barium enema": ["barium enema", "\u062D\u0642\u0646\u0629 \u0628\u0627\u0631\u064A\u0648\u0645 \u0634\u0631\u062C\u064A\u0629", "\u0627\u0634\u0639\u0629 \u0628\u0627\u0644\u0628\u0627\u0631\u064A\u0648\u0645 \u0639\u0644\u0649 \u0627\u0644\u0642\u0648\u0644\u0648\u0646"],
+  "carotid doppler": ["doppler carotid", "\u062F\u0648\u0628\u0644\u0631 \u0639\u0644\u0649 \u0634\u0631\u0627\u064A\u064A\u0646 \u0627\u0644\u0631\u0642\u0628\u0629"],
+  "dvt": ["venous doppler lower extremity", "\u062F\u0648\u0628\u0644\u0631 \u0627\u0648\u0631\u062F\u0629 \u0627\u0644\u0633\u0627\u0642\u064A\u0646"],
+  "bone scan": ["bone scan", "\u0645\u0633\u062D \u0630\u0631\u064A \u0639\u0644\u0649 \u0627\u0644\u0639\u0638\u0627\u0645"],
+  "\u0645\u0633\u062D \u0630\u0631\u064A": ["bone scan", "thyroid scan", "pet-ct"],
+  // Ultrasound & Doppler colloquial Arabic queries
+  "\u0633\u0648\u0646\u0627\u0631 \u0628\u0637\u0646 \u0648\u062D\u0648\u0636": ["us abdomen and pelvis", "\u0645\u0648\u062C\u0627\u062A \u0641\u0648\u0642 \u0635\u0648\u062A\u064A\u0629 \u0639\u0644\u064A \u0627\u0644\u0628\u0637\u0646 \u0648\u0627\u0644\u062D\u0648\u0636", "\u0645\u0648\u062C\u0627\u062A \u0641\u0648\u0642 \u0635\u0648\u062A\u064A\u0629 \u0639\u0644\u0649 \u0627\u0644\u0628\u0637\u0646 \u0648\u0627\u0644\u062D\u0648\u0636", "\u0633\u0648\u0646\u0627\u0631 \u0628\u0637\u0646 \u0648 \u062D\u0648\u0636"],
+  "\u0633\u0648\u0646\u0627\u0631 \u0628\u0637\u0646": ["us abdomen", "\u0645\u0648\u062C\u0627\u062A \u0641\u0648\u0642 \u0635\u0648\u062A\u064A\u0629 \u0639\u0644\u064A \u0627\u0644\u0628\u0637\u0646", "\u0645\u0648\u062C\u0627\u062A \u0641\u0648\u0642 \u0635\u0648\u062A\u064A\u0629 \u0639\u0644\u0649 \u0627\u0644\u0628\u0637\u0646"],
+  "\u0633\u0648\u0646\u0627\u0631 \u062D\u0648\u0636": ["us pelvis", "\u0645\u0648\u062C\u0627\u062A \u0641\u0648\u0642 \u0635\u0648\u062A\u064A\u0629 \u0639\u0644\u064A \u0627\u0644\u062D\u0648\u0636", "\u0645\u0648\u062C\u0627\u062A \u0641\u0648\u0642 \u0635\u0648\u062A\u064A\u0629 \u0639\u0644\u0649 \u0627\u0644\u062D\u0648\u0636"],
+  "\u062F\u0648\u0628\u0644\u0631 \u0627\u0648\u0631\u062F\u0629 \u0627\u0644\u0633\u0627\u0642\u064A\u0646": ["doppler venous system both lower limbs", "\u062F\u0648\u0628\u0644\u0631 \u0639\u0644\u064A \u0623\u0648\u0631\u062F\u0629 \u0627\u0644\u0623\u0637\u0631\u0627\u0641 \u0627\u0644\u0633\u0641\u0644\u064A", "\u062F\u0648\u0628\u0644\u0631 \u0627\u0648\u0631\u062F\u0629 \u0627\u0644\u0637\u0631\u0641\u064A\u0646 \u0627\u0644\u0633\u0641\u0644\u064A\u064A\u0646"],
+  "\u062F\u0648\u0628\u0644\u0631 \u0634\u0631\u0627\u064A\u064A\u0646 \u0627\u0644\u0633\u0627\u0642\u064A\u0646": ["doppler arterial system both lower limbs", "\u062F\u0648\u0628\u0644\u0631 \u0639\u0644\u064A \u0634\u0631\u0627\u064A\u064A\u0646 \u0627\u0644\u0623\u0637\u0631\u0627\u0641 \u0627\u0644\u0633\u0641\u0644\u064A", "\u062F\u0648\u0628\u0644\u0631 \u0634\u0631\u0627\u064A\u064A\u0646 \u0627\u0644\u0637\u0631\u0641\u064A\u0646 \u0627\u0644\u0633\u0641\u0644\u064A\u064A\u0646"],
+  "\u062A\u0631\u0643\u064A\u0628 \u0628\u0648\u0631\u062A \u0643\u0627\u062B": ["porta cath insertion", "\u062A\u0631\u0643\u064A\u0628 \u062C\u0647\u0627\u0632 \u0628\u0648\u0631\u062A \u0643\u0627\u062B"],
+  "\u0631\u0641\u0639 \u0628\u0648\u0631\u062A \u0643\u0627\u062B": ["porta cath removal", "\u0631\u0641\u0639 \u0628\u0648\u0631\u062A \u0643\u0627\u062B"],
+  // Dialysis / ICU / Interventions / Acute (Batch 1)
+  "hd session": ["\u063A\u0633\u064A\u0644 \u0643\u0644\u0648\u064A", "\u062C\u0644\u0633\u0629 \u063A\u0633\u064A\u0644 \u0643\u0644\u0648\u064A", "dialysis"],
+  "hemodialysis": ["\u063A\u0633\u064A\u0644 \u0643\u0644\u0648\u064A", "\u062C\u0644\u0633\u0629 \u063A\u0633\u064A\u0644 \u0643\u0644\u0648\u064A", "dialysis"],
+  "\u063A\u0633\u064A\u0644 \u0643\u0644\u0648\u064A": ["hemodialysis", "hd session", "dialysis"],
+  "pig tail": ["\u062A\u0631\u0643\u064A\u0628 \u0628\u064A\u062C \u062A\u064A\u0644", "pig tail catheter", "pig tail insertion"],
+  "\u0628\u064A\u062C \u062A\u064A\u0644": ["pig tail insertion", "pig tail catheter", "\u062A\u0631\u0643\u064A\u0628 \u0628\u064A\u062C \u062A\u064A\u0644"],
+  "port-a-cath": ["port-a-cath", "porta cath", "porta cath insertion", "chemoport", "tivad", "\u062C\u0647\u0627\u0632 \u0639\u0644\u0627\u062C \u0643\u064A\u0645\u0627\u0648\u064A", "\u0628\u0648\u0631\u062A \u0643\u0627\u062B"],
+  "portacath": ["port-a-cath", "porta cath", "porta cath insertion", "chemoport", "tivad", "\u062C\u0647\u0627\u0632 \u0639\u0644\u0627\u062C \u0643\u064A\u0645\u0627\u0648\u064A", "\u0628\u0648\u0631\u062A \u0643\u0627\u062B"],
+  "\u0628\u0648\u0631\u062A \u0643\u0627\u062B": ["port-a-cath", "porta cath", "porta cath insertion", "chemoport", "\u062C\u0647\u0627\u0632 \u0639\u0644\u0627\u062C \u0643\u064A\u0645\u0627\u0648\u064A"],
+  "\u0628\u0648\u0631\u062A\u0627\u0643\u0627\u062A": ["port-a-cath", "porta cath", "porta cath insertion", "chemoport"],
+  "evbl": ["esophageal varices band ligation", "\u0631\u0628\u0637 \u062F\u0648\u0627\u0644\u064A \u0627\u0644\u0645\u0631\u064A\u0621", "\u0631\u0628\u0637 \u062F\u0648\u0627\u0644\u064A \u0628\u0627\u0644\u0645\u0646\u0638\u0627\u0631"],
+  "\u0631\u0628\u0637 \u062F\u0648\u0627\u0644\u064A": ["esophageal varices band ligation", "evbl", "\u0631\u0628\u0637 \u062F\u0648\u0627\u0644\u064A \u0627\u0644\u0645\u0631\u064A\u0621"],
+  "pcn": ["percutaneous nephrostomy", "\u0628\u0630\u0644 \u0643\u0644\u0648\u064A \u0628\u0627\u0644\u0627\u0634\u0639\u0629 \u0627\u0644\u062A\u062F\u0627\u062E\u0644\u064A\u0629"],
+  "tru-cut": ["true cut biopsy", "u/s guided true cut biopsy", "\u0639\u064A\u0646\u0629 \u062A\u0631\u0648\u0643\u062A"],
+  "\u062A\u0631\u0648\u0643\u062A": ["true cut biopsy", "u/s guided true cut biopsy"],
+  "tracheostomy": ["\u0634\u0642 \u062D\u0646\u062C\u0631\u064A", "\u062A\u0631\u0643\u064A\u0628 \u0623\u0646\u0628\u0648\u0628 \u062D\u0646\u062C\u0631\u064A"],
+  "audiogram": ["computerized audiogram", "\u0631\u0633\u0645 \u0633\u0645\u0639 \u0628\u0627\u0644\u0643\u0645\u0628\u064A\u0648\u062A\u0631"],
+  "audiometry": ["computerized audiogram", "\u0631\u0633\u0645 \u0633\u0645\u0639"],
+  "\u0631\u0633\u0645 \u0633\u0645\u0639": ["computerized audiogram", "audiogram"],
+  "tapping": ["\u0628\u0632\u0644", "paracentesis"],
+  "\u0628\u0632\u0644": ["tapping", "paracentesis"],
+  // Surgical Procedures & Bedside Care (Batch 3)
+  "lac": ["above elbow cast", "\u062C\u0628\u0633 \u0641\u0648\u0642 \u0627\u0644\u0643\u0648\u0639"],
+  "sac": ["below elbow cast", "\u062C\u0628\u0633 \u062A\u062D\u062A \u0627\u0644\u0643\u0648\u0639"],
+  "llc": ["above knee cast", "\u062C\u0628\u0633 \u0641\u0648\u0642 \u0627\u0644\u0631\u0643\u0628\u0629"],
+  "slc": ["below knee cast", "\u062C\u0628\u0633 \u062A\u062D\u062A \u0627\u0644\u0631\u0643\u0628\u0629"],
+  "\u062C\u0628\u0633": ["cast", "above elbow cast", "below elbow cast", "above knee cast", "below knee cast"],
+  "\u062C\u0628\u064A\u0631\u0629": ["slab", "posterior slab", "\u062C\u0628\u064A\u0631\u0629 \u062E\u0644\u0641\u064A\u0629"],
+  "\u0631\u062F \u0643\u0633\u0631": ["fracture reduction", "\u0631\u062F \u0643\u0633\u0631 \u0628\u0633\u064A\u0637"],
+  "\u0631\u062F \u062E\u0644\u0639": ["dislocation reduction", "\u0631\u062F \u062E\u0644\u0639 \u0645\u0641\u0635\u0644"],
+  "\u062D\u0642\u0646 \u0645\u0641\u0627\u0635\u0644": ["intra-articular injection", "\u062D\u0642\u0646 \u0645\u0648\u0636\u0639\u064A \u0639\u0638\u0627\u0645 \u0645\u0641\u0627\u0635\u0644"],
+  "ett": ["endo tracheal intubation", "endotracheal intubation", "\u0623\u0646\u0628\u0648\u0628\u0629 \u062D\u0646\u062C\u0631\u064A\u0629"],
+  "intubation": ["endo tracheal intubation", "\u062A\u0631\u0643\u064A\u0628 \u0627\u0646\u0628\u0648\u0628\u0629 \u062D\u0646\u062C\u0631\u064A\u0629"],
+  "\u0627\u0646\u0628\u0648\u0628\u0629 \u062D\u0646\u062C\u0631\u064A\u0629": ["endo tracheal intubation", "\u062A\u0631\u0643\u064A\u0628 \u0627\u0646\u0628\u0648\u0628\u0629 \u0628\u0627\u0644\u0642\u0635\u0628\u0629 \u0627\u0644\u0647\u0648\u0627\u0626\u064A\u0629"],
+  "cvp": ["cvp catheter insertion", "\u062A\u0631\u0643\u064A\u0628 \u0642\u0633\u0637\u0631\u0629 \u0648\u0631\u064A\u062F \u0645\u0631\u0643\u0632\u064A"],
+  "\u0642\u0633\u0637\u0631\u0629 \u0648\u0631\u064A\u062F\u064A\u0629 \u0645\u0631\u0643\u0632\u064A\u0629": ["cvp catheter insertion", "\u062A\u0631\u0643\u064A\u0628 \u0642\u0633\u0637\u0631\u0629 \u0648\u0631\u064A\u062F \u0645\u0631\u0643\u0632\u064A"],
+  "arterial line": ["arterial line insertion", "\u062A\u0631\u0643\u064A\u0628 \u0642\u0633\u0637\u0631\u0629 \u0634\u0631\u064A\u0627\u0646\u064A\u0629"],
+  "\u0642\u0633\u0637\u0631\u0629 \u0634\u0631\u064A\u0627\u0646\u064A\u0629": ["arterial line insertion", "\u062A\u0631\u0643\u064A\u0628 \u0642\u0633\u0637\u0631\u0629 \u0634\u0631\u064A\u0627\u0646\u064A\u0629"],
+  "chest tube": ["insertion of intercostal tube", "\u062A\u0631\u0643\u064A\u0628 \u0623\u0646\u0628\u0648\u0628\u0629 \u0635\u062F\u0631\u064A\u0629"],
+  "\u0623\u0646\u0628\u0648\u0628\u0629 \u0635\u062F\u0631\u064A\u0629": ["insertion of intercostal tube", "\u062A\u0631\u0643\u064A\u0628 \u0623\u0646\u0628\u0648\u0628\u0629 \u0635\u062F\u0631\u064A\u0629"],
+  "lumbar puncture": ["c.s.f tapping", "\u0628\u0630\u0644 \u0646\u062E\u0627\u0639\u064A", "\u0628\u0630\u0644 \u0627\u0644\u0633\u0627\u0626\u0644 \u0627\u0644\u0633\u062D\u0627\u0626\u064A"],
+  "\u0628\u0630\u0644 \u0646\u062E\u0627\u0639\u064A": ["c.s.f tapping", "lumbar puncture", "\u0628\u0630\u0644 \u0627\u0644\u0633\u0627\u0626\u0644 \u0627\u0644\u0633\u062D\u0627\u0626\u064A"],
+  "paracentesis": ["\u0628\u0630\u0644 \u0628\u0637\u0646", "\u0628\u0630\u0644 \u062A\u062C\u0645\u0639 \u0633\u0627\u0626\u0644 \u0641\u064A \u0627\u0644\u0628\u0637\u0646", "paracentesis"],
+  "\u0628\u0630\u0644 \u0628\u0637\u0646": ["paracentesis", "\u0628\u0630\u0644 \u062A\u062C\u0645\u0639 \u0633\u0627\u0626\u0644 \u0641\u064A \u0627\u0644\u0628\u0637\u0646"],
+  "pericardiocentesis": ["\u0628\u0630\u0644 \u062A\u0627\u0645\u0648\u0631", "\u0628\u0630\u0644 \u0645\u0646 \u062A\u0627\u0645\u0648\u0631 \u0627\u0644\u0642\u0644\u0628"],
+  "\u063A\u064A\u0627\u0631 \u062C\u0631\u0648\u062D": ["wound dressing", "\u063A\u064A\u0627\u0631 \u0639\u0644\u064A \u062C\u0631\u062D", "wound cleaning"],
+  "\u0641\u0643 \u063A\u0631\u0632": ["stitch removal", "removal of surgical stitches", "\u0641\u0643 \u063A\u0631\u0632 \u062C\u0631\u0627\u062D\u064A\u0629"],
+  "\u063A\u0631\u0632 \u062C\u0631\u0627\u062D\u064A\u0629": ["surgical stitches", "suturing", "\u062E\u064A\u0627\u0637\u0629 \u062C\u0631\u0648\u062D"],
+  "\u062E\u064A\u0627\u0637\u0629 \u062C\u0631\u0648\u062D": ["surgical stitches", "suturing", "\u062E\u064A\u0627\u0637\u0629 \u062C\u0631\u0648\u062D"],
+  "\u0642\u0633\u0637\u0631\u0629 \u0628\u0648\u0644\u064A\u0629": ["insertion of urinary catheter", "\u062A\u0631\u0643\u064A\u0628 \u0642\u0633\u0637\u0631\u0629 \u0628\u0648\u0644\u064A\u0629"],
+  "foley": ["insertion of urinary catheter", "\u0642\u0633\u0637\u0631\u0629 \u0628\u0648\u0644\u064A\u0629"],
+  "ctg": ["fetal monitoring by cardiotocography", "\u0645\u0631\u0627\u0642\u0628\u0629 \u0645\u0639\u062F\u0644 \u0646\u0628\u0636 \u0627\u0644\u062C\u0646\u064A\u0646"],
+  "holter": ["holter monitor", "\u062C\u0647\u0627\u0632 \u0647\u0648\u0644\u062A\u0631", "\u062A\u0631\u0643\u064A\u0628 \u062C\u0647\u0627\u0632 \u0647\u0648\u0644\u062A\u0631"],
+  "\u0647\u0648\u0644\u062A\u0631": ["holter monitor", "\u062C\u0647\u0627\u0632 \u0647\u0648\u0644\u062A\u0631"],
+  "spirometry": ["pulmonary function test", "\u0642\u064A\u0627\u0633 \u0643\u0641\u0627\u0621\u0629 \u0627\u0644\u0631\u0626\u062A\u064A\u0646"],
+  "\u0648\u0638\u0627\u0626\u0641 \u062A\u0646\u0641\u0633": ["pulmonary function test", "spirometry"],
+  "fees": ["flexible endoscopic evaluation of swallowing", "\u062A\u0642\u064A\u064A\u0645 \u0627\u0644\u0628\u0644\u0639 \u0628\u0627\u0644\u0645\u0646\u0638\u0627\u0631"],
+  "\u062A\u0642\u064A\u064A\u0645 \u0628\u0644\u0639": ["flexible endoscopic evaluation of swallowing", "fees"],
+  "\u0639\u0644\u0627\u062C \u0636\u0648\u0626\u064A": ["phototherapy", "\u0639\u0644\u0627\u062C \u0636\u0648\u0626\u064A \u0644\u062D\u062F\u064A\u062B\u064A \u0627\u0644\u0648\u0644\u0627\u062F\u0629"],
+  "\u0641\u0635\u0644 \u0628\u0644\u0627\u0632\u0645\u0627": ["plasma pharesis", "plasmapheresis", "\u0627\u062C\u0631\u0627\u0621 \u0641\u0635\u0644 \u0628\u0644\u0627\u0632\u0645\u0627"],
+  "plasmapheresis": ["plasma pharesis", "\u0627\u062C\u0631\u0627\u0621 \u0641\u0635\u0644 \u0628\u0644\u0627\u0632\u0645\u0627"],
+  // Routine Clinical Laboratory & Endocrine (Batch 4)
+  "cbc": ["complete blood count", "\u0635\u0648\u0631\u0629 \u062F\u0645 \u0643\u0627\u0645\u0644\u0629", "\u0635\u0648\u0631\u0629 \u062F\u0645", "blood picture"],
+  "\u0635\u0648\u0631\u0629 \u062F\u0645": ["complete blood count", "cbc", "\u0635\u0648\u0631\u0629 \u062F\u0645 \u0643\u0627\u0645\u0644\u0629"],
+  "esr": ["erythrocyte sedimentation rate", "\u0633\u0631\u0639\u0629 \u062A\u0631\u0633\u064A\u0628", "\u0633\u0631\u0639\u0629 \u0627\u0644\u062A\u0631\u0633\u064A\u0628"],
+  "\u0633\u0631\u0639\u0629 \u062A\u0631\u0633\u064A\u0628": ["esr", "erythrocyte sedimentation rate"],
+  "pt": ["prothrombin time and inr", "prothrombin time", "\u062A\u062D\u0644\u064A\u0644 \u0633\u064A\u0648\u0644\u0629", "\u0633\u064A\u0648\u0644\u0629 \u0627\u0644\u062F\u0645"],
+  "inr": ["prothrombin time and inr", "international normalized ratio", "\u062A\u062D\u0644\u064A\u0644 \u0633\u064A\u0648\u0644\u0629"],
+  "\u0633\u064A\u0648\u0644\u0629": ["prothrombin time and inr", "pt inr", "\u0633\u064A\u0648\u0644\u0629 \u0627\u0644\u062F\u0645"],
+  "ptt": ["partial thromboplastin time", "aptt", "\u0632\u0645\u0646 \u0627\u0644\u062A\u062C\u0644\u0637 \u0627\u0644\u062C\u0632\u0626\u064A"],
+  "d-dimer": ["d-dimer quantitative", "d dimer", "\u062F\u064A \u062F\u0627\u064A\u0645\u0631"],
+  "\u062F\u064A \u062F\u0627\u064A\u0645\u0631": ["d-dimer quantitative", "d-dimer"],
+  "creatinine": ["serum creatinine", "\u0648\u0638\u0627\u0626\u0641 \u0643\u0644\u0649", "\u0643\u0631\u064A\u0627\u062A\u064A\u0646\u064A\u0646"],
+  "\u0648\u0638\u0627\u0626\u0641 \u0643\u0644\u0649": ["serum creatinine", "blood urea", "\u0643\u0631\u064A\u0627\u062A\u064A\u0646\u064A\u0646", "\u064A\u0648\u0631\u064A\u0627"],
+  "\u0643\u0631\u064A\u0627\u062A\u064A\u0646\u064A\u0646": ["serum creatinine", "creatinine"],
+  "\u064A\u0648\u0631\u064A\u0627": ["blood urea", "urea", "\u0628\u0648\u0644\u064A\u0646\u0627"],
+  "\u062D\u0645\u0636 \u0627\u0644\u0628\u0648\u0644\u064A\u0643": ["serum uric acid", "uric acid", "\u0646\u0642\u0631\u0633"],
+  "\u0632\u0644\u0627\u0644 \u0628\u0627\u0644\u0628\u0648\u0644": ["microalbuminuria", "albumin creatinine ratio", "protein in urine"],
+  "\u062A\u062D\u0644\u064A\u0644 \u0628\u0648\u0644": ["complete urine analysis", "urine analysis", "\u0641\u062D\u0635 \u0628\u0648\u0644 \u0631\u0648\u062A\u064A\u0646\u064A"],
+  "\u062A\u062D\u0644\u064A\u0644 \u0628\u0631\u0627\u0632": ["complete stool analysis", "stool analysis", "\u0641\u062D\u0635 \u0628\u0631\u0627\u0632 \u0631\u0648\u062A\u064A\u0646\u064A"],
+  "\u062F\u0645 \u062E\u0641\u064A": ["fecal occult blood test", "occult blood in stool", "fobt"],
+  "\u0643\u0627\u0644\u0628\u0631\u0648\u062A\u0643\u062A\u064A\u0646": ["fecal calprotectin", "calprotectin"],
+  "alt": ["sgpt", "alanin aminotransferase", "\u0627\u0646\u0632\u064A\u0645\u0627\u062A \u0643\u0628\u062F"],
+  "sgpt": ["alt", "alanin aminotransferase", "\u0627\u0646\u0632\u064A\u0645\u0627\u062A \u0643\u0628\u062F"],
+  "ast": ["sgot", "aspartate aminotransferase", "\u0627\u0646\u0632\u064A\u0645\u0627\u062A \u0643\u0628\u062F"],
+  "sgot": ["ast", "aspartate aminotransferase", "\u0627\u0646\u0632\u064A\u0645\u0627\u062A \u0643\u0628\u062F"],
+  "\u0627\u0646\u0632\u064A\u0645\u0627\u062A \u0643\u0628\u062F": ["alt", "ast", "sgpt", "sgot"],
+  "\u0648\u0638\u0627\u0626\u0641 \u0643\u0628\u062F": ["alt", "ast", "bilirubin", "albumin"],
+  "\u0627\u0644\u0635\u0641\u0631\u0627\u0621": ["total and direct bilirubin", "bilirubin total and direct"],
+  "\u0627\u0644\u0628\u064A\u0648\u0645\u064A\u0646": ["serum albumin", "albumin"],
+  "\u0641\u0648\u0633\u0641\u0627\u062A\u064A\u0632 \u0642\u0644\u0648\u064A": ["alkaline phosphatase", "alp"],
+  "\u0635\u0648\u062F\u064A\u0648\u0645": ["serum sodium", "sodium"],
+  "\u0628\u0648\u062A\u0627\u0633\u064A\u0648\u0645": ["serum potassium", "potassium"],
+  "\u0643\u0627\u0644\u0633\u064A\u0648\u0645": ["serum calcium", "calcium total"],
+  "\u0641\u064A\u0631\u064A\u062A\u064A\u0646": ["serum ferritin", "\u0645\u062E\u0632\u0648\u0646 \u0627\u0644\u062D\u062F\u064A\u062F"],
+  "\u0645\u062E\u0632\u0648\u0646 \u0627\u0644\u062D\u062F\u064A\u062F": ["serum ferritin", "ferritin"],
+  "fbs": ["fasting blood sugar", "fasting blood glucose", "\u0633\u0643\u0631 \u0635\u0627\u0626\u0645"],
+  "\u0633\u0643\u0631 \u0635\u0627\u0626\u0645": ["fasting blood sugar", "fbs"],
+  "2hpp": ["2 hours post prandial blood sugar", "\u0633\u0643\u0631 \u0641\u0627\u0637\u0631"],
+  "\u0633\u0643\u0631 \u0641\u0627\u0637\u0631": ["2 hours post prandial blood sugar", "2hpp"],
+  "rbs": ["random blood sugar", "\u0633\u0643\u0631 \u0639\u0634\u0648\u0627\u0626\u064A"],
+  "\u0633\u0643\u0631 \u0639\u0634\u0648\u0627\u0626\u064A": ["random blood sugar", "rbs"],
+  "hba1c": ["glycated hemoglobin", "\u0627\u0644\u0633\u0643\u0631 \u0627\u0644\u062A\u0631\u0627\u0643\u0645\u064A", "\u0633\u0643\u0631 \u062A\u0631\u0627\u0643\u0645\u064A"],
+  "\u0633\u0643\u0631 \u062A\u0631\u0627\u0643\u0645\u064A": ["glycated hemoglobin", "hba1c", "\u0627\u0644\u0633\u0643\u0631 \u0627\u0644\u062A\u0631\u0627\u0643\u0645\u064A"],
+  "\u0643\u0648\u0644\u064A\u0633\u062A\u0631\u0648\u0644": ["serum total cholesterol", "cholesterol"],
+  "\u062F\u0647\u0648\u0646 \u062B\u0644\u0627\u062B\u064A\u0629": ["serum triglycerides", "triglycerides"],
+  "\u062F\u0647\u0648\u0646 \u0643\u0627\u0645\u0644\u0629": ["full lipid profile", "lipid profile"],
+  "troponin": ["troponin i quantitative", "troponin t", "\u062A\u0631\u0648\u0628\u0648\u0646\u064A\u0646"],
+  "\u062A\u0631\u0648\u0628\u0648\u0646\u064A\u0646": ["troponin i quantitative", "troponin", "hs-ctni"],
+  "abg": ["arterial blood gas", "\u063A\u0627\u0632\u0627\u062A \u062F\u0645 \u0634\u0631\u064A\u0627\u0646\u064A"],
+  "\u063A\u0627\u0632\u0627\u062A \u062F\u0645": ["arterial blood gas", "abg"],
+  "tsh": ["thyroid stimulating hormone", "\u0647\u0631\u0645\u0648\u0646 \u0627\u0644\u063A\u062F\u0629 \u0627\u0644\u062F\u0631\u0642\u064A\u0629", "\u062A\u062D\u0644\u064A\u0644 \u062A\u064A \u0627\u0633 \u0627\u062A\u0634"],
+  "\u0627\u0644\u063A\u062F\u0629 \u0627\u0644\u062F\u0631\u0642\u064A\u0629": ["tsh", "free t3", "free t4"],
+  "pth": ["intact pth pth 1-84", "parathyroid hormone", "\u0628\u0627\u0631\u0627\u062B\u0648\u0631\u0645\u0648\u0646", "\u0647\u0631\u0645\u0648\u0646 \u0627\u0644\u063A\u062F\u0629 \u0627\u0644\u062C\u0627\u0631 \u062F\u0631\u0642\u064A\u0629"],
+  "\u0628\u0627\u0631\u0627\u062B\u0648\u0631\u0645\u0648\u0646": ["intact pth pth 1-84", "pth", "parathormone"],
+  "\u0641\u064A\u062A\u0627\u0645\u064A\u0646 \u062F": ["25-oh vitamin d total", "vitamin d3", "vitamin d"],
+  "\u062A\u062D\u0644\u064A\u0644 \u062D\u0645\u0644": ["beta hcg quantitative", "pregnancy test in blood"],
+  "\u0628\u0631\u0648\u0644\u0627\u0643\u062A\u064A\u0646": ["serum prolactin", "\u0647\u0631\u0645\u0648\u0646 \u0627\u0644\u0644\u0628\u0646"],
+  "\u0645\u062E\u0632\u0648\u0646 \u0627\u0644\u0645\u0628\u064A\u0636": ["anti mullerian hormone", "amh"],
+  "psa": ["total psa prostate specific antigen", "prostate specific antigen", "\u062F\u0644\u0627\u0644\u0627\u062A \u0627\u0648\u0631\u0627\u0645 \u0627\u0644\u0628\u0631\u0648\u0633\u062A\u0627\u062A\u0627"]
+};
+function expandMedicalSynonyms(input) {
+  if (!input) return [];
+  const cleanQ = cleanHisProcedureQuery(input);
+  const norm = normalizeText(cleanQ);
+  const normAr = normalizeArabic(cleanQ);
+  const results = /* @__PURE__ */ new Set([cleanQ, norm, normAr]);
+  for (const [key, syns] of Object.entries(MEDICAL_SYNONYMS)) {
+    const isEnglishKey = /^[a-z0-9\s-]+$/i.test(key);
+    const normKey = normalizeText(key);
+    let matched = false;
+    if (isEnglishKey && key.length <= 4) {
+      matched = new RegExp(`\\b${key}\\b`, "i").test(cleanQ);
+    } else {
+      matched = normKey && norm.includes(normKey) || norm.includes(key) || normAr.includes(key);
+    }
+    if (matched) {
+      syns.forEach((s) => results.add(s));
+    }
+  }
+  return Array.from(results).filter(Boolean);
+}
 function hasAntibodyConflict(query2, candidate) {
   if (!query2 || !candidate) return false;
   const isotypes = ["iga", "igg", "igm", "ige"];
@@ -2453,13 +2704,31 @@ function resolveOfficerByContractor(rawQuery, excelPath) {
 function hasClinicalMismatch(queryEngNorm, queryAraNorm, rowEngNorm, rowAraNorm) {
   const queryCombined = `${queryEngNorm} ${queryAraNorm}`;
   const rowCombined = `${rowEngNorm} ${rowAraNorm}`;
-  const isTeeQuery = /transesophageal|tee\b|t\.e\.e|مريء|المريء|بالمنظار/i.test(queryCombined);
-  const isTeeRow = /transesophageal|tee\b|t\.e\.e|مريء|المريء|بالمنظار/i.test(rowCombined);
+  const isTeeQuery = /\b(?:transesophageal|tee|t\.e\.e)\b|ايكو مريئي|عبر المريء/i.test(queryCombined);
+  const isTeeRow = /\b(?:transesophageal|tee|t\.e\.e)\b|ايكو مريئي|عبر المريء/i.test(rowCombined);
   if (isTeeQuery !== isTeeRow) return true;
   if (hasAntibodyConflict(queryCombined, rowCombined)) return true;
   if (hasLabInvestigationConflict(queryCombined, rowCombined)) return true;
   return false;
 }
+var GENERIC_MODALITY_TERMS = /* @__PURE__ */ new Set([
+  "ct",
+  "mri",
+  "sonar",
+  "doppler",
+  "duplex",
+  "ultrasound",
+  "computed tomography",
+  "magnetic resonance imaging",
+  "\u0627\u0634\u0639\u0647 \u0645\u0642\u0637\u0639\u064A\u0647",
+  "\u0627\u0634\u0639\u0629 \u0645\u0642\u0637\u0639\u064A\u0629",
+  "\u0631\u0646\u064A\u0646 \u0645\u063A\u0646\u0627\u0637\u064A\u0633\u064A",
+  "\u0645\u0648\u062C\u0627\u062A \u0635\u0648\u062A\u064A\u0647",
+  "\u0645\u0648\u062C\u0627\u062A \u0635\u0648\u062A\u064A\u0629",
+  "\u0633\u0648\u0646\u0627\u0631",
+  "\u062F\u0648\u0628\u0644\u0631",
+  "\u062F\u0648\u0628\u0644\u0643\u0633"
+]);
 function searchLocalPricelist(cashList, requestedProcedures) {
   const finalResults = [];
   for (const proc of requestedProcedures) {
@@ -2467,6 +2736,7 @@ function searchLocalPricelist(cashList, requestedProcedures) {
     const qEng = normalizeText(cleanEng);
     const qEngRaw = normalizeText(proc.name);
     const qAra = proc.arabic ? normalizeArabic(proc.arabic) : "";
+    const synonyms = expandMedicalSynonyms(cleanEng || proc.name);
     if (!qEng && !qAra && !qEngRaw) continue;
     const exactMatches = [];
     const partialMatches = [];
@@ -2492,14 +2762,91 @@ function searchLocalPricelist(cashList, requestedProcedures) {
           ...item,
           requestedProcedureName: proc.name
         });
+        continue;
+      }
+      if (synonyms.length > 0) {
+        let isSynMatch = false;
+        let isExactSynMatch = false;
+        for (const syn of synonyms) {
+          const normSynEn = normalizeText(syn);
+          const normSynAr = normalizeArabic(syn);
+          if (normSynEn && !GENERIC_MODALITY_TERMS.has(normSynEn) && normSynEn !== qEng) {
+            if (itemEng === normSynEn) {
+              isExactSynMatch = true;
+              break;
+            } else if (normSynEn.length >= 5 && itemEng.includes(normSynEn)) {
+              isSynMatch = true;
+              break;
+            }
+          }
+          if (normSynAr && !GENERIC_MODALITY_TERMS.has(normSynAr) && normSynAr !== qAra) {
+            if (itemAra === normSynAr) {
+              isExactSynMatch = true;
+              break;
+            } else if (normSynAr.length >= 5 && itemAra.includes(normSynAr)) {
+              isSynMatch = true;
+              break;
+            }
+          }
+        }
+        if (isExactSynMatch) {
+          exactMatches.push({
+            ...item,
+            requestedProcedureName: proc.name
+          });
+        } else if (isSynMatch) {
+          partialMatches.push({
+            ...item,
+            requestedProcedureName: proc.name
+          });
+        }
       }
     }
     if (exactMatches.length > 0) {
-      finalResults.push(...exactMatches);
+      const sortedExact = exactMatches.sort((a, b) => {
+        const aEng = normalizeText(a.nameEnglish);
+        const bEng = normalizeText(b.nameEnglish);
+        const aAra = normalizeArabic(a.nameArabic);
+        const bAra = normalizeArabic(b.nameArabic);
+        const stemToken = (t) => t.replace(/^(?:و|ف)?(?:ال)?/, "");
+        const qTokens = (qEng + " " + qAra).split(/\s+/).map(stemToken).filter((t) => t.length >= 3);
+        const aTokens = (aEng + " " + aAra).split(/\s+/).map(stemToken).filter((t) => t.length >= 3);
+        const bTokens = (bEng + " " + bAra).split(/\s+/).map(stemToken).filter((t) => t.length >= 3);
+        const aCount = qTokens.filter((t) => aTokens.some((at) => at === t || at.includes(t) || t.includes(at))).length;
+        const bCount = qTokens.filter((t) => bTokens.some((bt) => bt === t || bt.includes(t) || t.includes(bt))).length;
+        if (aCount !== bCount) {
+          return bCount - aCount;
+        }
+        return b.nameEnglish.length - a.nameEnglish.length;
+      });
+      finalResults.push(...sortedExact);
     } else if (partialMatches.length > 0) {
       const sortedPartials = partialMatches.sort((a, b) => {
         const aEng = normalizeText(a.nameEnglish);
         const bEng = normalizeText(b.nameEnglish);
+        const aAra = normalizeArabic(a.nameArabic);
+        const bAra = normalizeArabic(b.nameArabic);
+        const qAction = /insertion|تركيب|بذل|drainage/i.test(qEng + " " + qAra) ? "insert" : /removal|رفع|استخراج|ازالة/i.test(qEng + " " + qAra) ? "remove" : null;
+        if (qAction === "insert") {
+          const aHas = /insertion|تركيب|بذل|drainage/i.test(aEng + " " + aAra);
+          const bHas = /insertion|تركيب|بذل|drainage/i.test(bEng + " " + bAra);
+          if (aHas && !bHas) return -1;
+          if (!aHas && bHas) return 1;
+        } else if (qAction === "remove") {
+          const aHas = /removal|رفع|استخراج|ازالة/i.test(aEng + " " + aAra);
+          const bHas = /removal|رفع|استخراج|ازالة/i.test(bEng + " " + bAra);
+          if (aHas && !bHas) return -1;
+          if (!aHas && bHas) return 1;
+        }
+        const stemToken = (t) => t.replace(/^(?:و|ف)?(?:ال)?/, "");
+        const qTokens = (qEng + " " + qAra).split(/\s+/).map(stemToken).filter((t) => t.length >= 3);
+        const aTokens = (aEng + " " + aAra).split(/\s+/).map(stemToken).filter((t) => t.length >= 3);
+        const bTokens = (bEng + " " + bAra).split(/\s+/).map(stemToken).filter((t) => t.length >= 3);
+        const aCount = qTokens.filter((t) => aTokens.some((at) => at === t || at.includes(t) || t.includes(at))).length;
+        const bCount = qTokens.filter((t) => bTokens.some((bt) => bt === t || bt.includes(t) || t.includes(bt))).length;
+        if (aCount !== bCount) {
+          return bCount - aCount;
+        }
         const aStarts = qEng && aEng.startsWith(qEng);
         const bStarts = qEng && bEng.startsWith(qEng);
         if (aStarts && !bStarts) return -1;

@@ -1,0 +1,476 @@
+(1-3)-B-D Glucan | 
+(ANCA P&C) | 
+AFP-IHC | 
+ALK-1-IHC | 
+ANA (ELISA) | 
+ANA (IFA) | 
+ANA by Microarray | 
+ANCA P&C | 
+Acetylcholine receptor Antibodies | 
+Adenovirus Antigen | 
+Aerobic Blood Culture | 
+Alpha globin gene mutation by PCR | 
+Alternaria tenuis IgE - Inhalant Allergy | 
+Ammonia, plasma | 
+Amoxicillin IgE - Drug Allergy | 
+Ampicillin IgE - Drug Allergy | 
+Amyloid-A (Serum) | 
+Androgen-IHC | 
+Androgen-IHС | 
+Anerobic Blood Culture | 
+Ant saccharomyces cerevisiae IgA (ASCA) | 
+Ant saccharomyces cerevisiae IgG (ASCA) | 
+Anti MuSK (Muscle Specific Kinase) IFA | 
+Anti smooth muscle Ab (ASMA) | 
+Anti-Cardiolipin IgG | 
+Anti-Cardiolipin IgM | 
+Anti-DNA (L.E Cells) | 
+Anti-DNA (d's) | 
+Anti-DNA (d.s) | 
+Anti-HBc IgM | 
+Anti-HBc Total | 
+Anti-HBe | 
+Anti-HBs | 
+Anti-Islet cell Ab (Anti ICA) | 
+Anti-Smith (Sm) | 
+Anti-centromere Ab (ACA) | 
+Anti-cyclic citrulinated peptide (Anti-CCP) | 
+Anti-cyclic citrullinated peptide (Anti-CCP) | 
+Anti-gliadin IgA | 
+Anti-gliadin IgG | 
+Anti-glutamic acid decarboxylase (Anti-GAD) | 
+Anti-phospholipid IgG | 
+Anti-phospholipid IgM | 
+Anti-reticulin Ab | 
+Anti-topo I/Scl-70 (Anti-topoisomerase) | 
+AntiMyelin Oligodendrocyte Glycoprotein | 
+Antimitochondrial antibody (AMA) | 
+Antisaccharomyces cerevisiae IgA (ASCA) | 
+Antisaccharomyces cerevisiae IgG (ASCA) | 
+Aquaporin 4 Ab IFA | 
+Aspergillus fumigatus IgE - Inhalant Allergy | 
+Aspirate Culture - Aerobic | 
+Aspirate Culture - Anaerobic | 
+Aspirate Culture - aerobic | 
+Aspirate Culture - anaerobic | 
+Automated Fungal Culture ( Candida) | 
+Automated Fungal Culture (Candida) | 
+Automated PCR for HCV in mononuclear cells | 
+Automated TB Culture | 
+B2-Glycoprotein IgG | 
+B2-Glycoprotein IgM | 
+BCL-2 - IHC | 
+BCL-2-IHС | 
+BCL-6 - IHC | 
+BCL-6-IHС | 
+BCR-ABL Major | 
+BCR-ABL PCR (Major) - quantitative by GeneXpert | 
+BCR-ABL PCR (Minor) - quantitative | 
+BCR-ABL PCR (Minor) quantitative | 
+Banana IgE - Food Allergy | 
+Beta globin gene mutation by PCR | 
+Beta-Catenin-IHC | 
+Biofire Filmarray-Meningitis/Encephalitis Panel | 
+Biofire Filmarray-Pnemonia panel | 
+Blood Culture - Aerobic | 
+Blood Culture - Anaerobic | 
+Blood Culture - Fungal | 
+Blood Culture - anaerobic | 
+Blood Culture - fungal | 
+Bone Marrow Biopsy | 
+Bone Marrow Biopsy Procedure (Does not include the price of the laboratory test & doesn't include the medication & consumables) | اجراء اخذ وخذة من النخاع لا يشمل سعر التحليل او المستلزمات و الادوية )
+Bone Marrow Biopsy examination | 
+Bronchoalveolar lavage culture - Aerobic | 
+Bronchoalveolar lavage culture - Anaerobic | 
+Brucella IgG (ELISA) | 
+Brucella IgM (ELISA) | 
+Brucella Test | 
+C-kit (CD117)-IHC | 
+C1- esterase inhibitor | 
+CA125-IHC | 
+CA19.9-IHC | 
+CD10 | 
+CD10-IHC | 
+CD103 | 
+CD117 | 
+CD13 | 
+CD138 - IHC | 
+CD138-IHC | 
+CD14 | 
+CD15 | 
+CD15-IHC | 
+CD16 | 
+CD19 | 
+CD19-IHC | 
+CD1a-IHC | 
+CD2 | 
+CD20 | 
+CD20-IHC | 
+CD21-IHC | 
+CD23 | 
+CD23-IHC | 
+CD3 | 
+CD30-IHC | 
+CD31-IHC | 
+CD34 | 
+CD34-IHC | 
+CD4 | 
+CD4-IHC | 
+CD4/CD8 | 
+CD41a | 
+CD45 | 
+CD5 | 
+CD5-IHC | 
+CD55 | 
+CD56 | 
+CD56-IHC | 
+CD59 | 
+CD68-IHC | 
+CD7 | 
+CD7-IHC | 
+CD79a | 
+CD79alpha-IHC | 
+CD79alpha-IНС | 
+CD8 | 
+CD8-IHC | 
+CD99 - IHC | 
+CDK4-IHC | 
+CDx2 - IHC | 
+CEA-IHC | 
+CK (HMW) - IHC | 
+CK (Pan) - IHC | 
+CK(34betaE12)-IHC | 
+CK-IHC | 
+CK19-IHC | 
+CK20 - IHC | 
+CK5/6 - IHC | 
+CK7 - IHC | 
+CMV IgG | 
+CMV IgM | 
+CMV PCR | 
+CSF culture | 
+Cacao IgE - Food Allergy | 
+Calcitonin-IHC | 
+Calretinin-IHC | 
+Candida albicans IgE - Inhalant Allergy | 
+Carbamazepine (Tegretol) Peak | 
+Carbamazepine (Tegretol) Trough | 
+Casein IgE - Milk Allergy | 
+Casein IgG - Milk Allergy | 
+Cat dander epithelium IgE - Inhalant Allergy | 
+Catecholamines, urine (Adren, Nor-adrenalin) | 
+Catheter Tip Culture | 
+Catheter tip Culture | 
+Chlamydia Ag | 
+Chlamydia IgG | 
+Chlamydia IgM | 
+Chocolate IgE - Food Allergy | 
+Chromogranin - IHC | 
+Clostridium difficile enterotoxin in stool | 
+Cockroach IgE - Inhalant Allergy | 
+Coffee IgE - Food Allergy | 
+Cryptococcus antigen, CSF | 
+Cryptococcus antigen, serum | 
+Culture - aerobic (any specimen) | 
+Culture - anaerobic (any specimen) | 
+Cyclin-D1-IHC | 
+Cyclin-D1-IHС | 
+Cytology for fluids | 
+D2-40-IHC | 
+DNA Extraction | 
+DPD (Dihydropyrimidine dehydrogenase) | 
+Dermatophagoides farinae IgE - Inhalant Allergy | 
+Dermatophagoides microceras IgE - Inhalant Allergy | 
+Dermatophagoides pteronyssinus IgE - Inhalant Allergy | 
+Desman-IHC | 
+Desmin-IHC | 
+Desmin-IHС | 
+Dog dander IgE - Inhalant Allergy | 
+Dog-1-IHC | 
+Drain Culture | 
+E-cadherin-IHC | 
+EBV (Epstein Barr Virus) IgG | 
+EBV (Epstein Barr virus) IgM | 
+EBV VCA IgG | 
+EBV VCA IgM | 
+EBV by PCR | 
+EBV-EA-IgG (early Ag) | 
+EGFR | 
+EGFR-IHC | 
+EMA (Endomysial antibody IgG) | 
+EMA Endomysial antibody IgA | 
+EMA-IHC | 
+ER-IHC | 
+Egg white IgE - Food Allergy | 
+Egg yolk IgE - Food Allergy | 
+Entamoeba histolytica Ab (IHA) | 
+Entamoeba histolytica Ab (ІНА) | 
+Entamoeba histolytica Ag | 
+Estrogen receptor (ER) - IHC | 
+Estrogen receptor (ER) - IНС | 
+Extended Culture | 
+FISH for Y chromosome | 
+Facin-IHC | 
+Facror VIII-IHC | 
+Factor VIII-IHC | 
+Food Intolerance - IgG Food print 220 - Allergy | 
+Food Intolerance - IgG Food print 48 - Allergy | 
+Fungal Stain | 
+Fungal culture | 
+GATA3-IHC | 
+GFAP-IHC | 
+Galactomannan Ag for aspergilus | 
+Gardnerella Vaginalis Antigen | 
+Gluten IgE - Food allergy | 
+Gluten IgG - Food Allergy | 
+Glypican 3-IHC | 
+Glypican 3-IНС | 
+Gram stain | 
+HBME-1-IHC | 
+HBME-1-IHС | 
+HBME-1-IНС | 
+HBV DNA Qualitative byPCR | 
+HBV DNA Quantitative by PCR | 
+HBeAg | 
+HBs-Ag | 
+HBs-Ag Quantitative | 
+HCV Ab | 
+HCV Genotyping | 
+HCV RNA Quantitative by PCR | 
+HEP Par_1 - IHC | 
+HER2 - IHC | 
+HIV 1+2+O Ab | 
+HLA-B27 | 
+HMB45-IHC | 
+HMB45-IHС | 
+HSV 1+2 IgG | 
+HSV 1+2 IgM | 
+Histopathological examination Large | 
+Histopathological examination Medium | 
+Histopathological examination Small | 
+Histopathological examination X large | 
+House dust Bencard - Inhalant Allergy | 
+House dust Greer - Inhalant Allergy | 
+House dust Hollister-Stier - Inhalant Allergy | 
+Hydatid Ab (ELISA) | 
+Hydatid-Ab (IHA) | 
+Hydatid-Ab (IНА) | 
+IgE (Immunoglobulin E) - Allergy | 
+Infection Control Swabs | 
+Infection control swabs | 
+Inhalation Allergy Panel | 
+Inhibin-IHC | 
+Insulin, Human IgE - Drug Allergy | 
+KI 67 - IHC | 
+Kappa-IHC | 
+Karyotyping | 
+Karyotyping ( high resolution) | 
+Karyotyping (high resolution) | 
+LCA - IHC | 
+Lactoglobulin IgE - Milk Allergy | 
+Liver Kidney microsomal Ab (LKM-Ab) | 
+Local Skin Biopsy (L.A) | عينة من الجلد تحت مخدر موضعي
+Lupus Anticoagulant | 
+MLH-1-IHC | 
+MRSA Full Screen (3 swabs) | 
+MRSA full screen culture (3 swabs) | 
+MSH-2-IHC | 
+MSH-6-IHC | 
+MUM-1-IHC | 
+Mammaglobin-IHC | 
+Mango IgE - Food Allergy | 
+Melan A-IHC | 
+Milk & Gluten IgE Panel By Immunoblot technique - Allergy | 
+Milk IgE - Milk Allergy | 
+Mini BAL culture - Aerobic | 
+Mini BAL culture - Anerobic | 
+MuM-1-IHC | 
+Myel Operoxidase-IHC | 
+Myogenin-IHC | 
+Myogenin-IHС | 
+NSE-IHC | 
+Napsin A-IHC | 
+Napsin A-IHС | 
+Nipple Discharge culture | 
+Nipple discharge culture | 
+None | contact specific lgE for wool الصوف
+P-DL-1-IHC | 
+P16-IHC | 
+P53-IHC | 
+P63-IHC | 
+PAX-8-IHC | 
+PCR Panel for Respiratory Infections FLU | 
+PCR for COVID (stamped) | 
+PCR for COVID-19 | 
+PCR for FMF (mediterranean fever) | 
+PCR for FMF (mediterranean fever) 12 genes | 
+PCR for Factor V Leiden gene mutation | 
+PCR for HCV | 
+PCR for HIV-1 | 
+PCR for HIV-2 | 
+PCR for HLA-B 51 | 
+PCR for HLA-B 51 1 | 
+PCR for HLA-B5 | 
+PCR for Interleukin 28B (rs12979860) | 
+PCR for JAK2 V617F Mutation | 
+PCR for Jak II (exon 12) | 
+PCR for MTHFR mutation | 
+PCR for PML RARA | 
+PCR for Prothrombin gene mutation | 
+PCR for TB | 
+PCR for TB - GeneXpert | 
+PCR for brucella | 
+PCR for coaggulation profile (3 genes) | 
+PCR for coagulation profile (3 genes) | 
+PCR for lactase and aldolase B gene mutation | 
+PCR panel for Diarrheal Infections | 
+PCR panel for Meningitis, CSF | 
+PCR panel for Meningitis, CSF ( Bacterial & Viral Panels) | 
+PCR panel for Respiratory Infections | 
+PCR panel for Respiratory Infections (Bacterial & Viral Panels) | 
+PCR panel for Respiratory Infections (Bacterial Panel only) | 
+PCR panel for Respiratory Infections (Viral Panel only) | 
+PCR panel for Sexually Transmitted diseases | 
+PCR panel for Vaginal Infections | 
+PLAP-IHC | 
+PMS-2-IHC | 
+PSA-IHC | 
+Pap Smear | 
+Pap smear | 
+Penicillium notatum - Inhalant Allergy | 
+Penicilloyl G IgE - Drug Allergy | 
+Progesterone Receptor (PR) - IHC | 
+Pus culture - Aerobic | 
+Pus culture - Anaerobic | 
+RPR | 
+Renal Biopsy Light Microscopy & Immunofluorescence | 
+Renal Biopsy Light Microscopy, Immunofluorescence&EM | 
+Renal Biopsy Light Microscopy,Immunofluorescence&EM | 
+Renal Stone Analysis | 
+Reticulin Stain | 
+Routine Aerobic Cultures | 
+Rubella IgG | 
+Rubella IgG avidity | 
+Rubella IgM | 
+S100-IHC | 
+SARS-CoV-2 COVID Rapid Antigen | 
+SMA - IHC | 
+Salmon IgE - Food Allergy | 
+Schistosoma-Ab (IHA) | 
+Schistosoma-Ag In Urine | 
+Schistosomal-Ab (IHA) | 
+Schistosomal-Ag In Urine | 
+Shrimp IgE - Food Allergy | 
+SpeCific IgE for Horse Dander | 
+Specific IgE - Contact Allergy | 
+Specific IgE - Food Allergy | 
+Specific IgE - Inhalant Allergy | 
+Specific IgE for Apricot | 
+Specific IgE for Banana | 
+Specific IgE for Barley | 
+Specific IgE for Beef | 
+Specific IgE for Cabbage | 
+Specific IgE for Cat Dander Epithelium | 
+Specific IgE for Cherry | 
+Specific IgE for Chicken Feathers | 
+Specific IgE for Chicken Meat | 
+Specific IgE for Coconut | 
+Specific IgE for Cod Fish | 
+Specific IgE for Crab | 
+Specific IgE for Dermatophaggoids | 
+Specific IgE for Dermatophagoides Pteronyssinus HDM | 
+Specific IgE for Dermatophagoids | 
+Specific IgE for Dermatophagoids Farinae | 
+Specific IgE for Dog Dander | 
+Specific IgE for Egg (yolk & white) | 
+Specific IgE for Garlic | 
+Specific IgE for Gluten | 
+Specific IgE for Hazelnut | 
+Specific IgE for Honey Bee Venom | 
+Specific IgE for House Dust Bencard | 
+Specific IgE for House Dust Hollister Stier HD | 
+Specific IgE for House dust Greer HD | 
+Specific IgE for Lemon | 
+Specific IgE for Mango | 
+Specific IgE for Milk | 
+Specific IgE for Mosquito | 
+Specific IgE for Moth | 
+Specific IgE for Octopus | 
+Specific IgE for Onion | 
+Specific IgE for Orange | 
+Specific IgE for Peach | 
+Specific IgE for Peanut | 
+Specific IgE for Pigeon Droppings | 
+Specific IgE for Pineapple | 
+Specific IgE for Potato | 
+Specific IgE for Rat | 
+Specific IgE for Rice | 
+Specific IgE for Salmon | 
+Specific IgE for Sardine | 
+Specific IgE for Sesame Seed | 
+Specific IgE for Shrimp | 
+Specific IgE for Silk | 
+Specific IgE for Spinach | 
+Specific IgE for Strawberry | 
+Specific IgE for Tea | 
+Specific IgE for Tomato | 
+Specific IgE for Tuna | 
+Specific IgE for Wheat | 
+Specific IgE for Wool | 
+Specific IgE for chocolate | 
+Sperm DNA Fragmentation test | 
+Sputum Culture | 
+Squamous cell carcinoma antigen (SCC) | 
+Stamey Test (Prostatic Culture) | 
+Stamey's Test (Prostatic Culture) | 
+Stool Culture - Aerobic | 
+Stool Culture - aerobic | 
+Stool Culture-Anaerobic | 
+Strawberry IgE - Food Allergy | 
+Swab Culture | 
+Synaptophysin - IHC | 
+TB culture | 
+TPHA | 
+TdT-IHC | 
+Throat swab Culture | 
+Thyroglobulin-IHC | 
+Tissue transglutaminase | 
+Tissue transglutaminase (IgA) | 
+Tissue transglutaminase (IgG) | 
+Total IgE | 
+Toxoplasma -Ab (IHA) | 
+Toxoplasma IgG Avidity | 
+Toxoplasma-IgG | 
+Toxoplasma-IgM | 
+Tramadol | 
+U/S Guided Pleural Biopsy | 
+Urine Culture | 
+VDRL | 
+VDRL/ RPR | 
+Vaginal Culture - Aerobic | 
+Vaginal Culture - aerobic | 
+Vaginal Culture - anaerobic | 
+Vaginal Culture-Anaerobic | 
+WT 1-IHC | 
+Western blot for HIV | 
+Wheat IgE - Food Allergy | 
+Whey IgE - Milk Allergy | 
+Widal Test | 
+Wool IgE - Contact Allergy | 
+ZN Stain for Acid Fast Bacilli | 
+a Lactalbumin IgE - Milk Allergy | 
+biofire stool | 
+contact specific IgE for cottonseed | 
+contact specific IgE for silk | 
+contact specific lgE for cottonseed | 
+contact specific lgE for silk | 
+eGFR | 
+p16-IHC | 
+pAX-8-IHC | 
+pcr for tb | 
+specific IgE for Almond | 
+specific IgE for Casein | 
+specific IgE for Coffee | 
+specific IgE for Soybean | 
+specific IgE for cockroach | 
+specific IgE for mosquito | 

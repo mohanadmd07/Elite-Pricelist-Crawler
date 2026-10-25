@@ -1,0 +1,246 @@
+[Chemotherapy] Accomodation in Oncology Unit | اقامه بوحدة الاورام
+[Chemotherapy] Chemotherapy Preparation Service | خدمة تحضير علاج كيماوي
+[Chemotherapy] Chemotherapy Preparation Service | خدمة تحضير كيماوي
+[Chemotherapy] Chemotherapy Session 2 Hours To 6 Hours | جلسة علاج كيماوي من ساعتين الي 6 ساعات
+[Chemotherapy] Chemotherapy Session 2 Hours To 6 Hours ( Not Including Medical Or Nursing Care) | جلسة علاج كيماوي 24 ساعة ( متضمنة الإشراف الطبي أو التمريضي وتحضير الأدوية )
+[Chemotherapy] Chemotherapy Session 2 Hours To 6 Hours ( Not Including Medical Or Nursing Care) | جلسة علاج كيماوي 24 ساعة (غير متضمنة الإشراف الطبي أو التمريضي )
+[Chemotherapy] Chemotherapy Session 2 Hours To 6 Hours ( Not Including Medical Or Nursing Care) | جلسة علاج كيماوي من ساعتين الي 6 ساعات (غير متضمنة الإشراف الطبي أو التمريضي وتحضير الأدوية )
+[Chemotherapy] Chemotherapy Session 2 Hours To 6 Hours (Including Medical And Nursing Care) | جلسة علاج كيماوي من ساعتين الي 6 ساعات (متضمنة الإشراف الطبي و التمريضي)
+[Chemotherapy] Chemotherapy Session From 2 To 6 Hours (including medical and nursing care) | جلسة علاج كيماوي من ساعتين الي 6 ساعات متضمنة الإشراف الطبي و التمريضي)
+[Chemotherapy] Chemotherapy Session From 2 To 6 Hours (not including medical or nursing care) | جلسة علاج كيماوي من ساعتين الي 6 ساعات غير متضمنة الإشراف الطبي أو التمريضي )
+[Chemotherapy] Chemotherapy Session Less Than Two Hours | جلسة علاج كيماوي أقل من ساعتين
+[Chemotherapy] Chemotherapy Session Less Than Two Hours ( Not Including Medical Or Nursing Care) | جلسة علاج كيماوي أقل من ساعتين (غير متضمنة الإشراف الطبي أو التمريضي )
+[Chemotherapy] Chemotherapy Session Less Than Two Hours (Including Medical And Nursing Care) | جلسة علاج كيماوي أقل من ساعتين ( متضمنة الإشراف الطبي و التمريضي وتحضير الأدوية)
+[Chemotherapy] Chemotherapy Session Less Than Two Hours (including medical and nursing care) | جلسة علاج كيماوي أقل من ساعتين ) متضمنة الإشراف الطبي و التمريضي)
+[Chemotherapy] Chemotherapy Session Less Than Two Hours (not including medical or nursing care) | جلسة علاج كيماوي أقل من ساعتين (غير متضمنة الإشراف الطبي أو التمريضي )
+[Chemotherapy] Clinical Pharmacy Supervision | إشراف الصيدلة الإكلينيكية
+[Chemotherapy] Clinical Pharmacy Supervision | اشراف الصيدلة الاكلينيكيه
+[Chemotherapy] Clinical Pharmacy Supervision | اشراف الصيدله الاكلينيكيه
+[Chemotherapy] I.V Solutions Preparation Service | خدمة تحضير محاليل
+[Chemotherapy] Ice Cape Procedure | خدمه الآيس كاب
+[Chemotherapy] Immune Therapy Introduction | تنفيذ علاج مناعي
+[Chemotherapy] Injection Of Immune Vials | إعطاء حقن المناعة
+[Chemotherapy] Injection Of Immune Vials | اعطاء حقن المناعة
+[Chemotherapy] Medical Observation During Session | متابعة طبية أثناء الجلسة
+[Chemotherapy] Medical Observation During Session | متابعة طبية اثناء الجلسة
+[Chemotherapy] Medical Observation During Session | متابعة طبيه اثناء الجلسه
+[Chemotherapy] Nursing Observation During Session | متابعة تمريضية أثناء الجلسة
+[Chemotherapy] Nursing Observation During Session | متابعة تمريضية اثناء الجلسة
+[Chemotherapy] Nursing Observation During Session | متابعة تمريضيه اثناء الجلسه
+[Chemotherapy] Preparation For Interparental Nutrition | تحضير الأغذية الوريدية
+[Chemotherapy] Preparation For Intraparentral Nutrition | تحضير للأغذية الوريدية
+[Chemotherapy] Preparation For Intraparentral Nutrition Up To 2 Liters | تحضير للأغذية الوريدية حتي 2 لتر
+[Chemotherapy] Preparation For Intraparentral Nutrition Up To 3 Liters | تحضير للأغذية الوريدية حتي 3 لتر
+[Chemotherapy] Special Nature Medication IV Adminstration That need Special Observation, E.g Iron...etc (Not Including Medication Price or Chemotherapy Medic.) | اجراء حقن وريدي أدوية ذات طابع خاص التي تحتاج الي ملاحظه دقيقه مثال و ليس للحصر الحديد (غير متضمنة أدوية الكيماوي)
+[Chemotherapy] Specialist Observation | مرور اخصائي
+[Chemotherapy] Targeted Biotherapy Session | جلسة علاج حيوي موجه
+[Dialysis] 1-HD session with Fistula | 1 جلسة غسيل كلوي بوصله شريانيه وريديه
+[Dialysis] 2-HD session with Catheter | 2 جلسة غسيل كلوي بالقسطرة
+[Dialysis] 3-HD Sustained low-efficiency dialysis (SLED) Session with Fistula | جلسة غسيل كلوي بطيء بوصله شريانيه وريديه
+[Dialysis] 4-HD Sustained low-efficiency dialysis (SLED) with Catheter | 4- جلسة غسيل كلوي بطيء بالقسطرة
+[Dialysis] HD Session 4 Hours | جلسة غسيل كلوي 4 ساعات HD
+[Dialysis] HD Session In ICU | جلسة غسيل كلوي HD بالعناية المركزة
+[Dialysis] HD Session In ICU (Inpatient) | جلسة غسيل كلوي HD بالعناية المركزة
+[Dialysis] HD Session Less That 4 Hours (Outpatient) | جلسة غسيل كلوي أقل HD من 4 ساعات
+[Dialysis] HD Session More Than 4 Hours | جلسة غسيل كلوي HD أكثر من 4 ساعات
+[Dialysis] HD Session More Than 4 Hours (Outpatient) | جلسة غسيل كلوي HD أكثر من 4 ساعات
+[Dialysis] HD Session VIP | جلسة غسيل كلوي HD VIP
+[Dialysis] HD Session VIP (Inpatient) | جلسة غسيل كلوي HD VIP
+[Dialysis] HDF Session 4 Hours | جلسة غسيل كلوي 4 ساعات HDF
+[Dialysis] HDF Session In ICU | جلسة غسيل كلوي HDF بالعناية المركزة
+[Dialysis] HDF Session More Than 4 Hours | جلسة غسيل كلوي HDF أكثر من 4 ساعات
+[Dialysis] HDF Session VIP | جلسة غسيل كلوي HDF VIP
+[Dialysis] Plasma Pharesis | جلسة فصل البلازما (لا تشمل الأدوية والمستهلكات)
+[Dialysis] Temporary double lumen HD catheter insertion by specialist | تركيب قسطرة مزدوجه مؤقته للغسيل الكلوي بواسطة اللأخصائي
+[Medical Devices] AURIGA LASER MACHINE | رسم استخدام جهاز اوريجا ليزر
+[Medical Devices] Acrominizer Usage Fees | رسم استخدام جهاز أكرومانيزر
+[Medical Devices] Artificial Heart Machine Fees | رسم استخدام ماكينة القلب الصناعي
+[Medical Devices] Artificial Heart Machine fees | رسم استخدام ماكينه القلب الصناعي
+[Medical Devices] Auriga Laser Machine | رسم استخدام جهاز ليزر اوريجا
+[Medical Devices] Auriga Laser Machine (Vaser Device)(Vaser Suction & Reduction) | رسم استخدام جهاز أوريجا ليزر
+[Medical Devices] Bipap / Day (24 Hour O2 Consumption Not Included) | استخدام جهاز باي باب / اليوم
+[Medical Devices] Bipolar (Gyna) Usage Fees | رسم استخدام جهاز البيبولار أمراض نسا
+[Medical Devices] Bipolar (Gyna) Usage Fees | رسم استخدام جهاز البيبولار الأمراض النسا
+[Medical Devices] Bipolar (Orthopedics) Usage Fees | رسم استخدام جهاز البيبولار عظام
+[Medical Devices] Bipolar (orthopedics) Usage Fees | رسم استخدام جهاز البيبولار عظام
+[Medical Devices] Bipolar(Gyna) Usage Fees | رسم استخدام جهاز البيبولار امراض نسا
+[Medical Devices] Bipolar(Gyna)Usage Fees | رسم استخدام جهاز البيبولار امراض نسا
+[Medical Devices] Bipolar(orthopedics)Usage Fees | رسم استخدام جهاز البيبولار عظام
+[Medical Devices] C-ARM First Minute Usage Fees | رسم استخدام الس ارم اول دقيقه
+[Medical Devices] C-ARM First Minute Usage Fees | رسم استخدام الس-ارم اول دقيقه
+[Medical Devices] C-ARM First Minute Usage Fees | رسم استخدام جهاز السي أرم أشعة / الدقيقة
+[Medical Devices] C-ARM after First Minute Usage Fee | رسم استخدام جهاز السي أرم أشعة لكل دقيقة بعد أول دقيقة
+[Medical Devices] C-ARM after First Minute Usage Fees | رسم استخدام الس ارم بعد اول دقيقه
+[Medical Devices] C-ARM after First Minute Usage Fees | رسم استخدام الس-ارم بعد اول دقيقه
+[Medical Devices] C-Arm After First Minute Usage Fee | رسم استخدام جهاز السي أرم أشعة لكل دقيقة بعد أول دقيقه
+[Medical Devices] C-Arm First Minute Usage Fees | رسم استخدام جهاز السي أرم أشعة / الدقيقة
+[Medical Devices] CAVITRON ULTRASONIC SUR- GICAL ASPIRATOR (CUSA) | رسم استخدام جهاز الكوزا
+[Medical Devices] Cardiac Monitor / Day | مونيتور باليوم
+[Medical Devices] Cardiac Monitor Usage | رسم استخدام جهاز متابعة القلب
+[Medical Devices] Cardiac Monitor Usage Fees | رسم استخدام جهاز متابعة القلب
+[Medical Devices] Cardiac Monitor Usage Fees | رسم استخدام جهاز مراقب القلب (المونيتير )
+[Medical Devices] Cavitron Ultrasonic Surgical Aspirator (CUSA) | رسم استخدام جهاز الكوزا
+[Medical Devices] Cavitron Ultrasonic Surgical Aspirator (Cusa) | جهاز الكوزا
+[Medical Devices] Cpap / Day (Not Including The 24 Hr. O2 Consumption & Include The Mask) | استخدام جهاز سي باب / اليوم شامل الماسك/ غير شامل استهلاك 24 س أوكسجين
+[Medical Devices] Defibrillator Usage | جهاز الصدمات الكهربائية
+[Medical Devices] Diagnostic Arthroscope ( wrist/ankle joints) | رسم استخدام منظار مفاصل (الرسغ / الكاحل) تشخيصي
+[Medical Devices] Diagnostic Arthroscope (Shoulder/Hip/Knee) | رسم استخدام منظار مفاصل تشخيصي للكتف / الفخذ / الركبه
+[Medical Devices] Diagnostic Arthroscope (Shoulder/Hip/Knee) | رسم استخدام منظار مفاصل تشخيصي للكتف/الفخذ/الركبة
+[Medical Devices] Diagnostic Arthroscope (Wrist/Ankle) | رسم استخدام منظار مفاصل (الرسغ / الكاحل تشخيصي
+[Medical Devices] Diagnostic Arthroscope (Wrist/Ankle) | رسم استخدام منظار مفاصل (الرسغ / الكاحل) تشخيصي
+[Medical Devices] Diagnostic Arthroscope (shoulder/hip/knee) | رسم استخدام منظار مفاصل تشخيصي للكتف/الفخذ/الركبه
+[Medical Devices] Diagnostic Bronchoscope | رسم استخدام منظار الشعب الهوائي
+[Medical Devices] Diagnostic Bronchoscope. | رسم استخدام منظار الشعب الهوائي
+[Medical Devices] Diagnostic Cystoscope | رسم استخدام منظار المثانة التشخيصي
+[Medical Devices] Diagnostic Cystoscope | رسم استخدام منظار المثانه التشخيصي
+[Medical Devices] Diagnostic ERCP Usage Fees | رسم استخدام جهاز منظار القنوات المرارية التشخيصي
+[Medical Devices] Diagnostic Ercp Usage Fees | رسم استخدام جهاز منظار القنوات المرارية التشخيصي
+[Medical Devices] Diagnostic Hysteroscope | رسم استخدام منظار تجويف رحمي تشخيصي
+[Medical Devices] Diagnostic Laproscope(General Surgery)/ first 2 hours | رسم استخدام منظار الجراحي لاول ساعتين
+[Medical Devices] Diagnostic Laproscope(General Surgery)/every hour after first 2 hours | رسم استخدام منظار الجراحي / ساعةما بعد اول الساعتين
+[Medical Devices] Diagnostic Tilting Table Usage Fees In ICU | رسم استخدام المنضدة المائلة التشخيصية
+[Medical Devices] Diagnostic Ureteroscope | رسم استخدام منظار الحالب
+[Medical Devices] Drill (Unspecified Specialty) | رسم استخدام دريل (غير محدد التخصص)
+[Medical Devices] Drill (Unspecified Specialty) | رسم استخدام دريل غير محدد التخصص)
+[Medical Devices] E.N.T Drill Usage Fees | رسم استخدام دريل كهربائي للأنف و الأذن و الحنجرة
+[Medical Devices] E.N.T Drill Usage Fees | رسم استخدام دريل كهربائي للانف و الاذن و الحنجره
+[Medical Devices] E.N.T Shaver | رسم استخدام شيفر للأنف و الأذن و الحنجرة
+[Medical Devices] E.N.T Shaver. | رسم استخدام شيفر للانف و الاذن و الحنجره
+[Medical Devices] E.R.C.P Device Usage Fees | رسم استخدام جهاز منظار القنوات المرارية
+[Medical Devices] ECHO Device (Cath Lab & OR) Usage Fees | رسم استخدام جهاز الإيكو بالعمليات و القسطرة
+[Medical Devices] ECHO Device(CathLab & OR) Usage Fees | رسم استخدام جهاز الايكو بالعمليات و القسطره
+[Medical Devices] ERCP With Ballon Usage fees | رسم استخدام جهاز منظار القنوات المرارية مع البالون
+[Medical Devices] Electric Drill For E.N.T | رسم استخدام دريل كهربائي للأنف و الأذن و الحنجرة
+[Medical Devices] Endoscope For E.N.T | رسم استخدام منظار الأنف و الأذن و الحنجرة
+[Medical Devices] Endoscope for E.N.T. | رسم استخدام منظار الانف و الاذن و الحنجرة
+[Medical Devices] Ercp With Ballon Usage Fees | رسم استخدام جهاز منظار القنوات المرارية مع البالون
+[Medical Devices] Flexiable Laryngoscope. | رسم استخدام منظار الحنجره المرن
+[Medical Devices] Flexible Cystoscope | رسم استخدام منظار المثانة المرن
+[Medical Devices] Flexible Cystoscope. | رسم استخدام منظار المثانة المرن
+[Medical Devices] Flexible Ureteroscope | رسم استخدام منظار الحالب المرن
+[Medical Devices] Flexible endoscopic Evaluation of swallowing (FEES) (Procedure+ Doctor fees) | منظار مرن لتقيم البلع + اجراء اتعاب الطبيب)
+[Medical Devices] Flexible endoscopic Evaluation of swallowing (FEES)(Procedure+ Doctor fees) | منظار مرن لتقيم البلع +اجراء +اتعاṿ الطبيب
+[Medical Devices] Harmonic Device Usage Fees | رسم استخدام الهارمونيك
+[Medical Devices] Harmonic Device Usage Fees. | رسم استخدام الهارمونيك
+[Medical Devices] High Flow Oxygen /Day | استنشاق أكسجين مكثف /يوم
+[Medical Devices] High Flow Oxygen /day | استنشاق اكسجين مكثف /يوم
+[Medical Devices] High Flow Oxygen/day | استنشاق اكسجين مكثف / يوم
+[Medical Devices] High Flow Velocity Nasal Cannula / Day | رسم استخدام جهاز أكسجين عالي التدفق / اليوم
+[Medical Devices] Infusion Pump Usage Fees/Day | رسم استخدام مضخة محاليل / اليوم
+[Medical Devices] Infusion Pump/ Day | استخدام سرنجة محاليل / اليوم
+[Medical Devices] Laparoscope (General Surgery)/ First 2 Hours | منظار للجراحة العامة / لمدة ساعتين
+[Medical Devices] Laparoscope (General Surgery)/Every Hour After First 2 Hour | منظار للجراحة العامة كل ساعة بعد أول ساعتين
+[Medical Devices] Laparoscope (general surgery)/ First 2 Hours Usage Fees | رسم استخدام منظار للجراحة العامة / لمدة ساعتين
+[Medical Devices] Laparoscope (general surgery)/Every Hour After First 2 Hour Usage Fees | رسم استخدام منظار للجراحة العامة كل ساعة بعد أول ساعتين
+[Medical Devices] Laparoscope(General Surgery)/ first 2 hours | رسم استخدام منظار الجراحي لاول ساعتين
+[Medical Devices] Laparoscope(General Surgery)/every hour after first 2 hours | رسم استخدام منظار الجراحي / ساعه ما بعد اول الساعتين
+[Medical Devices] Laser Device Usage In Surgical Operations | رسم استخدام جهاز الليزر في العمليات الجراحية
+[Medical Devices] Laser Device Usage in Surgical Operations | رسم استخدام جهاز الليزر في العمليات الجراحيه
+[Medical Devices] Laser Lithotripsy Device After 10 Min Usage Fees | رسم استخدام جهاز تفتيت الحصوات بالليزر بعد اول 10 دقائق
+[Medical Devices] Laser Lithotripsy Device. After 10 Min Usage Fees | رسم استخدام جهاز تفتيت الحصوات بالليزر بعد أول 10 دقائق
+[Medical Devices] Laser Lithotripsy Device. First 10 Min Usage Fees | رسم استخدام جهاز تفتيت الحصوات بالليزر اول 10 دقائق
+[Medical Devices] Laser Lithotripsy Device. First 10 Min Usage Fees | رسم استخدام جهاز تفتيت حصوة بالليزر أول 10 دقائق
+[Medical Devices] Laser Lithotripsy Device. after 10 Min Usage Fees | رسم استخدام جهاز تفتيت الحصوات بالليزر بعد اول 10 دقائق
+[Medical Devices] Laser Lithotripsy Device.First 10 Min Usage Fees | رسم استخدام جهاز تفتيت الحصوات بالليزر اول 10 دقائق
+[Medical Devices] Leg Vein Compressor /Pneumatic Cuff /Day | جهاز ضاغط لأوردة الساقين /استخدام مضخة قدم هوائية / اليوم
+[Medical Devices] Ligasure Device Usage Fees | رسم استخدام جهاز الليجاشور
+[Medical Devices] Ligasure Hand Usage Fees | رسم استخدام يد الليجاشور
+[Medical Devices] Ligasure Hand Usage Fees | رسم استخدام يد جهاز الليجاشور
+[Medical Devices] Ligature Device Usage Fees | رسم استخدام جهاز الليجاشور
+[Medical Devices] Lower GI Endoscopy Usage Fees | رسم استخدام منظار جهاز هضمي سفلي
+[Medical Devices] Lower Gi Endoscopy Usage Fees | رسم استخدام منظار جهاز هضمي سفلي
+[Medical Devices] Monopolar Usage Fees | رسم استخدام جهاز المونوبولار
+[Medical Devices] Mri Compatible Ventilator | جهاز تنفس صناعي متوافق مع الرنين
+[Medical Devices] Nephroscope | رسم استخدام منظار كلي
+[Medical Devices] Neurosurgery Drill (Craniotomy) Usage Fees | رسم استخدام دريل المخ والأعصاب
+[Medical Devices] Neurosurgery Drill (Craniotomy) Usage Fees | رسم استخدام دريل مخ و الأعصاب
+[Medical Devices] Neurosurgery Drill. (Craniotomy) | رسم استخدام دريل مخ و الأعصاب
+[Medical Devices] Neurosurgery Drill. (Craniotomy) Usage Fees | رسم استخدام دريل مخ و الاعصاب
+[Medical Devices] Neurosurgery Drill. (Craniotomy) Usage Fees | رسم استخدام دريل مخ و الاعصاṿ
+[Medical Devices] Neurosurgery Thermal Frequency Device Usage Fees | رسم استخدام جهاز التردد الحراري في حالات المخ و الأعصاب
+[Medical Devices] Neurosurgery Thermal Frequency Device Usage fees | رسم استخدام جهاز التردد الحراري في حالات المخ و الاعصاب
+[Medical Devices] Neurosurgery Thermal Frequency Device Usage fees | رسم استخدام جهاز التردد الحراري في حالات المخ و الاعصاṿ
+[Medical Devices] O2 Consumption/ 12 Hours | استهلاك أكسجين / 12 ساعة
+[Medical Devices] O2 Consumption/ 24 Hours | استهلاك أكسجين / ساعة
+[Medical Devices] O2 Consumption/12 Hours | استهلاك أكسجين لمدة 12 ساعة
+[Medical Devices] O2 Consumption/24 Hours | استهلاك أكسجين لمدة 24 ساعة
+[Medical Devices] O2 Consumption/Hour | استهلاك أكسجين / ساعة
+[Medical Devices] O2 INHALATION / 12 HOURS | استنشاق اكسجين / 12 ساعة
+[Medical Devices] O2 INHALATION / 12 HOURS | استنشاق اكسجين /12 ساعة
+[Medical Devices] O2 INHALATION / 24 HOURS | استنشاق اكسجين / 24 ساعة
+[Medical Devices] O2 INHALATION / 24 HOURS | استنشاق اكسجين /24 ساعة
+[Medical Devices] O2 INHALATION / HALF HOUR | استنشاق اكسجين / نصف ساعة
+[Medical Devices] O2 INHALATION / HALF HOUR | استنشاق اكسجين /نصف ساعة
+[Medical Devices] O2 INHALATION / HOUR | استنشاق اكسجين / ساعة
+[Medical Devices] O2 INHALATION / HOUR | استنشاق اكسجين /ساعة
+[Medical Devices] O2 Inhalation / Half Hour | استنشاق أكسجين / نصف ساعة
+[Medical Devices] O2 Inhalation / Hour | استنشاق أكسجين /ساعة
+[Medical Devices] Octopus Usage Fees | رسم استخدام الاوكتوبوس
+[Medical Devices] Open Heart Package (OFF PUMP) | باكدج القلب المفتوح بدون مضخة
+[Medical Devices] Orthopedic Drill Usage Fees | رسم استخدام دريل العظام
+[Medical Devices] Orthopedic Saw Usage Fees | رسم استخدام جهاز المنشار عظام
+[Medical Devices] Orthopedic Saw Usage Fees | رسم استخدام جهاز المنشار للعظام
+[Medical Devices] Orthopedic Shaver | رسم استخدام شيفر للعظام
+[Medical Devices] Orthopedic Shaver. | رسم استخدام شيفر للعظام
+[Medical Devices] Orthopedic shaver Usage Fees | رسم استخدام شيفر للعظام
+[Medical Devices] Orthopedic shaver. | رسم استخدام شيفر للعظام
+[Medical Devices] Otocon Bipolar (Urology) Usage Fees | رسم استخدام جهاز البيبولار / أوتوكون (مسالك)
+[Medical Devices] Otocon Bipolar (urology) Usage fees | رسم استخدام جهاز البيبولار / اوتوكون مسالك
+[Medical Devices] Otocon Bipolar (urology)Usage fees | رسم استخدام جهاز البيبولار /اوتوكون مسالك
+[Medical Devices] Pneumatic Lithotripsy Manual Usage Fees | رسم استخدام جهاز تفتيت الحصوات هوائي
+[Medical Devices] Pneumatic Lithotripsy Manual Usage Fees | رسم استخدام جهاز تفتيت حصوة بالهواء
+[Medical Devices] Power Liposuction | الباور شفط دهون
+[Medical Devices] Protoscope Usage Fees | رسم استخدام منظار شرجي
+[Medical Devices] Pump Usage Fees | رسم استخدام المضخة
+[Medical Devices] Pump Usage Fees | رسم استخدام المضخه
+[Medical Devices] Radio Frequency Usage Fees | رسم استخدام جهاز التردد الاصطدامي - سوتر
+[Medical Devices] Radiofrequency Usage Fees | رسم استخدام رسم التردد الحراري
+[Medical Devices] Resectoscope &Loop | رسم استخدام مقطع أنسجة البروستاتا و أورام المثانة
+[Medical Devices] Resectoscope &Loop | رسم استخدام مقطع انسجة البروستاتا و اورام المثانه
+[Medical Devices] Shaver Blade Usage Fees | رسم استخدام سلاح الشيفر
+[Medical Devices] Surgical Cystoscope | رسم استخدام منظار المثانة جراحي
+[Medical Devices] Surgical Cystoscope | رسم استخدام منظار المثانه جراحي
+[Medical Devices] Surgical Microscope /Hour | رسم استخدام الميكروسكوب الجراحي غير شامل الجراب لكل ساعة
+[Medical Devices] Surgical Microscope /Hour | رسم استخدام الميكروسكوṿ الجراحي غير شامل الجراṿ لكل ساعة
+[Medical Devices] Surgical Microscope For Each 1/2 Hour | رسم استخدام الميكروسكوب الجراحي غير شامل الجراب لكل نصف ساعة
+[Medical Devices] Surgical Microscope/Hour | رسم استخدام الميكروسكوب الجراحي غير شامل الجراب لكل ساعة
+[Medical Devices] Syringe Or Infusion Pump / Day | مضخة محاليل باليوم
+[Medical Devices] Syringe Pump / Day | استخدام جهاز مضخة التسريب / اليوم
+[Medical Devices] Therapeutic Arthroscope ( wrist/ankle joints) | رسم استخدام منظار مفاصل (الرسغ / الكاحل)علاجي
+[Medical Devices] Therapeutic Arthroscope (Shoulder/Hip/Knee) | رسم استخدام منظار مفاصل علاجي للكتف / الفخذ / الركبه
+[Medical Devices] Therapeutic Arthroscope (Shoulder/Hip/Knee) | رسم استخدام منظار مفاصل علاجي للكتف/الفخذ/الركبة
+[Medical Devices] Therapeutic Arthroscope (Wrist/Ankle Joints) | رسم استخدام منظار مفاصل (الرسغ / الكاحل)علاجي
+[Medical Devices] Therapeutic Arthroscope (Wrist/Ankle) | رسم استخدام منظار مفاصل (الرسغ / الكاحل) علاجي
+[Medical Devices] Therapeutic Arthroscope (shoulder/hip/knee) | رسم استخدام منظار مفاصل علاجي للكتف/الفخذ/الركبه
+[Medical Devices] Therapeutic Arthroscope (shoulder/hip/knee) Usage fees | رسم استخدام منظار مفاصل علاجي للكتف / الفخذ / الركبة
+[Medical Devices] Therapeutic Arthroscope (wrist/ ankle joints) Usage fees | رسم استخدام منظار مفاصل (الرسغ / الكاحل) علاجي
+[Medical Devices] Therapeutic Cardiac Cathetarization With Balloon Diltation with IFR device | القسطرة العلاجية توسيع بالبالون) تركيب دعامه باستخدام جهاز IFR
+[Medical Devices] Therapeutic Cardiac Cathetarization With Balloon Diltation with IVUS device | القسطرة العلاجية توسيع بالبالون) تركيب دعامة باستخدام جهاز IVUS
+[Medical Devices] Therapeutic Cardiac Cathetarization With Balloon Diltation with Rotablator device | القسطرة العلاجية توسيع بالبالون) تركيب دعامة باستخدام جهاز Rotablator
+[Medical Devices] Therapeutic Hysteroscope | رسم استخدام منظار تجويف رحم علاجي
+[Medical Devices] Therapeutic Tilting Table Usage Fees In Er | رسم استخدام المنضدة المائلة العلاجية
+[Medical Devices] Thermal Frequency Device Usage Fees | رسم استخدام جهاز التردد الحراري
+[Medical Devices] Thermal Frequency Device Usage fees | رسم استخدام جهاز التردد الحراري
+[Medical Devices] Ultrasound Device Usage Fees | رسم استخدام جهاز الموجات الصوتية
+[Medical Devices] Ultrasound Device Usage Fees | رسم استخدام جهاز لموجات الصوتية
+[Medical Devices] Ultrasound Lithotripsy Usage Fees | رسم استخدام جهاز تفتيت الحصوات بالموجات الصوتية
+[Medical Devices] Upper GI Endoscopy Usage Fees | رسم استخدام منظار جهاز هضمي علوي
+[Medical Devices] Upper GIT Endoscopy Usage Fees | رسم استخدام منظار جهاز هضمي علوي
+[Medical Devices] Upper Gl Endoscopy Usage Fees | رسم استخدام منظار جهاز هضمي علوي
+[Medical Devices] Ureteric Forceps Usage Fees | رسم استخدام جفت حالب
+[Medical Devices] Urinary Dilators Usage Fees | رسم استخدام طقم موسعات
+[Medical Devices] Vaporizer Usage Fees | رسم استخدام جهاز فابوربزير
+[Medical Devices] Vaporizer Usage Fees | رسم استخدام جهاز فابوريزير
+[Medical Devices] Vascular C-ARM First Minute Usage Fees | رسم استخدام جهاز السي أرم للأوعية الدموية / الدقيقة
+[Medical Devices] Vascular C-ARM Usage Fees | رسم استخدام السي - ارم للاوعيه الدمويه
+[Medical Devices] Vascular C-ARM Usage Fees | رسم استخدام السي -ارم للاوعيه الدمويه
+[Medical Devices] Vascular C-ARM after First Minute Usage Fee | رسم استخدام جهاز السي أرم للأوعية الدموية لكل دقيقة بعد أول دقيقة
+[Medical Devices] Vascular C-Arm After First Minute Usage Fee | رسم استخدام جهاز السي أرم للأوعية الدموية لكل دقيقة بعد أول دقيقة
+[Medical Devices] Vascular C-Arm Usage Fees | رسم استخدام السي -ارم للأوعية الدموية
+[Medical Devices] Vaser & Power Liposuction | رسم استخدام جهاز فيزر & باور شفط الدهون
+[Medical Devices] Vaser Device Usage | رسم استخدام جهاز فيزر أمريكي
+[Medical Devices] Vaser Device Usage Fees (vaser suction & reduction) | رسم استخدام جهاز الفيزر
+[Medical Devices] Ventilator / Day | جهاز التنفس الصناعي / اليوم
+[Medical Devices] Video Laryngoscope | رسم استخدام منظار الحنجرة بالفيديو
+[Medical Devices] Video Laryngoscope. | رسم استخدام منظار الحنجرة بالفيديو
+[Medical Devices] Video Laryngoscope. | رسم استخدام منظار الحنجره بالفيديو

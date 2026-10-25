@@ -31,6 +31,24 @@ describe('Arabic & Clinical Normalizer', () => {
     expect(results[0].matchedName).toBe('Intact PTH (PTH 1-84)');
     expect(results[0].suggestedPrice).toBe(850);
   });
+
+  it('should grab Batch 1 and Batch 2 clinical aliases accurately from pricelist', () => {
+    const testCases = [
+      { name: 'CXR', expected: 'X - Ray Chest' },
+      { name: 'CTPA', expected: 'CT Pulmonary Angiography' },
+      { name: 'MRCP', expected: 'MRCP' },
+      { name: 'Gastroscopy', expected: 'Upper GIT Endoscopy' },
+      { name: 'Colonoscopy', expected: 'Lower GIT Endoscopy' },
+      { name: 'سونار بطن وحوض', expected: 'US Abdomen and Pelvis' },
+      { name: 'دوبلر اوردة الساقين', expected: 'Doppler Venous System Both Lower Limbs' }
+    ];
+
+    const results = matchServicesAgainstPricelist(testCases, '2025');
+    testCases.forEach((tc, idx) => {
+      expect(results[idx].status).toBe('matched');
+      expect(results[idx].matchedName).toContain(tc.expected);
+    });
+  });
   it('should normalize Arabic Alef, Yaa, Taa Marbuta and digits', () => {
     expect(normalizeArabic('إِسْتِئْصَالُ الْمَرَارَةِ ١٢٣')).toBe('استءصال المراره 123');
     expect(normalizeArabic('أشعة مقطعية على المخ')).toBe('اشعه مقطعيه علي المخ');

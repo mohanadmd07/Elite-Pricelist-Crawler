@@ -1,0 +1,742 @@
+Procedures | #NAME? | جلسة 5- فلتر غسيل كلوي بوصله شريانيه وريديه
+Procedures | 1 Limb E.M.G | تخطيط عضلات طرف واحد
+Procedures | 1 Limb NC/E.M.G | رسم عصب /تخطيط عضلات طرف واحد
+Procedures | 1 Limb Nerve Conduction | رسم عصب كامل طرف واحد
+Procedures | 1 Lower limb NC/EMG | رسم عصب /تخطيط عضلات طرف سفلي واحد
+Procedures | 2 Limbs E.M.G | تخطيط عضلات لطرفين
+Procedures | 2 Limbs NC/E.M.G | رسم عصب /تخطيط عضلات طرفين
+Procedures | 2 Limbs Nerve Conduction | رسم عصب كامل طرفين
+Procedures | 2 Lower Limbs NC/EMG | رسم عصب / تخطيط عضلات طرفين سفليين
+Procedures | 2 Lower limbs NC/EMG | رسم عصب /تخطيط عضلات طرفين سفليين
+Procedures | 3 Limbs Nerve Conduction | رسم عصب كامل 3 أطراف
+Procedures | 3D Abltion Package | دراسة كهرو فيسيولوجيه القلب و الكي باستخدام تقنيه ثلاثي الابعاد
+Procedures | 3D Pediatric Echo | موجات فوق صوتية علي القلب للأطفال ثلاثية الابعاد
+Procedures | 4 Limbs Nerve Conduction | رسم عصب كامل 4 أطراف
+Procedures | 4D U/S for Single Fetus | موجات فوق الصوتية رباعية الابعاد لجنه
+Procedures | 4D U/S for Triplets | موجات فوق الصوتية رباعية الابعاد لثلاثة اجنه
+Procedures | 4D U/S for Twins | موجات فوق الصوتية رباعية الابعاد لتوأم
+Procedures | 4D US For Single Baby | موجات فوق الصوتية رباعية الأبعاد لجنين واحد
+Procedures | 4D US For Triblets | موجات فوق الصوتية رباعية الأبعاد لثلاثة أجنة
+Procedures | 4D US For Twins | موجات فوق الصوتية رباعية الأبعاد لجنينين
+Procedures | A Auditory Test | تقييم أ سمعي
+Procedures | ABG/VBG | اجراء عمل تحليل غازات بالدم
+Procedures | ADHD (Attention deficit and hyperactivity disorder) Test | اختبار لفرط الحركة وتشتت الانتباه
+Procedures | ADHD (attention deficit and hyperactivity disorder) Test | اختبار فرط الحركة وتشتت الانتباه
+Procedures | Above Elbow Cast | جبس فوق الكوع
+Orthopedics | Above Elbow Cast Adult | جبس فوق الكوع كبار
+Orthopedics | Above Elbow Cast Pediatric | جبس فوق الكوع أطفال
+Procedures | Above Elbow Slab | سلاب فوق الكوع
+Orthopedics | Above Elbow posterior SLAB | سلاب خلفي فوق الكوع
+Procedures | Above Knee Cast | جبس فوق الركبة
+Orthopedics | Above Knee Cast Adult | جبس فوق الركبة كبار
+Orthopedics | Above Knee Cast Pediatric | جبس فوق الركبة أطفال
+Procedures | Above Knee Posterior Slab | سلاب فوق الركبة
+Orthopedics | Above knee Posterior SLAB | سلابة فوق الركبة
+Orthopedics | Above knee posterior SLAB | سلاب خلفي فوق الركبة
+Procedures | Abscess Drainage Under Local Anesthesia | فتح خراج تحت مخدر موضعي
+Procedures | Abscess Drainage under local anesthesia | فتح خراج تحت مخدر موضعي
+Procedures | Abscess drainage under local anaethesia | فتح خراج تحت تخدير موضعي
+Procedures | Added Fees For Portable Devices | رسم إضافي للأجهزة المتنقلة
+Orthopedics | Adhesive tape for fracture RIB | مشمع لاصق لكسر الضلوع
+Procedures | Advanced Air Mattress Usage Fees / Day | رسم استخدام المرتبة الهوائية المتقدمة / اليوم
+Procedures | Advanced Closed unit (VIP) | الوحدات المغلقة المتقدمة
+Procedures | Advanced H-C/12 Нг. | رعاية مكثفة منزلية 12 ساعة
+Procedures | Advanced H-C/24 Нг. | رعاية مكثفة منزلية لمدة 24 ساعة
+Procedures | Advanced Package 12 hours | باقة متقدمة 12 ساعة
+Procedures | Advanced Package 24 hours | باقة متقدمة 24 ساعة
+Procedures | Air Mattress Usage Fees / Day | رسم استخدام مرتبة هوائية لليوم الواحد
+Procedures | Air Mattress Use / Day | مرتبة هوائية لليوم الواحد
+Procedures | An Introductory Comprehensive Auditory Evaluation | تقييم سمعي شامل تمهيدي
+Procedures | Anterior Nasal Packing | حشو انف أمامي
+Procedures | Aortic Coarctation Repair PA banding | اصلاح ضيق بالشريان الأورطي تحزيم الشريان الرئوي
+Procedures | Arterial Line Insertion | تركيب قسطرة شريانية
+Procedures | Atrial Septal Defect Closure (ASD) | غلق ثقب بين اذينين
+Procedures | Audiogram (Pure Tome Audiometry) | قياس رسم سمع كهربائي
+Procedures | Audiogram (pure tome audiometry) | قياس رسم سمع كهربائي
+Procedures | Auditory Brain Stem Response (ABR) | تقييمات استجابة جذع الدماغ الصوتية
+Procedures | Auditory Brain Stem Response (Abr) | تقييمات استجابة جذع الدماغ الصوتية
+Procedures | Autism Assessment Skill | مهارة تقييم التوحد
+Procedures | Autism assessment skill | مهارة تقييم التوحد
+Procedures | B Surgical Test | تقييم ṿ جراحي
+Procedures | B.A.E.P Test | جهد مستثار علي جذع المخ
+Procedures | BCG Therapy | علاج موضعي بالمثانةBCG
+Procedures | Balance Training | تمرين الاتزان - جلسة علاج حركي - رسم اتزان
+Procedures | Balloon Diltation Of Valvular Pulmonary Stenosis | توسيع الصمام الرئوي بالبالون
+Procedures | Bed Side Endoscopic Tracheostomy | تركيب شق حنجري سريريا بواسطه المنظار
+Procedures | Bedsore Dressing Level One | غيار لقرح فراش من الدرجة الأولي
+Procedures | Below Elbow Cast | جبس تحت الكوع
+Orthopedics | Below Elbow Cast Adult | جبس تحت الكوع كبار
+Orthopedics | Below Elbow Cast Pediatric | جبس تحت الكوع أطفال
+Procedures | Below Knee Cast | جبس تحت الركبة
+Orthopedics | Below Knee Cast Adult | جبس تحت الركبة كبار
+Orthopedics | Below Knee Cast Pediatric | جبس تحت الركبة أطفال
+Procedures | Below Knee Slab | سلاب تحت الركبة
+Orthopedics | Below knee SLAB | سلاب تحت الركبة
+Procedures | Bilateral TMJ Reduction (Temporomandibular Joint) Without Anesthesia | إجراء رد جانبين المفصل الصدغي الفكي
+Procedures | Bilateral TMJ Reduction(Tempanomandibular Joint) Without Aneathesia | اجراء رد جانبين المفصل الصدغي الفكي بدون تخدير
+Procedures | Bilateral Tmj Reduction(Temporomandibular Joint) Without Anesthesia | رد جانبين المفصل الصدغي الفكي بدون تخدير
+Procedures | Biopsy From Any E.N.T Mass Lesion Under Local Anesthesia By Endoscopy | اخذ عينة من تورم بالأذن او الانف او الحنجرة تحت مخدر موضعي بالمنظار
+Procedures | Bladder Clot Evacuation And Irrigation | تفريغ تجلط دموي بالمثانة مع غسيل
+Procedures | Bladder Evacuation By Nilton Catheter | تفريغ المثانة بواسطة قسطرة نيلتون
+Procedures | Bladder Evacuation By Nylton Catheter | تفريغ المثانة بواسطة قسطرة نيلتون
+Procedures | Bladder Scanning | اجراء فحص المثانة
+Procedures | Bladder evacuation by Nylton Catheter | تفريغ المثانة بواسطة قسطرة نيلتون
+Procedures | Blood Glucose Monitoring | متابعة نسبه السكر بالدم
+Procedures | Blood Pressure Measurement | قياس ضغط
+Procedures | Blood Pressure Measuring 24 Hours | قياس ضغط الدم 24 ساعة
+Procedures | Blood Pressure Monitoring Without Examination Or Admittance | قياس ضغط الدم بواسطة التمريض بدون كشف أو حجز
+Procedures | Blood Pressure Monitoring without Examination Or Admittance | قياس ضغط الدم بواسطة التمريض بدون كشف أو حجز
+Procedures | Blood Product Transfusion (Not Including Blood Product Cost) | اجراء نقل مشتقاته دم او غير متضمن ثم الكيس )
+Procedures | Blood Product Transfusion (not including blood product cost) | نقل مشتقات الدم غير متضمن ثمن الكيس )
+Procedures | Blood Transfusion (Not Including Blood/Blood Product Cost) | اجراء نقل دم (غير متضمن كيس الدم)
+Procedures | Body Bandage | رباط حول الجسم
+Orthopedics | Body Bandage Adult | رباط حول الجسم كبار
+Procedures | Body Bandage Pediatric | رباط حول الجسم اطفال
+Orthopedics | Body Bandage kid | رباط حول الجسم اطفال
+Orthopedics | Bone Density | قياس كثافة العظام
+Orthopedics | Both Feet Deformation Repair | تصليح تشوه بالقدمين
+Procedures | Breathing Function Test Before And After Inhalation | اختبار وظائف تنفس ما قبل وبعد الاستنشاق
+Procedures | Bubble Study (Transthoracic Echo) | دراسة فقاعة مخطط صدي القلب
+Procedures | C Auditory Test | تقييم ج سمعي
+Procedures | C.S.F Tapping/ Drainage | اجراء بذل السائل السحائي
+Procedures | C.S.F Tapping/Drainage | بذل السائل السحائي
+Procedures | CARS TEST (CHILDHOOD AUTISM RATING SCALE) | اختبار كارز (مقياس التوحد في مرحلة الطفولة)
+Procedures | CD138IHС | 
+Procedures | CDU Admission in ER | دخول وحده اخذ القرار
+Orthopedics | CPM Machine | جهاز تحريك و تمرين مفصل الركبة
+Procedures | CPR ( Cardiopulmonary Resucitation) With Defibrillator | دوره انعاش قلبي رئوي مع صدمه كهربائيه
+Procedures | CPR ( Cardiopulmonary Resucitation) Without Defibrillator | دوره انعاش قلبي رئوي بدون صدمه كهربائيه
+Procedures | CPR (Cardiopulmonary Resucitation) | دوره انعاش قلبي رئوي
+Procedures | CPR (Cardiopulmonary Resuscitation) With Defibrillator | دورة إنعاش قلبي رئوي مع صدمة كهربائية
+Procedures | CPR (Cardiopulmonary Resuscitation) Without Defibrillator | دورة إنعاش قلبي رئوي بدون صدمة كهربائية
+Procedures | CVP Catheter Insertion | تركيب قسطرة وريد مركزي
+Procedures | CVP Catheter Removal | اجراء ازالة قسطرة وريد مركزي
+Procedures | CVP Catheter insertion | اجراء تركيب قسطرة وريد مركزي
+Procedures | CVP INSERTION BY CONSULTANT | تركيب جهاز الضغط الوريدي بواسطة استشاري
+Procedures | Cardiac Monitor Usage | رسم استخدام جهاز متابعة القلب
+Procedures | Cars Test (Childhood Autism Rating Scale) | مقياس كارز للتوحد (مهارة تقييم التوحد)
+Procedures | Cars Test (childhood autism rating scale) | مقياس كارز للتوحد
+Procedures | Cdu Admission In ER | دخول وحدة اخذ القرار
+Procedures | Cervical Dilatation | توسيع عنق الرحم
+Procedures | Cervical Epidural Injection | حقن الفقرات العنقية
+Procedures | Cervical Pap Smear | اخذ مسحه من عنق الرحم
+Procedures | Cervical Polypectomy | استئصال لحمية من عنق الرحم
+Procedures | Cervical Root (Sseps) - One Limbs | دراسة جهد حسي طرف واحد
+Procedures | Cervical polypectomy | استئصال لحمية من عنق الرحم
+Procedures | Chalazion Extraction | ازاله كيس دهني
+Procedures | Chalazion Extraction More Than One | ازاله أكثر من كيس دهني في العين
+Procedures | Chemical Cauterization Of The Cervix | كي كيميائي لعنق الرحم
+Procedures | Circumcision Procedure (Newborn) | طهارة لحديثي الولادة
+Procedures | Circumcision Procedure (newborn) | طهارة لحديثي الولادة
+Procedures | Cleansing Enema | اجراء حقنة شرجية تنظيفية
+Procedures | Cleansing Enema (Insetion Of Rectal Tube) | اجراء حقنة شرجية تنظيفية اجراء تركيب انبوب شرجي
+Procedures | Cochlear Response Test | اختبار استجابة قوقعة الاذن
+Procedures | Cognitive Behavioral Therapy Sessions | جلسات علاج سلوكي
+Procedures | Cognitive behavioral therapy sesions | جلسات علاج سلوكي
+Procedures | Colposcopy | منظار لعنق الرحم
+Procedures | Comodone Removal (large area) | إزالة رؤوس سوداء (منطقه كبيرة
+Procedures | Complete Nerve Conduction For 4 Limbs | رسم عصب كامل 4 أطراف
+Procedures | Complete Two Upper Limbs Nerve Conduction | رسم عصب كامل 2 طرف علوي
+Procedures | Complete Upper Limb Nerve Conduction | رسم عصب كامل طرف واحد علوي
+Procedures | Computerized Audiogram | قياس رسم سمع بالكمبيوتر
+Procedures | Conscious Sedation In Er | تهدئة واعية في الطوارئ
+Procedures | Conscious Sedation in ER | تهدئة واعية في الطوارئ
+Procedures | Conscious sedation in ER | تهدئة واعية في الطوارئ
+Procedures | Consultant Doctor Plus 12 hours | دكتور إستشاري ( بلس ) 12 ساعة
+Procedures | Consultant Doctor Plus 24 hours | دكتور إستشاري ( بلس ) 24 ساعة
+Procedures | Contraceptive Subcutaneous Implant Insertion | زرع وسيلة منع حمل تحت الجلد
+Procedures | Contraceptive Subcutaneous Implant Removal | خلع وسيلة منع حمل تحت الجلد
+Procedures | Contraceptive subcutanous implant insertion | زرع وسيلة منع حمل تحت الجلد
+Procedures | Contraceptive subcutanous implant removal | خلع وسيلة منع حمل تحت الجلد
+Procedures | Corner Turn Test | اختبار كورنر
+Procedures | Corticosteroid (large area) | حقن كورتيزون ( منطقه كبيرة)
+Procedures | Corticosteroid (medium area) | حقن كورتيزون ( منطقه متوسطة)
+Procedures | Corticosteroid (small area) | حقن كورتيزون ( منطقه صغيرة)
+Procedures | Cortisone Injection / Single Eye | حقن كورتيزون داخل الجفن / عين واحدة
+Orthopedics | Crepe Bandage | رباط كريب
+Procedures | Cross Matching | إجراء توافق
+Procedures | Cylinder Cast | أسطوانة جبس
+Orthopedics | Cylinder Cast Adult | أسطوانة جبس كبار
+Orthopedics | Cylinder Cast Pediatric | أسطوانة جبس أطفال
+Procedures | D Speech Test | تقييم د تخاطبي
+Procedures | DOUBLE PHOTOTHERAPY FOR NEONATES/12 Η | العلاج الضوئي المزدوج لحديثي الولادة /12 س
+Procedures | DOUBLE PHOTOTHERAPY FOR NEONATES/DAY | العلاج الضوئي المزدوج لحديثي الولادة / يوم
+Procedures | Defibrillator Usage | رسم استخدام جهاز صدمات كهربائية في الطواريء
+Procedures | Defibrillator Usage Fees | رسم استخدام جهاز الصدمات الكهربائية
+Orthopedics | Diagnostic Arthroscope (Wrist/Ankle) Usage Fees | رسم استخدام منظار مفاصل (الرسغ / الكاحل) تشخيصي
+Orthopedics | Diagnostic Arthroscope (shoulder/hip/knee) Usage Fees | رسم استخدام منظار مفاصل تشخيصي للكتف / الفخذ / الركبة
+Procedures | Diagnostic Bronchoscopy With Biopsy | اجراء منظار الشعب الهوائية تشخيصي مع اخذ عينه
+Procedures | Diagnostic Bronchoscopy With Biopsy+ Foreign Body Extraction | منظار الشعب الهوائية وأخذ عينه تحت مخدر عام + استخراج حسم غريب (لا يشمل سعر العينة)
+Procedures | Diagnostic Bronchoscopy With Biopsy+Electro Cautery | منظار الشعب الهوائية وأخذ عينه تحت مخدر عام + كي (لا يشمل سعر العينة)
+Procedures | Diagnostic Bronchoscopy With biopsy | منظار الشعب الهوائية وأخذ عينه تحت مخدر عام لا يشمل سعر العينة)
+Procedures | Diagnostic Chest Ultrasound | اشعه تليفزيونيه علي الصدر
+Procedures | Diagnostic Hysteroscope Usage Fees | رسم استخدام منظار تجويف رحمي تشخيصي
+Procedures | Diagnostic Laryngoscope | منظار حنجري تشخيصي
+Procedures | Diagnostic Tilting Table Usage Fees in ER | رسم استخدام المنضدة المائلة التشخيصية
+Procedures | Diagnostic Ureteroscope Usage Fees | رسم استخدام منظار الحالب
+Procedures | Diagnostic laryngoscope Use | استخدام منظار حنجري تشخيصي
+Procedures | Diaylsis Catheter Insertion | اجراء تركيب قسطرة غسيل
+Procedures | Diffusing Capacity For Carbon Monoxide Test (DLCO) | اختبار وظائف التنفس ونفاذية الغازات
+Procedures | Dobutamine Stress Echocardiography | موجات فوق صوتية علي القلب بالمجهود باستخدام الدوبياتامين
+Procedures | Double Phototherapy For Neonates / 12 Hr. | العلاج الضوئي المزدوج لحديثي الولادة / 12 ساعة
+Procedures | Double Phototherapy For Neonates / Day | العلاج الضوئي المزدوج لحديثي الولادة / يوم
+Procedures | Double Phototherapy For Neonates/12 Нг. | العلاج الضوئي المزدوج لحديثي الولادة / 12 ساعة
+Procedures | Double upper limbs E.M.G | تخطيط عضلات كامل (طرفين علوين)
+Procedures | Drain Insertion | تركيب درنقة
+Procedures | Drainage Of Fluid Collection | بذل تجمع للسوائل
+Procedures | Drainage Of Nasal Abscess | فتح خراج بالأنف
+Procedures | Dressing For Burn (Large Area) 10-15% | غيار علي حرق (مساحه كبيرة) %15-10
+Procedures | Dressing For Burn (Large Area) More Than 10% | غيار علي حرق (مساحة كبيرة) أكبر من 10%
+Procedures | Dressing For Burn (Medium Area) 5-10% | غيار علي حرق (مساحه متوسطة) %10-5
+Procedures | Dressing For Burn (Small Area) 5% | غيار علي حرق (مساحه صغيره) 5%
+Procedures | Dressing For Burn (large area) More Than 10% | غيار علي حرق مساحة كبيرة) أكبر من %10
+Procedures | Dressing For Burn (medium area) 5-10% | غيار علي حرق 5-10% )مساحة متوسطة
+Procedures | Dressing For Burn (small area) 5% | غيار علي حرق مساحة صغيرة %5
+Procedures | E.C.G | رسم قلب عادي
+Procedures | E.E.G | رسم مخ
+Procedures | E.E.G 24 Hours | رسم مخ 24 ساعة
+Procedures | E.E.G Inside Critical Nerve Care Unit (Up To 3 Hours) | رسم مخ داخل وحدة عناية الأعصاب الحرجة
+Procedures | E.E.G Inside Critical Nerve Care Unit (Up to 3 hours) | رسم مخ داخل وحدة عناية الأعصاṿ الحرجة
+Procedures | E.N.T Endoscopy Camera Use | استخدام كاميرا علي المنظار بعياده الانف و الاذن و الحنجرة
+Procedures | ECG | رسم قلب في الطواريء
+Procedures | EEG 24 hours | رسم مخ 24 ساعة
+Procedures | ENDO TRACHEAL INTUBATION | ادخال أنبوبة بالقصبة الهوائية
+Procedures | ER Call To Other Specialties | استدعاء أخصائي من تخصص أخر إلي الطوارئ
+Procedures | ER Ventilator / Hour | رسم استخدام تنفس صناعي بالطوارئ الساعة
+Procedures | ER call to other specialities | استدعاء اخصائي من تخصص اخر الي الطواريء
+Procedures | ER ventilator / hour In ER | رسم استخدام تنفس صناعي بالطواريء/ الساعة
+Procedures | EXTENDED EEG | رسم مخ ممتد الاجل
+Procedures | Ear Packing | حشو اذن
+Procedures | Ear Suction | شفط من الاذن
+Procedures | Ear Wash (Both Ears) | غسيل للاذنين
+Procedures | Ear Wash (One Ear) | غسيل اذن واحدة
+Procedures | Echocardiography | موجات فوق صوتية علي القلب
+Procedures | Elastoplast Bandage | رباط ايلاستوبلاست
+Orthopedics | Elastoplast bandage | رباط ايلاستوبلاست
+Procedures | Elective Cardioversion | صدمات كهربائية لاستعادة ضربات
+Procedures | Electroneurography (2 Nerves And Less) | اختبار عصب حركي (2 فأقل)
+Procedures | Electroneurography (More Than 2 Nerves) | اختبار عصب حركي (أكثر من 2)
+Procedures | Encephalogram Of The Cerebral Cortex | رسم المخ من خلال القشرة المخية
+Procedures | Endo Tracheal Intubation (Pediatric) | تركيب أنبوبة حنجرية (اطفال)
+Procedures | Endometrium Swab | عينة من بطانة عنق الرحم
+Procedures | Endotracheal Tube Intubation | إدخال أنبوبة بالقصبة الهوائية
+Procedures | Epidural Injection Procedure | تخدير منطقة فوق الجافية
+Procedures | Epidural Injection Procedure(Without Medication & Consumables) | اجراء حقن الم (بدون سعر الدواء او المستلزم )
+Procedures | Epley's Maneuver For Positional Vertigo | تدريبات إبيلي الحركية لعلاج الدوار الحركي
+Procedures | Epleys Manouver For Positional Vertigo | تدريبات إيبلي الحركية لعلاج الدوار الحركي
+Procedures | Epleys Manouver-for positional Vertigo | تدريبات إيبلي الحركية لعلاج الدوار الحركي
+Procedures | Er Call To Other Specialties | استدعاء أخصائي من تخصص آخر الي الطوارئ
+Procedures | Eradication Of The Salivary Gland Gallstone Under Local Anesthetic | استئصال حصوة بالغدة اللعابية تحت مخدر موضعي
+Procedures | Eustachian Tube Assessment Function Test | قياسات سمعية لقناة أستكيوس
+Procedures | Eustachian Tube Function Test | اختبار وظائف قناة استاكيوس
+Procedures | Eustachion Tube Assesment (Function test) | قياسات سمعية لقناة أستكيوس
+Procedures | Event Related Stress Test | اختبار الجهد المتعلق بالحدث
+Procedures | Evoked Stimulated Efforts Test | اختبار جهود مثاره وعصب وجه
+Procedures | Excision Of Ingrowing Nail Under Local Anesthesia | استئصال ظفر غائر تحت تأثير مخدر موضعي
+Procedures | Excision of ingrowing nail under local anaethesia | استئصال ظفر غائر تحت تخدير موضعي
+Procedures | Extended E.E.G | رسم مخ ممتد الأجل
+Procedures | Extra Limb N.C.V/EMG | رسم عصب / تخطيط عضلات طرف إضافي)
+Procedures | Extra Limb NC/E.M.G | طرف إضافي ( رسم عصب/تخطيط عضلات)
+Procedures | Extra Nebulizer Session | جلسه نيبوليزر / استنشاق اضافي
+Procedures | Extra Nebulizer session | اجراء جلسه نيبوليزر / استنشاق اضافي
+Procedures | Extra half hour - Advanced | نصف ساعة إضافي بالعمليات - متقدمة
+Procedures | Extra half hour - From simple to major | نصف ساعة إضافي بالعمليات - من بسيطة الي كبري
+Procedures | Extra half hour - Special nature | نصف ساعة إضافي بالعمليات - طابع خاص
+Procedures | Extra half hour - Special skill | نصف ساعة إضافي بالعمليات - مهارة
+Procedures | Extraction Of FB (E.N.T) | استخراج جسم غريب انف و اذن
+Procedures | Extraction Of Fb (E.N.T) | استخراج جسم غريب أنف و أذن
+Procedures | FEMORAL CATHTERIZATION UNDER G.A | قسطرة للشريان الفخذي تحت تخدير كلي
+Procedures | FIXATION OF UMBILICAL CATHETER | تثبيت قسطره سرة
+Procedures | Facial Nerve Conduction With Blink Reflex | رسم عصب الوجه مع بلينك ريفلكس
+Procedures | Facial Nerve Conduction with Blink Reflex | رسم عصب الوجه
+Procedures | Facial Nerve Function Test | اختبار قياس وظيفة عصب وجه
+Procedures | Fallot's Tertalogy DORV | رباعي فالوت مخرج ثنائي للبطين الايمن
+Procedures | Fasciola-Ab (ІНА) | 
+Orthopedics | Feet Deformation Repair | تصليح تشوه بالقدمين
+Procedures | Fetal Doppler | دوبلر علي الجنين
+Procedures | Fetal Monitoring By Cardiotocoghraphy (Ctg) | مراقبة معدل نبض الجنين
+Procedures | Fetal Monitoring By Cardiotocography (CTG) | مراقبه معدل نبض الجنين
+Procedures | Fetal monitoring by Cardiotocography | مراقبة معدل نبض الجنين
+Procedures | Fiber Optic Laryngoscope | استخدام منظار حنجرة ضوئي
+Procedures | Fiber Optic Laryngoscope Usage Fees | رسم استخدام منظار حنجرة ضوئي
+Procedures | Fiber Optic Laryngoscope Use | استخدام منظار حنجرة ضوئي
+Procedures | Fiber optic laryngoscope Use | استخدام منظار حنجرة ضوئي
+Orthopedics | Finger Bandage | رباط أصابع
+Orthopedics | Finger SLAB | سلاب جبس لأصبع اليد
+Orthopedics | Finger Slab | سلاب جبس الأصبع اليد
+Orthopedics | Finger Splint | سنادة أصابع
+Orthopedics | Finger bandage | رباط أصابع
+Procedures | Fixation Of Umbilical Catheter | تركيب قسطرة سرة
+Procedures | Flexible Bronchoscope | منظار شعب هوائية مرن
+Procedures | Flexible Endoscopic Evaluation Of Swallowing (Fees) | منظار تشخيصي بالألياف الضوئية للحنجرة (دراسة البلع)
+Procedures | Flexible Endoscopic Evaluation of Swallowing (FEES) | تقييم البلع باستخدام منظار الحنجرة المرن
+Procedures | Flexible Laryngoscope | منظار حنجرة مرن
+Procedures | Flexible Laryngoscope Use (Clinic) | استخدام منظار حنجرة مرن (بالعيادة)
+Procedures | Flexible Laryngoscope. | رسم استخدام منظار الحنجرة المرن
+Procedures | Fluoroscopy Screening For Prosthetic Valve | فحص التنظير الفلوري للصمام الصناعي
+Procedures | Fluoroscopy Screening for Prosthetic Valve | فحص التنظير الفلوري للصمام الصناعي
+Orthopedics | Foot Deformation Repair | تصليح تشوه بالقدم
+Orthopedics | Foot SLAB adult | سلاب قدم أو سلاṿ كوع خلفي
+Orthopedics | Foot SLAB pediatric | سلاب قدم أو سلاب كوع خلفي أطفال
+Orthopedics | Foot Slab Adult | سلاب قدم أو سلاب كوع خلفي
+Orthopedics | Foot Slab Pediatric | سلاب قدم أو سلاب كوع خلفي أطفال
+Procedures | Foreign Body Extraction Under Local Anesthesia | استخراج جسم غريب تحت تأثير مخدر موضعي
+Procedures | Foreign body extraction under local Aneathesia | استخراج جسم غريب تحت تخدير موضعي
+Procedures | Fundal Examination | فحص قاع عين
+Procedures | Gastric Lavage | اجراء غسيل معدة
+Procedures | General Aneathesia Procedure In ER | اجراء تخدير كلي بالطواريء
+Procedures | General Anesthesia Procedure In Er | إجراء تخدير كلي بالطوارئ
+Procedures | General surgery medical team - Anesthesia (Major) | أتعاب الأطباء للجراحات العامة - التخدير (كبري)
+Procedures | General surgery medical team - Anesthesia (Minor) | أتعاب الأطباء للجراحات العامة - التخدير (صغري)
+Procedures | General surgery medical team - Anesthesia (Moderate) | أتعاب الأطباء للجراحات العامة - التخدير (متوسطة)
+Procedures | General surgery medical team - Anesthesia (Special nature) | أتعاب الأطباء للجراحات العامة - التخدير (طابع خاص)
+Procedures | General surgery medical team - Anesthesia (Special skill) | أتعاب الأطباء للجراحات العامة - التخدير (مهارة)
+Procedures | General surgery medical team - Assistant (Major) | أتعاب الأطباء للجراحات العامة - المساعد (كبري)
+Procedures | General surgery medical team - Assistant (Minor) | أتعاب الأطباء للجراحات العامة - المساعد (صغري)
+Procedures | General surgery medical team - Assistant (Moderate) | أتعاب الأطباء للجراحات العامة - المساعد (متوسطة)
+Procedures | General surgery medical team - Assistant (Special nature) | أتعاب الأطباء للجراحات العامة - المساعد (طابع خاص)
+Procedures | General surgery medical team - Assistant (Special skill) | أتعاب الأطباء للجراحات العامة - المساعد (مهارة)
+Procedures | General surgery medical team - Surgeon (Major) | أتعاب الأطباء للجراحات العامة - الجراح (كبري)
+Procedures | General surgery medical team - Surgeon (Minor) | أتعاب الأطباء للجراحات العامة - الجراح (صغري)
+Procedures | General surgery medical team - Surgeon (Moderate) | أتعاب الأطباء للجراحات العامة - الجراح (متوسطة)
+Procedures | General surgery medical team - Surgeon (Simple) | أتعاب الأطباء للجراحات العامة - الجراح (بسيطة)
+Procedures | General surgery medical team - Surgeon (Special nature) | أتعاب الأطباء للجراحات العامة - الجراح (طابع خاص)
+Procedures | General surgery medical team - Surgeon (Special skill) | أتعاب الأطباء للجراحات العامة - الجراح (مهارة)
+Procedures | General surgery medical team - Total (Major) | أتعاب الأطباء للجراحات العامة - الإجمالي (كبري)
+Procedures | General surgery medical team - Total (Minor) | أتعاب الأطباء للجراحات العامة - الإجمالي (صغري)
+Procedures | General surgery medical team - Total (Moderate) | أتعاب الأطباء للجراحات العامة - الإجمالي (متوسطة)
+Procedures | General surgery medical team - Total (Simple) | أتعاب الأطباء للجراحات العامة - الإجمالي (بسيطة)
+Procedures | General surgery medical team - Total (Special nature) | أتعاب الأطباء للجراحات العامة - الإجمالي (طابع خاص)
+Procedures | General surgery medical team - Total (Special skill) | أتعاب الأطباء للجراحات العامة - الإجمالي (مهارة)
+Procedures | Giemsa stain | 
+Procedures | Golden Program Price 2024 | 
+Procedures | Growth Factor (3 sessions) | حقن عوامل النمو () 3جلسات)
+Procedures | Growth Factor Stem Cell (1 session) | حقن عوامل النمو (جلسة)
+Procedures | Growth Factor Stem Cell (3 sessions) | حقن عوامل النمو () 3جلسات)
+Procedures | HDF Session Less That 4 Hours (Outpatient) | جلسة غسيل كلوي HDF أقل من 4 ساعات
+Procedures | HDF Session More Than 4 Hours (Outpatient) | جلسة غسيل كلوي HDF أكثر من 4 ساعات
+Procedures | HDF Session With Catheter | 6- جلسة فلتر غسيل كلوي بالقسطرة
+Procedures | HEP Par_1 - ІНС | 
+Procedures | HER2 by SISH | 
+Procedures | Hair Electrolysis - Both Eyes | ازاله شعره بالكهرباء بالعينين
+Procedures | Hair Electrolysis - Single Eye | ازاله شعره بالكهرباء بعين واحدة
+Procedures | High Flow Nasal Cannula / Day | رسم استخدام جهاز أكسجين عالي التدفق / اليوم
+Orthopedics | Hip Spica | بنطلون جبس كبار
+Orthopedics | Hip Spika | بنطلون جبس كبار
+Procedures | Holter Monitor (24 Hrs.) | تركيب جهاز هولتر (24 ساعة)
+Procedures | Holter Monitor (24 hrs) | تركيب جهاز هولتر (24 ساعة)
+Procedures | Holter Monitor (24 hrs.) | تركيب جهاز هولتر () 24ساعة)
+Procedures | Holter Monitor (48 Hrs.) | تركيب جهاز هولتر (48 ساعة)
+Procedures | Holter Monitor (48 hrs) | تركيب جهاز هولتر (48 ساعة)
+Procedures | Holter Monitor (48 hrs.) | تركيب جهاز هولتر () 48ساعة)
+Procedures | Holter Monitor (72 Hrs.) | تركيب جهاز هولتر (72 ساعة)
+Procedures | Home sitter 12 hours | جليس بالمنزل 12 ساعة
+Procedures | Home sitter 24 hours | جليس بالمنزل 24 ساعة
+Procedures | Hormonal Loop Insertion (Not Including Loop Price) | تركيب لولب هرموني (بدون ثمن اللوب)
+Procedures | Hormonal Loop insertion (not including loop price) | تركيب لولب هرموني (بدون ثمن اللوṿ)
+Procedures | Hydatid-Ab (ІНА) | 
+Procedures | Hypertrophic Keloid Scar Injection | حقن ندبات
+Procedures | ICDS-Follow up (Double) | متابعة بجهاز صدمات داخلي (ثنائي)
+Procedures | ICDS-Follow up (Triple) | متابعة بجهاز صدمات داخلي (ثلاثي)
+Procedures | ICDS-Follow up (double) | متابعة بجهاز صدمات داخلي (ثنائي)
+Procedures | ICDS-Follow up (single) | متابعة بجهاز صدمات داخلي (أحادي)
+Procedures | ICDS-Follow up (triple) | متابعة بجهاز صدمات داخلي (ثلاثي)
+Procedures | IM Injection | اجراء حقن عضلي
+Procedures | IV Injection | حقن وريدي
+Procedures | IV Solution Insertion | اجراء تركيب محلول وريدي
+Procedures | IV injection | اجراء حقن وريدي
+Procedures | In Body Mass Analyser | تحليل قياس كتلة الجسم
+Procedures | In Body Mass Analyzer | تحليل قياس كتلة الجسم
+Procedures | In-body Analysis | تحليل قياس كتلة الجسم
+Procedures | In-body analysis | تحليل قياس كتلة الجسم
+Procedures | Incision & Drainage Of Tonsillar Abscess (Quinsy) | فتح وتصريف خراج حول اللوزتين
+Procedures | Incision & Drainage Of Tonsillar Abscess (Quinsy) Under Local Anesthesia | فتح وتصريف خراج حول اللوزتين تحت مخدر موضعي
+Procedures | Incision & Drainage Of Tonsillar Abscess (quinsy) Under Local Anesthesia | فتح وتصريف خراج حول اللوزتين تحت مخدر موضعي
+Procedures | Infusion Syringe Usage Fees / Day | رسم استخدام سرنجة محاليل / اليوم
+Procedures | Ingrowing Nail Removal Under Local Anathesia | استئصال اظفر غائر تحت تخدير موضعي
+Procedures | Insertion Of Cannula | تركيب كانيولا
+Procedures | Insertion Of Endotracheal Tube | تنبيت رغامي (إدخال أنبوبة بالقصبة الهوائية)
+Procedures | Insertion Of Insulin Pumps | تركيب مضخة أنسولين
+Procedures | Insertion Of Intercostal Tube | تركيب أنبوبة صدرية ما بين الضلوع
+Procedures | Insertion Of Laryngeal Tube | تركيب أنبوب حنجري
+Procedures | Insertion Of Nasogastric Tube | تركيب أنبوب معدة
+Procedures | Insertion Of Oropharyngeal Tube | اجراء تركيب انبوب فمي بلعومي
+Procedures | Insertion Of Porta Cath Needle | تركيب سن بورتاكات
+Procedures | Insertion Of Portacath Needle | اجراء تركيب سن بورتاكاث
+Procedures | Insertion Of Rectal Tube | تركيب أنبوب شرجي
+Procedures | Insertion Of Urinary Catheter | تركيب قسطره بولية
+Procedures | Insertion Of Urinary Catheter Using Guide | تركيب قسطره بولية باستخدام مرشد
+Procedures | Insertion Of laryngeal tube | تركيب أنبوب حنجري
+Procedures | Insertion of Cannula | اجراء تركيب كانيولا
+Procedures | Insertion of Endotracheal tube | اجراء تنبيت رغامي (ادخال أنبوبة بالقصبة الهوائية)
+Procedures | Insertion of Insulin Pump | تركيب مضخة انسولين
+Procedures | Insertion of Insulin Pumps | تركيب مضخة انسولين
+Procedures | Insertion of Intercostal Tube | اجراء تركيب انبوبه صدريه ما بين الضلوع
+Procedures | Insertion of Laryngeal Tube | اجراء تركيب انبوṿ حنجري
+Procedures | Insertion of Nasogastric tube | اجراء تركيب انبوب تغذيه الانف
+Procedures | Insertion of Urinary Catheter using guide by urologist | اجراء تركيب قسطره بول عن طريق اخصائي المسالك
+Procedures | Insertion of intercostal tube by consultant | اجراء تركيب انبوبه صدريه ما بين الضلوع بواسطه استشاري
+Procedures | Insertion of intercostal tube by specialist | اجراء تركيب انبوبه صدريه ما بين الضلوع بواسطه اخصائي
+Procedures | Insertion of nasogastric tube | اجراء تركيب انبوṿ تغذيه الانف
+Procedures | Insertion of rectal tube | اجراء تركيب انبوب شرجي
+Procedures | Insertion of urinary catheter | اجراء تركيب قسطره بول
+Procedures | Installation Of Ear Ventilation Tube Under Local Anesthetic | تركيب أنبوبة تهوية للأذن بمخدر موضعي
+Procedures | Insulin Pump Programming And Follow-Up | إعادة برمجة و متابعة مضخة أنسولين
+Procedures | Insulin Pump Programming and follow-up | اعادة برمجة و متابعة مضخة انسولين
+Procedures | Intelligence Quotient Test (IQ Test) | اختبار ذكاء
+Procedures | Intelligence Quotient Test (IQ test) | اختبار ذكاء
+Procedures | Intercostal Tube Insertion Adult | اجراء تركيب انبوبة صدر
+Orthopedics | Intra-Articular Injection | حقن موضعي عظام مفاصل
+Orthopedics | Intra-Articular Injection With PRP | حقن موضعي عظام مفاصل باستخدام البلازما
+Procedures | Intracavernosal Injection | حقن القضيب لعلاج ضعف الانتصاṿ
+Procedures | Intraosseous Access Insertion | تركيب كانيولا داخل العظام
+Procedures | Intraosseous access insertion | اجراء تركيب كانيولا داخل العظام
+Procedures | Ivc Assessment | تقييم الوريد الأجوف السفلي
+Procedures | Joint Aspiration | بذل من المفاصل
+Orthopedics | Jones Bandage | رباط جونز للركبة
+Procedures | Large Dressing | غيار كبير
+Procedures | Laryngeal Endoscopy / Rigid Videoscope | منظار تشخيصي للحنجرة
+Procedures | Leg Vein Compressor/Pneumatic Cuff/Day Usage Fees | رسم استخدام جهاز ضاغط الأوردة الساقين / استخدام مضخة قدم هوائية / اليوم
+Procedures | Lifting Metal Fasteners Without Anesthesia | رفع مثبتات معدنية بدون تخدير
+Orthopedics | Lifting Metal Fasteners Without Anesthetic | رفع مثبتات معدنية بدون تخدير
+Procedures | Lipoma Press session | جلسة تسطيح ورم دهني
+Orthopedics | Local Heel Injection | حقن موضعي للكعب
+Orthopedics | Local heel injection | حقن موضعي للكعب
+Procedures | Loop Extraction | خلع لولب
+Procedures | Loop Insertion (Not Including Loop Price) | تركيب لولب (بدون ثمن اللولب)
+Procedures | Loop Insertion (Without Loop Price) | تركيب لولب (بدون ثمن اللولب)
+Procedures | Loop Insertion (not including loop price) | تركيب لولب لا يشمل ثمن اللوب
+Procedures | Lumbar Epidural Injection | حقن الفقرات القطنية
+Procedures | MPC- Skin boosters - Face | حقن النضارة للوجة
+Procedures | Magnetic Stimulation Of Muscles | رسم عضلات بالتحفيز المغناطيسي
+Procedures | Medium Dressing | غيار وسط
+Procedures | Meladeep/area | تقشير ميلاديب مكان
+Procedures | Mesolipolysis (1 session) | ميزوثيرابي تكسير دهون (جلسة)
+Procedures | Mesolipolysis (1 vial) | ميزوثيرابي تكسير دهون - فيال كامل
+Procedures | Mesolipolysis (3 sessions) | ميزوثيرابي تكسير دهون () 3جلسات)
+Procedures | Middle Ear Injections | حقن الاذن الوسطي
+Procedures | Middle Tardiness Test | اختبار درجة التأخر الوسطي
+Procedures | Monthly Group Training Sessions | جلسات تدريب جماعي شهري
+Procedures | NEONATAL ECHOCARDIOGRAPHY | موجات فوق صوتية علي القلب لحديثي الولادة
+Procedures | Nasal Cautery | كي نزيف بالأنف
+Procedures | Nasal Endoscopy (Diagnostic) | منظار انف (تشخيصي)
+Procedures | Nasal Endoscopy (diagnostic) | منظار تشخيصي للأنف
+Procedures | Nasal Pack Insertion | تركيب فتيل
+Procedures | Nasal Suction | تشفيط من الانف
+Procedures | Nebulizer Session | جلسه نيبوليزر / استنشاق
+Procedures | Nebulizer session | اجراء جلسه نيبوليزر/استنشاق
+Procedures | Neonatal Echocardiography | موجات فوق صوتية علي القلب لحديثي الولادة
+Procedures | Neonatal Monitor / Day | مونيتور الأطفال حديثي الولادة / اليوم
+Procedures | Nephoscope Usage Fees | رسم استخدام منظار كلي
+Procedures | Nerve Block Anaethesia | اجراء تخدير العصب
+Procedures | Nerve Block Anesthesia | تخدير عصب
+Procedures | Nerve Conduction For One Nerve | رسم عصب لعصب واحد
+Procedures | Nerve Conduction For One Nerve ( After The First Nerve) | رسم عصب بعد العصب الأول
+Procedures | Nerve Conduction For One Nerve (After The First Nerve) | رسم عصب بعد العصب الأول
+Procedures | Neurology Botox Injection | حقن اعصاṿ بالبوتكس
+Procedures | Newborn Circumcision | الطهارة حديثي الولادة
+Procedures | O2 Consumption /Hour In ER | رسم استخدام الأكسجين/ ساعه بالطوارئ
+Procedures | O2 consumption /hour In ER | رسم استخدام الاوكسجين/ساعه بالطواريء
+Procedures | O2 consumption/hour In ER | رسم استخدام الاوكسجين / ساعه بالطواريء
+Procedures | Ocular Tension | قياس ضغط العين
+Procedures | Operating room fees - Advanced | فتح غرفة العمليات - متقدمة
+Procedures | Operating room fees - Major | فتح غرفة العمليات - كبري
+Procedures | Operating room fees - Minor | فتح غرفة العمليات - صغري
+Procedures | Operating room fees - Moderate | فتح غرفة العمليات - متوسطة
+Procedures | Operating room fees - Simple | فتح غرفة العمليات - بسيطة
+Procedures | Operating room fees - Special nature | فتح غرفة العمليات - طابع خاص
+Procedures | Operating room fees - Special skill | فتح غرفة العمليات - مهارة
+Procedures | Orthopedic PRP | حقن موضعي عظام مفاصل باستخدام البلازما
+Procedures | Over Wight Fees (120 Km- 140 Km) | رسوم إضافية للوزن الزائد () 120كيلو - 140 كيلو)
+Procedures | Over Wight Fees (140 Km-160 Km) | رسوم إضافية للوزن الزائد () 140كيلو - كيلو160 )
+Procedures | P 17 deletion | 
+Procedures | PED SPECIALIST CALL TO THE DELIVARY ROOM | استدعاء أخصائي الأطفال لغرفة الولادة
+Procedures | PTC Extraction | ازاله حبوṿ بجفن العين
+Procedures | PTC Extraction Both Eyes | ازاله حبوṿ للعينين
+Procedures | Pace-Maker Follow up (double) | متابعة بمنظم ضربات القلب (ثنائي)
+Procedures | Pace-Maker Follow up (single) | متابعة بمنظم ضربات القلب (أحادي)
+Procedures | Pace-Maker Follow up (triple) | متابعة بمنظم ضربات القلب (ثلاثي)
+Procedures | Pace-Maker follow up (Double) | متابعة بمنظم ضربات القلب (ثنائي)
+Procedures | Pace-Maker follow up (Triple) | متابعة بمنظم ضربات القلب (ثلاثي)
+Procedures | Pace-Maker follow up (single) | متابعة بمنظم ضربات القلب (أحادي)
+Procedures | Pacemaker (CRT) Programming | () CRTبرمجة منظم ضربات القلب
+Procedures | Pacemaker Programming | برمجه جهاز تنظيم ضربات القلب
+Procedures | Pack Insertion | تركيب فتيل
+Procedures | Paracentesis | اجراء بذل تجمع سائل في البطن
+Procedures | Partial Removal Of The Uvula | استئصال جزئي اللهاة
+Procedures | Patent Ductus Arterioses Closure (PDA) | غلق ثقب بين الشريان الأورطي و الرئوي
+Procedures | Pathology Frozen Section During Operation by Consultant | اجراء أخذ مقطع تجميدي أثناء عملية بواسطة استشاري
+Procedures | Peace Maker Programming | برمجة جهاز تنظيم ضربات القلب
+Procedures | Peak Flow Meter (manual) / Spirometry | قياس وظائف التنفس (يدوي)
+Procedures | Ped Specialist Call To The Deli- Vary Room | استدعاء اخصائي الاطفال لغرفة الولادة
+Procedures | Pediatric Long Line Insertion | تركيب انبوب وريدي طويل
+Procedures | Pericardiocentesis | بذل من تامور القلب
+Procedures | Peritoneal Diaylsis Session | جلسة غسيل بريتوني
+Procedures | Pharyngeal Suction | تشفيط من البلعوم
+Procedures | Phototherapy Capsule / 8 Hour | كبسولة علاج ضوئي /8 ساعات
+Procedures | Phototherapy Capsule / Hour | كبسولة علاج ضوئي / ساعة
+Procedures | Phototherapy Capsule /Day | كبسولة علاج ضوئي / اليوم
+Procedures | Phototherapy Capsule/Hour | كبسولة علاج ضوئي / الساعه
+Procedures | Piercing Of Both Ears | خرم الأذن
+Procedures | Piercing of both ears | ثقب الاذنين
+Procedures | Pig Tail insertion | تركيب بيج تيل
+Procedures | Plasma Pharesis Package | باكدج جلسه فصل البلازما
+Procedures | Plasma Pharesis Procedure | اجراء فصل بلازما
+Procedures | Plasma Skin Treatment (3 sessions) | علاج البشرة بالبلازما () 3جلسات)
+Procedures | Plasma Skin Treatment With Centrifuge (One Session) | علاج البشرة بالبلازما - جلسة واحدة بجهاز الطرد المركزي
+Procedures | Plastic Surgery Dressing (Large) | غيار كبير علي جروح تجميلية
+Procedures | Plastic Surgery Dressing (Medium) | غيار وسط علي جروح تجميلية
+Procedures | Plastic Surgery Dressing (Small) | غيار صغير علي جروح تجميلية
+Procedures | Plastic Surgery Dressing (large) | كبير علي جروح تجميلية غيار
+Procedures | Plastic Surgery Dressing (medium) | غيار وسط علي جروح تجميلية
+Procedures | Plastic Surgery Dressing (small) | غيار صغير علي جروح تجميلية
+Procedures | Plastic Surgery Stitches (Less Than 2Cm) | غرز تجميلية لجرح أقل من 2 سم
+Procedures | Plastic Surgery Stitches (More Than 5Cm) | غرز تجميلية لجرح أكثر من 5 سم
+Procedures | Plastic Surgery Stitches (less than 2cm) | غرز تجميلية لجرح أقل من 2 سم
+Procedures | Plastic Surgery Stitches (more than 5cm) | غرز تجميلية لجرح أكثر من 5 سم
+Procedures | Plastic Surgery Stitches Between (2Cm- 5Cm) | غرز تجميلية لجرح ما بين سم-5سم
+Procedures | Plastic Surgery Stitches between (2cm-5cm) | لجرح ما بين غرز تجميلية سم 5 2 سم
+Procedures | Plastic surgery dressing | غيار علي جروح تجميلية
+Procedures | Plastic surgery dressing (Large) | غيار كبير علي جروح تجميلية
+Procedures | Plastic surgery dressing (Medium) | غيار وسط علي جروح تجميلية
+Procedures | Plastic surgery dressing (Small) | غيار صغيرعلي جروح تجميلية
+Procedures | Plastic surgery stitches (less than 2cm) | غرز تجميليه لجرح اقل من 2 سم
+Procedures | Plastic surgery stitches (more than 5cm) | غرز تجميليه لجرح اكثر من 5 سم
+Procedures | Plastic surgery stitches between (2cm- 5cm) | غرز تجميليه لجرح مابين 2 سم5-سم
+Procedures | Plastic surgery stitches between (2cm-5cm) | غرز تجميليه لجرح مابين 2 سم 5- سم
+Procedures | Pleurodesis | حقن بلوري
+Procedures | Porta Cath Insertion Intervention Radiology | تركيب جهاز بورت كاث
+Procedures | Porta Cath Removal | اجراء رفع بورتاكاث
+Procedures | Portable Ultrasound Usage in ER | رسم استخدام جهاز الموجات فوق الصوتية المحمول في الطوارئ
+Procedures | Post Coital Test | اختبار ما بعد الجماع
+Procedures | Posterior Nasal Packing | حشو انف خلفي
+Procedures | Power liposuction usage fees | رسم استخدام جهاز شفط الدهون باور
+Procedures | Prostate Biopsy By U/S | سحب عينة من البروستاتا باستخدام الموجات فوق الصوتية
+Procedures | Psychotherapy Session- 1 Hr. | جلسة تأهيل نفسي (لمدة ساعة )
+Procedures | Psychotherapy Session- 1 hr. | جلسة تأهيل نفسي لمدة ساعة )
+Procedures | Psychotherapy Session- Extra Time | جلسة تأهيل نفسي وقت إضافي )
+Procedures | Psychotherapy session- 1 hr | جلسة تئهيل نفسي (لمدة ساعة )
+Procedures | Psychotherapy session-1 hr | جلسة تأهيل نفسي لمدة ساعة )
+Procedures | Ptc Extraction | إزالة حبوب بجفن العين
+Procedures | Ptc Extraction Both Eyes | إزالة حبوب للعينين
+Procedures | Pulmonary Function Test (Computerized Spirometry) | قياس كفاءة الرئتين بالكمبيوتر
+Procedures | Pulmonary Function Test (computerized spirometry) | قياس كفاءة الرئتين بالكمبيوتر
+Procedures | RBC Irradiation | خدمة اشعاع لكرات الدم الحمراء
+Procedures | Reduction Of Dislocated Joint | رد خلع بالمفصل
+Procedures | Reduction of dislocated joint procedure | اجراء رد خلع بالمفصل
+Procedures | Reduction of dislocated joint procedure Without Aneathesia | اجراء رد خلع بالمفصل بدون تخدير
+Procedures | Reflex Auditory | مقياس الانعكاس الصوتي
+Procedures | Regular H-C / 12 Нг. | رعاية تمريضية منزلية 12 ساعة
+Procedures | Regular H-C / 24 Нг. | رعاية تمريضية منزلية 24 ساعة
+Procedures | Regular Package 12 hours | الباقة العادية 12 ساعة
+Procedures | Regular Package 24 hours | الباقة العادية 24 ساعة
+Procedures | Regular Ventilator For Neonates / Day | جهاز تنفس صناعي عادي للاطفال / اليوم
+Orthopedics | Removal Of Cast | ازاله جبس
+Procedures | Removal Of Chest Tube | رفع أنبوبة صدر
+Procedures | Removal Of Clip Stitches | رفع غرز كلبسات
+Orthopedics | Removal Of Clip stitches | رفع غرز كلبسات
+Procedures | Removal Of Corneal Foreign Body | ازاله رايش او جسم غريب بالقرنية
+Procedures | Removal Of Foley Catheter by US | إزالة قسطرة فولي باستخدام الموجات الصوتية
+Procedures | Removal Of Nasogastric Tube | رفع أنبوبة معدة
+Procedures | Removal Of Portacath Needle | رفع سن بورت كاث
+Procedures | Removal Of Urinary Catheter | إزالة قسطرة بولية
+Procedures | Removal Of Wire | إزالة سلك معدني
+Orthopedics | Removal Of wire | إزالة سلك معدني
+Orthopedics | Removal of Clip stitches | رفع غرز كلبسات
+Procedures | Removal of Foley Catheter by U/S | ازالة قسطرة فولي باستخدام الموجات الصوتية
+Procedures | Removal of Nasogastric Tube | اجراء رفع أنبوبة معدة
+Procedures | Removal of Urinary Catheter | ازالة قسطرة بولية
+Orthopedics | Removal of wire | ازالة سلك معدني
+Procedures | Repetitive Nerve Stimulation Testing-Extended | اختبار تحفيز العصب المتكرر - مطول
+Procedures | Repetitive Nerve Stimulation Testing-Simple | اختبار تحفيز العصب المتكرر - بسيط
+Procedures | Repositioning Maneuver For Vertigo | اختبار دوار الرأس بإعادة التحرك
+Procedures | Repositioning Manouver For Vertigo | اختبار دوار الرأس بإعادة التحرك
+Procedures | Repositioning Manouver for Vertigo | اختبار دوار الرأس باعادة التحرك
+Procedures | Repositioning Of Pacemaker | اعادة تعديل جهاز منظم ضربات القلب
+Procedures | Resectoscope & Loop Usage Fees | رسم استخدام مقطع أنسجة البروستاتا و أورام المثانة
+Procedures | Reservoir Tapping | بذل من الجزء الأوسط من الصمام الثلاثي
+Procedures | Residual Volume & Bladder Capacity Calculation | قياس سعه المثانة
+Procedures | SINGLE PHOTOTHERAPY FOR NEONATES / DAY | العلاج الضوئي الفردي لحديثي الولادة / يوم
+Procedures | SINGLE PHOTOTHERAPY FOR NEONATES/12 Η | العلاج الضوئي الفردي لحديثي الولادة /12 س
+Procedures | STYE I&D | فتح خراج في جفن العين
+Procedures | STYE Incison & Drainage | فتح خراج في جفن العين
+Procedures | Sacroiliac Epidural Injection | حقن الفقرات العجزية
+Procedures | Scaphoid Cast | جبس زورقي
+Orthopedics | Scaphoid Cast Adult | جبس زورقي كبار
+Orthopedics | Scaphoid Cast Pediatric | جبس زورقي اطفال
+Procedures | Sclerotherapy Of Varicose Veins | حقن دوالي مرة واحدة)
+Procedures | Sclerotherapy Of Varicose Veins (Repeated) | حقن دوالي الساق (متكرر)
+Procedures | Sclerotherapy Of Varicose Veins (repeated) | حقن دوالي الساق (متكرر)
+Procedures | Sclerotherapy of Varicose Veins | حقن دوالي الساق العميقه
+Procedures | Sclerotherapy of Varicose Veins(Repeated) | حقن دوالي الساق (متكرر)
+Procedures | Semen analysis By CASA | 
+Procedures | Sensitivity Test (Excluding Extra Procedures Taken In Case Of Actual Sensitivity Reaction) | اختبار حساسية (غير متضمن إجراءات علاج الحساسية في حالة ظهورها)
+Procedures | Sensitivity Test (excluding extra procedures taken in case of actual sensitivity reaction) | اختبار حساسية غير متضمن إجراءات علاج الحساسية في حالة ظهورها)
+Procedures | Senstivity Test (Excluding extra procedures taken in case of actual senstivity reaction) | اختبار حساسيه (غير متضمن إجراءات علاج الحساسية في حالة ظهورها)
+Orthopedics | Shoulder Spica | جاكيت جبس
+Orthopedics | Shoulder Spika | جاكيت جبس
+Procedures | Silver Program Price 2024 | 
+Procedures | Simple Fracture Reduction In Er | إجراء رد كسر بسيط بالطوارئ
+Procedures | Simple Fracture Reduction in ER | رد كسر بسيط بالطوارئ
+Procedures | Simple Fracture Reduction in ER Without Aneathesia | اجراء رد كسر بسيط بالطواريء بدون تخدير
+Procedures | Simple NCS/EMG 1 upper limb | رسم عصب /تخطيط عضلات بسيط طرف علوي واحد
+Procedures | Simple NCS/EMG for both upper limbs | رسم عصب /تخطيط عضلات بسيط طرفين علويين
+Procedures | Single Blood Transfusion Procedure (Not Including Single Blood Bag) | اجراء نقل كيس دم غير متضمن ثمن كيس الدم)
+Procedures | Single Limb E.M.G | تخطيط عضلات طرف واحد
+Procedures | Single Limb Nerve Conduction | رسم عصب كامل طرف واحد
+Procedures | Single Phototherapy For Neonates / 12 Hr. | العلاج الضوئي الفردي لحديثي الولادة / 12 ساعة
+Procedures | Single Phototherapy For Neonates / Day | العلاج الضوئي الفردي لحديثي الولادة / يوم
+Procedures | Single Phototherapy For Neonates/12 Нг. | العلاج الضوئي الفردي لحديثي الولادة / 12 ساعة
+Procedures | Single Training Session | جلسة تدريب فردي
+Procedures | Single limb E.M.G | تخطيط عضلات كامل طرف واحد
+Procedures | Single upper limb E.M.G | تخطيط عضلات كامل (طرف واحد علوي)
+Orthopedics | Skin Traction | شده جلديه للعظام
+Procedures | Sleep Study | دراسة النوم
+Procedures | Sleeping Disorder Test (Night) | اختبار اضطرابات النوم / ليلا
+Procedures | Sleeping Study | دراسة النوم
+Procedures | Small Dressing | غيار صغير
+Procedures | Somatosensory Evoked Potential (SSEP) | جهد حسي للعضلات
+Procedures | Special Nature Medication IV Administration, (Not Including Medication Price) | حقن أدوية ذات طابع خاص غير متضمنة أدوية الكيماوي والحديد الوريدي)
+Procedures | Special Nature Medication IV Adminstration, E.g Iron …etc (Not Including Chemotherapy Medication) | اجراء حقن وريدي أدوية ذات طابع خاص مثال و ليس للحصر الحديد (غير متضمنة أدوية الكيماوي)
+Procedures | Special Nature Medication Iv Administration,( Not Including Medication Price) | حقن أدوية ذات طابع خاص (غير متضمنة سعر الأدوية)
+Procedures | Specialist Doctor Plus 12 hours | دكتور أخصائي ( بلس ) 12 ساعة
+Procedures | Specialist Doctor Plus 24 hours | دكتور أخصائي ( بلس ) 24 ساعة
+Procedures | Specialized surgeries medical team - Anesthesia (Major) | أتعاب الأطباء للجراحات التخصصية - التخدير (كبري)
+Procedures | Specialized surgeries medical team - Anesthesia (Minor) | أتعاب الأطباء للجراحات التخصصية - التخدير (صغري)
+Procedures | Specialized surgeries medical team - Anesthesia (Moderate) | أتعاب الأطباء للجراحات التخصصية - التخدير (متوسطة)
+Procedures | Specialized surgeries medical team - Anesthesia (Special nature) | أتعاب الأطباء للجراحات التخصصية - التخدير (طابع خاص)
+Procedures | Specialized surgeries medical team - Anesthesia (Special skill) | أتعاب الأطباء للجراحات التخصصية - التخدير (مهارة)
+Procedures | Specialized surgeries medical team - Assistant (Major) | أتعاب الأطباء للجراحات التخصصية - المساعد (كبري)
+Procedures | Specialized surgeries medical team - Assistant (Minor) | أتعاب الأطباء للجراحات التخصصية - المساعد (صغري)
+Procedures | Specialized surgeries medical team - Assistant (Moderate) | أتعاب الأطباء للجراحات التخصصية - المساعد (متوسطة)
+Procedures | Specialized surgeries medical team - Assistant (Special nature) | أتعاب الأطباء للجراحات التخصصية - المساعد (طابع خاص)
+Procedures | Specialized surgeries medical team - Assistant (Special skill) | أتعاب الأطباء للجراحات التخصصية - المساعد (مهارة)
+Procedures | Specialized surgeries medical team - Surgeon (Major) | أتعاب الأطباء للجراحات التخصصية - الجراح (كبري)
+Procedures | Specialized surgeries medical team - Surgeon (Minor) | أتعاب الأطباء للجراحات التخصصية - الجراح (صغري)
+Procedures | Specialized surgeries medical team - Surgeon (Moderate) | أتعاب الأطباء للجراحات التخصصية - الجراح (متوسطة)
+Procedures | Specialized surgeries medical team - Surgeon (Special nature) | أتعاب الأطباء للجراحات التخصصية - الجراح (طابع خاص)
+Procedures | Specialized surgeries medical team - Surgeon (Special skill) | أتعاب الأطباء للجراحات التخصصية - الجراح (مهارة)
+Procedures | Specialized surgeries medical team - Total (Major) | أتعاب الأطباء للجراحات التخصصية - الإجمالي (كبري)
+Procedures | Specialized surgeries medical team - Total (Minor) | أتعاب الأطباء للجراحات التخصصية - الإجمالي (صغري)
+Procedures | Specialized surgeries medical team - Total (Moderate) | أتعاب الأطباء للجراحات التخصصية - الإجمالي (متوسطة)
+Procedures | Specialized surgeries medical team - Total (Special nature) | أتعاب الأطباء للجراحات التخصصية - الإجمالي (طابع خاص)
+Procedures | Specialized surgeries medical team - Total (Special skill) | أتعاب الأطباء للجراحات التخصصية - الإجمالي (مهارة)
+Procedures | Speech Discrimination | اختبار تفسير الكلام
+Procedures | Speech Discrimination Test | اختبار تفسير الكلام
+Procedures | Speech Session | جلسة تخاطب
+Procedures | Speech Valve Replacement For Laryngectomy Patients | تبديل صمام كلام لمرضي الاستئصال الحنجري
+Procedures | Speech session | جلسة تخاطب
+Procedures | Spider Veins (large area) | إزالة الشعيرات الدموية منطقة كبيرة)
+Procedures | Spider Veins (medium area) | إزالة الشعيرات الدموية (منطقة متوسطة)
+Procedures | Spider Veins (small area) | إزالة الشعيرات الدموية منطقة صغيرة)
+Procedures | Spinal Cord Half Anesthesia | تخدير نصفي للنخاع الشوكي
+Procedures | Stelara II infusion | )Stelara( حقن وريدي
+Procedures | Stitch Removal | فك غرز جراحية
+Procedures | Stitch removal | رفع غرز
+Procedures | Stress E.C.G | رسم قلب بالمجهود
+Procedures | Stress ECG | رسم قلب بالمجهود
+Procedures | Stroke Team Call | استدعاء فريق الجلطه
+Procedures | Stroke Team Calling Fees Per Physician | استدعاء فريق الجلطة للطبيب الواحد
+Procedures | Stye Incision & Drainage | فتح خراج في جفن العين
+Procedures | Subcutaneous Injection (S.C Inj) | حقن تحت الجلد
+Procedures | Subcutaneous Injection (S.C inj) | حقن تحت الجلد
+Procedures | Subcutanous Injection (S.C inj) | اجراء حقن تحت الجلد
+Procedures | Suction Therapy | اجراء علاج بالشفط
+Procedures | Superfacial sclerotherapy of Varicose Veins | حقن دوالي الساق السطحية
+Procedures | Superficial Sclerotherapy Of Varicose Veins | حقن دوالي الساق العميقة
+Procedures | Superficial sclerotherapy of Varicose Veins | حقن دوالي آورده الساق السطحية
+Procedures | Suprapubic Urinary Catheterization | تركيب قسطرة فوق العانة خلال المثانة
+Procedures | Surgical Microscope For Each 1/2 Hour Usage Fees | رسم استخدام الميكروسكوب الجراحي غير شامل الجراب لكل نصف ساعة
+Procedures | Surgical Microscope Usage Fees/Hour | رسم استخدام الميكروسكوب الجراحي غير شامل الجراب لكل ساعة
+Procedures | Surgical Stitches / First Stitch | غرز جراحية / الغرزة الأولي
+Procedures | Surgical Stitches / Stitch After First Stitch | غرز جراحية / كل غرزة بعد الغرزة الأولي
+Procedures | Surgical Stitches 5 CM-10 CM | غرز جراحية من 5 سم حتي 10 سم
+Procedures | Surgical Stitches Less Than 5 CM | غرز جراحية أقل من 5 سم
+Procedures | Surgical Stitches More Than 10cm | غرز جراحية أكبر من 10 سم
+Procedures | Surgical stitches (between 5-10 cm) | غرز جراحيه ما بين 10-5سم
+Procedures | Surgical stitches (less than 5cm) | غرز جراحيه اقل من 5 سم
+Procedures | Surgical stitches more than 10cm | غرز جراحيه اكثر من 10 سم
+Procedures | Surgical stitches( more than 10cm) | غرز جراحيه اكثر من 10 سم
+Procedures | Surgical stitches(more than 10cm) | غرز جراحيه اكثر من 10 سم
+Procedures | Systemizing Quotient (SQ) Test | تقيم معامل التنظيم و المنهجيه
+Procedures | TAB Block Procedure | اجراء تاṿ بلوك
+Procedures | TMJ Reduction (Tempanomandibular Joint) Without Aneathesia | اجراء رد جانبين المفصل الصدغي الفكي بدون تخدير
+Procedures | TPA Administration (not including the TPA medication) | إعطاء مذيب الجلطات بدون سعر الدواء)
+Procedures | TPA adminstration (not including the TPA medication) | اجراء اعطاء مذيب الجلطات (بدون سعر الدواء)
+Procedures | TRIPLE PHOTOTHERAPY FOR NEONATES/12H | العلاج الضوئي الثلاثي لحديثي الولادة / 12 س
+Procedures | TRIPLE PHOTOTHERAPY FOR NEONATES/DAY | العلاج الضوئي الثلاثي لحديثي الولادة / يوم
+Procedures | Tab Block Procedure | إجراء تاب بلوك
+Procedures | Temporary Double Lumen HD Catheter Insertion | تركيب قسطرة مزدوجة مؤقتة للغسيل الكلوي
+Procedures | Temporary Double Lumen Hd Catheter Insertion | تركيب قسطرة مزدوجة مؤقته للغسيل الكلوي
+Procedures | Temporary Pacemaker Insertion | تركيب منظم ضربات القلب مؤقت
+Procedures | Temporary pacemaker Insertion | تركيب منظم ضربات قلب مؤقت
+Procedures | Therapeutic Cardiac Cathetarization With Balloon Diltation | القسطرة العلاجية توسيع بالبالون) + تركيب دعامة
+Procedures | Therapeutic Hysteroscope Usage Fees | رسم استخدام منظار تجويف رحم علاجي
+Procedures | Therapeutic Tilting Table Usage Fees In ER | رسم استخدام المنضدة المائلة العلاجية
+Procedures | Thoracic epidural Injection | حقن الفقرات الصدرية
+Procedures | Tie Tongue | فك لسان مربوط
+Procedures | Tonsillar Swap | مسحة من اللوزتين
+Procedures | Tpa Administration (Not Including The Tpa Medication) | إعطاء مذيب الجلطات (بدون سعر الدواء)
+Procedures | Trans-Catheter Aortic Valve Implantation (TAVI) | تغير الصمام الأورطي عن طريق القسطرة
+Procedures | Transcranial Doppler (TCD) | أشعة صوتية علي شرايين المخ
+Procedures | Transcranial Magnetic Stimulation (TMS) / Session | التحفيز المغناطيسي علي الجمجمة / جلسة
+Procedures | Transcranial Magnetic Stimulation (TMS)/Session | التحفيز المغناطيسي علي الجمجمة / جلسة
+Procedures | Transesophageal Echocardiography | موجات فوق صوتية علي القلب عن طريق المريء
+Procedures | Transvaginal Ultrasound | موجات فوق صوتية عن طريق المهبل
+Procedures | Trauma Team Call | استدعاء فريق الحوادث بالكامل
+Procedures | Trauma Team Call Per Physician | استدعاء فريق الحوادث للطبيب الواحد
+Procedures | Trigeminal NCS | رسم عصب للعصب توأمي ثلاثي
+Procedures | Triple Phototherapy For Neonates / 12 Hr. | العلاج الضوئي الثلاثي لحديثي الولادة / 12 ساعة
+Procedures | Triple Phototherapy For Neonates / 12 Нг. | العلاج الضوئي الثلاثي لحديثي الولادة / 12 ساعة
+Procedures | Triple Phototherapy For Neonates / Day | العلاج الضوئي الثلاثي لحديثي الولادة / يوم
+Procedures | Tympanometry | قياس ضغط اذن
+Procedures | U.S guided CVP insertion of catheter | اجراء ادخال قسطرة الضغط الوريدي المركزي باستخدام جهاز الموجات فوق الصوتية
+Procedures | U.S guided Insertion of Cannula | اجراء تركيب كانيولا إسترشادا بالموجات الصوتية
+Procedures | U/S Examination of Urinary Tract In Urology Clinic | فحص بالموجات صوتية علي مجري البول في عيادة المسالك
+Procedures | U/S Guided Lumbar drain insertion | اجراء تركيب درنقه بالظهر بالاشعه التليفزيونيه
+Procedures | U/S Guided Pig Tail insertion | اجراء تركيب يج تيل بالاشعه التليفزيونيه
+Procedures | U/S Guided Pleural Biopsy | اخذ عينه من الغشاء البلوري بالاشعه التليفزيونيه
+Procedures | U/S Guided Redivac Insertion | اجراء تركيب درنقه رديفاك بالاشعه التليفزيونيه
+Procedures | U/S In Ob & Gyn Clinic | اشعة تليفزيونيه في عياده النساء والتوليد
+Procedures | US Abdomen and Pelvis | موجات فوق صوتية علي البطن والحوض
+Procedures | US Guided CVP Insertion Of Catheter | إدخال قسطرة الضغط الوريدي المركزي باستخدام جهاز الموجات فوق الصوتية
+Procedures | UV Light Therapy Session | جلسة أشعة فوق بنفسجية
+Procedures | Ultrasound Guided Percutaneous Nephrostomy Insertion | تركيب قسطرة علي الكلي باستخدام الاشعة التداخلية
+Procedures | Umbilical Catheter Removal | رفع قسطرة سرة
+Procedures | Ureteral Dilatation Under Local Anesthesia | توسيع مجري البول باستخدام مخدر موضعي
+Procedures | Ureteroscope Usage Fees | رسم استخدام منظار الحالب
+Procedures | Uretheral Dilataion under local anasthesia | توسيع مجري البول بأستخدام مخدر موضعي
+Procedures | Urethral Dilatation & Insertion Of Urinary Catheter | تركيب قسطره بولية بعد توسيع مجري البول
+Procedures | Urethral Dilatation by urologist | اجراء توسيع المجري البولي بواسطة أخصائي المسالك
+Procedures | Urodynamic Full Study | دراسة متكاملة لديناميكية التبول
+Procedures | Uroflowmetry Study | قياس تدفق البول
+Procedures | Us Abdomen And Pelvis | سونار في عيادة النساء والتوليد
+Procedures | Us Examination Of Urinary Tract In Urology Clinic | فحص بالموجات صوتية علي مجري البول
+Procedures | VSD | ثقب بطيني
+Procedures | Vaccination (Without Cost Of Vaccine) | إعطاء التطعيم (بدون ثمن التطعيم)
+Procedures | Vaccination (without cost of vaccine) | التطعيمات (بدون ثمن التطعيم )
+Procedures | Vaginal Wet Swap | أخذ مسحه من المهبل
+Procedures | Vaginal Wet Swear | اخذ مسحه من المهبل
+Procedures | Valvuloplasty Operation Package | باكدج عملية تغيير أو إصلاح صمام
+Procedures | Vein viewer Usage | رسم استخدام مظهر الأوردة
+Procedures | Ventricular Septal Defect Closure (VSD) | غلق ثقب بين بطينين
+Procedures | Video Laryngoscope Usage Fees | رسم استخدام منظار الحنجرة بالفيديو
+Procedures | Vision Examination | قياس النظر
+Procedures | Visual Evoked Response (VER) | فحص الاستجابة الكهربائية البصرية المستثارة
+Procedures | Vocal Cord Function Assessment | تقيم كفاءه الاحبال الصوتيه
+Procedures | WOUND DEBRIDEMENT | تنظيف جرح
+Procedures | WOUND VACCUM | غيار علي جرح بالفاكيوم
+Procedures | Within Window Period For TPA | داخل نافذة وقت اعطاء مذيب الجلطات
+Procedures | Women Wellness -Solo Session | جلسه لصحة المرأة جماعي
+Procedures | Wound Cleaning | تنظيف جرح
+Procedures | Wound Debridement | تنظيف جرح
+Procedures | Wound Vaccum | غيار علي جرح بالفاكيوم
+Procedures | Wound Vacuum | غيار علي جرح بالفاكيوم
+Orthopedics | Wrist SLAB | سلاب معصم
+Orthopedics | Wrist Slab | سلاب معصم
+Procedures | X - Ray Both Heels | أشعة علي عظام الكعب
+Procedures | X - Ray Chest (AP&LAT) | أشعة علي الصدر (وضعين)
+Procedures | X - Ray KUB | أشعة علي المسالك البولية
+Procedures | extra limb N.C.V/EMG | طرف إضافي ( رسم عصب / تخطيط عضلات
+Procedures | nerve conduction for one nerve | رسم عصب لعصب واحد
+Procedures | nerve conduction for one nerve (after the first nerve) | رسم عصب بعد العصب الأول
