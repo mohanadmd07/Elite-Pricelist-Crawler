@@ -390,7 +390,7 @@ function isAccommodationOrGenericFee(name) {
   return /\b(bed|room|accommodation|stay|icu day|ccu day|nursing|care unit)\b/i.test(n) || /إقامة|اقامة|سرير|عناية مركزة|رعاية مركزة|رسم دخول|رسوم فتح ملف|كشف طوارئ|استشارة|مرور طبيب/i.test(a);
 }
 function extractRefusalReason(snippet) {
-  if (!snippet) return "\u063A\u064A\u0631 \u0645\u063A\u0637\u0649";
+  if (!snippet || !snippet.trim()) return "";
   const norm = snippet.normalize("NFKC").toLowerCase().replace(/[إأآ]/g, "\u0627").replace(/ة/g, "\u0647");
   if (norm.includes("\u0645\u0639\u0645\u0644 \u062E\u0627\u0631\u062C\u064A") || norm.includes("\u0637\u0631\u0641 \u0627\u0644\u062A\u0639\u0627\u0642\u062F \u0648\u0627\u0644\u0645\u0631\u064A\u0636 \u0641\u064A \u0645\u0639\u0645\u0644 \u062E\u0627\u0631\u062C\u064A")) {
     return "\u062A\u0646\u0633\u064A\u0642 \u0627\u0644\u062A\u062D\u0644\u064A\u0644 \u0628\u0645\u0639\u0645\u0644 \u062E\u0627\u0631\u062C\u064A";
@@ -615,7 +615,7 @@ ${line2}
     const refusalReason = extractRefusalReason(
       record.statusReasonArabic || record.refusalSnippet || record.coverageConditions
     );
-    line3 = `*\u062A\u0645 \u0631\u0641\u0636 \u0637\u0644\u0628 \u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0629 \u0639\u0644\u0649: ${procText} (${refusalReason})*`;
+    line3 = refusalReason ? `*\u062A\u0645 \u0631\u0641\u0636 \u0637\u0644\u0628 \u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0629 \u0639\u0644\u0649: ${procText} (${refusalReason})*` : `*\u062A\u0645 \u0631\u0641\u0636 \u0637\u0644\u0628 \u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0629 \u0639\u0644\u0649: ${procText}*`;
   } else {
     let actionPrefix = "";
     if (procText.startsWith("\u0633\u062D\u0628") || procText.startsWith("\u0639\u0645\u0644") || procText.startsWith("\u062A\u0631\u0643\u064A\u0628") || procText.startsWith("\u0627\u062C\u0631\u0627\u0621") || procText.startsWith("\u0625\u062C\u0631\u0627\u0621")) {

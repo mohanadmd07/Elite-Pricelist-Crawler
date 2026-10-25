@@ -454,7 +454,7 @@ export function extractOriginalRequestDate(html: string, text?: string): Date | 
  * Extracts a concise, normalized refusal reason or instruction from text or notes.
  */
 export function extractRefusalReason(snippet?: string): string {
-  if (!snippet) return 'غير مغطى';
+  if (!snippet || !snippet.trim()) return '';
   const norm = snippet
     .normalize('NFKC')
     .toLowerCase()

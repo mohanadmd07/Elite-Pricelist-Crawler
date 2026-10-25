@@ -338,7 +338,9 @@ export function generateCmWhatsappMessage(record: InpatientApprovalRecord): stri
     const refusalReason = extractRefusalReason(
       record.statusReasonArabic || record.refusalSnippet || record.coverageConditions
     );
-    line3 = `*تم رفض طلب الموافقة على: ${procText} (${refusalReason})*`;
+    line3 = refusalReason
+      ? `*تم رفض طلب الموافقة على: ${procText} (${refusalReason})*`
+      : `*تم رفض طلب الموافقة على: ${procText}*`;
   } else {
     let actionPrefix = '';
     if (
