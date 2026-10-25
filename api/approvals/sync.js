@@ -1604,6 +1604,151 @@ async function persistApprovalToPostgres(record) {
   }
 }
 
+// src/firebase.ts
+import { initializeApp } from "firebase/app";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut
+} from "firebase/auth";
+import {
+  initializeFirestore,
+  persistentLocalCache,
+  persistentMultipleTabManager,
+  memoryLocalCache,
+  getFirestore,
+  doc,
+  setDoc,
+  deleteDoc,
+  collection,
+  addDoc,
+  query,
+  orderBy,
+  limit,
+  getDocs,
+  writeBatch,
+  serverTimestamp
+} from "firebase/firestore";
+var getEnvVar = (key) => {
+  if (typeof import.meta !== "undefined" && import.meta.env && import.meta.env[key]) {
+    return String(import.meta.env[key]).trim();
+  }
+  if (typeof process !== "undefined" && process.env && process.env[key]) {
+    return String(process.env[key]).trim();
+  }
+  return "";
+};
+var firebaseConfig = {
+  apiKey: getEnvVar("VITE_FIREBASE_API_KEY"),
+  authDomain: getEnvVar("VITE_FIREBASE_AUTH_DOMAIN"),
+  projectId: getEnvVar("VITE_FIREBASE_PROJECT_ID"),
+  storageBucket: getEnvVar("VITE_FIREBASE_STORAGE_BUCKET"),
+  messagingSenderId: getEnvVar("VITE_FIREBASE_MESSAGING_SENDER_ID"),
+  appId: getEnvVar("VITE_FIREBASE_APP_ID"),
+  firestoreDatabaseId: getEnvVar("VITE_FIREBASE_DATABASE_ID") || void 0
+};
+var useEnv = Boolean(firebaseConfig.apiKey && firebaseConfig.apiKey.startsWith("AIzaSy"));
+console.log("Firebase Init Config Debug (Safe):", {
+  usingEnvOverrides: useEnv,
+  apiKeyLength: firebaseConfig.apiKey ? firebaseConfig.apiKey.length : 0,
+  apiKeyPrefix: firebaseConfig.apiKey ? firebaseConfig.apiKey.substring(0, 6) : "none",
+  projectId: firebaseConfig.projectId,
+  authDomain: firebaseConfig.authDomain,
+  firestoreDatabaseId: firebaseConfig.firestoreDatabaseId
+});
+var app = initializeApp(firebaseConfig);
+var auth = getAuth(app);
+function setupOptimizedFirestore() {
+  const isNode = typeof window === "undefined";
+  if (isNode) {
+    const nodeSettings = {
+      localCache: memoryLocalCache()
+    };
+    try {
+      if (firebaseConfig.firestoreDatabaseId) {
+        return initializeFirestore(app, nodeSettings, firebaseConfig.firestoreDatabaseId);
+      }
+      return initializeFirestore(app, nodeSettings);
+    } catch {
+      return firebaseConfig.firestoreDatabaseId ? getFirestore(app, firebaseConfig.firestoreDatabaseId) : getFirestore(app);
+    }
+  }
+  const multiTabSettings = {
+    localCache: persistentLocalCache({
+      tabManager: persistentMultipleTabManager()
+    }),
+    experimentalAutoDetectLongPolling: true
+  };
+  try {
+    if (firebaseConfig.firestoreDatabaseId) {
+      return initializeFirestore(app, multiTabSettings, firebaseConfig.firestoreDatabaseId);
+    }
+    return initializeFirestore(app, multiTabSettings);
+  } catch (err) {
+    console.warn("Persistent IndexedDB cache unavailable, falling back to memory cache:", err?.message || err);
+    try {
+      const memorySettings = {
+        localCache: memoryLocalCache(),
+        experimentalAutoDetectLongPolling: true
+      };
+      if (firebaseConfig.firestoreDatabaseId) {
+        return initializeFirestore(app, memorySettings, firebaseConfig.firestoreDatabaseId);
+      }
+      return initializeFirestore(app, memorySettings);
+    } catch {
+      return firebaseConfig.firestoreDatabaseId ? getFirestore(app, firebaseConfig.firestoreDatabaseId) : getFirestore(app);
+    }
+  }
+}
+var db = setupOptimizedFirestore();
+var googleProvider = new GoogleAuthProvider();
+
+// src/services/approvalFirestoreSync.ts
+import { doc as doc2, setDoc as setDoc2 } from "firebase/firestore";
+async function mirrorApprovalToFirestore(record) {
+  if (!db || !record.id) return;
+  try {
+    const docRef = doc2(db, "inpatient_approvals", record.id);
+    const firestorePayload = {
+      id: record.id,
+      messageId: record.messageId || null,
+      conversationId: record.conversationId || null,
+      receivedAt: record.receivedAt || (/* @__PURE__ */ new Date()).toISOString(),
+      patientName: record.patientName || "\u063A\u064A\u0631 \u0645\u0633\u062C\u0644",
+      mrn: record.mrn || "000000",
+      bed: record.bed || null,
+      admissionType: record.admissionType || "Inpatient",
+      physician: record.physician || null,
+      contractorRaw: record.contractorRaw || null,
+      contractorNormalized: record.contractorNormalized || null,
+      contractorOfficer: record.contractorOfficer || null,
+      priceListYear: record.priceListYear || "2025",
+      diagnosis: record.diagnosis || null,
+      requestedServices: record.requestedServices || [],
+      matchedProcedures: record.matchedProcedures || [],
+      financialTerms: {
+        patientSharePercentage: record.patientSharePercentage ?? -1,
+        approvedAmountLimit: record.approvedAmountLimit ?? -1,
+        creditLimitText: record.creditLimitText ?? null,
+        coverageConditions: record.coverageConditions ?? ""
+      },
+      status: record.status || "received",
+      statusReasonArabic: record.statusReasonArabic || null,
+      suggestedDraftReply: record.suggestedDraftReply || record.draftBody || null,
+      draftBody: record.draftBody || record.suggestedDraftReply || null,
+      cmWhatsappMessage: record.cmWhatsappMessage || null,
+      hasReplies: Boolean(record.hasReplies),
+      hasExistingApproval: Boolean(record.hasExistingApproval),
+      isRefused: Boolean(record.isRefused),
+      updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+    };
+    await setDoc2(docRef, firestorePayload, { merge: true });
+  } catch (err) {
+    console.warn(`[Firestore Mirror] Failed to mirror approval ${record.id}:`, err?.message || err);
+  }
+}
+
 // src/services/contractorOfficerResolver.ts
 import fs from "fs";
 import path2 from "path";
@@ -2154,6 +2299,34 @@ async function runMailSync(options) {
           console.error(`[Sync Engine] Failed to update approval ${existing.id}:`, updateError.message);
         } else {
           stats.messagesProcessed++;
+          await mirrorApprovalToFirestore({
+            id: existing.id,
+            conversationId: existing.conversation_id,
+            messageId: msg.messageId,
+            receivedAt: earliestReceivedAt,
+            patientName,
+            mrn,
+            bed,
+            admissionType,
+            physician,
+            contractorRaw,
+            contractorNormalized: contractorNormalized2,
+            contractorOfficer: contractorOfficer2,
+            priceListYear: priceListYear2,
+            diagnosis,
+            requestedServices,
+            matchedProcedures: matchedProcedures2,
+            status: updatedStatus,
+            hasReplies: true,
+            hasExistingApproval: hasApproval,
+            isRefused,
+            financialTerms: updatedFinancialTerms,
+            statusReasonArabic: updatedReplyText,
+            cmWhatsappMessage: cmWhatsappMessage2,
+            draftBody: draftBody2,
+            suggestedDraftReply: draftBody2,
+            draftedAt: existing.state_timestamps?.drafted_at || (/* @__PURE__ */ new Date()).toISOString()
+          });
         }
         continue;
       }
@@ -2246,6 +2419,7 @@ async function runMailSync(options) {
       const persistRes = await persistApprovalToPostgres(record);
       if (persistRes.success) {
         stats.messagesProcessed++;
+        await mirrorApprovalToFirestore(record);
       } else {
         console.warn(`[Sync Engine] Failed to persist approval ${msg.messageId}:`, persistRes.error);
       }

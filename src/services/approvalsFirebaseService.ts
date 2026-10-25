@@ -120,19 +120,17 @@ export function subscribeToApprovals(
   let isSubscribed = true;
   const fallbackUnsubscribers: Array<() => void> = [];
 
-  // 1. Initial fast-hydration from local watcher API if available
-  if (isLocalEnvironment()) {
-    getAuthHeaders().then((headers) => {
-      fetch('/api/approvals', { headers })
-        .then((res) => (res.ok ? res.json() : null))
-        .then((data) => {
-          if (Array.isArray(data) && isSubscribed) {
-            onUpdate(data.map((item) => normalizeApprovalRecord(item.id, item)));
-          }
-        })
-        .catch(() => {});
-    });
-  }
+  // 1. Initial fast-hydration from API (authoritative Supabase PostgreSQL source)
+  getAuthHeaders().then((headers) => {
+    fetch('/api/approvals', { headers })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (Array.isArray(data) && isSubscribed && data.length > 0) {
+          onUpdate(data.map((item) => normalizeApprovalRecord(item.id, item)));
+        }
+      })
+      .catch(() => {});
+  });
 
   // 2. Pure real-time stream via Firestore snapshot listener (no redundant 3s REST polling)
   const colRef = collection(db, APPROVALS_COLLECTION);

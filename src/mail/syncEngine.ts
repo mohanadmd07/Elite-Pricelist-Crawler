@@ -11,6 +11,7 @@ import { parseHisApprovalEmail, extractCleanReplyBody, cleanTextFromHtml } from 
 import { loadCursorFromPostgres, saveCursorToPostgres, triggerPhiRetentionPurge } from './storage/cursorManager';
 import { uploadAttachmentToStorage } from './attachments/attachmentHandler';
 import { persistApprovalToPostgres, toDeterministicUuid } from '../services/approvalPostgresService';
+import { mirrorApprovalToFirestore } from '../services/approvalFirestoreSync';
 import { resolveOfficerByContractor } from '../services/contractorOfficerResolver';
 import { cleanContractorName, normalizeArabic, normalizeText } from '../lib/arabic-normalizer';
 import { generateCmWhatsappMessage } from '../lib/whatsapp-generator';
@@ -327,6 +328,35 @@ export async function runMailSync(options?: {
           console.error(`[Sync Engine] Failed to update approval ${existing.id}:`, updateError.message);
         } else {
           stats.messagesProcessed++;
+          // Mirror immediately to Firestore for real-time UI synchronization
+          await mirrorApprovalToFirestore({
+            id: existing.id,
+            conversationId: existing.conversation_id,
+            messageId: msg.messageId,
+            receivedAt: earliestReceivedAt,
+            patientName,
+            mrn,
+            bed,
+            admissionType,
+            physician,
+            contractorRaw,
+            contractorNormalized,
+            contractorOfficer,
+            priceListYear,
+            diagnosis,
+            requestedServices,
+            matchedProcedures,
+            status: updatedStatus,
+            hasReplies: true,
+            hasExistingApproval: hasApproval,
+            isRefused,
+            financialTerms: updatedFinancialTerms,
+            statusReasonArabic: updatedReplyText,
+            cmWhatsappMessage,
+            draftBody,
+            suggestedDraftReply: draftBody,
+            draftedAt: existing.state_timestamps?.drafted_at || new Date().toISOString(),
+          } as any);
         }
         continue;
       }
@@ -434,10 +464,12 @@ export async function runMailSync(options?: {
         coverageConditions: parsed.financialTerms?.coverageConditions || parsed.cleanReplyBody,
       };
 
-      // Persist to Supabase PostgreSQL (Outbox trigger automatically enqueues event for Firestore)
+      // Persist to Supabase PostgreSQL (authoritative)
       const persistRes = await persistApprovalToPostgres(record);
       if (persistRes.success) {
         stats.messagesProcessed++;
+        // Mirror directly to Firestore for real-time UI synchronization
+        await mirrorApprovalToFirestore(record);
       } else {
         console.warn(`[Sync Engine] Failed to persist approval ${msg.messageId}:`, persistRes.error);
       }
