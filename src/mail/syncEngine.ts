@@ -204,9 +204,11 @@ export async function runMailSync(options?: {
         if (parsed.isRefused) {
           updatedStatus = 'refused';
           isRefused = true;
+          hasApproval = false;
         } else if (parsed.hasExistingApproval) {
           updatedStatus = 'answered';
           hasApproval = true;
+          isRefused = false;
         }
 
         const updatedApprovedLimit =

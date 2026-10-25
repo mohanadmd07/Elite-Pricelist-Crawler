@@ -56,6 +56,8 @@ export interface ParsedApprovalEmail {
   hasReplies: boolean;
   hasExistingApproval: boolean;
   isRefused: boolean;
+  isConditionalApproval?: boolean;
+  refusalReason?: string;
   statusReasonArabic?: string;
   cleanReplyBody?: string;
   isReplyMessage?: boolean;

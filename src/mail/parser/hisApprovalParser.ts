@@ -5,7 +5,7 @@
  */
 
 import * as cheerio from 'cheerio';
-import { cleanContractorName, stripSentFromSignatures } from '../../lib/arabic-normalizer';
+import { cleanContractorName, stripSentFromSignatures, extractRefusalReason } from '../../lib/arabic-normalizer';
 import { extractCleanProcedurePhrase } from '../../lib/whatsapp-generator';
 import { ParsedApprovalEmail, RawMailMessage } from '../types';
 
@@ -14,6 +14,53 @@ export const REFUSAL_KEYWORDS = [
   'غير مغطاه',
   'غير مغطاة',
   'غير مغطي',
+  'غير مغطيه',
+  'غير مغطية',
+  'غير مغطي تامينيا',
+  'غير مغطى تأمينيا',
+  'غير مغطى تأمينياً',
+  'غير مغطي تامنيا',
+  'غير مغطى تامنيا',
+  'غير مغطي تامينا',
+  'الحاله غير مغطاه',
+  'الحالة غير مغطاة',
+  'الحالة غير مغطية',
+  'جميع الاجراءات للحاله غير مغطاه',
+  'جميع الإجراءات للحالة غير مغطاة',
+  'لعدم مد الاقامه ورفع الحد الاقصي',
+  'لعدم مد الإقامة ورفع الحد الأقصى',
+  'لعدم مد الاقامه',
+  'لعدم مد الإقامة',
+  'لعدم رفع الحد الاقصي',
+  'لعدم رفع الحد الأقصى',
+  'كاش طرف الاهل',
+  'كاش طرف الأهل',
+  'كاش طرف المريض',
+  'علي حساب المريض',
+  'على حساب المريض',
+  'توجيه الاهل للرسيبشن',
+  'توجيه الأهل للريسبشن',
+  'توجيه الاهل للرسيبشن للتغطيه',
+  'توجيه الأهل للريسبشن للتغطية',
+  'ارسال الاهل للحسابات',
+  'إرسال الأهل للحسابات',
+  'ارسال الاهل للحسابات للتغطيه',
+  'إرسال الأهل للحسابات للتغطية',
+  'ارسال الاهل للتغطيه',
+  'إرسال الأهل للتغطية',
+  'توجيه الاهل للتغطيه',
+  'توجيه الأهل للتغطية',
+  'قسم حسابات المرضي',
+  'قسم حسابات المرضى',
+  'توجيه اهل الحاله لقسم حسابات المرضي',
+  'توجيه أهل الحالة لقسم حسابات المرضى',
+  'حسابات المرضي',
+  'حسابات المرضى',
+  'معمل خارجي',
+  'في معمل خارجي',
+  'فى معمل خارجي',
+  'تنسيق عمل التحليل طرف التعاقد والمريض في معمل خارجي',
+  'طرف التعاقد والمريض في معمل خارجي',
   'مرفوض',
   'رفض',
   'غير معتمد',
@@ -23,6 +70,7 @@ export const REFUSAL_KEYWORDS = [
   'نعتذر عن الموافقه',
   'خارج التغطية',
   'خارج التغطيه',
+  'خارج التعاقد',
 ];
 
 export const APPROVAL_KEYWORDS = [
@@ -296,14 +344,84 @@ export function extractCoPayment(text: string): { percentage?: number; formatted
   return {};
 }
 
-export function detectRefusal(text: string, subject: string, cleanReply?: string): { hasRefusal: boolean; snippet: string } {
+export interface ConditionalCoverageResult {
+  isConditional: boolean;
+  conditionText?: string;
+  snippet?: string;
+}
+
+/**
+ * Detects conditional approvals, exclusions, or time-limited coverage in replies:
+ * 1. Exceptions: "ما عدا / ماعدا / باستثناء / عدا ... غير مغطى"
+ * 2. Notes: "علما بان / بأن ... غير مغطى داخل المستشفى"
+ * 3. Time limits: "الحالة مغطاة لمدة يوم واحد فقط من تاريخ الخروج من العناية"
+ */
+export function detectConditionalCoverage(text: string, cleanReply?: string): ConditionalCoverageResult {
+  const target = cleanReply && cleanReply.trim().length > 0 ? cleanReply : text || '';
+  if (!target.trim()) return { isConditional: false };
+
+  const norm = target
+    .normalize('NFKC')
+    .toLowerCase()
+    .replace(/[إأآ]/g, 'ا')
+    .replace(/ة/g, 'ه');
+
+  // 1. Exception pattern: ما عدا / ماعدا / باستثناء / عدا ... غير مغطى
+  const exceptMatch = norm.match(/(?:ماعدا|ما\s+عدا|باستثناء|عدا)\s+(.+?)(?:غير\s+مغط[ىياه]+|خارج\s+التغطي[ةه]|كاش|طرف\s+المريض)/i);
+  if (exceptMatch) {
+    const item = exceptMatch[1].trim();
+    return {
+      isConditional: true,
+      conditionText: `ما عدا ${item.toUpperCase()} غير مغطى`,
+      snippet: target.trim(),
+    };
+  }
+
+  // 2. Note / Exclusion pattern: علما بان / علما بأن ... غير مغطى ...
+  const noteMatch = norm.match(/علما\s+(?:بان|بان)\s+(.+?غير\s+مغط[ىياه]+.*?)(?:داخل\s+المستشف[ىي]|$|\.|\n)/i);
+  if (noteMatch) {
+    let cond = noteMatch[1].trim();
+    if (!cond.includes('داخل المستشف')) {
+      cond += ' داخل المستشفى';
+    }
+    return {
+      isConditional: true,
+      conditionText: cond,
+      snippet: target.trim(),
+    };
+  }
+
+  // 3. Limited coverage duration pattern: مغطاة لمدة ... فقط / مغطاة لمدة يوم واحد ...
+  const durationMatch = norm.match(/(?:بان\s+)?(?:الحال[ةه]\s+)?مغط[ىياه]+\s+لمد[ةه]\s+(.+?)(?:$|\.|\n)/i);
+  if (durationMatch) {
+    return {
+      isConditional: true,
+      conditionText: `مغطاة لمدة ${durationMatch[1].trim()}`,
+      snippet: target.trim(),
+    };
+  }
+
+  return { isConditional: false };
+}
+
+export function detectRefusal(
+  text: string,
+  subject: string,
+  cleanReply?: string
+): { hasRefusal: boolean; snippet: string; reason?: string } {
+  // CRITICAL: Check if this is a conditional coverage / partial exclusion instead of a flat refusal
+  const conditional = detectConditionalCoverage(text, cleanReply);
+  if (conditional.isConditional) {
+    return { hasRefusal: false, snippet: '' };
+  }
+
   // If cleanReply exists, prioritize checking it directly
   if (cleanReply && cleanReply.trim().length > 0) {
     const normReply = cleanReply.normalize('NFKC').toLowerCase().replace(/[إأآ]/g, 'ا').replace(/ة/g, 'ه');
     for (const kw of REFUSAL_KEYWORDS) {
       const kwNorm = kw.normalize('NFKC').toLowerCase().replace(/[إأآ]/g, 'ا').replace(/ة/g, 'ه');
       if (normReply.includes(kwNorm)) {
-        return { hasRefusal: true, snippet: cleanReply.trim() };
+        return { hasRefusal: true, snippet: cleanReply.trim(), reason: extractRefusalReason(cleanReply) };
       }
     }
   }
@@ -333,7 +451,7 @@ export function detectRefusal(text: string, subject: string, cleanReply?: string
       if (start > 0) snippet = '...' + snippet;
       if (end < combined.length) snippet = snippet + '...';
 
-      return { hasRefusal: true, snippet };
+      return { hasRefusal: true, snippet, reason: extractRefusalReason(snippet) };
     }
   }
 
@@ -344,7 +462,31 @@ export function detectExistingApproval(
   text: string,
   subject: string,
   cleanReply?: string
-): { hasApproval: boolean; snippet: string; creditLimit?: number; creditLimitText?: string; patientSharePercentage?: number } {
+): {
+  hasApproval: boolean;
+  snippet: string;
+  creditLimit?: number;
+  creditLimitText?: string;
+  patientSharePercentage?: number;
+  isConditional?: boolean;
+  conditionText?: string;
+} {
+  // 0. Check conditional coverage first (e.g. exceptions or time limits)
+  const conditional = detectConditionalCoverage(text, cleanReply);
+  if (conditional.isConditional) {
+    const credit = extractCreditLimit(cleanReply) || extractCreditLimit(text);
+    const copay = extractCoPayment(cleanReply) || extractCoPayment(text);
+    return {
+      hasApproval: true,
+      snippet: cleanReply?.trim() || conditional.snippet || '',
+      isConditional: true,
+      conditionText: conditional.conditionText,
+      creditLimit: credit.limit,
+      creditLimitText: credit.formatted,
+      patientSharePercentage: copay.percentage,
+    };
+  }
+
   const refusalCheck = detectRefusal(text, subject, cleanReply);
   if (refusalCheck.hasRefusal) {
     return { hasApproval: false, snippet: '' };
@@ -783,16 +925,18 @@ export function parseHisApprovalEmail(msg: RawMailMessage): ParsedApprovalEmail 
     financialTerms: {
       approvedAmountLimit: credit.limit || null,
       patientSharePercentage: copay.percentage || null,
-      coverageConditions: approval.snippet || cleanReply || undefined,
+      coverageConditions: approval.conditionText || approval.snippet || cleanReply || undefined,
     },
     hasReplies: isReply,
     hasExistingApproval: isReply && approval.hasApproval,
     isRefused: isReply && refusal.hasRefusal,
+    isConditionalApproval: isReply && Boolean(approval.isConditional),
+    refusalReason: isReply && refusal.hasRefusal ? refusal.reason : undefined,
     statusReasonArabic: isReply
       ? (refusal.hasRefusal
           ? refusal.snippet
           : approval.hasApproval
-          ? approval.snippet
+          ? (approval.conditionText || approval.snippet)
           : cleanReply || undefined)
       : undefined,
     cleanReplyBody: isReply && cleanReply ? cleanReply : undefined,

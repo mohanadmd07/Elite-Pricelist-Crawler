@@ -450,4 +450,47 @@ export function extractOriginalRequestDate(html: string, text?: string): Date | 
   return null;
 }
 
+/**
+ * Extracts a concise, normalized refusal reason or instruction from text or notes.
+ */
+export function extractRefusalReason(snippet?: string): string {
+  if (!snippet) return 'غير مغطى';
+  const norm = snippet
+    .normalize('NFKC')
+    .toLowerCase()
+    .replace(/[إأآ]/g, 'ا')
+    .replace(/ة/g, 'ه');
+
+  if (norm.includes('معمل خارجي') || norm.includes('طرف التعاقد والمريض في معمل خارجي')) {
+    return 'تنسيق التحليل بمعمل خارجي';
+  }
+  if (norm.includes('لعدم مد الاقامه') || norm.includes('رفع الحد الاقصي')) {
+    return 'لعدم مد الإقامة ورفع الحد الأقصى';
+  }
+  if (norm.includes('حسابات المرضي') || norm.includes('حسابات المرضى')) {
+    return 'توجيه الأهل لقسم حسابات المرضى';
+  }
+  if (
+    norm.includes('ارسال الاهل') ||
+    norm.includes('إرسال الأهل') ||
+    norm.includes('للحسابات للتغطيه') ||
+    norm.includes('للحسابات للتغطية')
+  ) {
+    return 'إرسال الأهل للحسابات للتغطية';
+  }
+  if (norm.includes('رسيبشن') || norm.includes('ريسبشن')) {
+    return 'توجيه الأهل للريسبشن للتغطية';
+  }
+  if (norm.includes('كاش طرف الاهل') || norm.includes('كاش طرف الأهل') || norm.includes('كاش')) {
+    return 'كاش طرف الأهل';
+  }
+  if (norm.includes('تامينيا') || norm.includes('تامنيا')) {
+    return 'غير مغطى تأمينياً';
+  }
+  if (norm.includes('خارج التغطيه') || norm.includes('خارج التغطية')) {
+    return 'خارج التغطية';
+  }
+  return 'غير مغطى';
+}
+
 

@@ -1,5 +1,5 @@
 import { InpatientApprovalRecord } from '../types';
-import { cleanContractorName, stripSentFromSignatures, isAccommodationOrGenericFee } from './arabic-normalizer';
+import { cleanContractorName, stripSentFromSignatures, isAccommodationOrGenericFee, extractRefusalReason } from './arabic-normalizer';
 import { generateCmWhatsappWithAI, isGeminiConfigured } from '../services/aiMatchService';
 
 /**
@@ -317,9 +317,28 @@ export function generateCmWhatsappMessage(record: InpatientApprovalRecord): stri
     // "موافقة سعرية بمبلغ معين" -> state it as a price approval, not as a max limit / ceiling
     line3 = `*تمت الموافقة على: ${procText} - ${priceText}*`;
   } else if (isApproved) {
-    line3 = `*تمت الموافقة على: ${procText}${limitFormatted}${copayFormatted}*`;
+    const condText = (record.coverageConditions || record.statusReasonArabic || '').trim();
+    if (
+      condText &&
+      (condText.startsWith('مغطاة لمدة') || condText.startsWith('مغطاه لمده') || condText.startsWith('مشروط'))
+    ) {
+      line3 = `*موافقة مشروطة على: ${procText} (${condText})*`;
+    } else if (
+      condText &&
+      (condText.startsWith('ما عدا') ||
+        condText.startsWith('ماعدا') ||
+        condText.includes('داخل المستشفى') ||
+        condText.includes('داخل المستشفي'))
+    ) {
+      line3 = `*تمت الموافقة على: ${procText} (${condText})*`;
+    } else {
+      line3 = `*تمت الموافقة على: ${procText}${limitFormatted}${copayFormatted}*`;
+    }
   } else if (isRefused) {
-    line3 = `*تم رفض طلب الموافقة على: ${procText}*`;
+    const refusalReason = extractRefusalReason(
+      record.statusReasonArabic || record.refusalSnippet || record.coverageConditions
+    );
+    line3 = `*تم رفض طلب الموافقة على: ${procText} (${refusalReason})*`;
   } else {
     let actionPrefix = '';
     if (
