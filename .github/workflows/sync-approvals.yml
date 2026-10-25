@@ -1,0 +1,32 @@
+name: 20-Minute EWS Mail Sync
+
+on:
+  schedule:
+    # Runs every 20 minutes, 24/7
+    - cron: '*/20 * * * *'
+  workflow_dispatch:
+
+jobs:
+  sync:
+    name: Sync Inpatient Approvals
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Trigger Vercel EWS Sync
+        run: |
+          echo "Triggering EWS Mail Sync on https://elite-pricelist.vercel.app/api/approvals/sync..."
+          RESPONSE=$(curl -s -w "\nHTTP_STATUS:%{http_code}" -X GET \
+            -H "Authorization: Bearer 75befe0ca733d76cd391224060a660af7f665dda75ed5a597bcad46f5ea85e48" \
+            "https://elite-pricelist.vercel.app/api/approvals/sync")
+          
+          BODY=$(echo "$RESPONSE" | sed -e '$d')
+          STATUS=$(echo "$RESPONSE" | tail -n1 | cut -d':' -f2)
+          
+          echo "Status: $STATUS"
+          echo "Response: $BODY"
+          
+          if [ "$STATUS" -ne 200 ]; then
+            echo "::warning::Sync returned HTTP $STATUS"
+            exit 1
+          fi

@@ -128,10 +128,16 @@ export const ApprovalsHub: React.FC<ApprovalsHubProps> = ({
       }
     });
 
+    // Background auto-sync heartbeat every 15 minutes while app is active
+    const autoSyncInterval = setInterval(() => {
+      triggerManualApprovalsSync().catch(() => {});
+    }, 15 * 60 * 1000);
+
     return () => {
       unsubApprovals();
       unsubSettings();
       unsubCompanies();
+      clearInterval(autoSyncInterval);
     };
   }, []);
 

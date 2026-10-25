@@ -628,22 +628,39 @@ export async function mergeCompanies(params: {
 /**
  * Manually triggers an immediate synchronization of the Outlook / Exchange InApprovals folder.
  */
-export async function triggerManualApprovalsSync(): Promise<{ success: boolean; message: string }> {
-  // 1. If local environment, trigger the watcher HTTP endpoint
-  if (isLocalEnvironment()) {
-    try {
-      const res = await fetch('/api/approvals/sync', {
-        method: 'POST',
-        headers: await getAuthHeaders(),
-      });
-      if (res.ok) {
-        const data = await res.json();
-        return { success: true, message: data.message || 'Sync triggered successfully' };
-      }
-    } catch {}
+let lastTriggeredSyncTime = 0;
+const MIN_SYNC_INTERVAL_MS = 2 * 60 * 1000; // 2 minutes debounce
+
+/**
+ * Triggers an immediate approval synchronization directly via the Vercel serverless
+ * endpoint or local watcher, with defensive debouncing to prevent concurrent runs.
+ */
+export async function triggerManualApprovalsSync(force = false): Promise<{ success: boolean; message: string }> {
+  const now = Date.now();
+  if (!force && now - lastTriggeredSyncTime < MIN_SYNC_INTERVAL_MS) {
+    return { success: true, message: 'البيانات حديثة (تمت المزامنة خلال آخر دقيقتين)' };
+  }
+  lastTriggeredSyncTime = now;
+
+  // 1. Trigger the serverless / local sync endpoint directly
+  try {
+    const headers = await getAuthHeaders();
+    const res = await fetch('/api/approvals/sync', {
+      method: 'GET',
+      headers,
+    });
+    if (res.ok) {
+      const data = await res.json();
+      return {
+        success: true,
+        message: `تمت المزامنة بنجاح: تم جلب ${data.messagesFetched || 0}، معالجة ${data.messagesProcessed || 0}، وتخطي ${data.messagesSkipped || 0}`,
+      };
+    }
+  } catch (apiErr: any) {
+    console.warn('[Sync] Direct API trigger note:', apiErr?.message);
   }
 
-  // 2. Also signal via Firestore automation settings doc
+  // 2. Also signal via Firestore automation settings doc for background workers
   try {
     const docRef = doc(db, SETTINGS_COLLECTION, AUTOMATION_SETTINGS_DOC);
     await setDoc(
@@ -654,9 +671,9 @@ export async function triggerManualApprovalsSync(): Promise<{ success: boolean; 
       },
       { merge: true }
     );
-    return { success: true, message: 'Sync command broadcast to background watcher' };
+    return { success: true, message: 'تم إرسال أمر المزامنة' };
   } catch (err: any) {
-    return { success: false, message: err?.message || 'Sync failed' };
+    return { success: false, message: err?.message || 'فشلت المزامنة' };
   }
 }
 

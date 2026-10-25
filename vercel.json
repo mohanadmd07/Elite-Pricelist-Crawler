@@ -30,6 +30,12 @@
       "destination": "/index.html"
     }
   ],
+  "functions": {
+    "api/approvals/sync.js": {
+      "maxDuration": 60,
+      "memory": 1024
+    }
+  },
   "crons": [
     {
       "path": "/api/approvals/sync",
