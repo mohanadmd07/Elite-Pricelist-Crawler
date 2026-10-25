@@ -2,14 +2,35 @@ import { describe, it, expect } from 'vitest';
 import {
   normalizeArabic,
   normalizeText,
+  normalizeHomoglyphs,
   cleanContractorName,
   cleanHisProcedureQuery,
   hasAntibodyConflict,
   hasLabInvestigationConflict,
   isAccommodationOrGenericFee,
 } from '../src/lib/arabic-normalizer';
+import { matchServicesAgainstPricelist } from '../src/mail/syncEngine';
 
 describe('Arabic & Clinical Normalizer', () => {
+  it('should normalize Greek and Cyrillic homoglyphs to Latin', () => {
+    // Greek Ρ (Rho), Τ (Tau), Η (Eta) -> PTH
+    expect(normalizeHomoglyphs('Intact PTH (\u03a1\u03a4\u0397 1-84)')).toBe('Intact PTH (PTH 1-84)');
+    // Cyrillic С (ES) -> C
+    expect(normalizeHomoglyphs('CD138IH\u0421')).toBe('CD138IHC');
+    // normalizeText should map them and normalize to lowercase
+    expect(normalizeText('Intact PTH (\u03a1\u03a4\u0397 1-84)')).toBe('intact pth pth 1 84');
+  });
+
+  it('should match Intact PTH (PTH 1-84) - Investigation against 2025 pricelist', () => {
+    const results = matchServicesAgainstPricelist(
+      [{ name: 'Intact PTH (PTH 1-84) - Investigation', rawPrice: 1065 }],
+      '2025'
+    );
+    expect(results).toHaveLength(1);
+    expect(results[0].status).toBe('matched');
+    expect(results[0].matchedName).toBe('Intact PTH (PTH 1-84)');
+    expect(results[0].suggestedPrice).toBe(850);
+  });
   it('should normalize Arabic Alef, Yaa, Taa Marbuta and digits', () => {
     expect(normalizeArabic('إِسْتِئْصَالُ الْمَرَارَةِ ١٢٣')).toBe('استءصال المراره 123');
     expect(normalizeArabic('أشعة مقطعية على المخ')).toBe('اشعه مقطعيه علي المخ');

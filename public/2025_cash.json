@@ -1358,7 +1358,7 @@
     "sourceFile": "Elite Hospital 2025"
   },
   {
-    "nameEnglish": "Extraction Of FB (Ε.Ν.Τ)",
+    "nameEnglish": "Extraction Of FB (E.N.T)",
     "nameArabic": "استخراج جسم غريب أنف و أذن)",
     "price": "450",
     "sectionName": "General",
@@ -3843,7 +3843,7 @@
     "sourceFile": "Elite Hospital 2025"
   },
   {
-    "nameEnglish": "Double Phototherapy For Neonates/12 Нг.",
+    "nameEnglish": "Double Phototherapy For Neonates/12 Hr.",
     "nameArabic": "العلاج الضوئي المزدوج لحديثي الولادة / 12 ساعة",
     "price": "360",
     "sectionName": "General",
@@ -3857,7 +3857,7 @@
     "sourceFile": "Elite Hospital 2025"
   },
   {
-    "nameEnglish": "Single Phototherapy For Neonates/12 Нг.",
+    "nameEnglish": "Single Phototherapy For Neonates/12 Hr.",
     "nameArabic": "العلاج الضوئي الفردي لحديثي الولادة / 12 ساعة",
     "price": "180",
     "sectionName": "General",
@@ -3871,7 +3871,7 @@
     "sourceFile": "Elite Hospital 2025"
   },
   {
-    "nameEnglish": "Triple Phototherapy For Neonates / 12 Нг.",
+    "nameEnglish": "Triple Phototherapy For Neonates / 12 Hr.",
     "nameArabic": "العلاج الضوئي الثلاثي لحديثي الولادة / 12 ساعة",
     "price": "600",
     "sectionName": "General",
@@ -7840,7 +7840,7 @@
     "sourceFile": "Elite Hospital 2025"
   },
   {
-    "nameEnglish": "CD138IHС",
+    "nameEnglish": "CD138IHC",
     "nameArabic": "",
     "price": "2000",
     "sectionName": "General",
@@ -8078,7 +8078,7 @@
     "sourceFile": "Elite Hospital 2025"
   },
   {
-    "nameEnglish": "CD79alpha-IНС",
+    "nameEnglish": "CD79alpha-IHC",
     "nameArabic": "",
     "price": "2000",
     "sectionName": "General",
@@ -8652,7 +8652,7 @@
     "sourceFile": "Elite Hospital 2025"
   },
   {
-    "nameEnglish": "Entamoeba histolytica Ab (ІНА)",
+    "nameEnglish": "Entamoeba histolytica Ab (IHA)",
     "nameArabic": "",
     "price": "750",
     "sectionName": "General",
@@ -8694,7 +8694,7 @@
     "sourceFile": "Elite Hospital 2025"
   },
   {
-    "nameEnglish": "Estrogen receptor (ER) - IHНС",
+    "nameEnglish": "Estrogen receptor (ER) - IHC",
     "nameArabic": "",
     "price": "2000",
     "sectionName": "General",
@@ -8736,7 +8736,7 @@
     "sourceFile": "Elite Hospital 2025"
   },
   {
-    "nameEnglish": "Fasciola-Ab (ІНА)",
+    "nameEnglish": "Fasciola-Ab (IHA)",
     "nameArabic": "",
     "price": "395",
     "sectionName": "General",
@@ -8995,7 +8995,7 @@
     "sourceFile": "Elite Hospital 2025"
   },
   {
-    "nameEnglish": "Glypican 3-IНС",
+    "nameEnglish": "Glypican 3-IHC",
     "nameArabic": "",
     "price": "2000",
     "sectionName": "General",
@@ -9128,7 +9128,7 @@
     "sourceFile": "Elite Hospital 2025"
   },
   {
-    "nameEnglish": "HBME-1-IНС",
+    "nameEnglish": "HBME-1-IHC",
     "nameArabic": "",
     "price": "2000",
     "sectionName": "General",
@@ -9170,7 +9170,7 @@
     "sourceFile": "Elite Hospital 2025"
   },
   {
-    "nameEnglish": "HEP Par_1 - ІНС",
+    "nameEnglish": "HEP Par_1 - IHC",
     "nameArabic": "",
     "price": "2000",
     "sectionName": "General",
@@ -9240,7 +9240,7 @@
     "sourceFile": "Elite Hospital 2025"
   },
   {
-    "nameEnglish": "HMB45-IHС",
+    "nameEnglish": "HMB45-IHC",
     "nameArabic": "",
     "price": "2000",
     "sectionName": "General",
@@ -9282,7 +9282,7 @@
     "sourceFile": "Elite Hospital 2025"
   },
   {
-    "nameEnglish": "Hydatid-Ab (ІНА)",
+    "nameEnglish": "Hydatid-Ab (IHA)",
     "nameArabic": "",
     "price": "450",
     "sectionName": "General",
@@ -9366,7 +9366,7 @@
     "sourceFile": "Elite Hospital 2025"
   },
   {
-    "nameEnglish": "Intact PTH (ΡΤΗ 1-84)",
+    "nameEnglish": "Intact PTH (PTH 1-84)",
     "nameArabic": "",
     "price": "850",
     "sectionName": "General",
@@ -10934,14 +10934,14 @@
     "sourceFile": "Elite Hospital 2025"
   },
   {
-    "nameEnglish": "Advanced H-C/12 Нг.",
+    "nameEnglish": "Advanced H-C/12 Hr.",
     "nameArabic": "رعاية مكثفة منزلية 12 ساعة",
     "price": "1350",
     "sectionName": "General",
     "sourceFile": "Elite Hospital 2025"
   },
   {
-    "nameEnglish": "Advanced H-C/24 Нг.",
+    "nameEnglish": "Advanced H-C/24 Hr.",
     "nameArabic": "رعاية مكثفة منزلية لمدة 24 ساعة",
     "price": "2700",
     "sectionName": "General",
@@ -10955,35 +10955,35 @@
     "sourceFile": "Elite Hospital 2025"
   },
   {
-    "nameEnglish": "HC Package/24 Нг. (doctor+nurse)",
+    "nameEnglish": "HC Package/24 Hr. (doctor+nurse)",
     "nameArabic": "باكدج الرعاية المنزلية 24 ساعة تمريض + طبيب)",
     "price": "4000",
     "sectionName": "General",
     "sourceFile": "Elite Hospital 2025"
   },
   {
-    "nameEnglish": "Home Sitter H-C 12 Нг.",
+    "nameEnglish": "Home Sitter H-C 12 Hr.",
     "nameArabic": "جليس بالمنزل 12 ساعة",
     "price": "650",
     "sectionName": "General",
     "sourceFile": "Elite Hospital 2025"
   },
   {
-    "nameEnglish": "Home Sitter H-C 24 Нг.",
+    "nameEnglish": "Home Sitter H-C 24 Hr.",
     "nameArabic": "جليس بالمنزل 24 ساعة",
     "price": "1250",
     "sectionName": "General",
     "sourceFile": "Elite Hospital 2025"
   },
   {
-    "nameEnglish": "Regular H-C / 12 Нг.",
+    "nameEnglish": "Regular H-C / 12 Hr.",
     "nameArabic": "رعاية تمريضية منزلية 12 ساعة",
     "price": "1150",
     "sectionName": "General",
     "sourceFile": "Elite Hospital 2025"
   },
   {
-    "nameEnglish": "Regular H-C / 24 Нг.",
+    "nameEnglish": "Regular H-C / 24 Hr.",
     "nameArabic": "رعاية تمريضية منزلية 24 ساعة",
     "price": "2300",
     "sectionName": "General",

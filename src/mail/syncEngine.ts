@@ -13,10 +13,11 @@ import { uploadAttachmentToStorage } from './attachments/attachmentHandler';
 import { persistApprovalToPostgres, toDeterministicUuid } from '../services/approvalPostgresService';
 import { mirrorApprovalToFirestore } from '../services/approvalFirestoreSync';
 import { resolveOfficerByContractor } from '../services/contractorOfficerResolver';
-import { cleanContractorName, normalizeArabic, normalizeText } from '../lib/arabic-normalizer';
+import { cleanContractorName, normalizeArabic, normalizeText, cleanHisProcedureQuery } from '../lib/arabic-normalizer';
+import { searchLocalPricelist } from '../services/procedureService';
 import { generateCmWhatsappMessage } from '../lib/whatsapp-generator';
 import { buildDraftReplyText } from '../lib/draftReplyBuilder';
-import { InpatientApprovalRecord } from '../types';
+import { InpatientApprovalRecord, ProcedureResult } from '../types';
 import { MailSyncStats, RawMailMessage } from './types';
 import { supabaseAdmin, supabase } from '../lib/supabase';
 
@@ -67,10 +68,12 @@ async function isMessageAlreadyIngested(messageId: string): Promise<boolean> {
 }
 
 /**
- * Quick procedure candidate matcher against local yearly cash pricelists.
+ * Robust procedure candidate matcher against local yearly cash pricelists.
+ * Employs clean HIS suffix removal, exact catalog lookups, substring matching,
+ * token overlap, and clinical safety gates.
  */
-function matchServicesAgainstPricelist(
-  services: Array<{ name: string; rawPrice: number }>,
+export function matchServicesAgainstPricelist(
+  services: Array<{ name: string; rawPrice?: number }>,
   year: string = '2025'
 ): Array<{
   serviceName: string;
@@ -80,7 +83,7 @@ function matchServicesAgainstPricelist(
   suggestedPrice?: number;
 }> {
   const targetYear = ['2023', '2024', '2025', '2026'].includes(year) ? year : '2025';
-  let catalog: any[] = [];
+  let catalog: ProcedureResult[] = [];
 
   try {
     const filePath = path.resolve(process.cwd(), 'public', `${targetYear}_cash.json`);
@@ -92,7 +95,22 @@ function matchServicesAgainstPricelist(
   }
 
   return services.map((srv) => {
-    const normSrv = normalizeArabic(normalizeText(srv.name));
+    // 1. Try searchLocalPricelist (exact match, cleaned HIS query, substring, clinical safety)
+    const localMatches = searchLocalPricelist(catalog, [{ name: srv.name }]);
+    if (localMatches.length > 0) {
+      const best = localMatches[0];
+      return {
+        serviceName: srv.name,
+        matchedName: best.nameEnglish || best.nameArabic,
+        code: best.code,
+        status: 'matched' as const,
+        suggestedPrice: Number(best.price) || undefined,
+      };
+    }
+
+    // 2. Fallback candidate scoring with token overlap and bidirectional substring matching
+    const cleanSrv = cleanHisProcedureQuery(srv.name);
+    const normSrv = normalizeArabic(normalizeText(cleanSrv || srv.name));
     let bestMatch: any = null;
     let maxScore = 0;
 
@@ -106,8 +124,8 @@ function matchServicesAgainstPricelist(
           maxScore = score;
           bestMatch = item;
         }
-      } else if (normEn && normSrv.toLowerCase().includes(normEn)) {
-        const score = normEn.length / Math.max(normEn.length, normSrv.length);
+      } else if (normEn && (normSrv.includes(normEn) || normEn.includes(normSrv))) {
+        const score = Math.min(normEn.length, normSrv.length) / Math.max(normEn.length, normSrv.length);
         if (score > maxScore) {
           maxScore = score;
           bestMatch = item;

@@ -603,9 +603,61 @@ function normalizeArabic(str) {
   if (!str) return "";
   return str.toLowerCase().replace(/[\u064B-\u065F\u0670\u0640]/g, "").replace(/[\u0660-\u0669\u06F0-\u06F9]/g, (d) => String(d.charCodeAt(0) & 15)).replace(/[أإآا]/g, "\u0627").replace(/[ىيی]/g, "\u064A").replace(/[كک]/g, "\u0643").replace(/[ةهھۀ]/g, "\u0647").replace(/[ئؤ]/g, "\u0621").replace(/[^a-zA-Z0-9\u0621-\u064A\s]/g, " ").replace(/\s+/g, " ").trim();
 }
+var HOMOGLYPH_MAP = {
+  // Greek
+  "\u0391": "A",
+  "\u0392": "B",
+  "\u0395": "E",
+  "\u0397": "H",
+  "\u0399": "I",
+  "\u039A": "K",
+  "\u039C": "M",
+  "\u039D": "N",
+  "\u039F": "O",
+  "\u03A1": "P",
+  "\u03A4": "T",
+  "\u03A7": "X",
+  "\u03B1": "a",
+  "\u03B2": "b",
+  "\u03B5": "e",
+  "\u03B7": "h",
+  "\u03B9": "i",
+  "\u03BA": "k",
+  "\u03BC": "m",
+  "\u03BD": "n",
+  "\u03BF": "o",
+  "\u03C1": "p",
+  "\u03C4": "t",
+  "\u03C7": "x",
+  // Cyrillic
+  "\u0410": "A",
+  "\u0412": "B",
+  "\u0415": "E",
+  "\u041D": "H",
+  "\u041C": "M",
+  "\u041E": "O",
+  "\u0420": "P",
+  "\u0421": "C",
+  "\u0422": "T",
+  "\u0406": "I",
+  "\u0430": "a",
+  "\u0435": "e",
+  "\u043E": "o",
+  "\u0440": "p",
+  "\u0441": "c",
+  "\u0443": "y",
+  "\u0445": "x",
+  "\u0456": "i",
+  "\u043D": "h",
+  "\u0433": "r"
+};
+function normalizeHomoglyphs(str) {
+  if (!str) return "";
+  return str.replace(/[\u0391-\u03c7\u0400-\u045f]/g, (ch) => HOMOGLYPH_MAP[ch] || ch);
+}
 function normalizeText(str) {
   if (!str) return "";
-  let normalized = str.toLowerCase();
+  let normalized = normalizeHomoglyphs(str).toLowerCase();
   normalized = normalized.replace(/\b([a-z])\s*\.\s*/g, "$1");
   normalized = normalized.replace(/\s*[-/,]\s*(investigations?|procedures?|tests?|testing|panels?|profiles?|screens?|screening|analysis|packages?|scans?|counts?)\b/g, "").replace(/\s+\b(investigations?|procedures?|tests?|testing|panels?|profiles?|screens?|screening|analysis|packages?|scans?|counts?)$/g, "");
   return normalized.replace(/[\u064B-\u065F\u0670\u0640]/g, "").replace(/[\u0660-\u0669\u06F0-\u06F9]/g, (d) => String(d.charCodeAt(0) & 15)).replace(/[أإآا]/g, "\u0627").replace(/[ىيی]/g, "\u064A").replace(/[كک]/g, "\u0643").replace(/[ةهھۀ]/g, "\u0647").replace(/[ئؤ]/g, "\u0621").replace(/[^a-zA-Z0-9\u0621-\u064A\s]/g, " ").replace(/\s+/g, " ").trim();
@@ -629,6 +681,74 @@ function cleanContractorName(str) {
 function stripSentFromSignatures(input) {
   if (!input) return "";
   return input.replace(/(?:Sent\s+from|Sent\s+with|Send\s+from)\s+[^\r\n.<>]+/gi, " ").replace(/Get\s+Outlook(?:\s+for\s+[a-zA-Z]+)?/gi, " ").replace(/(?:تم\s+الإرسال\s+من|تم\s+الارسال\s+من|أرسلت\s+من|ارسلت\s+من)\s+[^\r\n.<>]+/gi, " ").replace(/(?:احصل|أحصل)\s+على\s+[^\r\n.<>]+/gi, " ").replace(/From:\s*[^<]+Sent:\s*[^<]+To:[^\r\n.<>]*/gi, " ").replace(/[\r\n\t]+/g, " ").replace(/\s+/g, " ").trim();
+}
+function cleanHisProcedureQuery(query2) {
+  if (!query2) return "";
+  let trimmed = normalizeHomoglyphs(query2).trim();
+  trimmed = trimmed.replace(/\s*(?:حيث\s*(?:انه|أنها|أنه|انها)|نظرا\s*(?:لانه|لأنها|لوجود|لأنه)|بسبب|نظرا|لتشخيص)\s+.*$/i, "");
+  trimmed = trimmed.replace(/\s*(?:due to|because of|for evaluation of|for suspected)\s+.*$/i, "");
+  if (/^(?:t\.?e\.?e\.?)(?:\s*-\s*investigation|\s*-\s*procedure|\s*echocardiography)?$/i.test(trimmed)) {
+    return "Transesophageal Echocardiography (TEE)";
+  }
+  return trimmed.replace(/\s*-\s*investigation\b/gi, "").replace(/\binvestigation\b/gi, "").replace(/\s*-\s*procedure\b/gi, "").replace(/\s*-\s*service\b/gi, "").replace(/\s*-\s*profile\b/gi, "").replace(/\b(citrulinated)\b/gi, "citrullinated").replace(/\(d\.s\)/gi, "(d's)").replace(/\s+/g, " ").trim();
+}
+function hasAntibodyConflict(query2, candidate) {
+  if (!query2 || !candidate) return false;
+  const isotypes = ["iga", "igg", "igm", "ige"];
+  const qLower = query2.toLowerCase();
+  const cLower = candidate.toLowerCase();
+  const qIso = isotypes.filter((iso) => new RegExp(`\\b${iso}\\b`, "i").test(qLower));
+  const cIso = isotypes.filter((iso) => new RegExp(`\\b${iso}\\b`, "i").test(cLower));
+  if (qIso.length > 0 && cIso.length > 0) {
+    return !qIso.some((iso) => cIso.includes(iso));
+  }
+  return false;
+}
+function hasLabInvestigationConflict(query2, candidate) {
+  if (!query2 || !candidate) return false;
+  const q = query2.toLowerCase();
+  const c = candidate.toLowerCase();
+  const isQCulture = /\bculture\b|مزرع[ةه]/i.test(q);
+  const isCCulture = /\bculture\b|مزرع[ةه]/i.test(c);
+  if (isQCulture !== isCCulture) {
+    if (isQCulture && /\banalysis\b|chemistry|cell count|تحليل كيمياء/i.test(c)) return true;
+    if (isCCulture && /\banalysis\b|chemistry|cell count|تحليل كيمياء/i.test(q)) return true;
+  }
+  const isQStain = /\bstain\b|صبغ[ةه]/i.test(q);
+  const isCStain = /\bstain\b|صبغ[ةه]/i.test(c);
+  if (isQStain !== isCStain) {
+    if (isQStain && /\banalysis\b|chemistry|cell count|culture/i.test(c)) return true;
+    if (isCStain && /\banalysis\b|chemistry|cell count|culture/i.test(q)) return true;
+  }
+  const isQCytology = /\bcytology\b|سيتولوج/i.test(q);
+  const isCCytology = /\bcytology\b|سيتولوج/i.test(c);
+  if (isQCytology !== isCCytology) {
+    if (isQCytology && /\banalysis\b|chemistry|cell count|culture|stain/i.test(c)) return true;
+    if (isCCytology && /\banalysis\b|chemistry|cell count|culture|stain/i.test(q)) return true;
+  }
+  const isQPCR = /\bpcr\b|filmarray|biofire|molecular/i.test(q);
+  const isCPCR = /\bpcr\b|filmarray|biofire|molecular/i.test(c);
+  if (isQPCR !== isCPCR) {
+    if (isQPCR && /\banalysis\b|chemistry|cell count|culture|stain|cytology/i.test(c)) return true;
+    if (isCPCR && /\banalysis\b|chemistry|cell count|culture|stain|cytology/i.test(q)) return true;
+  }
+  const isQLactate = /\blactate\b|لاكتات/i.test(q);
+  const isCLactate = /\blactate\b|لاكتات/i.test(c);
+  if (isQLactate !== isCLactate) {
+    if (isQLactate && /chemistry & cell count|cell count/i.test(c)) return true;
+    if (isCLactate && /chemistry & cell count|cell count/i.test(q)) return true;
+  }
+  const oneSiteRe = /(?:one|two|three|\d+)\s*sites?|مكان\s*واحد|مكانين|ثلاث[ةه]?\s*اماكن|مغناطيس|magnetic|ليزر|laser/i;
+  const physioQueryRe = /physio|physical therapy|علاج\s*طبيع|عنايه\s*صدر|عناية\s*صدر|اطراف|أطراف|limbs/i;
+  if (oneSiteRe.test(c) && !oneSiteRe.test(q) && physioQueryRe.test(q) && !/ليزر|laser|مغناطيس|magnetic/i.test(q)) return true;
+  const isQLaser = /\blaser\b|ليزر/i.test(q);
+  const isCLaser = /\blaser\b|ليزر/i.test(c);
+  if (isQLaser !== isCLaser) {
+    const physioRe = /physio|physical therapy|علاج\s*طبيع|عنايه\s*صدر|عناية\s*صدر|chest\s*\+|اطراف|أطراف|limbs?/i;
+    if (isCLaser && physioRe.test(q)) return true;
+    if (isQLaser && physioRe.test(c)) return true;
+  }
+  return false;
 }
 function isAccommodationOrGenericFee(name) {
   if (!name) return false;
@@ -2329,6 +2449,69 @@ function resolveOfficerByContractor(rawQuery, excelPath) {
   };
 }
 
+// src/services/procedureService.ts
+function hasClinicalMismatch(queryEngNorm, queryAraNorm, rowEngNorm, rowAraNorm) {
+  const queryCombined = `${queryEngNorm} ${queryAraNorm}`;
+  const rowCombined = `${rowEngNorm} ${rowAraNorm}`;
+  const isTeeQuery = /transesophageal|tee\b|t\.e\.e|مريء|المريء|بالمنظار/i.test(queryCombined);
+  const isTeeRow = /transesophageal|tee\b|t\.e\.e|مريء|المريء|بالمنظار/i.test(rowCombined);
+  if (isTeeQuery !== isTeeRow) return true;
+  if (hasAntibodyConflict(queryCombined, rowCombined)) return true;
+  if (hasLabInvestigationConflict(queryCombined, rowCombined)) return true;
+  return false;
+}
+function searchLocalPricelist(cashList, requestedProcedures) {
+  const finalResults = [];
+  for (const proc of requestedProcedures) {
+    const cleanEng = cleanHisProcedureQuery(proc.name);
+    const qEng = normalizeText(cleanEng);
+    const qEngRaw = normalizeText(proc.name);
+    const qAra = proc.arabic ? normalizeArabic(proc.arabic) : "";
+    if (!qEng && !qAra && !qEngRaw) continue;
+    const exactMatches = [];
+    const partialMatches = [];
+    for (const item of cashList) {
+      const itemEng = normalizeText(item.nameEnglish);
+      const itemAra = normalizeArabic(item.nameArabic);
+      if (hasClinicalMismatch(qEng || qEngRaw, qAra, itemEng, itemAra)) {
+        continue;
+      }
+      const isExactEng = Boolean(qEng && (itemEng === qEng || itemEng === qEngRaw));
+      const isExactAra = Boolean(qAra && itemAra === qAra);
+      if (isExactEng || isExactAra) {
+        exactMatches.push({
+          ...item,
+          requestedProcedureName: proc.name
+        });
+        continue;
+      }
+      const isSubEng = Boolean(qEng && itemEng.includes(qEng));
+      const isSubAra = Boolean(qAra && itemAra.includes(qAra));
+      if (isSubEng || isSubAra) {
+        partialMatches.push({
+          ...item,
+          requestedProcedureName: proc.name
+        });
+      }
+    }
+    if (exactMatches.length > 0) {
+      finalResults.push(...exactMatches);
+    } else if (partialMatches.length > 0) {
+      const sortedPartials = partialMatches.sort((a, b) => {
+        const aEng = normalizeText(a.nameEnglish);
+        const bEng = normalizeText(b.nameEnglish);
+        const aStarts = qEng && aEng.startsWith(qEng);
+        const bStarts = qEng && bEng.startsWith(qEng);
+        if (aStarts && !bStarts) return -1;
+        if (!aStarts && bStarts) return 1;
+        return a.nameEnglish.length - b.nameEnglish.length;
+      });
+      finalResults.push(...sortedPartials.slice(0, 5));
+    }
+  }
+  return finalResults;
+}
+
 // src/lib/draftReplyBuilder.ts
 function buildDraftReplyText(priceListYear, contractor, officer, matchedProcedures) {
   const procedures = matchedProcedures || [];
@@ -2398,7 +2581,19 @@ function matchServicesAgainstPricelist(services, year = "2025") {
     console.warn(`[Sync Engine] Failed to load catalog for ${targetYear}:`, err);
   }
   return services.map((srv) => {
-    const normSrv = normalizeArabic(normalizeText(srv.name));
+    const localMatches = searchLocalPricelist(catalog, [{ name: srv.name }]);
+    if (localMatches.length > 0) {
+      const best = localMatches[0];
+      return {
+        serviceName: srv.name,
+        matchedName: best.nameEnglish || best.nameArabic,
+        code: best.code,
+        status: "matched",
+        suggestedPrice: Number(best.price) || void 0
+      };
+    }
+    const cleanSrv = cleanHisProcedureQuery(srv.name);
+    const normSrv = normalizeArabic(normalizeText(cleanSrv || srv.name));
     let bestMatch = null;
     let maxScore = 0;
     for (const item of catalog) {
@@ -2410,8 +2605,8 @@ function matchServicesAgainstPricelist(services, year = "2025") {
           maxScore = score;
           bestMatch = item;
         }
-      } else if (normEn && normSrv.toLowerCase().includes(normEn)) {
-        const score = normEn.length / Math.max(normEn.length, normSrv.length);
+      } else if (normEn && (normSrv.includes(normEn) || normEn.includes(normSrv))) {
+        const score = Math.min(normEn.length, normSrv.length) / Math.max(normEn.length, normSrv.length);
         if (score > maxScore) {
           maxScore = score;
           bestMatch = item;

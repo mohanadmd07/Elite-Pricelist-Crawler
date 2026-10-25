@@ -23,12 +23,35 @@ export function normalizeArabic(str: string): string {
 }
 
 /**
+ * Normalizes common Greek and Cyrillic OCR/extraction homoglyphs to Latin ASCII equivalents.
+ * Examples: Greek Rho 'Ρ' -> 'P', Tau 'Τ' -> 'T', Eta 'Η' -> 'H', Cyrillic 'С' -> 'C', 'Н' -> 'H'.
+ */
+const HOMOGLYPH_MAP: Record<string, string> = {
+  // Greek
+  '\u0391': 'A', '\u0392': 'B', '\u0395': 'E', '\u0397': 'H', '\u0399': 'I',
+  '\u039a': 'K', '\u039c': 'M', '\u039d': 'N', '\u039f': 'O', '\u03a1': 'P',
+  '\u03a4': 'T', '\u03a7': 'X', '\u03b1': 'a', '\u03b2': 'b', '\u03b5': 'e',
+  '\u03b7': 'h', '\u03b9': 'i', '\u03ba': 'k', '\u03bc': 'm', '\u03bd': 'n',
+  '\u03bf': 'o', '\u03c1': 'p', '\u03c4': 't', '\u03c7': 'x',
+  // Cyrillic
+  '\u0410': 'A', '\u0412': 'B', '\u0415': 'E', '\u041d': 'H', '\u041c': 'M',
+  '\u041e': 'O', '\u0420': 'P', '\u0421': 'C', '\u0422': 'T', '\u0406': 'I',
+  '\u0430': 'a', '\u0435': 'e', '\u043e': 'o', '\u0440': 'p', '\u0441': 'c',
+  '\u0443': 'y', '\u0445': 'x', '\u0456': 'i', '\u043d': 'h', '\u0433': 'r',
+};
+
+export function normalizeHomoglyphs(str: string): string {
+  if (!str) return '';
+  return str.replace(/[\u0391-\u03c7\u0400-\u045f]/g, (ch) => HOMOGLYPH_MAP[ch] || ch);
+}
+
+/**
  * Normalizes English nomenclature, expanding common dots in medical abbreviations (e.g. "E.E.G." -> "eeg")
  * and stripping superfluous descriptive suffixes ("- Investigation", "Procedure", etc.)
  */
 export function normalizeText(str: string): string {
   if (!str) return '';
-  let normalized = str.toLowerCase();
+  let normalized = normalizeHomoglyphs(str).toLowerCase();
 
   // Merge dotted abbreviations like "E.E.G." or "E. C. G." -> "eeg" / "ecg"
   normalized = normalized.replace(/\b([a-z])\s*\.\s*/g, '$1');
@@ -153,7 +176,7 @@ export function stripSentFromSignatures(input: string): string {
  */
 export function cleanHisProcedureQuery(query: string): string {
   if (!query) return '';
-  let trimmed = query.trim();
+  let trimmed = normalizeHomoglyphs(query).trim();
 
   // Strip doctor clinical justification clauses accidentally typed into procedure names
   // e.g. "رسم سمع واتزان حيث انه يعاني من عدم اتزان و دوخة" -> "رسم سمع واتزان"
