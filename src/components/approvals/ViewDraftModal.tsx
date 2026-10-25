@@ -18,7 +18,8 @@ import {
   XCircle,
 } from 'lucide-react';
 import { InpatientApprovalRecord, ApprovalGranularStatus } from '../../types';
-import { generateCmWhatsappMessageAsync } from '../../lib/whatsapp-generator';
+import { generateCmWhatsappMessage, generateCmWhatsappMessageAsync } from '../../lib/whatsapp-generator';
+import { buildDraftReplyFromRecord } from '../../lib/draftReplyBuilder';
 import { triggerManualDraft, updateApprovalStatus } from '../../services/approvalsFirebaseService';
 
 interface ViewDraftModalProps {
@@ -41,6 +42,19 @@ export const ViewDraftModal: React.FC<ViewDraftModalProps> = ({
   const [statusSuccessMsg, setStatusSuccessMsg] = useState<string | null>(null);
 
   if (!isOpen || !approval) return null;
+
+  // Synchronous computed fallbacks guarantee zero 'undefined' or 'قيد التوليد' displays
+  const effectiveDraft =
+    (approval.draftBody && approval.draftBody !== 'undefined' ? approval.draftBody : null) ||
+    (approval.suggestedDraftReply && approval.suggestedDraftReply !== 'undefined' ? approval.suggestedDraftReply : null) ||
+    buildDraftReplyFromRecord(approval);
+
+  const effectiveWhatsapp =
+    (approval.cmWhatsappMessage &&
+     approval.cmWhatsappMessage !== 'undefined' &&
+     approval.cmWhatsappMessage !== 'رسالة الواتساب قيد التوليد...'
+      ? approval.cmWhatsappMessage
+      : null) || generateCmWhatsappMessage(approval);
 
   const handleUpdateStatus = async (newStatus: InpatientApprovalRecord['status'], reason: string) => {
     try {
@@ -66,7 +80,18 @@ export const ViewDraftModal: React.FC<ViewDraftModalProps> = ({
 
   const handleCopyDraft = async () => {
     try {
-      await navigator.clipboard.writeText(approval.draftBody);
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(effectiveDraft);
+      } else {
+        const textarea = document.createElement('textarea');
+        textarea.value = effectiveDraft;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+      }
       setCopiedDraft(true);
       setTimeout(() => setCopiedDraft(false), 2000);
     } catch (err) {
@@ -76,7 +101,7 @@ export const ViewDraftModal: React.FC<ViewDraftModalProps> = ({
 
   const handleCopyWhatsapp = async () => {
     try {
-      const msg = approval.cmWhatsappMessage || (await generateCmWhatsappMessageAsync(approval));
+      const msg = effectiveWhatsapp;
       if (navigator.clipboard && navigator.clipboard.writeText) {
         await navigator.clipboard.writeText(msg);
       } else {
@@ -398,7 +423,7 @@ export const ViewDraftModal: React.FC<ViewDraftModalProps> = ({
                   dir="rtl"
                   className="w-full p-4 rounded-xl bg-slate-900 text-slate-100 font-sans text-xs leading-relaxed whitespace-pre-wrap border border-slate-800 shadow-inner max-h-96 overflow-y-auto"
                 >
-                  {approval.draftBody}
+                  {effectiveDraft}
                 </pre>
               </div>
               <div className="flex items-center justify-between text-xs text-slate-500">
@@ -418,7 +443,7 @@ export const ViewDraftModal: React.FC<ViewDraftModalProps> = ({
           {activeTab === 'whatsapp' && (
             <div className="space-y-4">
               <div className="p-4 rounded-xl bg-emerald-50/70 border border-emerald-300 text-emerald-950 font-sans text-xs leading-relaxed whitespace-pre-wrap shadow-inner" dir="rtl">
-                {approval.cmWhatsappMessage || 'رسالة الواتساب قيد التوليد...'}
+                {effectiveWhatsapp}
               </div>
               <div className="flex items-center justify-between text-xs text-slate-500">
                 <span>صيغة قياسية معتمدة من 3 أسطر لمنسق الكيس مانجر.</span>

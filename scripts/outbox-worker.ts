@@ -223,6 +223,7 @@ export async function replayAllToFirestore(): Promise<{ totalReplayed: number }>
       statusReasonArabic: app.status_reason_arabic,
       stateTimestamps: app.state_timestamps,
       suggestedDraftReply: app.suggested_draft_reply,
+      draftBody: app.suggested_draft_reply,
       cmWhatsappMessage: app.cm_whatsapp_message,
       hasReplies: app.has_replies,
       hasExistingApproval: app.has_existing_approval,

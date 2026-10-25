@@ -383,6 +383,12 @@ function stripSentFromSignatures(input) {
   if (!input) return "";
   return input.replace(/(?:Sent\s+from|Sent\s+with|Send\s+from)\s+[^\r\n.<>]+/gi, " ").replace(/Get\s+Outlook(?:\s+for\s+[a-zA-Z]+)?/gi, " ").replace(/(?:تم\s+الإرسال\s+من|تم\s+الارسال\s+من|أرسلت\s+من|ارسلت\s+من)\s+[^\r\n.<>]+/gi, " ").replace(/(?:احصل|أحصل)\s+على\s+[^\r\n.<>]+/gi, " ").replace(/From:\s*[^<]+Sent:\s*[^<]+To:[^\r\n.<>]*/gi, " ").replace(/[\r\n\t]+/g, " ").replace(/\s+/g, " ").trim();
 }
+function isAccommodationOrGenericFee(name) {
+  if (!name) return false;
+  const n = normalizeText(name);
+  const a = normalizeArabic(name);
+  return /\b(bed|room|accommodation|stay|icu day|ccu day|nursing|care unit)\b/i.test(n) || /إقامة|اقامة|سرير|عناية مركزة|رعاية مركزة|رسم دخول|رسوم فتح ملف|كشف طوارئ|استشارة|مرور طبيب/i.test(a);
+}
 
 // src/services/aiMatchService.ts
 import { GoogleGenAI, Type } from "@google/genai";
@@ -429,6 +435,160 @@ function extractCleanProcedurePhrase(rawText) {
   text = text.replace(/^(?:يعاني|تعاني)\s+(?:المريض|المريضة|الحالة|الطفل|الطفله)\s+من\s+[^و]+و\s*(?:يحتاج|تحتاج|نحتاج)?\s*(?:الى|الي)?\s*/is, "");
   text = text.replace(/^طفل\s+يعانى\s+من\s+[^و]+و\s*/is, "");
   return text.trim();
+}
+function formatProcedureForCmWhatsapp(proc) {
+  const lower = proc.toLowerCase().trim();
+  if (lower.includes("transesophageal") || lower === "tee" || lower === "t.e.e" || lower.includes("\u0639\u0646 \u0637\u0631\u064A\u0642 \u0627\u0644\u0645\u0631\u064A\u0621") || lower.includes("\u0627\u064A\u0643\u0648 \u0628\u0627\u0644\u0645\u0646\u0638\u0627\u0631") || lower.includes("\u0625\u064A\u0643\u0648 \u0628\u0627\u0644\u0645\u0646\u0638\u0627\u0631")) {
+    return "\u0645\u0648\u062C\u0627\u062A \u0641\u0648\u0642 \u0635\u0648\u062A\u064A\u0629 \u0639\u0644\u0649 \u0627\u0644\u0642\u0644\u0628 \u0639\u0646 \u0637\u0631\u064A\u0642 \u0627\u0644\u0645\u0631\u064A\u0621 (Transesophageal Echocardiography - TEE)";
+  }
+  if (lower.includes("mri brain with contrast") || lower.includes("mri") && lower.includes("brain") && lower.includes("contrast")) {
+    return "\u0623\u0634\u0639\u0629 \u0631\u0646\u064A\u0646 \u0645\u063A\u0646\u0627\u0637\u064A\u0633\u064A \u0639\u0644\u0649 \u0627\u0644\u0645\u062E \u0628\u0627\u0644\u0635\u0628\u063A\u0629 (MRI Brain With Contrast)";
+  }
+  if (lower.includes("ct pancreas triphasic")) {
+    return "\u0623\u0634\u0639\u0629 \u0645\u0642\u0637\u0639\u064A\u0629 \u062B\u0644\u0627\u062B\u064A\u0629 \u0627\u0644\u0645\u0631\u0627\u062D\u0644 \u0639\u0644\u0649 \u0627\u0644\u0628\u0646\u0643\u0631\u064A\u0627\u0633 (CT Pancreas Triphasic)";
+  }
+  if (lower.includes("pig tail")) {
+    return "\u062A\u0631\u0643\u064A\u0628 \u0642\u0633\u0637\u0631\u0629 \u0628\u064A\u062C \u062A\u064A\u0644 (Pig Tail Insertion)";
+  }
+  return proc;
+}
+function extractProcedureFromApprovalReply(text) {
+  if (!text) return "";
+  const clean = text.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+  const m1 = clean.match(
+    /(?:لا\s*مانع\s*من\s*(?:الدخول[^\n\r:،,-]{0,35})?(?:ل?[إا]جراء|ل?عمل|وعمل)|الموافقة\s*على\s*(?:عمل|إجراء|اجراء)?)\s*[:\s]*([^\n\r،,-]+?)(?=\s*(?:-|–|تحت|بحد|الحد|شامل|مع|فقط|$))/i
+  );
+  if (m1 && m1[1] && m1[1].trim().length > 3) {
+    const res = m1[1].trim();
+    if (!res.toLowerCase().includes("inpatient") && !res.toLowerCase().includes("clinical evaluation")) {
+      return res;
+    }
+  }
+  const m2 = clean.match(
+    /(?:موافقة\s+على|معتمد\s+لـ?)\s*[:\s]*([^\n\r،,-]+?)(?=\s*(?:-|–|تحت|بحد|الحد|شامل|مع|فقط|$))/i
+  );
+  if (m2 && m2[1] && m2[1].trim().length > 3) {
+    const res = m2[1].trim();
+    if (!res.toLowerCase().includes("inpatient") && !res.toLowerCase().includes("clinical evaluation")) {
+      return res;
+    }
+  }
+  return "";
+}
+function detectPriceApprovalMode(record) {
+  if (record.priceApprovalRequested) return "request";
+  const text = [
+    record.existingApprovalSnippet,
+    record.replySnippet,
+    record.aiThreadSummary,
+    record.statusReasonArabic,
+    record.coverageConditions
+  ].filter(Boolean).join(" ").normalize("NFKC").replace(/[إأآ]/g, "\u0627").replace(/ة/g, "\u0647").replace(/ى/g, "\u064A");
+  if (/خارج\s*(?:ال)?تعاقد/.test(text)) return "request";
+  if (!/موافق[ةه]?\s+سعري[ةه]?/.test(text)) return null;
+  const isRequest = /(?:احضار|لاحضار|بإحضار|باحضار|عمل|اعمل|لعمل|مطلوب|المطلوب|يجب|سوف\s+يتم|سيتم|برجاء|الرجاء|نرجو)\s+(?:يتم\s+)?(?:احضار\s+)?(?:اصل\s+)?موافق[ةه]?\s+سعري[ةه]?/.test(text);
+  return isRequest ? "request" : "approved";
+}
+function formatPriceAmount(record) {
+  if (record.creditLimitText) return record.creditLimitText;
+  const n = record.creditLimit || record.approvedAmountLimit;
+  return n && n > 0 ? `${n.toLocaleString("en-US")} \u062C.\u0645` : "";
+}
+function generateCmWhatsappMessage(record) {
+  const patient = (record.patientName || "\u0627\u0644\u0645\u0631\u064A\u0636").trim();
+  let bedInfo = (record.bed || "").trim();
+  bedInfo = bedInfo.replace(/Physician.*$/i, "").trim();
+  if (bedInfo && !bedInfo.toLowerCase().startsWith("bed") && !bedInfo.toLowerCase().startsWith("inpatient") && !bedInfo.toLowerCase().startsWith("icu") && !bedInfo.toLowerCase().startsWith("observation")) {
+    bedInfo = `Bed ${bedInfo}`;
+  }
+  const line1 = bedInfo ? `*${patient}* - ${bedInfo}` : `*${patient}*`;
+  let rawContractor = (record.contractorNormalized || record.contractorRaw || "\u0627\u0644\u062A\u0639\u0627\u0642\u062F").trim();
+  if (rawContractor.includes("\u0645\u0633\u062A\u0634\u0641\u0649 \u0625\u064A\u0644\u064A\u062A") || rawContractor === "\u063A\u064A\u0631 \u0645\u062D\u062F\u062F") {
+    rawContractor = "\u0627\u0644\u062A\u0639\u0627\u0642\u062F";
+  }
+  const line2 = cleanContractorName(rawContractor) || rawContractor;
+  let rawList = [];
+  if (record.requestedServices && record.requestedServices.length > 0) {
+    rawList = record.requestedServices.map((s) => s.name.trim()).filter(Boolean);
+  } else if (record.matchedProcedures && record.matchedProcedures.length > 0) {
+    rawList = record.matchedProcedures.map((m) => m.matchedName || m.serviceName).filter(Boolean);
+  }
+  rawList = rawList.filter((s) => {
+    const l = s.toLowerCase();
+    return !l.includes("clinical inpatient evaluation") && !l.includes("inpatient clinical evaluation") && !l.includes("clinical evaluation");
+  });
+  const fromReply = extractProcedureFromApprovalReply(
+    (record.existingApprovalSnippet || "") + " " + (record.replySnippet || "")
+  );
+  let cleanedServices = rawList.map(extractCleanProcedurePhrase).map(formatProcedureForCmWhatsapp).filter(Boolean);
+  let procText = "";
+  if (fromReply) {
+    const cleanFromReply = extractCleanProcedurePhrase(fromReply);
+    if (cleanedServices.length > 0 && !cleanedServices.some((s) => s.includes(cleanFromReply) || cleanFromReply.includes(s))) {
+      const primaryService = cleanedServices[0].replace(/\/\s*first\s*\d+\s*hours?/i, "").trim();
+      procText = `${cleanFromReply} (${primaryService})`;
+    } else {
+      procText = cleanFromReply;
+    }
+  } else if (cleanedServices.length > 0) {
+    procText = cleanedServices.join(" \u0648 ");
+  } else if (record.diagnosis && !record.diagnosis.toLowerCase().includes("evaluation") && !record.diagnosis.toLowerCase().includes("staff")) {
+    procText = record.diagnosis;
+  } else {
+    procText = "\u0627\u0644\u062F\u062E\u0648\u0644 \u0648\u0627\u0644\u0625\u062C\u0631\u0627\u0621\u0627\u062A \u0627\u0644\u0645\u0642\u0631\u0631\u0629";
+  }
+  const isApproved = record.status === "approved" || record.status === "conditionally_approved" || Boolean(record.hasExistingApproval);
+  const isRefused = record.status === "refused" || Boolean(record.isRefused);
+  let limitFormatted = "";
+  if (record.creditLimitText) {
+    limitFormatted = ` (\u062D\u062F \u0623\u0642\u0635\u0649: ${record.creditLimitText})`;
+  } else if (record.creditLimit && record.creditLimit > 0) {
+    limitFormatted = ` (\u062D\u062F \u0623\u0642\u0635\u0649: ${record.creditLimit.toLocaleString("en-US")} \u062C.\u0645)`;
+  } else if (record.approvedAmountLimit && record.approvedAmountLimit > 0) {
+    limitFormatted = ` (\u062D\u062F \u0623\u0642\u0635\u0649: ${record.approvedAmountLimit.toLocaleString("en-US")} \u062C.\u0645)`;
+  }
+  const unlisted = (record.matchedProcedures || []).filter(
+    (m) => m.status === "unmatched" && (m.suggestedPrice || 0) > 0 && !isAccommodationOrGenericFee(m.serviceName)
+  );
+  const unlistedLines = unlisted.map((m) => {
+    const name = formatProcedureForCmWhatsapp(extractCleanProcedurePhrase(m.serviceName)) || m.serviceName;
+    const amt = ` \u0628\u0645\u0628\u0644\u063A ${m.suggestedPrice.toLocaleString("en-US")} \u062C.\u0645`;
+    return { name, text: `\u0645\u0637\u0644\u0648\u0628 \u0645\u0648\u0627\u0641\u0642\u0629 \u0633\u0639\u0631\u064A\u0629${amt} \u0639\u0644\u0649: ${name}` };
+  });
+  if (unlistedLines.length > 0 && !isApproved && !isRefused) {
+    const body = unlistedLines.length === 1 ? unlistedLines[0].text : unlistedLines.map((u) => u.text).join(" | ");
+    return `${line1}
+${line2}
+*${body}*`;
+  }
+  const priceMode = detectPriceApprovalMode(record);
+  const priceAmount = record.priceApprovalRequested && record.priceApprovalAmount ? `${record.priceApprovalAmount.toLocaleString("en-US")} \u062C.\u0645` : formatPriceAmount(record);
+  const priceText = priceAmount ? `\u0645\u0648\u0627\u0641\u0642\u0629 \u0633\u0639\u0631\u064A\u0629 \u0628\u0645\u0628\u0644\u063A ${priceAmount}` : "\u0645\u0648\u0627\u0641\u0642\u0629 \u0633\u0639\u0631\u064A\u0629";
+  let line3 = "";
+  if (priceMode === "request") {
+    line3 = `*\u0645\u0637\u0644\u0648\u0628 ${priceText}${procText ? ` \u0639\u0644\u0649: ${procText}` : ""}*`;
+  } else if (isApproved && priceMode === "approved") {
+    line3 = `*\u062A\u0645\u062A \u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0629 \u0639\u0644\u0649: ${procText} - ${priceText}*`;
+  } else if (isApproved) {
+    line3 = `*\u062A\u0645\u062A \u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0629 \u0639\u0644\u0649: ${procText}${limitFormatted}*`;
+  } else if (isRefused) {
+    line3 = `*\u062A\u0645 \u0631\u0641\u0636 \u0637\u0644\u0628 \u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0629 \u0639\u0644\u0649: ${procText}*`;
+  } else {
+    let actionPrefix = "";
+    if (procText.startsWith("\u0633\u062D\u0628") || procText.startsWith("\u0639\u0645\u0644") || procText.startsWith("\u062A\u0631\u0643\u064A\u0628") || procText.startsWith("\u0627\u062C\u0631\u0627\u0621") || procText.startsWith("\u0625\u062C\u0631\u0627\u0621")) {
+      actionPrefix = "";
+    } else if (procText.startsWith("\u062A\u062D\u0644\u064A\u0644")) {
+      actionPrefix = "\u0633\u062D\u0628 ";
+    } else if (procText.startsWith("\u062F\u0639\u0627\u0645\u0629") || procText.startsWith("\u062F\u0639\u0627\u0645\u0647") || procText.startsWith("\u0642\u0633\u0637\u0631\u0629") || procText.startsWith("\u0642\u0633\u0637\u0631\u0647") || procText.startsWith("\u0627\u0646\u0628\u0648\u0628") || procText.startsWith("\u0623\u0646\u0628\u0648\u0628")) {
+      actionPrefix = "\u062A\u0631\u0643\u064A\u0628 ";
+    } else {
+      actionPrefix = "\u0639\u0645\u0644 ";
+    }
+    line3 = `*\u0627\u0644\u0645\u0637\u0644\u0648\u0628 \u0645\u0648\u0627\u0641\u0642\u0629 ${actionPrefix}${procText}*`;
+  }
+  return `${line1}
+${line2}
+${line3}`;
 }
 
 // src/mail/parser/hisApprovalParser.ts
@@ -629,7 +789,7 @@ function parseHisApprovalEmail(msg) {
         const fullRowText = $(tr).text();
         admissionType = fullRowText.includes("Inpatient") ? "Inpatient" : "Outpatient";
         const bedMatch = fullRowText.match(/Bed:\s*([^–\n<]+)/i);
-        if (bedMatch) bed = bedMatch[1].trim();
+        if (bedMatch) bed = bedMatch[1].replace(/Physician.*$/i, "").trim();
       }
       if ((!physician || physician === "Hospital Staff") && /^Physician\s*[:\s]*$/i.test(cellText) && nextCellText) {
         physician = nextCellText;
@@ -670,7 +830,7 @@ function parseHisApprovalEmail(msg) {
     }
     if (!bed || bed === "Inpatient Bed") {
       const bMatch = text.match(/Bed:\s*([^–\n<]+)/i);
-      if (bMatch) bed = bMatch[1].trim();
+      if (bMatch) bed = bMatch[1].replace(/Physician.*$/i, "").trim();
     }
     if (text.includes("Request Details")) {
       const container = $(el).closest("div, table").find("div, p, span").last().text().trim();
@@ -1370,6 +1530,35 @@ function resolveOfficerByContractor(rawQuery, excelPath) {
   };
 }
 
+// src/lib/draftReplyBuilder.ts
+function buildDraftReplyText(priceListYear, contractor, officer, matchedProcedures) {
+  const procedures = matchedProcedures || [];
+  const matchedLines = procedures.filter((p) => p.status === "matched").map((p, idx) => `${idx + 1}- ${p.matchedName || p.serviceName}`).join("\n");
+  const unmatchedLines = procedures.filter((p) => p.status === "unmatched").map(
+    (p) => ` - ${p.serviceName}${p.suggestedPrice && p.suggestedPrice > 0 ? ` : \u0645\u0637\u0644\u0648\u0628 \u0645\u0648\u0627\u0641\u0642\u0629 \u0633\u0639\u0631\u064A\u0629 \u0628\u0645\u0628\u0644\u063A ${Number(p.suggestedPrice).toLocaleString("en-US")} \u062C.\u0645` : ""}`
+  ).join("\n");
+  const contractorDisplay = contractor && contractor.trim() ? contractor.trim() : "\u0627\u0644\u062A\u0639\u0627\u0642\u062F";
+  const displayYear = priceListYear === "Cash" || /كاش|cash|خصم نادي|خصم نادى/i.test(contractorDisplay) ? "2026" : priceListYear || "2026";
+  const officerDisplay = officer && officer.trim() && officer !== "\u063A\u064A\u0631 \u0645\u062D\u062F\u062F" && !officer.includes("\u064A\u062A\u0637\u0644\u0628 \u062A\u062D\u062F\u064A\u062F") ? officer.trim() : "\u0645\u0633\u0626\u0648\u0644 \u0627\u0644\u0633\u064A\u0644\u0632 \u0627\u0644\u0645\u062E\u062A\u0635";
+  let text = `Price list: Elite Hospital ${displayYear}
+Contractor: ${contractorDisplay}
+\u0627\u0644\u0645\u0633\u0626\u0648\u0644 \u0645\u0646 \u0642\u0633\u0645 \u0627\u0644\u0633\u064A\u0644\u0632: ${officerDisplay}
+Corporate Email: corporate@elitehospital.org
+ 
+\u0627\u0644\u0625\u062C\u0631\u0627\u0621\u0627\u062A \u0627\u0644\u0645\u062A\u0648\u0627\u062C\u062F\u0629 \u0628\u0644\u0627\u0626\u062D\u0629 \u0623\u0633\u0639\u0627\u0631 \u0627\u0644\u062A\u0639\u0627\u0642\u062F:
+${matchedLines || "\u0644\u0627 \u062A\u0648\u062C\u062F \u0625\u062C\u0631\u0627\u0621\u0627\u062A \u0645\u0637\u0627\u0628\u0642\u0629 \u0645\u0628\u0627\u0634\u0631\u0629 \u0628\u0627\u0644\u0644\u0627\u0626\u062D\u0629"}`;
+  if (unmatchedLines) {
+    text += `
+
+[\u26A0\uFE0F  \u0627\u0644\u0625\u062C\u0631\u0627\u0621\u0627\u062A \u0627\u0644\u062A\u0627\u0644\u064A\u0629 \u063A\u064A\u0631 \u0645\u062F\u0631\u062C\u0629 \u0641\u064A \u0644\u0627\u0626\u062D\u0629 \u0623\u0633\u0639\u0627\u0631 \u0627\u0644\u062A\u0639\u0627\u0642\u062F (\u0645\u0637\u0644\u0648\u0628 \u0645\u0648\u0627\u0641\u0642\u0629 \u0633\u0639\u0631\u064A\u0629):
+${unmatchedLines}]`;
+  }
+  text += `
+
+@corporate@elitehospital.org`;
+  return text;
+}
+
 // src/mail/syncEngine.ts
 var client3 = supabaseAdmin || supabase;
 async function isMessageAlreadyIngested(messageId) {
@@ -1495,6 +1684,27 @@ async function runMailSync(options) {
           }
         }
       }
+      const draftBody = buildDraftReplyText(
+        priceListYear,
+        contractorNormalized,
+        contractorOfficer,
+        matchedProcedures
+      );
+      const cmWhatsappMessage = generateCmWhatsappMessage({
+        patientName: parsed.patientName,
+        bed: parsed.bed || "",
+        contractorNormalized,
+        contractorRaw: parsed.contractorRaw,
+        requestedServices: parsed.requestedServices,
+        matchedProcedures,
+        diagnosis: parsed.diagnosis,
+        status: initialStatus,
+        hasExistingApproval: parsed.hasExistingApproval,
+        isRefused: parsed.isRefused,
+        approvedAmountLimit: parsed.financialTerms?.approvedAmountLimit,
+        patientSharePercentage: parsed.financialTerms?.patientSharePercentage,
+        coverageConditions: parsed.financialTerms?.coverageConditions
+      });
       const record = {
         id: msg.id,
         conversationId: msg.conversationId || msg.messageId,
@@ -1514,7 +1724,9 @@ async function runMailSync(options) {
         matchedProcedures,
         status: initialStatus,
         statusReasonArabic: parsed.statusReasonArabic,
-        draftBody: "",
+        draftBody,
+        suggestedDraftReply: draftBody,
+        cmWhatsappMessage,
         draftedAt: (/* @__PURE__ */ new Date()).toISOString(),
         hasReplies: parsed.hasReplies,
         hasExistingApproval: parsed.hasExistingApproval,

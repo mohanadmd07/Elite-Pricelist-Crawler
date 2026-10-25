@@ -13,6 +13,8 @@ import { uploadAttachmentToStorage } from './attachments/attachmentHandler';
 import { persistApprovalToPostgres } from '../services/approvalPostgresService';
 import { resolveOfficerByContractor } from '../services/contractorOfficerResolver';
 import { cleanContractorName, normalizeArabic, normalizeText } from '../lib/arabic-normalizer';
+import { generateCmWhatsappMessage } from '../lib/whatsapp-generator';
+import { buildDraftReplyText } from '../lib/draftReplyBuilder';
 import { InpatientApprovalRecord } from '../types';
 import { MailSyncStats, RawMailMessage } from './types';
 import { supabaseAdmin, supabase } from '../lib/supabase';
@@ -200,6 +202,31 @@ export async function runMailSync(options?: {
         }
       }
 
+      // Build standard email draft reply
+      const draftBody = buildDraftReplyText(
+        priceListYear,
+        contractorNormalized,
+        contractorOfficer,
+        matchedProcedures
+      );
+
+      // Build standard Case Manager WhatsApp message
+      const cmWhatsappMessage = generateCmWhatsappMessage({
+        patientName: parsed.patientName,
+        bed: parsed.bed || '',
+        contractorNormalized,
+        contractorRaw: parsed.contractorRaw,
+        requestedServices: parsed.requestedServices,
+        matchedProcedures,
+        diagnosis: parsed.diagnosis,
+        status: initialStatus,
+        hasExistingApproval: parsed.hasExistingApproval,
+        isRefused: parsed.isRefused,
+        approvedAmountLimit: parsed.financialTerms?.approvedAmountLimit,
+        patientSharePercentage: parsed.financialTerms?.patientSharePercentage,
+        coverageConditions: parsed.financialTerms?.coverageConditions,
+      } as any);
+
       // Build InpatientApprovalRecord
       const record: InpatientApprovalRecord = {
         id: msg.id,
@@ -220,7 +247,9 @@ export async function runMailSync(options?: {
         matchedProcedures,
         status: initialStatus,
         statusReasonArabic: parsed.statusReasonArabic,
-        draftBody: '',
+        draftBody,
+        suggestedDraftReply: draftBody,
+        cmWhatsappMessage,
         draftedAt: new Date().toISOString(),
         hasReplies: parsed.hasReplies,
         hasExistingApproval: parsed.hasExistingApproval,

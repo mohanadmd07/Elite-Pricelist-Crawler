@@ -127,6 +127,7 @@ BEGIN
         'statusReasonArabic', NEW.status_reason_arabic,
         'stateTimestamps', NEW.state_timestamps,
         'suggestedDraftReply', NEW.suggested_draft_reply,
+        'draftBody', NEW.suggested_draft_reply,
         'cmWhatsappMessage', NEW.cm_whatsapp_message,
         'hasReplies', NEW.has_replies,
         'hasExistingApproval', NEW.has_existing_approval,

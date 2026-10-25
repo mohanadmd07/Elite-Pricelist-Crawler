@@ -17,6 +17,8 @@ import {
 } from 'firebase/firestore';
 import { db, auth } from '../firebase';
 import { InpatientApprovalRecord, CompanyConfigRecord, AutomationSettings, CompanyInfo } from '../types';
+import { buildDraftReplyFromRecord } from '../lib/draftReplyBuilder';
+import { generateCmWhatsappMessage } from '../lib/whatsapp-generator';
 
 const APPROVALS_COLLECTION = 'inpatient_approvals';
 const COMPANIES_COLLECTION = 'companies_config';
@@ -26,6 +28,32 @@ const AUTOMATION_SETTINGS_DOC = 'approvals_automation';
 export const MAX_HISTORY_DAYS = 30;
 
 let lastPurgeTimestamp = 0;
+
+/**
+ * Normalizes an approval record from Firestore or API, guaranteeing that draftBody
+ * and cmWhatsappMessage are never undefined, empty, or placeholder strings.
+ */
+export function normalizeApprovalRecord(id: string, rawData: any): InpatientApprovalRecord {
+  const draftBody =
+    (rawData.draftBody && rawData.draftBody !== 'undefined' ? rawData.draftBody : null) ||
+    (rawData.suggestedDraftReply && rawData.suggestedDraftReply !== 'undefined' ? rawData.suggestedDraftReply : null) ||
+    buildDraftReplyFromRecord(rawData);
+
+  const cmWhatsappMessage =
+    (rawData.cmWhatsappMessage &&
+     rawData.cmWhatsappMessage !== 'undefined' &&
+     rawData.cmWhatsappMessage !== 'رسالة الواتساب قيد التوليد...'
+      ? rawData.cmWhatsappMessage
+      : null) || generateCmWhatsappMessage(rawData);
+
+  return {
+    id,
+    ...rawData,
+    draftBody,
+    suggestedDraftReply: draftBody,
+    cmWhatsappMessage,
+  };
+}
 
 /**
  * Returns authorization headers with the current authenticated user's JWT
@@ -99,7 +127,7 @@ export function subscribeToApprovals(
         .then((res) => (res.ok ? res.json() : null))
         .then((data) => {
           if (Array.isArray(data) && isSubscribed) {
-            onUpdate(data);
+            onUpdate(data.map((item) => normalizeApprovalRecord(item.id, item)));
           }
         })
         .catch(() => {});
@@ -134,10 +162,7 @@ export function subscribeToApprovals(
 
         // Enforce 30-day rolling window
         if (recordDate >= cutoffDate) {
-          records.push({
-            id: docSnap.id,
-            ...data,
-          });
+          records.push(normalizeApprovalRecord(docSnap.id, data));
         }
       });
 
@@ -168,10 +193,7 @@ export function subscribeToApprovals(
         (snap) => {
           const records: InpatientApprovalRecord[] = [];
           snap.docs.forEach((docSnap) => {
-            records.push({
-              id: docSnap.id,
-              ...(docSnap.data() as Omit<InpatientApprovalRecord, 'id'>),
-            });
+            records.push(normalizeApprovalRecord(docSnap.id, docSnap.data()));
           });
           records.sort((a, b) => {
             const getEpoch = (val: any) => {

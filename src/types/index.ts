@@ -133,6 +133,7 @@ export interface InpatientApprovalRecord {
   }>;
   status: ApprovalGranularStatus;
   draftBody: string;
+  suggestedDraftReply?: string;
   draftedAt: any;
   answeredAt?: any;
 

@@ -304,7 +304,7 @@ export function parseHisApprovalEmail(msg: RawMailMessage): ParsedApprovalEmail 
         const fullRowText = $(tr).text();
         admissionType = fullRowText.includes('Inpatient') ? 'Inpatient' : 'Outpatient';
         const bedMatch = fullRowText.match(/Bed:\s*([^–\n<]+)/i);
-        if (bedMatch) bed = bedMatch[1].trim();
+        if (bedMatch) bed = bedMatch[1].replace(/Physician.*$/i, '').trim();
       }
       if ((!physician || physician === 'Hospital Staff') && /^Physician\s*[:\s]*$/i.test(cellText) && nextCellText) {
         physician = nextCellText;
@@ -353,7 +353,7 @@ export function parseHisApprovalEmail(msg: RawMailMessage): ParsedApprovalEmail 
     }
     if (!bed || bed === 'Inpatient Bed') {
       const bMatch = text.match(/Bed:\s*([^–\n<]+)/i);
-      if (bMatch) bed = bMatch[1].trim();
+      if (bMatch) bed = bMatch[1].replace(/Physician.*$/i, '').trim();
     }
     if (text.includes('Request Details')) {
       const container = $(el).closest('div, table').find('div, p, span').last().text().trim();
