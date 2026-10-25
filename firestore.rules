@@ -16,22 +16,46 @@ service cloud.firestore {
       return request.auth != null;
     }
 
-    function isOwner(userId) {
-      return isSignedIn() && request.auth.uid == userId;
+    function isStaffEmail(email) {
+      return email in [
+        'mohanad.md07@gmail.com',
+        'uniquepower0@gmail.com',
+        'dr.mohamed.mounir83@gmail.com',
+        'dr.bassam.saqr@gmail.com',
+        'drmohamedhamedahmedghazy@gmail.com',
+        'ayaelkassas2013@gmail.com',
+        'bofaridabofarida@gmail.com',
+        'salmakhamishussien12@gmail.com',
+        'moody203205@gmail.com'
+      ];
     }
 
     function isAdmin() {
       return isSignedIn() && (
         ('admin' in request.auth.token && request.auth.token.admin == true) ||
-        (request.auth.token.email != null && request.auth.token.email == 'mohanad.md07@gmail.com')
+        (request.auth.token.email != null && (request.auth.token.email == 'mohanad.md07@gmail.com' || request.auth.token.email == 'uniquepower0@gmail.com'))
       );
+    }
+
+    function isAuthorizedStaff() {
+      return isSignedIn() && (
+        isAdmin() ||
+        (request.auth.token.email != null && (
+          request.auth.token.email.matches('.*@elitehospital\\.org$') ||
+          isStaffEmail(request.auth.token.email)
+        ))
+      );
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
     }
 
     // ===============================================================
     // Collection Rules
     // ===============================================================
 
-    // User Profiles
+    // User Profiles & Searches
     match /users/{userId} {
       allow get: if isOwner(userId) || isAdmin();
       allow list: if isAdmin();
@@ -52,19 +76,27 @@ service cloud.firestore {
       allow read: if isAdmin();
     }
 
-    // Inpatient Approvals Collection (Operational Workflow & 30-day rollover purge)
+    // Inpatient Approvals Collection (Strictly Authorized Hospital Staff & Outbox Worker)
     match /inpatient_approvals/{approvalId} {
-      allow read, write: if true;
+      allow read: if isAuthorizedStaff();
+      allow create, update: if isAuthorizedStaff() || (
+        request.resource.data.mrn != null &&
+        request.resource.data.status in ['received', 'parsed', 'matched', 'needs_review', 'draft_created', 'answered', 'refused']
+      );
+      allow delete: if isAdmin();
     }
 
     // Companies / Contractors Configuration (Pricelist & Sales Officer Mappings)
     match /companies_config/{companyId} {
-      allow read, write: if true;
+      allow read: if isAuthorizedStaff();
+      allow create, update, delete: if isAdmin();
     }
 
     // Global Automation Settings (Pause / Resume / Polling Intervals)
     match /settings/{settingId} {
-      allow read, write: if true;
+      allow read: if isAuthorizedStaff();
+      allow create, update: if isAuthorizedStaff();
+      allow delete: if isAdmin();
     }
   }
 }

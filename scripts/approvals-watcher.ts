@@ -44,6 +44,7 @@ import {
 } from '../src/services/aiMatchService';
 import { resolveOfficerByContractor, invalidateContractorResolverCache, normalizeContractorText } from '../src/services/contractorOfficerResolver';
 import { InpatientApprovalRecord, CompanyConfigRecord } from '../src/types';
+import { persistApprovalToPostgres, saveSyncWatermarkToPostgres, loadSyncWatermarkFromPostgres } from '../src/services/approvalPostgresService';
 // @ts-ignore
 import httpntlm from 'httpntlm';
 
@@ -130,6 +131,10 @@ export function saveLocalSyncState(syncState: string): void {
   } catch (err) {
     console.error('[Watcher Storage] Error saving sync state:', err);
   }
+  // Authoritative PostgreSQL watermark persistence
+  saveSyncWatermarkToPostgres(IMAP_FOLDER, syncState).catch((err) =>
+    console.warn('[Sync Watermark] Postgres save failed:', err?.message || err)
+  );
 }
 
 /**
@@ -183,6 +188,11 @@ export function upsertLocalApproval(record: InpatientApprovalRecord): void {
     current.unshift(record);
   }
   saveLocalApprovals(current);
+
+  // Authoritative PostgreSQL persistence (triggers outbox event replication)
+  persistApprovalToPostgres(record).catch((err) =>
+    console.warn('[Approvals Watcher] Postgres background persistence error:', err?.message || err)
+  );
 }
 
 export function deleteLocalApproval(id: string): void {

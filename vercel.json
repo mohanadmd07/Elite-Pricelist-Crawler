@@ -29,5 +29,11 @@
       "source": "/((?!api/).*)",
       "destination": "/index.html"
     }
+  ],
+  "crons": [
+    {
+      "path": "/api/approvals/sync",
+      "schedule": "0 4 * * *"
+    }
   ]
 }

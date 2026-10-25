@@ -33,11 +33,37 @@ export const ProcedureResultCard: React.FC<ProcedureResultCardProps> = ({
           <span className="text-xs font-bold font-mono text-slate-800">
             {result.sourceFile}
           </span>
+          {result.code && (
+            <span className="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-slate-200/70 text-slate-800">
+              {result.code}
+            </span>
+          )}
+          {result.outsourced && (
+            <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-100 text-amber-900 border border-amber-200">
+              خارجي / Send-out
+            </span>
+          )}
         </div>
-        <div className="bg-white border border-slate-200 px-2.5 py-1 rounded-lg">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-600">
-            {result.sectionName || 'General'}
-          </span>
+        <div className="flex items-center gap-2">
+          {result.confidence !== undefined && (
+            <span
+              className={`px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider border ${
+                result.confidence >= 0.85
+                  ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
+                  : result.confidence >= 0.5
+                  ? 'bg-amber-50 text-amber-900 border-amber-300'
+                  : 'bg-rose-50 text-rose-900 border-rose-300'
+              }`}
+            >
+              {result.confidence >= 0.85 ? '✓ موثق' : '⚠️ للمراجعة'}{' '}
+              {Math.round(result.confidence * 100)}%
+            </span>
+          )}
+          <div className="bg-white border border-slate-200 px-2.5 py-1 rounded-lg">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-600">
+              {result.sectionName || 'General'}
+            </span>
+          </div>
         </div>
       </div>
 

@@ -10,6 +10,9 @@ import {
 } from '../lib/arabic-normalizer';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import { matchProceduresWithAI, isGeminiConfigured } from './aiMatchService';
+import { getOverrideForQuery } from './procedureOverrideService';
+import { getCachedCatalog, setCachedCatalog } from '../lib/catalogCache';
+import { searchPricelistAsync } from './searchWorkerClient';
 
 // Module-level caches per react-best-practices (js-cache-function-results)
 const cashDataCache: Record<string, ProcedureResult[]> = {};
@@ -57,12 +60,26 @@ export async function getCashData(year: '2023' | '2024' | '2025' | '2026'): Prom
     }
   }
 
+  if (!data && typeof window !== 'undefined') {
+    try {
+      const cached = await getCachedCatalog(year);
+      if (cached && cached.length > 0) {
+        data = cached;
+      }
+    } catch {
+      // Fall through to network fetch
+    }
+  }
+
   if (!data) {
     const response = await fetch(`/${year}_cash.json`);
     if (!response.ok) {
       throw new Error(`Could not load ${year} Cash pricelist file.`);
     }
     data = await response.json();
+    if (data && typeof window !== 'undefined') {
+      setCachedCatalog(year, data).catch(() => {});
+    }
   }
 
   if (data) {
@@ -332,11 +349,35 @@ export async function searchAllProcedures(
   const localResults: ProcedureResult[] = [];
   const listsToSearch: { year: string; list: ProcedureResult[] }[] = [];
 
+  // 0. Check clinician and staff priority manual overrides
+  const pendingProcedures: SelectedProcedure[] = [];
+  for (const proc of selectedProcedures) {
+    const override = await getOverrideForQuery(proc.name);
+    if (override) {
+      localResults.push({
+        code: override.chosenCode,
+        nameArabic: override.chosenName,
+        nameEnglish: override.chosenName,
+        price: '0.00',
+        sectionName: 'تعديل يدوي معتمد (Override)',
+        sourceFile: 'Manual Override Priority',
+        requestedProcedureName: proc.name,
+      });
+    } else {
+      pendingProcedures.push(proc);
+    }
+  }
+
+  // If all procedures resolved by overrides, return immediately
+  if (pendingProcedures.length === 0 && localResults.length > 0) {
+    return localResults;
+  }
+
   // 1. Parallel Supabase RPC lookup with fast 750ms timeout race
   if (isSupabaseConfigured() && supabase) {
     try {
       const targetYear = normalizedYear ? parseInt(normalizedYear, 10) : 2026;
-      const rpcPromises = selectedProcedures.map(async (proc) => {
+      const rpcPromises = pendingProcedures.map(async (proc) => {
         try {
           const cleanedSearchTerm = cleanHisProcedureQuery(proc.name) || proc.name;
           const { data, error } = await supabase.rpc('search_procedures', {
@@ -388,7 +429,7 @@ export async function searchAllProcedures(
   for (const item of fetchedLists) {
     if (item.list.length > 0) {
       listsToSearch.push(item);
-      const matches = searchLocalPricelist(item.list, selectedProcedures);
+      const matches = await searchPricelistAsync(item.list, pendingProcedures);
       localResults.push(...matches);
     }
   }

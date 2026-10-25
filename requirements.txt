@@ -11,10 +11,23 @@ pydantic-settings>=2.2.1
 # Resilience & Retries
 tenacity>=8.2.3
 
-# File Parsing
+# File Parsing (Excel & PDF)
 openpyxl>=3.1.2
+pymupdf>=1.24.0
+pdfplumber>=0.11.0
+pillow>=10.3.0
+
+# Arabic & Bidi Text Normalization
+arabic-reshaper>=3.0.0
+python-bidi>=0.4.0
+
+# AI & LLM Vision
+google-genai>=1.0.0
 
 # CLI & Output formatting
 rich>=13.7.1
 click>=8.1.7
 python-dotenv>=1.0.1
+
+# Testing & Quality Gates
+pytest>=8.0.0

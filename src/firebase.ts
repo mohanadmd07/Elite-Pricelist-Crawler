@@ -27,7 +27,6 @@ import {
   serverTimestamp,
   Firestore,
 } from 'firebase/firestore';
-import firebaseAppletConfig from '../firebase-applet-config.json';
 import { SaveSearchOptions, UserSearchRecord } from './types';
 
 const getEnvVar = (key: string): string => {
@@ -40,32 +39,18 @@ const getEnvVar = (key: string): string => {
   return '';
 };
 
-// Determine if we have a valid external Firebase API key set in the environment
-const hasValidEnvConfig = (): boolean => {
-  const envKey = getEnvVar('VITE_FIREBASE_API_KEY');
-  return envKey.startsWith('AIzaSy');
-};
-
-const useEnv = hasValidEnvConfig();
-
-// Construct config, prioritizing environment variables, falling back to pre-configured values
-const firebaseConfig = useEnv ? {
+// Construct config from environment variables
+const firebaseConfig = {
   apiKey: getEnvVar('VITE_FIREBASE_API_KEY'),
   authDomain: getEnvVar('VITE_FIREBASE_AUTH_DOMAIN'),
   projectId: getEnvVar('VITE_FIREBASE_PROJECT_ID'),
   storageBucket: getEnvVar('VITE_FIREBASE_STORAGE_BUCKET'),
   messagingSenderId: getEnvVar('VITE_FIREBASE_MESSAGING_SENDER_ID'),
   appId: getEnvVar('VITE_FIREBASE_APP_ID'),
-  firestoreDatabaseId: getEnvVar('VITE_FIREBASE_DATABASE_ID'),
-} : {
-  apiKey: firebaseAppletConfig.apiKey,
-  authDomain: firebaseAppletConfig.authDomain,
-  projectId: firebaseAppletConfig.projectId,
-  storageBucket: firebaseAppletConfig.storageBucket,
-  messagingSenderId: firebaseAppletConfig.messagingSenderId,
-  appId: firebaseAppletConfig.appId,
-  firestoreDatabaseId: firebaseAppletConfig.firestoreDatabaseId || (firebaseAppletConfig as any).firestoreDatabaseId,
+  firestoreDatabaseId: getEnvVar('VITE_FIREBASE_DATABASE_ID') || undefined,
 };
+
+const useEnv = Boolean(firebaseConfig.apiKey && firebaseConfig.apiKey.startsWith('AIzaSy'));
 
 
 console.log('Firebase Init Config Debug (Safe):', {

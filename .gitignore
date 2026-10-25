@@ -16,3 +16,13 @@ __pycache__/
 supabase/.temp/
 supabase/contractor_aliases_seed.sql
 data/raw_email_staging.json
+data/inpatient_approvals.json
+data/sync_state.json
+data/*.log
+data/approvals_watcher.log
+data/approvals_watcher_err.log
+data/pdf_crops/
+data/review_queue_*.csv
+data/secure_seeds/
+firebase-applet-config.json
+firebase-blueprint.json

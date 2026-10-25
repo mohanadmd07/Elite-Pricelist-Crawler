@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  mail-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: elite_mail_worker
+    restart: always
+    ports:
+      - '8080:8080'
+    env_file:
+      - .env.local
+    environment:
+      - PORT=8080
+      - SYNC_INTERVAL_MINUTES=20
+      - EWS_URL=${EWS_URL:-https://wmail.elitehospital.org/EWS/Exchange.asmx}
+      - EXCHANGE_USER=${EXCHANGE_USER:-${IMAP_USER}}
+      - EXCHANGE_PASSWORD=${EXCHANGE_PASSWORD:-${IMAP_PASSWORD}}
+      - EXCHANGE_DOMAIN=${EXCHANGE_DOMAIN:-elitehospital}
+      - EWS_FOLDER=${EWS_FOLDER:-InApprovals}
+    healthcheck:
+      test: ['CMD', 'wget', '--spider', '-q', 'http://localhost:8080/health']
+      interval: 30s
+      timeout: 5s
+      retries: 3

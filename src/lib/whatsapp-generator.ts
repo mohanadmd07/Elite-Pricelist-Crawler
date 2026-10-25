@@ -122,9 +122,9 @@ export function extractProcedureFromApprovalReply(text: string): string {
   if (!text) return '';
   const clean = text.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
 
-  // 1. لا مانع من ... لاجراء / لعمل / وعمل: <Procedure>
+  // 1. لا مانع من ... لاجراء / لعمل / وعمل / عمل / إجراء: <Procedure>
   const m1 = clean.match(
-    /(?:لا\s*مانع\s*من\s*(?:الدخول[^\n\r:،,-]{0,35})?(?:ل[إا]جراء|لعمل|وعمل)|الموافقة\s*على\s*(?:عمل|إجراء|اجراء)?)\s*[:\s]*([^\n\r،,-]+?)(?=\s*(?:-|–|تحت|بحد|الحد|شامل|مع|فقط|$))/i
+    /(?:لا\s*مانع\s*من\s*(?:الدخول[^\n\r:،,-]{0,35})?(?:ل?[إا]جراء|ل?عمل|وعمل)|الموافقة\s*على\s*(?:عمل|إجراء|اجراء)?)\s*[:\s]*([^\n\r،,-]+?)(?=\s*(?:-|–|تحت|بحد|الحد|شامل|مع|فقط|$))/i
   );
   if (m1 && m1[1] && m1[1].trim().length > 3) {
     const res = m1[1].trim();
@@ -197,6 +197,7 @@ export function generateCmWhatsappMessage(record: InpatientApprovalRecord): stri
   // Line 1: *Patient Name* - Bed <Location>
   const patient = (record.patientName || 'المريض').trim();
   let bedInfo = (record.bed || '').trim();
+  bedInfo = bedInfo.replace(/Physician.*$/i, '').trim();
   if (
     bedInfo &&
     !bedInfo.toLowerCase().startsWith('bed') &&
@@ -260,11 +261,14 @@ export function generateCmWhatsappMessage(record: InpatientApprovalRecord): stri
     procText = 'الدخول والإجراءات المقررة';
   }
 
-  // Check approval status
+  // Check approval and refusal status
   const isApproved =
     record.status === 'approved' ||
     record.status === 'conditionally_approved' ||
     Boolean(record.hasExistingApproval);
+  const isRefused =
+    record.status === 'refused' ||
+    Boolean(record.isRefused);
 
   // Credit limit formatting
   let limitFormatted = '';
@@ -285,7 +289,7 @@ export function generateCmWhatsappMessage(record: InpatientApprovalRecord): stri
     const amt = ` بمبلغ ${(m.suggestedPrice as number).toLocaleString('en-US')} ج.م`;
     return { name, text: `مطلوب موافقة سعرية${amt} على: ${name}` };
   });
-  if (unlistedLines.length > 0 && !isApproved) {
+  if (unlistedLines.length > 0 && !isApproved && !isRefused) {
     const body =
       unlistedLines.length === 1
         ? unlistedLines[0].text
@@ -308,6 +312,8 @@ export function generateCmWhatsappMessage(record: InpatientApprovalRecord): stri
     line3 = `*تمت الموافقة على: ${procText} - ${priceText}*`;
   } else if (isApproved) {
     line3 = `*تمت الموافقة على: ${procText}${limitFormatted}*`;
+  } else if (isRefused) {
+    line3 = `*تم رفض طلب الموافقة على: ${procText}*`;
   } else {
     let actionPrefix = '';
     if (

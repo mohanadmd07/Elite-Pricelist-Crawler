@@ -14,9 +14,10 @@ export function calculateDiscountedPrice(
     String(d.charCodeAt(0) & 0xf)
   );
 
+  if (cleanPriceStr.trim().startsWith('-')) return null;
   const numericPart = cleanPriceStr.replace(/[^0-9.]/g, '');
   const price = parseFloat(numericPart);
-  if (isNaN(price)) return null;
+  if (isNaN(price) || price <= 0) return null;
 
   // Apply discount percentage (e.g., 20 means 20% off)
   const discountAmount = (price * Math.max(0, Math.min(discountPercent, 100))) / 100;

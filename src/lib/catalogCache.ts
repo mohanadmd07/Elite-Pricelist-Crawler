@@ -1,0 +1,101 @@
+/**
+ * High-Performance IndexedDB Offline Catalog Cache.
+ * Persists yearly pricelist catalogs locally in the browser to eliminate network latency,
+ * enable offline search, and reduce network egress.
+ */
+
+import { ProcedureResult } from '../types';
+
+const DB_NAME = 'ElitePricelistCache';
+const DB_VERSION = 1;
+const STORE_NAME = 'catalogs';
+
+interface CachedCatalogRecord {
+  year: string;
+  timestamp: number;
+  items: ProcedureResult[];
+}
+
+function openDatabase(): Promise<IDBDatabase | null> {
+  if (typeof window === 'undefined' || !window.indexedDB) {
+    return Promise.resolve(null);
+  }
+
+  return new Promise((resolve) => {
+    try {
+      const request = window.indexedDB.open(DB_NAME, DB_VERSION);
+
+      request.onupgradeneeded = (event) => {
+        const db = (event.target as IDBOpenDBRequest).result;
+        if (!db.objectStoreNames.contains(STORE_NAME)) {
+          db.createObjectStore(STORE_NAME, { keyPath: 'year' });
+        }
+      };
+
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => {
+        console.warn('[IndexedDB] Failed to open database:', request.error);
+        resolve(null);
+      };
+    } catch (e) {
+      console.warn('[IndexedDB] Initialization exception:', e);
+      resolve(null);
+    }
+  });
+}
+
+/**
+ * Retrieves a cached catalog from IndexedDB.
+ */
+export async function getCachedCatalog(year: string): Promise<ProcedureResult[] | null> {
+  const db = await openDatabase();
+  if (!db) return null;
+
+  return new Promise((resolve) => {
+    try {
+      const tx = db.transaction(STORE_NAME, 'readonly');
+      const store = tx.objectStore(STORE_NAME);
+      const req = store.get(year);
+
+      req.onsuccess = () => {
+        const record = req.result as CachedCatalogRecord | undefined;
+        if (!record || !Array.isArray(record.items)) {
+          resolve(null);
+          return;
+        }
+        // Cache valid for 24 hours
+        const isFresh = Date.now() - record.timestamp < 24 * 60 * 60 * 1000;
+        resolve(isFresh ? record.items : null);
+      };
+
+      req.onerror = () => resolve(null);
+    } catch {
+      resolve(null);
+    }
+  });
+}
+
+/**
+ * Persists a catalog to IndexedDB.
+ */
+export async function setCachedCatalog(year: string, items: ProcedureResult[]): Promise<void> {
+  const db = await openDatabase();
+  if (!db) return;
+
+  return new Promise((resolve) => {
+    try {
+      const tx = db.transaction(STORE_NAME, 'readwrite');
+      const store = tx.objectStore(STORE_NAME);
+      const record: CachedCatalogRecord = {
+        year,
+        timestamp: Date.now(),
+        items,
+      };
+      store.put(record);
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => resolve();
+    } catch {
+      resolve();
+    }
+  });
+}

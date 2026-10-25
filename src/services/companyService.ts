@@ -4,6 +4,7 @@ import { getBaseNameForSales, normalizeArabic } from '../lib/arabic-normalizer';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import { db } from '../firebase';
 import { collection, getDocs, query, orderBy } from 'firebase/firestore';
+import { getAuthHeaders } from './approvalsFirebaseService';
 
 const MANUAL_REPS: Record<string, string> = {
   'المصرية الاماراتية': 'ديانا',
@@ -87,7 +88,8 @@ export async function loadCompanies(): Promise<CompanyInfo[]> {
 
   // 2. Try local API (/api/contractors)
   try {
-    const res = await fetch('/api/contractors');
+    const headers = await getAuthHeaders();
+    const res = await fetch('/api/contractors', { headers });
     if (res.ok) {
       const localData = await res.json();
       if (Array.isArray(localData) && localData.length > 0) {

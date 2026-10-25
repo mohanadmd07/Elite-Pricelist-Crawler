@@ -1,0 +1,301 @@
+[
+  {
+    "nameEnglish": "Bilateral TMJ Reduction(Tempanomandibular Joint) Without Aneathesia",
+    "nameArabic": "بدون تخدير اجراء رد جانبين المفصل الصدغي الفكي",
+    "price": "1050",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2023.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2023.pdf",
+        "sha256": "61cc2a3b5fc31f52178c8f215310b828256d22beb07312d4c507deb5d0b09bd6",
+        "page": 4,
+        "extractor": "L2"
+      }
+    ],
+    "extractor": "L2",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.8,
+    "flags": [
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Epidural Injection Procedure(Without Medication & Consumables)",
+    "nameArabic": "المستلزم ) اجراء حقن الم (بدون سعر الدواء او",
+    "price": "3300",
+    "sectionName": "Ambulance Services",
+    "sourceFile": "2023.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2023.pdf",
+        "sha256": "61cc2a3b5fc31f52178c8f215310b828256d22beb07312d4c507deb5d0b09bd6",
+        "page": 5,
+        "extractor": "L2"
+      }
+    ],
+    "extractor": "L2",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.8,
+    "flags": [
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Insertion of Cannula",
+    "nameArabic": "اجراء تركيب كانيوال",
+    "price": "60",
+    "sectionName": "Ambulance Services",
+    "sourceFile": "2023.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2023.pdf",
+        "sha256": "61cc2a3b5fc31f52178c8f215310b828256d22beb07312d4c507deb5d0b09bd6",
+        "page": 5,
+        "extractor": "L2"
+      }
+    ],
+    "extractor": "L2",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.8,
+    "flags": [
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Insertion of nasogastric tube",
+    "nameArabic": "اجراء تركيب انبوب تغذيه االنف",
+    "price": "200",
+    "sectionName": "Ambulance Services",
+    "sourceFile": "2023.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2023.pdf",
+        "sha256": "61cc2a3b5fc31f52178c8f215310b828256d22beb07312d4c507deb5d0b09bd6",
+        "page": 5,
+        "extractor": "L2"
+      }
+    ],
+    "extractor": "L2",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.8,
+    "flags": [
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Insertion of Urinary Catheter using guide by urologist",
+    "nameArabic": "المسالك اجراء تركيب قسطره بول عن طريق اخصائي",
+    "price": "400",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2023.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2023.pdf",
+        "sha256": "61cc2a3b5fc31f52178c8f215310b828256d22beb07312d4c507deb5d0b09bd6",
+        "page": 4,
+        "extractor": "L2"
+      }
+    ],
+    "extractor": "L2",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.8,
+    "flags": [
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Intraosseous access insertion",
+    "nameArabic": "اجراء تركيب كانيوال داخل العظام",
+    "price": "250",
+    "sectionName": "Ambulance Services",
+    "sourceFile": "2023.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2023.pdf",
+        "sha256": "61cc2a3b5fc31f52178c8f215310b828256d22beb07312d4c507deb5d0b09bd6",
+        "page": 5,
+        "extractor": "L2"
+      }
+    ],
+    "extractor": "L2",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.8,
+    "flags": [
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Plastic surgery stitches between (2cm- 5cm)",
+    "nameArabic": "غرز تجميليه لجرح مابين 2 سم-5سم",
+    "price": "900",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2023.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2023.pdf",
+        "sha256": "61cc2a3b5fc31f52178c8f215310b828256d22beb07312d4c507deb5d0b09bd6",
+        "page": 4,
+        "extractor": "L2"
+      }
+    ],
+    "extractor": "L2",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.8,
+    "flags": [
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Simple Fracture Reduction in ER Without Aneathesia",
+    "nameArabic": "تخدير اجراء رد كسر بسيط بالطواريء بدون",
+    "price": "400",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2023.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2023.pdf",
+        "sha256": "61cc2a3b5fc31f52178c8f215310b828256d22beb07312d4c507deb5d0b09bd6",
+        "page": 4,
+        "extractor": "L2"
+      }
+    ],
+    "extractor": "L2",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.8,
+    "flags": [
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Special Nature Medication IV Adminstration, E.g Iron...etc (Not Including Chemotherapy Medication)",
+    "nameArabic": "أدوية الكيماوي) مثال و ليس للحصر الحديد (غير متضمنة اجراء حقن وريدي أدوية ذات طابع خاص",
+    "price": "220",
+    "sectionName": "Ambulance Services",
+    "sourceFile": "2023.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2023.pdf",
+        "sha256": "61cc2a3b5fc31f52178c8f215310b828256d22beb07312d4c507deb5d0b09bd6",
+        "page": 5,
+        "extractor": "L2"
+      }
+    ],
+    "extractor": "L2",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.8,
+    "flags": [
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Suction Therapy",
+    "nameArabic": "اجراء عالج بالشفط",
+    "price": "1500",
+    "sectionName": "Ambulance Services",
+    "sourceFile": "2023.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2023.pdf",
+        "sha256": "61cc2a3b5fc31f52178c8f215310b828256d22beb07312d4c507deb5d0b09bd6",
+        "page": 5,
+        "extractor": "L2"
+      }
+    ],
+    "extractor": "L2",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.8,
+    "flags": [
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Urethral Dilatation by urologist",
+    "nameArabic": "أخصائي المسالك اجراء توسيع المجري البولي بواسطة",
+    "price": "460",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2023.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2023.pdf",
+        "sha256": "61cc2a3b5fc31f52178c8f215310b828256d22beb07312d4c507deb5d0b09bd6",
+        "page": 4,
+        "extractor": "L2"
+      }
+    ],
+    "extractor": "L2",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.8,
+    "flags": [
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "U.S guided CVP insertion of catheter",
+    "nameArabic": "الصوتية المركزي باستخدام جهاز الموجات فوق اجراء ادخال قسطرة الضغط الوريدي",
+    "price": "1600",
+    "sectionName": "Ambulance Services",
+    "sourceFile": "2023.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2023.pdf",
+        "sha256": "61cc2a3b5fc31f52178c8f215310b828256d22beb07312d4c507deb5d0b09bd6",
+        "page": 5,
+        "extractor": "L2"
+      }
+    ],
+    "extractor": "L2",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.8,
+    "flags": [
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "U.S guided Insertion of Cannula",
+    "nameArabic": "الصوتية اجراء تركيب كانيوال إسترشادا بالموجات",
+    "price": "500",
+    "sectionName": "Ambulance Services",
+    "sourceFile": "2023.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2023.pdf",
+        "sha256": "61cc2a3b5fc31f52178c8f215310b828256d22beb07312d4c507deb5d0b09bd6",
+        "page": 5,
+        "extractor": "L2"
+      }
+    ],
+    "extractor": "L2",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.8,
+    "flags": [
+      "pdf_only_candidate"
+    ]
+  }
+]

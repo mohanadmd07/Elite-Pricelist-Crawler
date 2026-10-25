@@ -1,11 +1,14 @@
 """
 Text normalization, multilingual cleaning, and number parsing utilities.
 Specifically optimized for Egyptian healthcare, Arabic/English bilingual pricelists,
-and OCR/Excel artifact sanitization.
+and OCR/PDF/Excel artifact sanitization.
+
+Mirrors src/lib/arabic-normalizer.ts for 1:1 cross-language matching consistency.
 """
 
 import re
-from typing import Optional, Tuple, Any
+import unicodedata
+from typing import Optional, Tuple, Any, List
 
 # Pre-compiled Regex patterns
 ARABIC_CHAR_PATTERN = re.compile(r"[\u0600-\u06FF]")
@@ -19,6 +22,7 @@ SENDOUT_ASTERISK_PATTERN = re.compile(r"^\*+\s*(.*)$")
 CHAR_TRANSLATION_MAP = str.maketrans({
     "ی": "ي",
     "ى": "ي",
+    "ك": "ك",
     "ک": "ك",
     "ھ": "ه",
     "ۀ": "ه",
@@ -28,13 +32,130 @@ CHAR_TRANSLATION_MAP = str.maketrans({
 })
 
 
+def is_reversed_arabic(text: str) -> bool:
+    """
+    Detects whether an Arabic string was extracted in visual LTR order (reversed characters/words).
+    Analyzes Arabic word starts (prefixes) vs word endings (suffixes).
+    """
+    if not text:
+        return False
+    words = re.findall(r"[\u0600-\u06FF]+", text)
+    if not words:
+        return False
+
+    reversed_score = 0
+    logical_score = 0
+
+    for w in words:
+        # Isolated hamza 'ء' at start of word -> impossible in standard Arabic, indicates reversed (e.g. 'ءارجا' -> 'اجراء')
+        if w.startswith("ء"):
+            reversed_score += 5
+        if w.endswith("ء"):
+            logical_score += 2
+
+        # Taa marbuta or Alef Maqsura at start of word -> impossible in Arabic, strongly indicates reversed
+        if w.startswith(("ة", "ى")):
+            reversed_score += 4
+        if w.endswith(("ة", "ى")):
+            logical_score += 2
+
+        # 'ال' at start of word -> logical
+        if w.startswith(("ال", "وال", "فال", "بال", "كال", "لل")):
+            logical_score += 3
+        # 'لا' at end of word -> reversed 'ال'
+        if w.endswith(("لا", "لاو", "لاف", "لاب", "لاك")):
+            reversed_score += 3
+
+        # 'است' at start -> logical
+        if w.startswith(("است", "واست")):
+            logical_score += 4
+        # 'تسا' at end -> reversed 'است'
+        if w.endswith(("تسا", "تساو")):
+            reversed_score += 4
+
+    return reversed_score > logical_score
+
+
+def reverse_visual_bidi(text: str) -> str:
+    """
+    Directly reverses a visual-order Arabic line back to logical order.
+    Preserves embedded Latin characters and digits intact while reversing Arabic word flow.
+    """
+    if not text:
+        return ""
+    tokens = re.findall(r"[a-zA-Z0-9_.-]+|[\u0600-\u06FF]+|\s+|[^\s\w]", text)
+    tokens.reverse()
+    result = []
+    for tok in tokens:
+        if re.search(r"[\u0600-\u06FF]", tok):
+            result.append(tok[::-1])
+        else:
+            result.append(tok)
+    return "".join(result).strip()
+
+
+def fix_bidi_arabic(text: str, force: bool = False) -> str:
+    """
+    Detects and fixes visual-order (reversed) Arabic text per cell or line.
+    If force=True, reverses unconditionally (useful when entire table is verified reversed).
+    """
+    if not text:
+        return ""
+    if force or is_reversed_arabic(text):
+        return reverse_visual_bidi(text)
+    return text.strip()
+
+
+def normalize_nfkc(text: str) -> str:
+    """
+    Applies Unicode NFKC normalization to collapse Arabic Presentation Forms
+    (U+FB50-FDFF, U+FE70-FEFF) into canonical Unicode codepoints.
+    """
+    if not text:
+        return ""
+    return unicodedata.normalize("NFKC", text)
+
+
 def clean_text(value: Any) -> str:
-    """Normalizes string encoding, strips diacritics/tatweel, and collapses whitespace."""
+    """Normalizes string encoding, applies NFKC, strips diacritics/tatweel, and collapses whitespace."""
     if value is None:
         return ""
-    text = str(value).replace("\xa0", " ").translate(CHAR_TRANSLATION_MAP)
+    text = normalize_nfkc(str(value)).replace("\xa0", " ").translate(CHAR_TRANSLATION_MAP)
     text = DIACRITICS_TATWEEL_PATTERN.sub("", text)
     return WHITESPACE_PATTERN.sub(" ", text).strip()
+
+
+def normalize_arabic(text: str) -> str:
+    """
+    Standardizes Arabic characters across Alef, Yaa, Haa/Taa Marbuta, Hamzas, and diacritics.
+    Mirrors normalizeArabic() in src/lib/arabic-normalizer.ts.
+    """
+    if not text:
+        return ""
+    t = clean_text(text).lower()
+    t = re.sub(r"[أإآا]", "ا", t)
+    t = re.sub(r"[ىيی]", "ي", t)
+    t = re.sub(r"[كک]", "ك", t)
+    t = re.sub(r"[ةهھۀ]", "ه", t)
+    t = re.sub(r"[ئؤ]", "ء", t)
+    t = re.sub(r"[^a-zA-Z0-9\u0621-\u064A\s]", " ", t)
+    return WHITESPACE_PATTERN.sub(" ", t).strip()
+
+
+def normalize_text(text: str) -> str:
+    """
+    Normalizes English & Arabic medical text:
+    - Merges dotted abbreviations ('E.E.G.' -> 'eeg')
+    - Strips billing suffixes ('- investigation', 'procedure', etc.)
+    - Mirrors normalizeText() in src/lib/arabic-normalizer.ts.
+    """
+    if not text:
+        return ""
+    t = text.lower()
+    t = re.sub(r"\b([a-z])\s*\.\s*", r"\1", t)
+    t = re.sub(r"\s*[-/,]\s*(investigations?|procedures?|tests?|testing|panels?|profiles?|screens?|screening|analysis|packages?|scans?|counts?)\b", "", t)
+    t = re.sub(r"\s+\b(investigations?|procedures?|tests?|testing|panels?|profiles?|screens?|screening|analysis|packages?|scans?|counts?)$", "", t)
+    return normalize_arabic(t)
 
 
 def parse_numeric_price(value: Any) -> Optional[float]:
@@ -44,7 +165,7 @@ def parse_numeric_price(value: Any) -> Optional[float]:
     if isinstance(value, (int, float)):
         return float(value) if value > 0 else None
     if isinstance(value, str):
-        cleaned = clean_text(value).replace(",", "").replace("EGP", "").replace("LE", "").replace("L.E", "").strip()
+        cleaned = clean_text(value).replace(",", "").replace("EGP", "").replace("LE", "").replace("L.E", "").replace("ج.م", "").strip()
         match = re.search(r"(\d+(?:\.\d+)?)", cleaned)
         if match:
             try:
@@ -66,26 +187,32 @@ def split_mixed_bilingual(text: str) -> Tuple[str, str]:
     arabic_parts = [m.group(0) for m in ARABIC_RUN_PATTERN.finditer(t)]
     arabic_text = clean_text(" ".join(arabic_parts))
     english_text = clean_text(ARABIC_RUN_PATTERN.sub(" ", t))
-    
+
     # Balance parentheses in English text
     english_text = re.sub(r"\(\s*\)", "", english_text).strip()
     if english_text.count("(") > english_text.count(")"):
         english_text += ")"
     elif english_text.count(")") > english_text.count("("):
         english_text = english_text.replace(")", "", english_text.count(")") - english_text.count("("))
-        
+
     return english_text, arabic_text
 
 
-def sanitize_procedure_names(en_raw: str, ar_raw: str) -> Tuple[str, str, bool]:
+def sanitize_procedure_names(en_raw: str, ar_raw: str, force_bidi: bool = False) -> Tuple[str, str, bool]:
     """
     Sanitizes English and Arabic procedure names:
     - Resolves cross-column contamination (Arabic in English column or vice-versa)
+    - Fixes visual reversed Arabic if present (or forced on Arabic text)
     - Strips send-out test asterisks (*) and sets outsourced flag
     - Resolves broken PDF/OCR hyphens ('un- der' -> 'under')
     """
-    en = clean_text(en_raw)
-    ar = clean_text(ar_raw)
+    # English column is Latin LTR and should not have forced bidi reversal
+    en_fixed = fix_bidi_arabic(str(en_raw or ""), force=False)
+    # Arabic column can be forced if entire table column was laid out in visual LTR
+    ar_fixed = fix_bidi_arabic(str(ar_raw or ""), force=force_bidi)
+
+    en = clean_text(en_fixed)
+    ar = clean_text(ar_fixed)
 
     # Detect cross-column swapped values
     if en and ARABIC_CHAR_PATTERN.search(en) and not ar:

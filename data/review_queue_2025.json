@@ -1,0 +1,746 @@
+[
+  {
+    "nameEnglish": "Blood Pressure Monitoring without Examination Or Admittance",
+    "nameArabic": "كشف أو حجز قياس ضغط الدم بواسطة التمريض بدون",
+    "price": "150",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2025.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2025.pdf",
+        "sha256": "be8a348bc71d902afc5c10de5d5ac8caf55ccf21cae55e4e3c45a44aefdb2ca4",
+        "page": 4,
+        "extractor": "L2"
+      }
+    ],
+    "extractor": "L2",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.8,
+    "flags": [
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "CPR ( Cardiopulmonary Resuscitation) Without Defibrillator",
+    "nameArabic": "كهربائية دورة إنعاش قلبي رئوي بدون صدمة",
+    "price": "1400",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2025.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2025.pdf",
+        "sha256": "be8a348bc71d902afc5c10de5d5ac8caf55ccf21cae55e4e3c45a44aefdb2ca4",
+        "page": 4,
+        "extractor": "L2"
+      }
+    ],
+    "extractor": "L2",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.8,
+    "flags": [
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "ER Call To Other Specialties",
+    "nameArabic": "الطوارئ استدعاء أخصائي من تخصص أخر إلي",
+    "price": "400",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2025.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2025.pdf",
+        "sha256": "be8a348bc71d902afc5c10de5d5ac8caf55ccf21cae55e4e3c45a44aefdb2ca4",
+        "page": 4,
+        "extractor": "L2"
+      }
+    ],
+    "extractor": "L2",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.8,
+    "flags": [
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "ER Ventilator / Hour",
+    "nameArabic": "الساعة رسم استخدام تنفس صناعي بالطوارئ/",
+    "price": "250",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2025.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2025.pdf",
+        "sha256": "be8a348bc71d902afc5c10de5d5ac8caf55ccf21cae55e4e3c45a44aefdb2ca4",
+        "page": 4,
+        "extractor": "L2"
+      }
+    ],
+    "extractor": "L2",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.8,
+    "flags": [
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Foreign Body Extraction Under Local Anesthesia",
+    "nameArabic": "موضعي استخراج جسم غريب تحت تأثير مخدر",
+    "price": "850",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2025.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2025.pdf",
+        "sha256": "be8a348bc71d902afc5c10de5d5ac8caf55ccf21cae55e4e3c45a44aefdb2ca4",
+        "page": 4,
+        "extractor": "L2"
+      }
+    ],
+    "extractor": "L2",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.8,
+    "flags": [
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Gastric Balloon Insertion (Without Balloon Price)",
+    "nameArabic": "تركيب بالون معدة",
+    "price": "1000",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2025",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2025 Cash.xlsx",
+        "sheet": "Sheet1",
+        "year": "2025"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_drop (YoY 0.09x from 11100.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Geriatrics Program",
+    "nameArabic": "برنامج الشيخوخة",
+    "price": "462",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2025",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2025 Cash.xlsx",
+        "sheet": "Sheet1",
+        "year": "2025"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_drop (YoY 0.17x from 2640.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Imperial suite",
+    "nameArabic": "جناح امبريال",
+    "price": "10700",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2025",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2025 Cash.xlsx",
+        "sheet": "Sheet1",
+        "year": "2025"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 17.8x from 600.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Incontinence Program",
+    "nameArabic": "برنامج سلس البولي",
+    "price": "640",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2025",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2025 Cash.xlsx",
+        "sheet": "Sheet1",
+        "year": "2025"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_drop (YoY 0.10x from 6340.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Insertion Of Cannula",
+    "nameArabic": "تركيب كانيوال",
+    "price": "150",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2025.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2025.pdf",
+        "sha256": "be8a348bc71d902afc5c10de5d5ac8caf55ccf21cae55e4e3c45a44aefdb2ca4",
+        "page": 4,
+        "extractor": "L2"
+      }
+    ],
+    "extractor": "L2",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.8,
+    "flags": [
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Insertion Of Porta Cath Needle",
+    "nameArabic": "تركيب سن بورتاكاث",
+    "price": "850",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2025.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2025.pdf",
+        "sha256": "be8a348bc71d902afc5c10de5d5ac8caf55ccf21cae55e4e3c45a44aefdb2ca4",
+        "page": 4,
+        "extractor": "L2"
+      }
+    ],
+    "extractor": "L2",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.8,
+    "flags": [
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Lymphedema Program",
+    "nameArabic": "برنامج الوذمة اللمفية",
+    "price": "392",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2025",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2025 Cash.xlsx",
+        "sheet": "Sheet1",
+        "year": "2025"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_drop (YoY 0.14x from 2900.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Mobility Program",
+    "nameArabic": "برنامج الحركة",
+    "price": "320",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2025",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2025 Cash.xlsx",
+        "sheet": "Sheet1",
+        "year": "2025"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_drop (YoY 0.12x from 2640.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Muscle Training Program",
+    "nameArabic": "تمرين العضلات",
+    "price": "330",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2025",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2025 Cash.xlsx",
+        "sheet": "Sheet1",
+        "year": "2025"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_drop (YoY 0.09x from 3830.0)"
+    ]
+  },
+  {
+    "nameEnglish": "New born (well baby)",
+    "nameArabic": "حديثي الولادة",
+    "price": "1600",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2025",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2025 Cash.xlsx",
+        "sheet": "Sheet1",
+        "year": "2025"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 6.4x from 250.0)"
+    ]
+  },
+  {
+    "nameEnglish": "NICU",
+    "nameArabic": "العناية المركزة لحديثي الولادة",
+    "price": "2900",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2025",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2025 Cash.xlsx",
+        "sheet": "Sheet1",
+        "year": "2025"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 5.8x from 500.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Osmotic fragility",
+    "nameArabic": "",
+    "price": "1300",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2025",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2025 Cash.xlsx",
+        "sheet": "Sheet1",
+        "year": "2025"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 8.7x from 150.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Pain Management Program",
+    "nameArabic": "برنامج التحكم بالألم",
+    "price": "350",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2025",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2025 Cash.xlsx",
+        "sheet": "Sheet1",
+        "year": "2025"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_drop (YoY 0.12x from 2900.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Porta Cath Removal",
+    "nameArabic": "رفع بورت كاث",
+    "price": "15600",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2025",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2025 Cash.xlsx",
+        "sheet": "Sheet1",
+        "year": "2025"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 55.7x from 280.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Porta Cath Removal",
+    "nameArabic": "رفع بورتاكاث",
+    "price": "500",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2025.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2025.pdf",
+        "sha256": "be8a348bc71d902afc5c10de5d5ac8caf55ccf21cae55e4e3c45a44aefdb2ca4",
+        "page": 5,
+        "extractor": "L2"
+      }
+    ],
+    "extractor": "L2",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.8,
+    "flags": [
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Post Chemotherapy Program",
+    "nameArabic": "برنامج ما بعد علاج الكيماوي",
+    "price": "390",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2025",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2025 Cash.xlsx",
+        "sheet": "Sheet1",
+        "year": "2025"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_drop (YoY 0.12x from 3200.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Post Operative Rehabilitation",
+    "nameArabic": "برنامج التأهيل ما بعد العملية",
+    "price": "400",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2025",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2025 Cash.xlsx",
+        "sheet": "Sheet1",
+        "year": "2025"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_drop (YoY 0.10x from 3960.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Post Stroke Rehabilitation",
+    "nameArabic": "تأهيل ما بعد السكتة الدماغية",
+    "price": "420",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2025",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2025 Cash.xlsx",
+        "sheet": "Sheet1",
+        "year": "2025"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_drop (YoY 0.10x from 4200.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Relaxation Program",
+    "nameArabic": "برنامج الاسترخاء",
+    "price": "400",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2025",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2025 Cash.xlsx",
+        "sheet": "Sheet1",
+        "year": "2025"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_drop (YoY 0.15x from 2640.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Removal Of Gastric Balloon",
+    "nameArabic": "رفع بالون معدة",
+    "price": "1000",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2025",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2025 Cash.xlsx",
+        "sheet": "Sheet1",
+        "year": "2025"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_drop (YoY 0.14x from 6900.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Schroth Exercises For Scoliosis",
+    "nameArabic": "تمارين شورث لاعوجاج العمود الفقري",
+    "price": "400",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2025",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2025 Cash.xlsx",
+        "sheet": "Sheet1",
+        "year": "2025"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_drop (YoY 0.10x from 4000.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Sensitivity Test (excluding extra procedures taken in case of actual sensitivity reaction)",
+    "nameArabic": "عالج الحساسية في حالة ظهورها) اختبار حساسية (غير متضمن إجراءات",
+    "price": "175",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2025.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2025.pdf",
+        "sha256": "be8a348bc71d902afc5c10de5d5ac8caf55ccf21cae55e4e3c45a44aefdb2ca4",
+        "page": 5,
+        "extractor": "L2"
+      }
+    ],
+    "extractor": "L2",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.8,
+    "flags": [
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "SICU",
+    "nameArabic": "عناية مركزة بعد العمليات",
+    "price": "4400",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2025",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2025 Cash.xlsx",
+        "sheet": "Sheet1",
+        "year": "2025"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 8.8x from 500.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Special Nature Medication IV Administration,( Not Including Medication Price)",
+    "nameArabic": "الوريدي) متضمنة أدوية الكيماوي والحديد حقن أدوية ذات طابع خاص (غير",
+    "price": "600",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2025.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2025.pdf",
+        "sha256": "be8a348bc71d902afc5c10de5d5ac8caf55ccf21cae55e4e3c45a44aefdb2ca4",
+        "page": 5,
+        "extractor": "L2"
+      }
+    ],
+    "extractor": "L2",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.8,
+    "flags": [
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Sports Injury",
+    "nameArabic": "إصابة ملاعب",
+    "price": "310",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2025",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2025 Cash.xlsx",
+        "sheet": "Sheet1",
+        "year": "2025"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_drop (YoY 0.07x from 4600.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Stelara II infusion",
+    "nameArabic": "حقن وريدي (Stelara)",
+    "price": "1000",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2025.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2025.pdf",
+        "sha256": "be8a348bc71d902afc5c10de5d5ac8caf55ccf21cae55e4e3c45a44aefdb2ca4",
+        "page": 5,
+        "extractor": "L2"
+      }
+    ],
+    "extractor": "L2",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.8,
+    "flags": [
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Stitch Removal",
+    "nameArabic": "فك غرز جراحية",
+    "price": "300",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2025",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2025 Cash.xlsx",
+        "sheet": "Sheet1",
+        "year": "2025"
+      },
+      {
+        "file": "2025.pdf",
+        "sha256": "be8a348bc71d902afc5c10de5d5ac8caf55ccf21cae55e4e3c45a44aefdb2ca4",
+        "page": 5,
+        "extractor": "L2"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 15.0x from 20.0)"
+    ]
+  },
+  {
+    "nameEnglish": "TPA Administration (not including the TPA medication)",
+    "nameArabic": "الدواء) إعطاء مذيب الجلطات (بدون سعر",
+    "price": "8500",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2025.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2025.pdf",
+        "sha256": "be8a348bc71d902afc5c10de5d5ac8caf55ccf21cae55e4e3c45a44aefdb2ca4",
+        "page": 5,
+        "extractor": "L2"
+      }
+    ],
+    "extractor": "L2",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.8,
+    "flags": [
+      "pdf_only_candidate"
+    ]
+  }
+]

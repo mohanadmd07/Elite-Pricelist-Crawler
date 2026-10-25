@@ -10,9 +10,9 @@ const getEnv = (key: string): string => {
   return '';
 };
 
-const supabaseUrl = getEnv('VITE_SUPABASE_URL');
-const supabaseAnonKey = getEnv('VITE_SUPABASE_ANON_KEY');
-
+const supabaseUrl = getEnv('VITE_SUPABASE_URL') || getEnv('SUPABASE_URL');
+const supabaseAnonKey = getEnv('VITE_SUPABASE_ANON_KEY') || getEnv('SUPABASE_ANON_KEY');
+const supabaseServiceKey = getEnv('SUPABASE_SERVICE_ROLE_KEY') || getEnv('SUPABASE_SERVICE_KEY');
 
 export const isSupabaseConfigured = (): boolean => {
   return (
@@ -23,7 +23,23 @@ export const isSupabaseConfigured = (): boolean => {
   );
 };
 
-// Create Supabase client if configured, otherwise fallback gracefully
+export const isSupabaseAdminConfigured = (): boolean => {
+  return (
+    typeof supabaseUrl === 'string' &&
+    supabaseUrl.startsWith('https://') &&
+    typeof supabaseServiceKey === 'string' &&
+    supabaseServiceKey.length > 20
+  );
+};
+
+// Create public Supabase client (subject to RLS)
 export const supabase = isSupabaseConfigured()
   ? createClient(supabaseUrl, supabaseAnonKey)
   : null;
+
+// Create admin Supabase client (service role, bypasses RLS for server-side ingestion and outbox worker)
+export const supabaseAdmin = isSupabaseAdminConfigured()
+  ? createClient(supabaseUrl, supabaseServiceKey, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    })
+  : supabase;

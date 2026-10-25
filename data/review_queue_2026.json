@@ -1,0 +1,134 @@
+[
+  {
+    "nameEnglish": "Fresh Prostatic Smear",
+    "nameArabic": "",
+    "price": "3400",
+    "sectionName": "Laboratory",
+    "sourceFile": "Elite Hospital 2026",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2026 Elite Cash PL 12-1 (1).xlsx",
+        "sheet": "Laboratory",
+        "year": "2026"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 5.2x from 650.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Upper GIT Endoscopy",
+    "nameArabic": "منظار معدة",
+    "price": "9000",
+    "sectionName": "Endoscopy & GIT",
+    "sourceFile": "Elite Hospital 2026",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2026 Elite Cash PL 12-1 (1).xlsx",
+        "sheet": "Endoscopy & GIT",
+        "year": "2026"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 4.5x from 2000.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Upper GIT Endoscopy + Biopsy",
+    "nameArabic": "منظار معدة وأخذ عينة",
+    "price": "9800",
+    "sectionName": "Endoscopy & GIT",
+    "sourceFile": "Elite Hospital 2026",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2026 Elite Cash PL 12-1 (1).xlsx",
+        "sheet": "Endoscopy & GIT",
+        "year": "2026"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 4.9x from 2000.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Lower GIT Endoscopy",
+    "nameArabic": "منظار قولون",
+    "price": "10500",
+    "sectionName": "Endoscopy & GIT",
+    "sourceFile": "Elite Hospital 2026",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2026 Elite Cash PL 12-1 (1).xlsx",
+        "sheet": "Endoscopy & GIT",
+        "year": "2026"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 5.2x from 2000.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Upper & Lower GIT Endoscopy",
+    "nameArabic": "منظار جهاز هضمي علوي وسفلي (معدة وقولون)",
+    "price": "13500",
+    "sectionName": "Endoscopy & GIT",
+    "sourceFile": "Elite Hospital 2026",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2026 Elite Cash PL 12-1 (1).xlsx",
+        "sheet": "Endoscopy & GIT",
+        "year": "2026"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 6.8x from 2000.0)"
+    ]
+  },
+  {
+    "nameEnglish": "RECP With Balloon",
+    "nameArabic": "منظار قنوات مرارية وتوسيع بالبالون",
+    "price": "25500",
+    "sectionName": "Endoscopy & GIT",
+    "sourceFile": "Elite Hospital 2026",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2026 Elite Cash PL 12-1 (1).xlsx",
+        "sheet": "Endoscopy & GIT",
+        "year": "2026"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 12.8x from 2000.0)"
+    ]
+  }
+]

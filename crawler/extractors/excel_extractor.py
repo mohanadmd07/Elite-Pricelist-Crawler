@@ -108,6 +108,11 @@ class ExcelPricelistExtractor(BaseExtractor):
                         sourceFile=self.source_label,
                         code=raw_code if raw_code and raw_code not in ("#N/A", "None") else None,
                         outsourced=True if outsourced else None,
+                        sources=[{"file": self.file_path.name, "sheet": title, "year": self.year}],
+                        extractor="excel",
+                        extractorVersion="1.2.0",
+                        confidence=1.0,
+                        flags=[],
                     )
                     items.append(item)
                     sheet_count += 1
@@ -145,6 +150,11 @@ class ExcelPricelistExtractor(BaseExtractor):
                         price=format_price_string(total),
                         sectionName="IPD Services",
                         sourceFile=self.source_label,
+                        sources=[{"file": self.file_path.name, "sheet": "IPD Services", "year": self.year}],
+                        extractor="excel",
+                        extractorVersion="1.2.0",
+                        confidence=1.0,
+                        flags=[],
                     )
                 )
             except Exception:
@@ -175,6 +185,11 @@ class ExcelPricelistExtractor(BaseExtractor):
                                     price=match.group(1),
                                     sectionName=sname.strip(),
                                     sourceFile=self.source_label,
+                                    sources=[{"file": self.file_path.name, "sheet": sname.strip(), "year": self.year}],
+                                    extractor="excel",
+                                    extractorVersion="1.2.0",
+                                    confidence=1.0,
+                                    flags=[],
                                 )
                             )
                         except Exception:
@@ -225,6 +240,11 @@ class ExcelPricelistExtractor(BaseExtractor):
                         sectionName="General",
                         sourceFile=self.source_label,
                         outsourced=True if outsourced else None,
+                        sources=[{"file": self.file_path.name, "sheet": "Sheet1", "year": self.year}],
+                        extractor="excel",
+                        extractorVersion="1.2.0",
+                        confidence=1.0,
+                        flags=[],
                     )
                 )
             except Exception:

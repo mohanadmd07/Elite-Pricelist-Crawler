@@ -1,0 +1,2541 @@
+[
+  {
+    "nameEnglish": "A/G Ratio",
+    "nameArabic": "",
+    "price": "350",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 5.0x from 70.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Acetone/Glucose in urine",
+    "nameArabic": "",
+    "price": "95",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 9.5x from 10.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Aldosterone",
+    "nameArabic": "",
+    "price": "1000",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 5.0x from 200.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Ambulance Outside Alexandria Fees Without A Doctor",
+    "nameArabic": "سيارة اسعاف خارج الأسكندرية / كيلو بدون طبيب",
+    "price": "800",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 47.1x from 17.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Anti-ss-A/Ro",
+    "nameArabic": "",
+    "price": "850",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 4.0x from 210.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Anti-ss-B/La",
+    "nameArabic": "",
+    "price": "850",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 4.0x from 210.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Antisaccharomyces cerevisiae IgA (ASCA)",
+    "nameArabic": "",
+    "price": "1500",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 4.3x from 350.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Antisaccharomyces cerevisiae IgG (ASCA)",
+    "nameArabic": "",
+    "price": "1500",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 4.3x from 350.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Blood Glucose Monitoring",
+    "nameArabic": "(cid:3)(cid:180)(cid:405)(cid:458)(cid:377)(cid:380)(cid:3)(cid:409)(cid:455)(cid:415)(cid:458)(cid:155)(cid:3)(cid:469)(cid:381)(cid:415)(cid:466)(cid:3)(cid:383)(cid:439)(cid:380)(cid:377)(cid:387)(cid:462) (cid:149)(cid:184)(cid:165)(cid:155)(cid:473)(cid:431)(cid:458)(cid:155)(cid:3)(cid:477)(cid:446)(cid:3)(cid:379)(cid:459)(cid:450)(cid:3)(cid:461)(cid:414)(cid:165)",
+    "price": "50",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2024.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2024.pdf",
+        "sha256": "eb426b0ca8d71a397a9a41a11ea50200574b8a9a5000ea1ae6a571c250cf7911",
+        "page": 5,
+        "extractor": "L1"
+      }
+    ],
+    "extractor": "L1",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.6,
+    "flags": [
+      "needs_review",
+      "unverified_arabic_encoding",
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Brucella IgG (ELISA)",
+    "nameArabic": "",
+    "price": "950",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 6.3x from 150.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Brucella IgM (ELISA)",
+    "nameArabic": "",
+    "price": "950",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 6.3x from 150.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Brucella Test",
+    "nameArabic": "",
+    "price": "550",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 5.7x from 96.0)"
+    ]
+  },
+  {
+    "nameEnglish": "CDU Admission in ER Senstivity Test (Excluding extra proce-",
+    "nameArabic": "(cid:165)(cid:155)(cid:409)(cid:451)(cid:458)(cid:155)(cid:3)(cid:407)(cid:402)(cid:155)(cid:3)(cid:182)(cid:405)(cid:398)(cid:183)(cid:3)(cid:179)(cid:473)(cid:402)(cid:163)(cid:3) (cid:3)(cid:160)(cid:487)(cid:438)(cid:3)(cid:158)(cid:155)(cid:149)(cid:155)(cid:409)(cid:394)(cid:153)(cid:3)(cid:465)(cid:463)(cid:427)(cid:387)(cid:462)(cid:3)(cid:409)(cid:479)(cid:442)(cid:12)(cid:3)(cid:3)(cid:469)(cid:479)(cid:414)(cid:377)(cid:415)(cid:398)(cid:3)(cid:165)(cid:377)(cid:381)(cid:387)(cid:402)(cid:155)",
+    "price": "660",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2024.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2024.pdf",
+        "sha256": "eb426b0ca8d71a397a9a41a11ea50200574b8a9a5000ea1ae6a571c250cf7911",
+        "page": 5,
+        "extractor": "L1"
+      }
+    ],
+    "extractor": "L1",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.6,
+    "flags": [
+      "needs_review",
+      "unverified_arabic_encoding",
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Cleansing Enema (Insetion Of Rectal Tube)",
+    "nameArabic": "(cid:3)(cid:379)(cid:479)(cid:454)(cid:409)(cid:386)(cid:3)(cid:149)(cid:155)(cid:409)(cid:394)(cid:155)(cid:12)(cid:383)(cid:479)(cid:447)(cid:479)(cid:435)(cid:467)(cid:386)(cid:3)(cid:383)(cid:479)(cid:394)(cid:409)(cid:418)(cid:3)(cid:383)(cid:467)(cid:451)(cid:398)(cid:3)(cid:149)(cid:155)(cid:409)(cid:394)(cid:155) (cid:11)(cid:475)(cid:394)(cid:409)(cid:418)(cid:3)(cid:156)(cid:473)(cid:381)(cid:466)(cid:155)",
+    "price": "250",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2024.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2024.pdf",
+        "sha256": "eb426b0ca8d71a397a9a41a11ea50200574b8a9a5000ea1ae6a571c250cf7911",
+        "page": 4,
+        "extractor": "L1"
+      }
+    ],
+    "extractor": "L1",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.6,
+    "flags": [
+      "needs_review",
+      "unverified_arabic_encoding",
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "CMV IgG",
+    "nameArabic": "",
+    "price": "950",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 13.6x from 70.0)"
+    ]
+  },
+  {
+    "nameEnglish": "CMV IgM",
+    "nameArabic": "",
+    "price": "950",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 13.6x from 70.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Conscious sedation in ER",
+    "nameArabic": "(cid:154)(cid:165)(cid:155)(cid:473)(cid:431)(cid:458)(cid:155)(cid:3)(cid:477)(cid:446)(cid:3)(cid:3)(cid:383)(cid:479)(cid:438)(cid:155)(cid:183)(cid:3)(cid:383)(cid:374)(cid:405)(cid:471)(cid:386)",
+    "price": "400",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2024.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2024.pdf",
+        "sha256": "eb426b0ca8d71a397a9a41a11ea50200574b8a9a5000ea1ae6a571c250cf7911",
+        "page": 5,
+        "extractor": "L1"
+      }
+    ],
+    "extractor": "L1",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.6,
+    "flags": [
+      "needs_review",
+      "unverified_arabic_encoding",
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "CPR ( Cardiopulmonary Resucitation)",
+    "nameArabic": "(cid:3)(cid:184)(cid:473)(cid:374)(cid:165)(cid:3)(cid:477)(cid:381)(cid:459)(cid:450)(cid:3)(cid:168)(cid:377)(cid:439)(cid:466)(cid:155)(cid:3)(cid:182)(cid:165)(cid:183)(cid:163)",
+    "price": "1300",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2024.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2024.pdf",
+        "sha256": "eb426b0ca8d71a397a9a41a11ea50200574b8a9a5000ea1ae6a571c250cf7911",
+        "page": 5,
+        "extractor": "L1"
+      }
+    ],
+    "extractor": "L1",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.6,
+    "flags": [
+      "needs_review",
+      "unverified_arabic_encoding",
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "CVP Catheter insertion",
+    "nameArabic": "(cid:185)(cid:411)(cid:454)(cid:409)(cid:462)(cid:3)(cid:405)(cid:478)(cid:165)(cid:183)(cid:3)(cid:157)(cid:409)(cid:431)(cid:415)(cid:450)(cid:3)(cid:379)(cid:479)(cid:454)(cid:409)(cid:386)(cid:3)(cid:149)(cid:155)(cid:409)(cid:394)(cid:155)",
+    "price": "1300",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2024.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2024.pdf",
+        "sha256": "eb426b0ca8d71a397a9a41a11ea50200574b8a9a5000ea1ae6a571c250cf7911",
+        "page": 4,
+        "extractor": "L1"
+      }
+    ],
+    "extractor": "L1",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.6,
+    "flags": [
+      "needs_review",
+      "unverified_arabic_encoding",
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "CVP Catheter Removal",
+    "nameArabic": "(cid:185)(cid:411)(cid:454)(cid:409)(cid:462)(cid:3)(cid:405)(cid:478)(cid:165)(cid:183)(cid:3)(cid:157)(cid:409)(cid:431)(cid:415)(cid:450)(cid:3)(cid:383)(cid:458)(cid:155)(cid:166)(cid:155)(cid:3)(cid:149)(cid:155)(cid:409)(cid:394)(cid:155)",
+    "price": "250",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2024.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2024.pdf",
+        "sha256": "eb426b0ca8d71a397a9a41a11ea50200574b8a9a5000ea1ae6a571c250cf7911",
+        "page": 4,
+        "extractor": "L1"
+      }
+    ],
+    "extractor": "L1",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.6,
+    "flags": [
+      "needs_review",
+      "unverified_arabic_encoding",
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Daycase",
+    "nameArabic": "حالة نهاريه",
+    "price": "8400",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 38.2x from 220.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Defibrillator Usage",
+    "nameArabic": "(cid:3)(cid:477)(cid:446)(cid:3)(cid:383)(cid:479)(cid:374)(cid:377)(cid:380)(cid:409)(cid:471)(cid:454)(cid:3)(cid:158)(cid:377)(cid:462)(cid:405)(cid:422)(cid:3)(cid:166)(cid:377)(cid:471)(cid:394)(cid:3)(cid:180)(cid:155)(cid:405)(cid:403)(cid:387)(cid:414)(cid:155)(cid:3)(cid:461)(cid:414)(cid:165)(cid:3) (cid:149)(cid:184)(cid:165)(cid:155)(cid:473)(cid:431)(cid:458)(cid:155) (cid:157)(cid:163)(cid:165)(cid:183)(cid:482)(cid:155)(cid:3)(cid:409)(cid:471)(cid:435)(cid:462)(cid:3)(cid:180)(cid:155)(cid:405)(cid:403)(cid:387)(cid:414)(cid:155)(cid:3)(cid:461)(cid:414)(cid:165)",
+    "price": "700",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2024.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2024.pdf",
+        "sha256": "eb426b0ca8d71a397a9a41a11ea50200574b8a9a5000ea1ae6a571c250cf7911",
+        "page": 5,
+        "extractor": "L1"
+      }
+    ],
+    "extractor": "L1",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.6,
+    "flags": [
+      "needs_review",
+      "unverified_arabic_encoding",
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Dengue Fever (Flavivirus) IgG",
+    "nameArabic": "",
+    "price": "1250",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 4.2x from 300.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Dengue Fever (Flavivirus) IgM",
+    "nameArabic": "",
+    "price": "1250",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 4.2x from 300.0)"
+    ]
+  },
+  {
+    "nameEnglish": "EBV (Epstein Barr Virus) IgG",
+    "nameArabic": "",
+    "price": "950",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 5.3x from 180.0)"
+    ]
+  },
+  {
+    "nameEnglish": "EBV (Epstein Barr virus) IgM",
+    "nameArabic": "",
+    "price": "950",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 5.3x from 180.0)"
+    ]
+  },
+  {
+    "nameEnglish": "EBV VCA IgG",
+    "nameArabic": "",
+    "price": "950",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 5.3x from 180.0)"
+    ]
+  },
+  {
+    "nameEnglish": "EBV VCA IgM",
+    "nameArabic": "",
+    "price": "950",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 5.3x from 180.0)"
+    ]
+  },
+  {
+    "nameEnglish": "ECG",
+    "nameArabic": "(cid:149)(cid:184)(cid:165)(cid:155)(cid:473)(cid:431)(cid:458)(cid:155)(cid:3)(cid:477)(cid:446)(cid:3)(cid:379)(cid:459)(cid:450)(cid:3)(cid:461)(cid:414)(cid:165) (cid:177)(cid:377)(cid:419)(cid:467)(cid:387)(cid:414)(cid:155)(cid:18)(cid:165)(cid:411)(cid:479)(cid:458)(cid:473)(cid:381)(cid:479)(cid:466)(cid:3)(cid:469)(cid:415)(cid:459)(cid:394)(cid:3)(cid:149)(cid:155)(cid:409)(cid:394)(cid:155)",
+    "price": "300",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2024.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2024.pdf",
+        "sha256": "eb426b0ca8d71a397a9a41a11ea50200574b8a9a5000ea1ae6a571c250cf7911",
+        "page": 5,
+        "extractor": "L1"
+      }
+    ],
+    "extractor": "L1",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.6,
+    "flags": [
+      "needs_review",
+      "unverified_arabic_encoding",
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "EMA Endomysial antibody IgA",
+    "nameArabic": "",
+    "price": "750",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 5.0x from 150.0)"
+    ]
+  },
+  {
+    "nameEnglish": "EMA (Endomysial antibody IgG)",
+    "nameArabic": "",
+    "price": "650",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 4.3x from 150.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Emergency (ER) Services Abscess drainage under local anaethesia Excision of ingrowing nail under local",
+    "nameArabic": "(cid:149)(cid:184)(cid:165)(cid:155)(cid:473)(cid:431)(cid:458)(cid:155)(cid:3)(cid:158)(cid:377)(cid:462)(cid:405)(cid:402) (cid:3)(cid:475)(cid:439)(cid:426)(cid:473)(cid:462)(cid:3)(cid:409)(cid:478)(cid:405)(cid:403)(cid:386)(cid:3)(cid:385)(cid:399)(cid:386)(cid:3)(cid:160)(cid:155)(cid:409)(cid:402)(cid:3)(cid:397)(cid:387)(cid:446)",
+    "price": "450",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2024.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2024.pdf",
+        "sha256": "eb426b0ca8d71a397a9a41a11ea50200574b8a9a5000ea1ae6a571c250cf7911",
+        "page": 4,
+        "extractor": "L1"
+      }
+    ],
+    "extractor": "L1",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.6,
+    "flags": [
+      "needs_review",
+      "unverified_arabic_encoding",
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Emergency (ER) Services IV injection",
+    "nameArabic": "(cid:149)(cid:184)(cid:165)(cid:155)(cid:473)(cid:431)(cid:458)(cid:155)(cid:3)(cid:158)(cid:377)(cid:462)(cid:405)(cid:402) (cid:184)(cid:405)(cid:478)(cid:165)(cid:183)(cid:3)(cid:465)(cid:451)(cid:398)(cid:3)(cid:149)(cid:155)(cid:409)(cid:394)(cid:155)",
+    "price": "80",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2024.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2024.pdf",
+        "sha256": "eb426b0ca8d71a397a9a41a11ea50200574b8a9a5000ea1ae6a571c250cf7911",
+        "page": 5,
+        "extractor": "L1"
+      }
+    ],
+    "extractor": "L1",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.6,
+    "flags": [
+      "needs_review",
+      "unverified_arabic_encoding",
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "ESBL Screening",
+    "nameArabic": "",
+    "price": "350",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 5.0x from 70.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Excision of ingrowing nail under local anaethesia Foreign body extraction under local",
+    "nameArabic": "(cid:3)(cid:475)(cid:439)(cid:426)(cid:473)(cid:462)(cid:3)(cid:409)(cid:478)(cid:405)(cid:403)(cid:386)(cid:3)(cid:385)(cid:399)(cid:386)(cid:3)(cid:409)(cid:374)(cid:377)(cid:442)(cid:3)(cid:409)(cid:447)(cid:434)(cid:3)(cid:179)(cid:377)(cid:423)(cid:375)(cid:387)(cid:414)(cid:155)",
+    "price": "700",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2024.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2024.pdf",
+        "sha256": "eb426b0ca8d71a397a9a41a11ea50200574b8a9a5000ea1ae6a571c250cf7911",
+        "page": 4,
+        "extractor": "L1"
+      }
+    ],
+    "extractor": "L1",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.6,
+    "flags": [
+      "needs_review",
+      "unverified_arabic_encoding",
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Extra Nebulizer session",
+    "nameArabic": "(cid:477)(cid:446)(cid:377)(cid:426)(cid:155)(cid:3)(cid:177)(cid:377)(cid:419)(cid:467)(cid:387)(cid:414)(cid:155)(cid:18)(cid:165)(cid:411)(cid:479)(cid:458)(cid:473)(cid:381)(cid:479)(cid:466)(cid:3)(cid:469)(cid:415)(cid:459)(cid:394)(cid:3)(cid:149)(cid:155)(cid:409)(cid:394)(cid:155) (cid:3)(cid:149)(cid:185)(cid:165)(cid:155)(cid:473)(cid:431)(cid:458)(cid:377)(cid:380)(cid:3)(cid:469)(cid:435)(cid:398)(cid:487)(cid:462)",
+    "price": "60",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2024.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2024.pdf",
+        "sha256": "eb426b0ca8d71a397a9a41a11ea50200574b8a9a5000ea1ae6a571c250cf7911",
+        "page": 5,
+        "extractor": "L1"
+      }
+    ],
+    "extractor": "L1",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.6,
+    "flags": [
+      "needs_review",
+      "unverified_arabic_encoding",
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Factor II",
+    "nameArabic": "",
+    "price": "2005",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 7.0x from 288.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Factor IX",
+    "nameArabic": "",
+    "price": "1500",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 4.2x from 360.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Factor VIII",
+    "nameArabic": "",
+    "price": "2005",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 5.6x from 360.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Factor VII",
+    "nameArabic": "",
+    "price": "2005",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 7.0x from 288.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Factor V",
+    "nameArabic": "",
+    "price": "2005",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 7.0x from 288.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Factor XIII",
+    "nameArabic": "",
+    "price": "2005",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 5.6x from 360.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Factor XII",
+    "nameArabic": "",
+    "price": "2005",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 5.6x from 360.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Factor XI",
+    "nameArabic": "",
+    "price": "2005",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 5.6x from 360.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Factor X",
+    "nameArabic": "",
+    "price": "2005",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 5.1x from 390.0)"
+    ]
+  },
+  {
+    "nameEnglish": "First Normal Class",
+    "nameArabic": "درجة اولي عادية",
+    "price": "15500",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 47.0x from 330.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Foreign body extraction under local Aneathesia Reduction of dislocated joint proce-",
+    "nameArabic": "(cid:3)(cid:475)(cid:439)(cid:426)(cid:473)(cid:462)(cid:3)(cid:409)(cid:478)(cid:405)(cid:403)(cid:386)(cid:3)(cid:385)(cid:399)(cid:386)(cid:3)(cid:379)(cid:478)(cid:409)(cid:442)(cid:3)(cid:461)(cid:415)(cid:394)(cid:3)(cid:160)(cid:155)(cid:409)(cid:403)(cid:387)(cid:414)(cid:155)",
+    "price": "700",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2024.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2024.pdf",
+        "sha256": "eb426b0ca8d71a397a9a41a11ea50200574b8a9a5000ea1ae6a571c250cf7911",
+        "page": 4,
+        "extractor": "L1"
+      }
+    ],
+    "extractor": "L1",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.6,
+    "flags": [
+      "needs_review",
+      "unverified_arabic_encoding",
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Fresh Prostatic Smear",
+    "nameArabic": "",
+    "price": "350",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 7.0x from 50.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Fructose in Semen (Qualititative)",
+    "nameArabic": "",
+    "price": "250",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 6.2x from 40.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Gastric Lavage Cleansing Enema (Insetion Of Rectal",
+    "nameArabic": "(cid:157)(cid:405)(cid:439)(cid:462)(cid:3)(cid:457)(cid:479)(cid:415)(cid:442)(cid:3)(cid:149)(cid:155)(cid:409)(cid:394)(cid:155) (cid:3)(cid:379)(cid:479)(cid:454)(cid:409)(cid:386)(cid:3)(cid:149)(cid:155)(cid:409)(cid:394)(cid:155)(cid:12)(cid:383)(cid:479)(cid:447)(cid:479)(cid:435)(cid:467)(cid:386)(cid:3)(cid:383)(cid:479)(cid:394)(cid:409)(cid:418)(cid:3)(cid:383)(cid:467)(cid:451)(cid:398)(cid:3)(cid:149)(cid:155)(cid:409)(cid:394)(cid:155)",
+    "price": "800",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2024.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2024.pdf",
+        "sha256": "eb426b0ca8d71a397a9a41a11ea50200574b8a9a5000ea1ae6a571c250cf7911",
+        "page": 4,
+        "extractor": "L1"
+      }
+    ],
+    "extractor": "L1",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.6,
+    "flags": [
+      "needs_review",
+      "unverified_arabic_encoding",
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "General Aneathesia Procedure In ER",
+    "nameArabic": "(cid:149)(cid:184)(cid:165)(cid:155)(cid:473)(cid:431)(cid:458)(cid:377)(cid:380)(cid:3)(cid:477)(cid:459)(cid:454)(cid:3)(cid:409)(cid:478)(cid:405)(cid:403)(cid:386)(cid:3)(cid:149)(cid:155)(cid:409)(cid:394)(cid:155) (cid:165)(cid:155)(cid:409)(cid:451)(cid:458)(cid:155)(cid:3)(cid:407)(cid:402)(cid:155)(cid:3)(cid:182)(cid:405)(cid:398)(cid:183)(cid:3)(cid:179)(cid:473)(cid:402)(cid:163)(cid:3)",
+    "price": "1300",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2024.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2024.pdf",
+        "sha256": "eb426b0ca8d71a397a9a41a11ea50200574b8a9a5000ea1ae6a571c250cf7911",
+        "page": 5,
+        "extractor": "L1"
+      }
+    ],
+    "extractor": "L1",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.6,
+    "flags": [
+      "needs_review",
+      "unverified_arabic_encoding",
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Glucose in urine",
+    "nameArabic": "",
+    "price": "85",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 5.7x from 15.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Haptoglobin",
+    "nameArabic": "",
+    "price": "450",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 12.5x from 36.0)"
+    ]
+  },
+  {
+    "nameEnglish": "H.Pylori - IgA",
+    "nameArabic": "",
+    "price": "650",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 4.3x from 150.0)"
+    ]
+  },
+  {
+    "nameEnglish": "H.Pylori-IgG",
+    "nameArabic": "",
+    "price": "650",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 4.3x from 150.0)"
+    ]
+  },
+  {
+    "nameEnglish": "IM Injection",
+    "nameArabic": "(cid:3)(cid:477)(cid:459)(cid:427)(cid:438)(cid:3)(cid:465)(cid:451)(cid:398)(cid:3)(cid:149)(cid:155)(cid:409)(cid:394)(cid:155)",
+    "price": "60",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2024.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2024.pdf",
+        "sha256": "eb426b0ca8d71a397a9a41a11ea50200574b8a9a5000ea1ae6a571c250cf7911",
+        "page": 5,
+        "extractor": "L1"
+      }
+    ],
+    "extractor": "L1",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.6,
+    "flags": [
+      "needs_review",
+      "unverified_arabic_encoding",
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Immunoglobulin-A (IgA)",
+    "nameArabic": "",
+    "price": "750",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 6.9x from 108.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Immunoglobulin-G (IgG)",
+    "nameArabic": "",
+    "price": "750",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 6.2x from 120.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Immunoglobulin-M (IgM)",
+    "nameArabic": "",
+    "price": "750",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 6.2x from 120.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Insertion of Cannula",
+    "nameArabic": "(cid:3)(cid:486)(cid:473)(cid:479)(cid:466)(cid:377)(cid:454)(cid:3)(cid:379)(cid:479)(cid:454)(cid:409)(cid:386)(cid:3)(cid:149)(cid:155)(cid:409)(cid:394)(cid:155)",
+    "price": "100",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2024.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2024.pdf",
+        "sha256": "eb426b0ca8d71a397a9a41a11ea50200574b8a9a5000ea1ae6a571c250cf7911",
+        "page": 4,
+        "extractor": "L1"
+      }
+    ],
+    "extractor": "L1",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.6,
+    "flags": [
+      "needs_review",
+      "unverified_arabic_encoding",
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Insertion of Endotracheal tube Insertion of intercostal tube by con-",
+    "nameArabic": "(cid:3)(cid:383)(cid:381)(cid:423)(cid:451)(cid:458)(cid:377)(cid:380)(cid:3)(cid:383)(cid:380)(cid:473)(cid:381)(cid:466)(cid:151)(cid:3)(cid:179)(cid:377)(cid:402)(cid:163)(cid:155)(cid:12)(cid:3)(cid:477)(cid:462)(cid:377)(cid:442)(cid:165)(cid:3)(cid:385)(cid:479)(cid:381)(cid:467)(cid:386)(cid:3)(cid:149)(cid:155)(cid:409)(cid:394)(cid:155) (cid:11)(cid:383)(cid:479)(cid:374)(cid:155)(cid:473)(cid:471)(cid:458)(cid:155) (cid:3)(cid:173)(cid:473)(cid:459)(cid:427)(cid:458)(cid:155)(cid:3)(cid:465)(cid:479)(cid:380)(cid:3)(cid:377)(cid:462)(cid:3)(cid:469)(cid:478)(cid:165)(cid:405)(cid:422)(cid:3)(cid:469)(cid:380)(cid:473)(cid:381)(cid:466)(cid:155)(cid:3)(cid:379)(cid:479)(cid:454)(cid:409)(cid:386)(cid:3)(cid:149)(cid:155)(cid:409)(cid:394)(cid:155)",
+    "price": "600",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2024.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2024.pdf",
+        "sha256": "eb426b0ca8d71a397a9a41a11ea50200574b8a9a5000ea1ae6a571c250cf7911",
+        "page": 5,
+        "extractor": "L1"
+      }
+    ],
+    "extractor": "L1",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.6,
+    "flags": [
+      "needs_review",
+      "unverified_arabic_encoding",
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Insertion of intercostal tube by consultant",
+    "nameArabic": "(cid:3)(cid:173)(cid:473)(cid:459)(cid:427)(cid:458)(cid:155)(cid:3)(cid:465)(cid:479)(cid:380)(cid:3)(cid:377)(cid:462)(cid:3)(cid:469)(cid:478)(cid:165)(cid:405)(cid:422)(cid:3)(cid:469)(cid:380)(cid:473)(cid:381)(cid:466)(cid:155)(cid:3)(cid:379)(cid:479)(cid:454)(cid:409)(cid:386)(cid:3)(cid:149)(cid:155)(cid:409)(cid:394)(cid:155) (cid:184)(cid:165)(cid:377)(cid:419)(cid:387)(cid:414)(cid:155)(cid:3)(cid:469)(cid:431)(cid:414)(cid:155)(cid:473)(cid:380)",
+    "price": "4800",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2024.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2024.pdf",
+        "sha256": "eb426b0ca8d71a397a9a41a11ea50200574b8a9a5000ea1ae6a571c250cf7911",
+        "page": 5,
+        "extractor": "L1"
+      }
+    ],
+    "extractor": "L1",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.6,
+    "flags": [
+      "needs_review",
+      "unverified_arabic_encoding",
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Insertion of Intercostal Tube",
+    "nameArabic": "(cid:3)(cid:173)(cid:473)(cid:459)(cid:427)(cid:458)(cid:155)(cid:3)(cid:465)(cid:479)(cid:380)(cid:3)(cid:377)(cid:462)(cid:3)(cid:469)(cid:478)(cid:165)(cid:405)(cid:422)(cid:3)(cid:469)(cid:380)(cid:473)(cid:381)(cid:466)(cid:155)(cid:3)(cid:379)(cid:479)(cid:454)(cid:409)(cid:386)(cid:3)(cid:149)(cid:155)(cid:409)(cid:394)(cid:155)",
+    "price": "3100",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2024.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2024.pdf",
+        "sha256": "eb426b0ca8d71a397a9a41a11ea50200574b8a9a5000ea1ae6a571c250cf7911",
+        "page": 5,
+        "extractor": "L1"
+      }
+    ],
+    "extractor": "L1",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.6,
+    "flags": [
+      "needs_review",
+      "unverified_arabic_encoding",
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Insertion Of Portacath Needle",
+    "nameArabic": "(cid:159)(cid:377)(cid:454)(cid:377)(cid:386)(cid:165)(cid:473)(cid:380)(cid:3)(cid:465)(cid:414)(cid:3)(cid:379)(cid:479)(cid:454)(cid:409)(cid:386)(cid:3)(cid:149)(cid:155)(cid:409)(cid:394)(cid:155)",
+    "price": "480",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2024.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2024.pdf",
+        "sha256": "eb426b0ca8d71a397a9a41a11ea50200574b8a9a5000ea1ae6a571c250cf7911",
+        "page": 5,
+        "extractor": "L1"
+      }
+    ],
+    "extractor": "L1",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.6,
+    "flags": [
+      "needs_review",
+      "unverified_arabic_encoding",
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Insertion of urinary catheter",
+    "nameArabic": "(cid:3)(cid:179)(cid:473)(cid:380)(cid:3)(cid:182)(cid:409)(cid:431)(cid:415)(cid:450)(cid:3)(cid:379)(cid:479)(cid:454)(cid:409)(cid:386)(cid:3)(cid:149)(cid:155)(cid:409)(cid:394)(cid:155)",
+    "price": "400",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2024.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2024.pdf",
+        "sha256": "eb426b0ca8d71a397a9a41a11ea50200574b8a9a5000ea1ae6a571c250cf7911",
+        "page": 4,
+        "extractor": "L1"
+      }
+    ],
+    "extractor": "L1",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.6,
+    "flags": [
+      "needs_review",
+      "unverified_arabic_encoding",
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Intraosseous access insertion",
+    "nameArabic": "(cid:180)(cid:377)(cid:435)(cid:439)(cid:458)(cid:155)(cid:3)(cid:457)(cid:402)(cid:155)(cid:163)(cid:3)(cid:486)(cid:473)(cid:479)(cid:466)(cid:377)(cid:454)(cid:3)(cid:379)(cid:479)(cid:454)(cid:409)(cid:386)(cid:3)(cid:149)(cid:155)(cid:409)(cid:394)(cid:155)",
+    "price": "300",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2024.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2024.pdf",
+        "sha256": "eb426b0ca8d71a397a9a41a11ea50200574b8a9a5000ea1ae6a571c250cf7911",
+        "page": 4,
+        "extractor": "L1"
+      }
+    ],
+    "extractor": "L1",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.6,
+    "flags": [
+      "needs_review",
+      "unverified_arabic_encoding",
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "IV Solution Insertion",
+    "nameArabic": "(cid:3)(cid:184)(cid:405)(cid:478)(cid:165)(cid:183)(cid:3)(cid:179)(cid:473)(cid:459)(cid:399)(cid:462)(cid:3)(cid:379)(cid:479)(cid:454)(cid:409)(cid:386)(cid:3)(cid:149)(cid:155)(cid:409)(cid:394)(cid:155)",
+    "price": "150",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2024.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2024.pdf",
+        "sha256": "eb426b0ca8d71a397a9a41a11ea50200574b8a9a5000ea1ae6a571c250cf7911",
+        "page": 4,
+        "extractor": "L1"
+      }
+    ],
+    "extractor": "L1",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.6,
+    "flags": [
+      "needs_review",
+      "unverified_arabic_encoding",
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Junior Suite",
+    "nameArabic": "جناح جونيور",
+    "price": "17200",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 31.3x from 550.0)"
+    ]
+  },
+  {
+    "nameEnglish": "KOH examination for fungi",
+    "nameArabic": "",
+    "price": "650",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 6.5x from 100.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Large Dressing Plastic surgery stitches (less than",
+    "nameArabic": "(cid:3)(cid:409)(cid:479)(cid:381)(cid:454)(cid:3)(cid:3)(cid:165)(cid:377)(cid:479)(cid:442)",
+    "price": "350",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2024.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2024.pdf",
+        "sha256": "eb426b0ca8d71a397a9a41a11ea50200574b8a9a5000ea1ae6a571c250cf7911",
+        "page": 4,
+        "extractor": "L1"
+      }
+    ],
+    "extractor": "L1",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.6,
+    "flags": [
+      "needs_review",
+      "unverified_arabic_encoding",
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Medic.) Insertion of Laryngeal Tube",
+    "nameArabic": "(cid:11)(cid:185)(cid:183)(cid:377)(cid:463)(cid:479)(cid:455)(cid:458)(cid:155) (cid:185)(cid:409)(cid:395)(cid:467)(cid:398)(cid:3)(cid:156)(cid:473)(cid:381)(cid:466)(cid:155)(cid:3)(cid:379)(cid:479)(cid:454)(cid:409)(cid:386)(cid:3)(cid:149)(cid:155)(cid:409)(cid:394)(cid:155) (cid:3)(cid:383)(cid:381)(cid:423)(cid:451)(cid:458)(cid:377)(cid:380)(cid:3)(cid:383)(cid:380)(cid:473)(cid:381)(cid:466)(cid:151)(cid:3)(cid:179)(cid:377)(cid:402)(cid:163)(cid:155)(cid:12)(cid:3)(cid:477)(cid:462)(cid:377)(cid:442)(cid:165)(cid:3)(cid:385)(cid:479)(cid:381)(cid:467)(cid:386)(cid:3)(cid:149)(cid:155)(cid:409)(cid:394)(cid:155)",
+    "price": "400",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2024.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2024.pdf",
+        "sha256": "eb426b0ca8d71a397a9a41a11ea50200574b8a9a5000ea1ae6a571c250cf7911",
+        "page": 5,
+        "extractor": "L1"
+      }
+    ],
+    "extractor": "L1",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.6,
+    "flags": [
+      "needs_review",
+      "unverified_arabic_encoding",
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Medium Dressing",
+    "nameArabic": "(cid:3)(cid:429)(cid:414)(cid:183)(cid:3)(cid:165)(cid:377)(cid:479)(cid:442)",
+    "price": "250",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2024.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2024.pdf",
+        "sha256": "eb426b0ca8d71a397a9a41a11ea50200574b8a9a5000ea1ae6a571c250cf7911",
+        "page": 4,
+        "extractor": "L1"
+      }
+    ],
+    "extractor": "L1",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.6,
+    "flags": [
+      "needs_review",
+      "unverified_arabic_encoding",
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Nebulizer session",
+    "nameArabic": "(cid:177)(cid:377)(cid:419)(cid:467)(cid:387)(cid:414)(cid:155)(cid:18)(cid:165)(cid:411)(cid:479)(cid:458)(cid:473)(cid:381)(cid:479)(cid:466)(cid:3)(cid:469)(cid:415)(cid:459)(cid:394)(cid:3)(cid:149)(cid:155)(cid:409)(cid:394)(cid:155)",
+    "price": "200",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2024.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2024.pdf",
+        "sha256": "eb426b0ca8d71a397a9a41a11ea50200574b8a9a5000ea1ae6a571c250cf7911",
+        "page": 5,
+        "extractor": "L1"
+      }
+    ],
+    "extractor": "L1",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.6,
+    "flags": [
+      "needs_review",
+      "unverified_arabic_encoding",
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Nurse visit in home",
+    "nameArabic": "زياره تمريضية للمنزل",
+    "price": "300",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 5.0x from 60.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Observation In ER",
+    "nameArabic": "(cid:3)(cid:149)(cid:185)(cid:165)(cid:155)(cid:473)(cid:431)(cid:458)(cid:377)(cid:380)(cid:3)(cid:469)(cid:435)(cid:398)(cid:487)(cid:462) (cid:3)(cid:477)(cid:446)(cid:3)(cid:383)(cid:479)(cid:374)(cid:377)(cid:380)(cid:409)(cid:471)(cid:454)(cid:3)(cid:158)(cid:377)(cid:462)(cid:405)(cid:422)(cid:3)(cid:166)(cid:377)(cid:471)(cid:394)(cid:3)(cid:180)(cid:155)(cid:405)(cid:403)(cid:387)(cid:414)(cid:155)(cid:3)(cid:461)(cid:414)(cid:165)(cid:3)",
+    "price": "240",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2024.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2024.pdf",
+        "sha256": "eb426b0ca8d71a397a9a41a11ea50200574b8a9a5000ea1ae6a571c250cf7911",
+        "page": 5,
+        "extractor": "L1"
+      }
+    ],
+    "extractor": "L1",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.6,
+    "flags": [
+      "needs_review",
+      "unverified_arabic_encoding",
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Pancreatic amylase in Urine",
+    "nameArabic": "",
+    "price": "350",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 4.2x from 84.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Panorama Suite",
+    "nameArabic": "جناح بانوراما",
+    "price": "17200",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 43.0x from 400.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Phenytion (Epanutine) Peak",
+    "nameArabic": "",
+    "price": "650",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 5.4x from 120.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Phenytion (Epanutine) Trough",
+    "nameArabic": "",
+    "price": "550",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 4.6x from 120.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Plastic surgery stitches between (2cm- 5cm) Plastic surgery stitches (more than",
+    "nameArabic": "(cid:461)(cid:414)(cid:16)(cid:24)(cid:461)(cid:414)(cid:3)2(cid:3)(cid:3)(cid:465)(cid:479)(cid:380)(cid:377)(cid:462)(cid:3)(cid:161)(cid:409)(cid:395)(cid:458)(cid:3)(cid:469)(cid:479)(cid:459)(cid:479)(cid:463)(cid:395)(cid:386)(cid:3)(cid:166)(cid:409)(cid:442)",
+    "price": "1200",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2024.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2024.pdf",
+        "sha256": "eb426b0ca8d71a397a9a41a11ea50200574b8a9a5000ea1ae6a571c250cf7911",
+        "page": 4,
+        "extractor": "L1"
+      }
+    ],
+    "extractor": "L1",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.6,
+    "flags": [
+      "needs_review",
+      "unverified_arabic_encoding",
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Plastic surgery stitches (less than 2cm) Plastic surgery stitches between",
+    "nameArabic": "(cid:461)(cid:414)(cid:3)2(cid:3)(cid:465)(cid:462)(cid:3)(cid:457)(cid:450)(cid:155)(cid:3)(cid:161)(cid:409)(cid:395)(cid:458)(cid:3)(cid:469)(cid:479)(cid:459)(cid:479)(cid:463)(cid:395)(cid:386)(cid:3)(cid:166)(cid:409)(cid:442)",
+    "price": "800",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2024.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2024.pdf",
+        "sha256": "eb426b0ca8d71a397a9a41a11ea50200574b8a9a5000ea1ae6a571c250cf7911",
+        "page": 4,
+        "extractor": "L1"
+      }
+    ],
+    "extractor": "L1",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.6,
+    "flags": [
+      "needs_review",
+      "unverified_arabic_encoding",
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Plastic surgery stitches (more than 5cm)",
+    "nameArabic": "(cid:461)(cid:414)(cid:3)(cid:24)(cid:3)(cid:465)(cid:462)(cid:3)(cid:409)(cid:391)(cid:454)(cid:155)(cid:3)(cid:161)(cid:409)(cid:395)(cid:458)(cid:3)(cid:469)(cid:479)(cid:459)(cid:479)(cid:463)(cid:395)(cid:386)(cid:3)(cid:166)(cid:409)(cid:442)",
+    "price": "1500",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2024.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2024.pdf",
+        "sha256": "eb426b0ca8d71a397a9a41a11ea50200574b8a9a5000ea1ae6a571c250cf7911",
+        "page": 4,
+        "extractor": "L1"
+      }
+    ],
+    "extractor": "L1",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.6,
+    "flags": [
+      "needs_review",
+      "unverified_arabic_encoding",
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Pneumocystis carinii",
+    "nameArabic": "",
+    "price": "2250",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 5.0x from 450.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Porta Cath Removal Special Nature Medication IV Adminstration That need Special Obser-",
+    "nameArabic": "(cid:159)(cid:377)(cid:454)(cid:377)(cid:386)(cid:165)(cid:473)(cid:380)(cid:3)(cid:437)(cid:446)(cid:165)(cid:3)(cid:149)(cid:155)(cid:409)(cid:394)(cid:155) (cid:3)(cid:3)(cid:169)(cid:377)(cid:402)(cid:3)(cid:437)(cid:380)(cid:377)(cid:430)(cid:3)(cid:158)(cid:155)(cid:164)(cid:3)(cid:383)(cid:478)(cid:183)(cid:163)(cid:151)(cid:3)(cid:185)(cid:405)(cid:478)(cid:165)(cid:183)(cid:3)(cid:465)(cid:451)(cid:398)(cid:3)(cid:149)(cid:155)(cid:409)(cid:394)(cid:155)(cid:3) (cid:3)(cid:183)(cid:3)(cid:179)(cid:377)(cid:391)(cid:462)(cid:3)(cid:469)(cid:451)(cid:479)(cid:450)(cid:163)(cid:3)(cid:469)(cid:435)(cid:398)(cid:487)(cid:462)(cid:3)(cid:477)(cid:458)(cid:155)(cid:3)(cid:160)(cid:377)(cid:387)(cid:399)(cid:386)(cid:3)(cid:477)(cid:387)(cid:458)(cid:155)",
+    "price": "280",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2024.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2024.pdf",
+        "sha256": "eb426b0ca8d71a397a9a41a11ea50200574b8a9a5000ea1ae6a571c250cf7911",
+        "page": 5,
+        "extractor": "L1"
+      }
+    ],
+    "extractor": "L1",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.6,
+    "flags": [
+      "needs_review",
+      "unverified_arabic_encoding",
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "reaction) Blood Pressure Monitoring without Examination Or Admittance",
+    "nameArabic": "(cid:3)(cid:181)(cid:183)(cid:405)(cid:380)(cid:3)(cid:425)(cid:478)(cid:409)(cid:463)(cid:387)(cid:458)(cid:155)(cid:3)(cid:383)(cid:431)(cid:414)(cid:155)(cid:473)(cid:380)(cid:3)(cid:180)(cid:405)(cid:458)(cid:155)(cid:3)(cid:429)(cid:443)(cid:426)(cid:3)(cid:167)(cid:377)(cid:479)(cid:450) (cid:411)(cid:395)(cid:398)(cid:3)(cid:183)(cid:151)(cid:3)(cid:445)(cid:419)(cid:454)",
+    "price": "75",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2024.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2024.pdf",
+        "sha256": "eb426b0ca8d71a397a9a41a11ea50200574b8a9a5000ea1ae6a571c250cf7911",
+        "page": 5,
+        "extractor": "L1"
+      }
+    ],
+    "extractor": "L1",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.6,
+    "flags": [
+      "needs_review",
+      "unverified_arabic_encoding",
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Reducing substance (stool)",
+    "nameArabic": "",
+    "price": "350",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 5.8x from 60.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Reduction of dislocated joint procedure Simple Fracture Reduction in ER",
+    "nameArabic": "(cid:3)(cid:457)(cid:423)(cid:447)(cid:463)(cid:458)(cid:377)(cid:380)(cid:3)(cid:437)(cid:459)(cid:402)(cid:3)(cid:163)(cid:165)(cid:3)(cid:149)(cid:155)(cid:409)(cid:394)(cid:155)(cid:3) (cid:3)(cid:181)(cid:183)(cid:405)(cid:380)(cid:3)(cid:149)(cid:184)(cid:165)(cid:155)(cid:473)(cid:431)(cid:458)(cid:377)(cid:380)(cid:3)(cid:429)(cid:479)(cid:415)(cid:380)(cid:3)(cid:3)(cid:409)(cid:415)(cid:454)(cid:3)(cid:163)(cid:165)(cid:3)(cid:149)(cid:155)(cid:409)(cid:394)(cid:155)(cid:3)(cid:3)",
+    "price": "950",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2024.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2024.pdf",
+        "sha256": "eb426b0ca8d71a397a9a41a11ea50200574b8a9a5000ea1ae6a571c250cf7911",
+        "page": 4,
+        "extractor": "L1"
+      }
+    ],
+    "extractor": "L1",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.6,
+    "flags": [
+      "needs_review",
+      "unverified_arabic_encoding",
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "RPR",
+    "nameArabic": "",
+    "price": "350",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 4.7x from 75.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Rubella IgG",
+    "nameArabic": "",
+    "price": "350",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 4.2x from 84.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Rubella IgM",
+    "nameArabic": "",
+    "price": "350",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 4.2x from 84.0)"
+    ]
+  },
+  {
+    "nameEnglish": "S.Bilirubin (Indirect)",
+    "nameArabic": "",
+    "price": "75",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 7.5x from 10.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Senstivity Test (Excluding extra procedures taken in case of actual senstivity reaction) Blood Pressure Monitoring without",
+    "nameArabic": "(cid:3)(cid:160)(cid:487)(cid:438)(cid:3)(cid:158)(cid:155)(cid:149)(cid:155)(cid:409)(cid:394)(cid:153)(cid:3)(cid:465)(cid:463)(cid:427)(cid:387)(cid:462)(cid:3)(cid:409)(cid:479)(cid:442)(cid:12)(cid:3)(cid:3)(cid:469)(cid:479)(cid:414)(cid:377)(cid:415)(cid:398)(cid:3)(cid:165)(cid:377)(cid:381)(cid:387)(cid:402)(cid:155) (cid:11)(cid:377)(cid:470)(cid:165)(cid:473)(cid:471)(cid:434)(cid:3)(cid:383)(cid:458)(cid:377)(cid:398)(cid:3)(cid:477)(cid:446)(cid:3)(cid:383)(cid:479)(cid:414)(cid:377)(cid:415)(cid:399)(cid:458)(cid:155) (cid:3)(cid:181)(cid:183)(cid:405)(cid:380)(cid:3)(cid:425)(cid:478)(cid:409)(cid:463)(cid:387)(cid:458)(cid:155)(cid:3)(cid:383)(cid:431)(cid:414)(cid:155)(cid:473)(cid:380)(cid:3)(cid:180)(cid:405)(cid:458)(cid:155)(cid:3)(cid:429)(cid:443)(cid:426)(cid:3)(cid:167)(cid:377)(cid:479)(cid:450)",
+    "price": "75",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2024.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2024.pdf",
+        "sha256": "eb426b0ca8d71a397a9a41a11ea50200574b8a9a5000ea1ae6a571c250cf7911",
+        "page": 5,
+        "extractor": "L1"
+      }
+    ],
+    "extractor": "L1",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.6,
+    "flags": [
+      "needs_review",
+      "unverified_arabic_encoding",
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Sickling test",
+    "nameArabic": "",
+    "price": "350",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 5.0x from 70.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Simple Fracture Reduction in ER Without Aneathesia TMJ Reduction(Tempanomandibular",
+    "nameArabic": "(cid:3)(cid:181)(cid:183)(cid:405)(cid:380)(cid:3)(cid:149)(cid:184)(cid:165)(cid:155)(cid:473)(cid:431)(cid:458)(cid:377)(cid:380)(cid:3)(cid:429)(cid:479)(cid:415)(cid:380)(cid:3)(cid:3)(cid:409)(cid:415)(cid:454)(cid:3)(cid:163)(cid:165)(cid:3)(cid:149)(cid:155)(cid:409)(cid:394)(cid:155)(cid:3)(cid:3) (cid:409)(cid:478)(cid:405)(cid:403)(cid:386) (cid:3)(cid:477)(cid:455)(cid:447)(cid:458)(cid:155)(cid:3)(cid:477)(cid:442)(cid:405)(cid:423)(cid:458)(cid:155)(cid:3)(cid:457)(cid:423)(cid:447)(cid:463)(cid:458)(cid:155)(cid:3)(cid:465)(cid:479)(cid:381)(cid:466)(cid:377)(cid:394)(cid:3)(cid:163)(cid:165)(cid:3)(cid:149)(cid:155)(cid:409)(cid:394)(cid:155)",
+    "price": "500",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2024.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2024.pdf",
+        "sha256": "eb426b0ca8d71a397a9a41a11ea50200574b8a9a5000ea1ae6a571c250cf7911",
+        "page": 4,
+        "extractor": "L1"
+      }
+    ],
+    "extractor": "L1",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.6,
+    "flags": [
+      "needs_review",
+      "unverified_arabic_encoding",
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Small Dressing",
+    "nameArabic": "(cid:409)(cid:479)(cid:443)(cid:422)(cid:3)(cid:165)(cid:377)(cid:479)(cid:442)",
+    "price": "180",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2024.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2024.pdf",
+        "sha256": "eb426b0ca8d71a397a9a41a11ea50200574b8a9a5000ea1ae6a571c250cf7911",
+        "page": 4,
+        "extractor": "L1"
+      }
+    ],
+    "extractor": "L1",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.6,
+    "flags": [
+      "needs_review",
+      "unverified_arabic_encoding",
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Special Nature Medication IV Adminstration That need Special Observation, E.g Iron...etc ( Not Including Medication Price or Chemotherapy Medic.)",
+    "nameArabic": "(cid:3)(cid:3)(cid:169)(cid:377)(cid:402)(cid:3)(cid:437)(cid:380)(cid:377)(cid:430)(cid:3)(cid:158)(cid:155)(cid:164)(cid:3)(cid:383)(cid:478)(cid:183)(cid:163)(cid:151)(cid:3)(cid:185)(cid:405)(cid:478)(cid:165)(cid:183)(cid:3)(cid:465)(cid:451)(cid:398)(cid:3)(cid:149)(cid:155)(cid:409)(cid:394)(cid:155)(cid:3) (cid:3)(cid:183)(cid:3)(cid:179)(cid:377)(cid:391)(cid:462)(cid:3)(cid:469)(cid:451)(cid:479)(cid:450)(cid:163)(cid:3)(cid:469)(cid:435)(cid:398)(cid:487)(cid:462)(cid:3)(cid:477)(cid:458)(cid:155)(cid:3)(cid:160)(cid:377)(cid:387)(cid:399)(cid:386)(cid:3)(cid:477)(cid:387)(cid:458)(cid:155) (cid:3)(cid:383)(cid:478)(cid:183)(cid:163)(cid:151)(cid:3)(cid:383)(cid:467)(cid:463)(cid:427)(cid:387)(cid:462)(cid:3)(cid:409)(cid:479)(cid:442)(cid:12)(cid:3)(cid:405)(cid:478)(cid:405)(cid:399)(cid:458)(cid:155)(cid:3)(cid:409)(cid:423)(cid:399)(cid:459)(cid:458)(cid:3)(cid:413)(cid:479)(cid:458) (cid:11)(cid:185)(cid:183)(cid:377)(cid:463)(cid:479)(cid:455)(cid:458)(cid:155)",
+    "price": "400",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2024.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2024.pdf",
+        "sha256": "eb426b0ca8d71a397a9a41a11ea50200574b8a9a5000ea1ae6a571c250cf7911",
+        "page": 5,
+        "extractor": "L1"
+      }
+    ],
+    "extractor": "L1",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.6,
+    "flags": [
+      "needs_review",
+      "unverified_arabic_encoding",
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Stitch removal",
+    "nameArabic": "(cid:166)(cid:409)(cid:442)(cid:3)(cid:437)(cid:446)(cid:165)",
+    "price": "20",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2024.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2024.pdf",
+        "sha256": "eb426b0ca8d71a397a9a41a11ea50200574b8a9a5000ea1ae6a571c250cf7911",
+        "page": 4,
+        "extractor": "L1"
+      }
+    ],
+    "extractor": "L1",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.6,
+    "flags": [
+      "needs_review",
+      "unverified_arabic_encoding",
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Subcutanous Injection (S.C inj)",
+    "nameArabic": "(cid:405)(cid:459)(cid:395)(cid:458)(cid:155)(cid:3)(cid:385)(cid:399)(cid:386)(cid:3)(cid:465)(cid:451)(cid:398)(cid:3)(cid:149)(cid:155)(cid:409)(cid:394)(cid:155)",
+    "price": "50",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2024.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2024.pdf",
+        "sha256": "eb426b0ca8d71a397a9a41a11ea50200574b8a9a5000ea1ae6a571c250cf7911",
+        "page": 5,
+        "extractor": "L1"
+      }
+    ],
+    "extractor": "L1",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.6,
+    "flags": [
+      "needs_review",
+      "unverified_arabic_encoding",
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Surgical stitches (between 5-10 cm)",
+    "nameArabic": "(cid:461)(cid:414)(cid:24)(cid:16)(cid:20)(cid:19)(cid:3)(cid:465)(cid:479)(cid:380)(cid:3)(cid:377)(cid:462)(cid:3)(cid:469)(cid:479)(cid:398)(cid:155)(cid:409)(cid:394)(cid:3)(cid:166)(cid:409)(cid:442)",
+    "price": "700",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2024.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2024.pdf",
+        "sha256": "eb426b0ca8d71a397a9a41a11ea50200574b8a9a5000ea1ae6a571c250cf7911",
+        "page": 4,
+        "extractor": "L1"
+      }
+    ],
+    "extractor": "L1",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.6,
+    "flags": [
+      "needs_review",
+      "unverified_arabic_encoding",
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Surgical stitches (less than 5cm)",
+    "nameArabic": "(cid:3)(cid:461)(cid:414)(cid:3)(cid:24)(cid:3)(cid:465)(cid:462)(cid:3)(cid:457)(cid:450)(cid:155)(cid:3)(cid:469)(cid:479)(cid:398)(cid:155)(cid:409)(cid:394)(cid:3)(cid:166)(cid:409)(cid:442)",
+    "price": "500",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2024.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2024.pdf",
+        "sha256": "eb426b0ca8d71a397a9a41a11ea50200574b8a9a5000ea1ae6a571c250cf7911",
+        "page": 4,
+        "extractor": "L1"
+      }
+    ],
+    "extractor": "L1",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.6,
+    "flags": [
+      "needs_review",
+      "unverified_arabic_encoding",
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Surgical stitches( more than 10cm)",
+    "nameArabic": "(cid:3)(cid:461)(cid:414)(cid:3)(cid:20)(cid:19)(cid:3)(cid:465)(cid:462)(cid:3)(cid:409)(cid:391)(cid:454)(cid:155)(cid:3)(cid:469)(cid:479)(cid:398)(cid:155)(cid:409)(cid:394)(cid:3)(cid:166)(cid:409)(cid:442)",
+    "price": "900",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2024.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2024.pdf",
+        "sha256": "eb426b0ca8d71a397a9a41a11ea50200574b8a9a5000ea1ae6a571c250cf7911",
+        "page": 4,
+        "extractor": "L1"
+      }
+    ],
+    "extractor": "L1",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.6,
+    "flags": [
+      "needs_review",
+      "unverified_arabic_encoding",
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Technician visit at home",
+    "nameArabic": "زيارة فني بالمنزل",
+    "price": "300",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 5.0x from 60.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Test for Assessment of Sterilization Efficiency",
+    "nameArabic": "",
+    "price": "350",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 5.8x from 60.0)"
+    ]
+  },
+  {
+    "nameEnglish": "TMJ Reduction(Tempanomandibular Joint) Without Aneathesia",
+    "nameArabic": "(cid:3)(cid:477)(cid:455)(cid:447)(cid:458)(cid:155)(cid:3)(cid:477)(cid:442)(cid:405)(cid:423)(cid:458)(cid:155)(cid:3)(cid:457)(cid:423)(cid:447)(cid:463)(cid:458)(cid:155)(cid:3)(cid:465)(cid:479)(cid:381)(cid:466)(cid:377)(cid:394)(cid:3)(cid:163)(cid:165)(cid:3)(cid:149)(cid:155)(cid:409)(cid:394)(cid:155) (cid:409)(cid:478)(cid:405)(cid:403)(cid:386)(cid:3)(cid:181)(cid:183)(cid:405)(cid:380)",
+    "price": "1300",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2024.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2024.pdf",
+        "sha256": "eb426b0ca8d71a397a9a41a11ea50200574b8a9a5000ea1ae6a571c250cf7911",
+        "page": 4,
+        "extractor": "L1"
+      }
+    ],
+    "extractor": "L1",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.6,
+    "flags": [
+      "needs_review",
+      "unverified_arabic_encoding",
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "Toxoplasma -Ab (IHA)",
+    "nameArabic": "",
+    "price": "750",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 5.0x from 150.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Urine specific gravity",
+    "nameArabic": "",
+    "price": "105",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 10.5x from 10.0)"
+    ]
+  },
+  {
+    "nameEnglish": "VDRL",
+    "nameArabic": "",
+    "price": "250",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 4.2x from 60.0)"
+    ]
+  },
+  {
+    "nameEnglish": "Vein viewer Usage",
+    "nameArabic": "(cid:157)(cid:163)(cid:165)(cid:183)(cid:482)(cid:155)(cid:3)(cid:409)(cid:471)(cid:435)(cid:462)(cid:3)(cid:180)(cid:155)(cid:405)(cid:403)(cid:387)(cid:414)(cid:155)(cid:3)(cid:461)(cid:414)(cid:165)",
+    "price": "100",
+    "sectionName": "Emergency (ER) Services",
+    "sourceFile": "2024.pdf",
+    "code": null,
+    "outsourced": false,
+    "sources": [
+      {
+        "file": "2024.pdf",
+        "sha256": "eb426b0ca8d71a397a9a41a11ea50200574b8a9a5000ea1ae6a571c250cf7911",
+        "page": 5,
+        "extractor": "L1"
+      }
+    ],
+    "extractor": "L1",
+    "extractorVersion": "1.2.0",
+    "confidence": 0.6,
+    "flags": [
+      "needs_review",
+      "unverified_arabic_encoding",
+      "pdf_only_candidate"
+    ]
+  },
+  {
+    "nameEnglish": "VMA",
+    "nameArabic": "",
+    "price": "550",
+    "sectionName": "General",
+    "sourceFile": "Elite Hospital 2024",
+    "code": null,
+    "outsourced": null,
+    "sources": [
+      {
+        "file": "2024 Pricelist extracted.xlsx",
+        "sheet": "Sheet1",
+        "year": "2024"
+      }
+    ],
+    "extractor": "excel",
+    "extractorVersion": "1.2.0",
+    "confidence": 1.0,
+    "flags": [
+      "price_outlier_jump (YoY 4.6x from 120.0)"
+    ]
+  }
+]

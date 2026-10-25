@@ -15,7 +15,7 @@ import {
   Timestamp,
   where,
 } from 'firebase/firestore';
-import { db } from '../firebase';
+import { db, auth } from '../firebase';
 import { InpatientApprovalRecord, CompanyConfigRecord, AutomationSettings, CompanyInfo } from '../types';
 
 const APPROVALS_COLLECTION = 'inpatient_approvals';
@@ -26,6 +26,22 @@ const AUTOMATION_SETTINGS_DOC = 'approvals_automation';
 export const MAX_HISTORY_DAYS = 30;
 
 let lastPurgeTimestamp = 0;
+
+/**
+ * Returns authorization headers with the current authenticated user's JWT
+ */
+export async function getAuthHeaders(): Promise<Record<string, string>> {
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+  };
+  try {
+    const token = await auth.currentUser?.getIdToken();
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+  } catch {}
+  return headers;
+}
 
 /**
  * Checks if the frontend is running locally (where the local watcher API exists).
@@ -78,14 +94,16 @@ export function subscribeToApprovals(
 
   // 1. Initial fast-hydration from local watcher API if available
   if (isLocalEnvironment()) {
-    fetch('/api/approvals')
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data) => {
-        if (Array.isArray(data) && isSubscribed) {
-          onUpdate(data);
-        }
-      })
-      .catch(() => {});
+    getAuthHeaders().then((headers) => {
+      fetch('/api/approvals', { headers })
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data) => {
+          if (Array.isArray(data) && isSubscribed) {
+            onUpdate(data);
+          }
+        })
+        .catch(() => {});
+    });
   }
 
   // 2. Pure real-time stream via Firestore snapshot listener (no redundant 3s REST polling)
@@ -198,7 +216,10 @@ export async function toggleApprovalStatus(
 
   if (isLocalEnvironment()) {
     try {
-      await fetch(`/api/approvals/${id}/toggle`, { method: 'POST' });
+      await fetch(`/api/approvals/${id}/toggle`, {
+        method: 'POST',
+        headers: await getAuthHeaders(),
+      });
     } catch {}
   }
 
@@ -224,7 +245,7 @@ export async function updateApprovalStatus(
     try {
       await fetch(`/api/approvals/${id}/status`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: await getAuthHeaders(),
         body: JSON.stringify({ status: newStatus, reason }),
       });
     } catch {}
@@ -258,7 +279,10 @@ export async function updateApprovalStatus(
 export async function triggerManualDraft(id: string): Promise<void> {
   // 1. Attempt local/proxied REST draft trigger
   try {
-    const res = await fetch(`/api/approvals/${id}/draft`, { method: 'POST' });
+    const res = await fetch(`/api/approvals/${id}/draft`, {
+      method: 'POST',
+      headers: await getAuthHeaders(),
+    });
     if (res.ok) {
       return;
     }
@@ -288,14 +312,16 @@ export function subscribeToCompanyConfigs(
 
   // Fast hydration on mount if local
   if (isLocalEnvironment()) {
-    fetch('/api/contractors')
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data) => {
-        if (Array.isArray(data) && data.length > 0 && isSubscribed) {
-          onUpdate(data);
-        }
-      })
-      .catch(() => {});
+    getAuthHeaders().then((headers) => {
+      fetch('/api/contractors', { headers })
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data) => {
+          if (Array.isArray(data) && data.length > 0 && isSubscribed) {
+            onUpdate(data);
+          }
+        })
+        .catch(() => {});
+    });
   }
 
   const colRef = collection(db, COMPANIES_COLLECTION);
@@ -401,7 +427,7 @@ export async function saveCompanyConfig(
     try {
       await fetch('/api/contractors', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: await getAuthHeaders(),
         body: JSON.stringify({
           ...company,
           id: docId,
@@ -468,6 +494,7 @@ export async function deleteCompanyConfig(id: string): Promise<void> {
     try {
       await fetch(`/api/contractors?id=${encodeURIComponent(id)}`, {
         method: 'DELETE',
+        headers: await getAuthHeaders(),
       });
     } catch {}
   }
@@ -507,7 +534,7 @@ export async function mergeCompanies(params: {
     try {
       await fetch('/api/contractors/merge', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: await getAuthHeaders(),
         body: JSON.stringify({
           targetId,
           targetName,
@@ -583,7 +610,10 @@ export async function triggerManualApprovalsSync(): Promise<{ success: boolean; 
   // 1. If local environment, trigger the watcher HTTP endpoint
   if (isLocalEnvironment()) {
     try {
-      const res = await fetch('/api/approvals/sync', { method: 'POST' });
+      const res = await fetch('/api/approvals/sync', {
+        method: 'POST',
+        headers: await getAuthHeaders(),
+      });
       if (res.ok) {
         const data = await res.json();
         return { success: true, message: data.message || 'Sync triggered successfully' };
@@ -620,14 +650,16 @@ export function subscribeToAutomationSettings(
 
   // Fast hydration on mount if local
   if (isLocalEnvironment()) {
-    fetch('/api/settings')
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data) => {
-        if (data && typeof data.isPaused === 'boolean' && isSubscribed) {
-          onUpdate(data);
-        }
-      })
-      .catch(() => {});
+    getAuthHeaders().then((headers) => {
+      fetch('/api/settings', { headers })
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data) => {
+          if (data && typeof data.isPaused === 'boolean' && isSubscribed) {
+            onUpdate(data);
+          }
+        })
+        .catch(() => {});
+    });
   }
 
   const docRef = doc(db, SETTINGS_COLLECTION, AUTOMATION_SETTINGS_DOC);
@@ -658,7 +690,7 @@ export async function setAutomationPaused(isPaused: boolean, userEmail?: string)
     try {
       await fetch('/api/settings/pause', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: await getAuthHeaders(),
         body: JSON.stringify({ isPaused }),
       });
     } catch {}

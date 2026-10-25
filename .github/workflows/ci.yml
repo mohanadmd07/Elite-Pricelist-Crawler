@@ -1,0 +1,53 @@
+name: CI Quality Gates & Pipeline Verification
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  verify:
+    name: Lint, Test, Evaluate & Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: 'pip'
+
+      - name: Install Node Dependencies
+        run: npm ci
+
+      - name: Install Python Dependencies
+        run: pip install -r requirements.txt
+
+      - name: TypeScript & Lint Gate
+        run: npm run lint
+
+      - name: Frontend & Clinical Unit Tests
+        run: npm test
+
+      - name: Python PDF & Reconciliation Tests
+        run: pytest -v
+
+      - name: Golden Matching Quality Evaluation Gate
+        run: npx tsx scripts/eval-matching.ts
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+
+      - name: Production Vite Build
+        run: npm run build

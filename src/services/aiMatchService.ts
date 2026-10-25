@@ -2,6 +2,7 @@ import { GoogleGenAI, Type } from '@google/genai';
 import { ProcedureResult, SelectedProcedure, InpatientApprovalRecord, ApprovalGranularStatus } from '../types';
 import { cleanContractorName, normalizeArabic, normalizeText, expandMedicalSynonyms, hasAntibodyConflict, hasLabInvestigationConflict, cleanHisProcedureQuery } from '../lib/arabic-normalizer';
 import { generateCmWhatsappMessage } from '../lib/whatsapp-generator';
+import { redactPhiFromText, assertZeroDemographics, KnownDemographics } from '../lib/deidentifier';
 
 export const GEMINI_STORAGE_KEY = 'elite_gemini_api_key';
 
@@ -368,15 +369,23 @@ export async function analyzeThreadWithUnifiedAI(input: UnifiedThreadInput): Pro
 
   const ai = new GoogleGenAI({ apiKey: key });
 
-  // Format thread messages chronologically
+  const knownDemo: KnownDemographics = {
+    patientName: input.patientName,
+    mrn: input.mrn,
+    bed: input.bed,
+  };
+
+  // Format thread messages chronologically with PHI redaction
   const messagesFormatted = input.threadMessages
     .map((m, idx) => {
+      const sanitizedBody = redactPhiFromText(m.body, knownDemo).trim().slice(0, 1500);
+      const sanitizedSubject = redactPhiFromText(m.subject, knownDemo);
       return `--- [Message ${idx + 1}] ---
-From: ${m.sender}
+Sender: Insurance/Hospital Staff
 Date: ${m.date}
-Subject: ${m.subject}
+Subject: ${sanitizedSubject}
 Content:
-${m.body.trim().slice(0, 1500)}
+${sanitizedBody}
 ------------------------`;
     })
     .join('\n\n');
@@ -392,28 +401,26 @@ ${m.body.trim().slice(0, 1500)}
     .join('\n');
 
   const servicesFormatted = input.initialServices
-    .map((s, idx) => `[Srv ${idx}]: "${s.name}" (Price: ${s.rawPrice})`)
+    .map((s, idx) => `[Srv ${idx}]: "${redactPhiFromText(s.name, knownDemo)}" (Price: ${s.rawPrice})`)
     .join('\n');
 
-  const promptText = `You are a Senior Hospital Contracting & Insurance AI Specialist at Elite Hospital.
-Analyze the following inpatient approval request email thread and extract structured operational and financial intelligence.
+  const sanitizedDiagnosis = redactPhiFromText(input.diagnosis || '', knownDemo);
 
-<PatientAndContractorInfo>
-Patient Name: "${input.patientName}"
-MRN: "${input.mrn}"
-Bed: "${input.bed || 'Inpatient'}"
+  const promptText = `You are a Senior Hospital Contracting & Insurance AI Specialist at Elite Hospital.
+Analyze the following de-identified inpatient approval request email thread and extract structured operational and financial intelligence.
+
+<ContractContext>
 Contractor / Insurance Company: "${input.contractor}"
-Diagnosis / Clinical Notes: "${input.diagnosis}"
 Price List Year: "${input.priceListYear === 'Cash' ? '2026' : (input.priceListYear || '2026')}"
-Contractor Officer: "${input.contractorOfficer || 'غير محدد'}"
-</PatientAndContractorInfo>
+Clinical Specialty / Indication: "${sanitizedDiagnosis || 'Inpatient admission'}"
+</ContractContext>
 
 <RequestedServices>
 ${servicesFormatted}
 </RequestedServices>
 
 <EmailThreadHistoryChronological>
-${messagesFormatted || 'No prior email messages. Only initial HIS approval form.'}
+${messagesFormatted || 'No prior email messages. Only initial approval request.'}
 </EmailThreadHistoryChronological>
 
 <CandidatePricelistRows>
@@ -547,6 +554,13 @@ YOUR TASKS:
       'cmWhatsappMessage',
     ],
   };
+
+  // PHI De-identification Guardrail Assertion
+  const demoCheck = assertZeroDemographics(promptText, knownDemo);
+  if (!demoCheck.isClean) {
+    console.error('[PHI Violation Intercepted] Demographics detected in outgoing prompt:', demoCheck.violations);
+    throw new Error(`De-identification check failed: ${demoCheck.violations.join('; ')}`);
+  }
 
   const candidateModels = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash'];
   for (const model of candidateModels) {
@@ -756,6 +770,13 @@ STRICT CLINICAL EXTRACTION RULES:
   };
 
   // Try candidate models in order: gemini-2.5-flash -> gemini-2.0-flash -> gemini-1.5-flash
+  // PHI De-identification Guardrail Assertion
+  const demoCheck = assertZeroDemographics(promptText);
+  if (!demoCheck.isClean) {
+    console.error('[PHI Violation Intercepted] Demographics detected in outgoing prompt:', demoCheck.violations);
+    throw new Error(`De-identification check failed: ${demoCheck.violations.join('; ')}`);
+  }
+
   const candidateModels = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash'];
   let lastError: any = null;
 
@@ -848,12 +869,14 @@ export async function extractProceduresFromTextWithAI(clinicalText: string): Pro
 
   const ai = new GoogleGenAI({ apiKey: key });
 
+  const sanitizedText = redactPhiFromText(clinicalText);
+
   const promptText = `You are a medical records extraction specialist at Elite Hospital.
-Given the following doctor note or clinical email text, extract ONLY the specific medical procedure(s), test(s), investigation(s), or surgery requested for approval.
+Given the following de-identified doctor note or clinical email text, extract ONLY the specific medical procedure(s), test(s), investigation(s), or surgery requested for approval.
 
 Doctor Note / Clinical Text:
 """
-${clinicalText.trim()}
+${sanitizedText.trim()}
 """
 
 CRITICAL EXTRACTION RULES:
@@ -865,6 +888,13 @@ CRITICAL EXTRACTION RULES:
    - Symptoms or physical findings (e.g. "ضعف عام في الجزء الايسر")
 3. If an explicit English procedure name or investigation is mentioned (e.g., "MRI BRAIN WITH CONTRAST", "Bed Side Endoscopic Tracheostomy", "ankle foot orthosis"), ALWAYS include it as the core procedure.
 4. Return a JSON array of strings containing the extracted procedure names (e.g. ["MRI Brain With Contrast"]). If none found, return [].`;
+
+  // PHI De-identification Guardrail Assertion
+  const demoCheck = assertZeroDemographics(promptText);
+  if (!demoCheck.isClean) {
+    console.error('[PHI Violation Intercepted] Demographics detected in outgoing prompt:', demoCheck.violations);
+    throw new Error(`De-identification check failed: ${demoCheck.violations.join('; ')}`);
+  }
 
   const candidateModels = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash'];
   for (const model of candidateModels) {
@@ -896,89 +926,9 @@ CRITICAL EXTRACTION RULES:
 }
 
 /**
- * Generates an optimized, professional 3-line Case Manager WhatsApp message using Gemini AI.
+ * Generates an optimized, professional 3-line Case Manager WhatsApp message.
+ * Formats strictly locally via deterministic template engine to eliminate PHI transmission over the wire.
  */
 export async function generateCmWhatsappWithAI(record: InpatientApprovalRecord): Promise<string> {
-  const key = getGeminiApiKey();
-  if (!key) {
-    throw new Error('Gemini API key is not configured.');
-  }
-
-  const ai = new GoogleGenAI({ apiKey: key });
-
-  const patient = (record.patientName || 'المريض').trim();
-  const bed = (record.bed || '').trim();
-  const rawContractor = (record.contractorNormalized || record.contractorRaw || 'التعاقد').trim();
-  const contractor = cleanContractorName(rawContractor) || rawContractor;
-
-  const servicesList = (record.requestedServices || []).map((s) => s.name).join(' | ');
-  const matchedList = (record.matchedProcedures || []).map((m) => m.matchedName || m.serviceName).join(' | ');
-  const details = record.diagnosis || '';
-
-  const isApproved =
-    record.status === 'approved' ||
-    record.status === 'conditionally_approved' ||
-    Boolean(record.hasExistingApproval);
-
-  const limitText =
-    record.creditLimitText ||
-    (record.creditLimit ? `${record.creditLimit.toLocaleString('en-US')} EGP` : '');
-
-  const promptText = `You are a medical Case Management assistant at Elite Hospital.
-Generate a concise, standardized 3-line WhatsApp message for the Case Manager (CM).
-
-Patient details:
-- Patient Name: "${patient}"
-- Bed / Location: "${bed}"
-- Contractor: "${contractor}"
-- Requested services / clinical notes: "${servicesList || matchedList || details}"
-- Status: ${isApproved ? 'APPROVED' : 'PENDING APPROVAL'}
-- Credit Limit: ${limitText || 'None'}
-
-Format strictly as exactly 3 lines:
-Line 1: *${patient}*${bed ? ` - ${bed.startsWith('Bed') || bed.startsWith('ICU') || bed.startsWith('Observation') ? bed : `Bed ${bed}`}` : ''}
-Line 2: ${contractor}
-${
-  isApproved
-    ? `Line 3: *تمت الموافقة على: <Procedure Name in Arabic with English if available>${limitText ? ` (حد أقصى: ${limitText})` : ''}*`
-    : `Line 3: *المطلوب موافقة <action verb> <Procedure Name in Arabic with English if available>*`
-}
-
-Rules:
-1. Extract ONLY the requested medical procedure/investigation/surgery. Do NOT include clinical history, reasons for request, patient symptoms, or doctor names.
-2. If already approved, Line 3 MUST state "*تمت الموافقة على: ...*" with the credit limit.
-3. If pending approval, select the correct Arabic action prefix for Line 3:
-   - "سحب تحليل ..." for laboratory tests / blood samples (e.g. "سحب تحليل هرمون الغدة الجار درقية (PTH - Parathormone)").
-   - "عمل أشعة ..." or "عمل ..." for radiology/imaging/scans (e.g. "عمل أشعة رنين على المخ بالصبغة (MRI Brain With Contrast)").
-   - "عمل ..." or "إجراء ..." for surgeries, endoscopies, and clinical procedures (e.g. "عمل شق حنجري بالمنظار بالسرير (Bed Side Endoscopic Tracheostomy)").
-   - "تركيب ..." for catheters or orthotics/braces (e.g. "تركيب دعامة للقدم والكاحل (Ankle Foot Orthosis)").
-4. Output ONLY the 3 lines with asterisks for bolding lines 1 and 3 as specified. No greetings, markdown code fences, or explanations.`;
-
-  const candidateModels = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash'];
-  for (const model of candidateModels) {
-    try {
-      const response = await Promise.race([
-        ai.models.generateContent({
-          model,
-          contents: [{ parts: [{ text: promptText }] }],
-          config: {
-            temperature: 0.1,
-          },
-        }),
-        new Promise<never>((_, reject) =>
-          setTimeout(() => reject(new Error('Timeout querying Gemini')), 6000)
-        ),
-      ]);
-
-      const text = (response.text || '').replace(/^```[\w]*\s*/i, '').replace(/```$/i, '').trim();
-      const lines = text.split(/[\r\n]+/).map((l) => l.trim()).filter(Boolean);
-      if (lines.length >= 3) {
-        return lines.slice(0, 3).join('\n');
-      }
-    } catch (err) {
-      console.warn(`[AI CM WhatsApp] Model ${model} failed:`, err);
-    }
-  }
-
-  throw new Error('All Gemini models failed for CM WhatsApp generation.');
+  return generateCmWhatsappMessage(record);
 }

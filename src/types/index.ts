@@ -2,6 +2,14 @@
  * Core type definitions for Elite Hospital Pricelist Explorer
  */
 
+export interface ProcedureProvenanceSource {
+  file: string;
+  sha256?: string;
+  page?: number;
+  sheet?: string;
+  extractor?: string;
+}
+
 export interface ProcedureResult {
   nameArabic: string;
   nameEnglish: string;
@@ -13,6 +21,12 @@ export interface ProcedureResult {
   /** True for send-out tests marked with ** in the pricelist */
   outsourced?: boolean;
   requestedProcedureName?: string;
+  /** Additive provenance and audit trail */
+  sources?: ProcedureProvenanceSource[];
+  extractor?: string;
+  extractorVersion?: string;
+  confidence?: number;
+  flags?: string[];
 }
 
 export interface CompanyInfo {
@@ -74,6 +88,10 @@ export interface UserSearchRecord {
 }
 
 export type ApprovalGranularStatus =
+  | 'received'
+  | 'parsed'
+  | 'matched'
+  | 'sent'
   | 'approved'
   | 'conditionally_approved'
   | 'partially_approved'
