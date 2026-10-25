@@ -1,4 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
+import { doc, getDoc, collection, getDocs, query, limit } from 'firebase/firestore';
+import { db } from '../firebase';
 import { EwsSource } from './adapters/EwsSource';
 import { mirrorApprovalToFirestore } from '../services/approvalFirestoreSync';
 import { buildDraftReplyFromRecord } from '../lib/draftReplyBuilder';
@@ -33,14 +35,20 @@ export default async function handler(req: any, res: any) {
     return res.status(200).end();
   }
 
-  // 1. Extract approval ID from query params or URL route
+  // 1. Extract approval ID and body from request
   let id = req.query?.id as string;
   if (!id && req.url) {
     const match = req.url.match(/\/api\/approvals\/([^/?]+)\/draft/i);
     if (match) id = match[1];
   }
-  if (!id && req.body && typeof req.body === 'object' && req.body.id) {
-    id = req.body.id;
+  let body = req.body || {};
+  if (typeof body === 'string') {
+    try {
+      body = JSON.parse(body);
+    } catch {}
+  }
+  if (!id && body && typeof body === 'object' && body.id) {
+    id = body.id;
   }
 
   if (!id) {
@@ -53,7 +61,7 @@ export default async function handler(req: any, res: any) {
 
   console.log(`[Draft API] Triggering draft creation for approval ID: ${id}`);
 
-  // 2. Fetch approval record from Supabase PostgreSQL
+  // 2. Fetch approval record from Supabase PostgreSQL (primary) or Firestore (derived fallback)
   const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY;
   let record: any = null;
@@ -77,27 +85,112 @@ export default async function handler(req: any, res: any) {
     }
   }
 
-  // 3. Resolve draft text, subject, and recipient
+  // Fallback to Firestore if record not in Supabase or client is offline
+  if (!record && db) {
+    try {
+      const docRef = doc(db, 'inpatient_approvals', id);
+      const snap = await getDoc(docRef);
+      if (snap.exists()) {
+        const d = snap.data();
+        record = {
+          id: snap.id,
+          exchange_message_id: d.messageId,
+          conversation_id: d.conversationId,
+          patient_name: d.patientName,
+          mrn: d.mrn,
+          bed: d.bed,
+          admission_type: d.admissionType,
+          physician: d.physician,
+          contractor_raw: d.contractorRaw,
+          contractor_normalized: d.contractorNormalized,
+          contractor_officer: d.contractorOfficer,
+          price_list_year: d.priceListYear,
+          diagnosis: d.diagnosis,
+          requested_services: d.requestedServices,
+          matched_procedures: d.matchedProcedures,
+          suggested_draft_reply: d.suggestedDraftReply || d.draftBody,
+          cm_whatsapp_message: d.cmWhatsappMessage,
+          has_replies: d.hasReplies,
+          has_existing_approval: d.hasExistingApproval,
+          is_refused: d.isRefused,
+        };
+      }
+    } catch (fErr: any) {
+      console.warn(`[Draft API] Firestore read note for ${id}:`, fErr?.message || fErr);
+    }
+  }
+
+  // 3. Resolve latest contractor, officer, and price list year dynamically
+  let resolvedContractor =
+    body?.contractorNormalized ||
+    record?.contractor_normalized ||
+    record?.contractor_raw ||
+    'التعاقد';
+
+  let resolvedOfficer =
+    body?.contractorOfficer ||
+    record?.contractor_officer;
+
+  let resolvedYear =
+    body?.priceListYear ||
+    record?.price_list_year ||
+    '2026';
+
+  // If contractor officer or year was not explicitly supplied, check companies_config in Firestore
+  if (db && resolvedContractor) {
+    try {
+      const compSnap = await getDocs(query(collection(db, 'companies_config'), limit(250)));
+      const targetNorm = resolvedContractor.trim().toLowerCase();
+      for (const docSnap of compSnap.docs) {
+        const compData = docSnap.data();
+        const compName = (compData.name || '').trim().toLowerCase();
+        const aliases: string[] = Array.isArray(compData.aliases)
+          ? compData.aliases.map((a: string) => (a || '').trim().toLowerCase())
+          : [];
+        if (compName === targetNorm || aliases.includes(targetNorm) || targetNorm.includes(compName)) {
+          if (!body?.contractorOfficer && compData.contractorOfficer) {
+            resolvedOfficer = compData.contractorOfficer;
+          }
+          if (!body?.priceListYear && compData.priceListYear) {
+            resolvedYear = compData.priceListYear;
+          }
+          if (compData.name) {
+            resolvedContractor = compData.name;
+          }
+          break;
+        }
+      }
+    } catch (cfgErr) {
+      console.warn('[Draft API] Companies config check note:', cfgErr);
+    }
+  }
+
+  // 4. Resolve draft text, subject, and recipient
+  // Priority:
+  // a) Explicit draftText provided in req.body
+  // b) Dynamically computed from record using latest officer & price list year
   const draftBody =
-    req.body?.draftText ||
-    record?.suggested_draft_reply ||
-    (record ? buildDraftReplyFromRecord({
-      priceListYear: record.price_list_year,
-      contractorNormalized: record.contractor_normalized,
-      contractorRaw: record.contractor_raw,
-      contractorOfficer: record.contractor_officer,
-      matchedProcedures: record.matched_procedures,
-    }) : 'Price list: Elite Hospital 2025\nCorporate Email: corporate@elitehospital.org\n@corporate@elitehospital.org');
+    body?.draftText ||
+    (record
+      ? buildDraftReplyFromRecord({
+          priceListYear: resolvedYear,
+          contractorNormalized: resolvedContractor,
+          contractorRaw: record.contractor_raw,
+          contractorOfficer: resolvedOfficer,
+          matchedProcedures: record.matched_procedures,
+          requestedServices: record.requested_services,
+        })
+      : (record?.suggested_draft_reply || 'Price list: Elite Hospital 2026\nCorporate Email: corporate@elitehospital.org\n@corporate@elitehospital.org'));
 
   const draftSubject =
-    req.body?.subject ||
+    body?.subject ||
     (record?.patient_name
       ? `RE: Inpatient Approval Request - ${record.patient_name} - ${record.mrn || ''}`
       : 'RE: Inpatient Approval Request');
 
-  const draftTo = req.body?.to || 'corporate@elitehospital.org';
+  const draftTo = body?.to || 'corporate@elitehospital.org';
 
-  // 4. Attempt EWS in-thread Reply-All draft creation in Exchange
+  // 5. Attempt EWS in-thread Reply-All draft creation in Exchange
   let ewsSuccess = false;
   let draftMode: 'reply_all' | 'standalone' = 'standalone';
   let ewsError = '';
@@ -114,8 +207,8 @@ export default async function handler(req: any, res: any) {
       subject: draftSubject,
       body: draftBody,
       to: draftTo,
-      signatureHtml: req.body?.signatureHtml,
-      signatureText: req.body?.signatureText,
+      signatureHtml: body?.signatureHtml,
+      signatureText: body?.signatureText,
     });
     ewsSuccess = draftResult.success;
     draftMode = draftResult.mode;
@@ -127,7 +220,7 @@ export default async function handler(req: any, res: any) {
 
   const nowIso = new Date().toISOString();
 
-  // 5. Update status in Supabase PostgreSQL
+  // 6. Update status, latest officer, year, and draft text in Supabase PostgreSQL
   if (supabaseUrl && supabaseKey) {
     try {
       const client = createClient(supabaseUrl, supabaseKey);
@@ -135,6 +228,10 @@ export default async function handler(req: any, res: any) {
         .from('inpatient_approvals')
         .update({
           status: 'draft_created',
+          contractor_normalized: resolvedContractor,
+          contractor_officer: resolvedOfficer,
+          price_list_year: resolvedYear,
+          suggested_draft_reply: draftBody,
           state_timestamps: {
             ...(record?.state_timestamps || {}),
             drafted_at: nowIso,
@@ -148,7 +245,7 @@ export default async function handler(req: any, res: any) {
     }
   }
 
-  // 6. Mirror immediately to Firestore derived read model
+  // 7. Mirror immediately to Firestore derived read model
   try {
     await mirrorApprovalToFirestore({
       id,
@@ -160,9 +257,9 @@ export default async function handler(req: any, res: any) {
       admissionType: record?.admission_type || 'Inpatient',
       physician: record?.physician || null,
       contractorRaw: record?.contractor_raw || null,
-      contractorNormalized: record?.contractor_normalized || null,
-      contractorOfficer: record?.contractor_officer || null,
-      priceListYear: record?.price_list_year || '2025',
+      contractorNormalized: resolvedContractor,
+      contractorOfficer: resolvedOfficer,
+      priceListYear: resolvedYear,
       diagnosis: record?.diagnosis || null,
       requestedServices: record?.requested_services || [],
       matchedProcedures: record?.matched_procedures || [],

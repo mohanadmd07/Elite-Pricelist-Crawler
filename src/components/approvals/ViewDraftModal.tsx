@@ -43,11 +43,21 @@ export const ViewDraftModal: React.FC<ViewDraftModalProps> = ({
 
   if (!isOpen || !approval) return null;
 
-  // Synchronous computed fallbacks guarantee zero 'undefined' or 'قيد التوليد' displays
-  const effectiveDraft =
+  // Dynamically compute fresh draft reflecting current contractor, officer, and year
+  const rawOfficer = approval.contractorOfficer;
+  const rawYear = approval.priceListYear;
+  let effectiveDraft =
     (approval.draftBody && approval.draftBody !== 'undefined' ? approval.draftBody : null) ||
-    (approval.suggestedDraftReply && approval.suggestedDraftReply !== 'undefined' ? approval.suggestedDraftReply : null) ||
-    buildDraftReplyFromRecord(approval);
+    (approval.suggestedDraftReply && approval.suggestedDraftReply !== 'undefined' ? approval.suggestedDraftReply : null);
+
+  const isStaleDraft =
+    !effectiveDraft ||
+    (rawOfficer && rawOfficer !== 'غير محدد' && !rawOfficer.includes('يتطلب تحديد') && !effectiveDraft.includes(rawOfficer.trim())) ||
+    (rawYear && !effectiveDraft.includes(rawYear));
+
+  if (isStaleDraft) {
+    effectiveDraft = buildDraftReplyFromRecord(approval);
+  }
 
   const effectiveWhatsapp =
     (approval.cmWhatsappMessage &&
@@ -124,7 +134,11 @@ export const ViewDraftModal: React.FC<ViewDraftModalProps> = ({
   const handleDraftToOutlook = async () => {
     try {
       setIsDraftingToOutlook(true);
-      await triggerManualDraft(approval.id);
+      await triggerManualDraft(approval.id, {
+        draftText: effectiveDraft,
+        contractorOfficer: approval.contractorOfficer,
+        priceListYear: approval.priceListYear,
+      });
       setDraftedSuccess(true);
       setTimeout(() => setDraftedSuccess(false), 3000);
     } catch (err) {

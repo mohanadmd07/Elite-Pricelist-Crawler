@@ -17,8 +17,9 @@ import {
 } from 'firebase/firestore';
 import { db, auth } from '../firebase';
 import { InpatientApprovalRecord, CompanyConfigRecord, AutomationSettings, CompanyInfo } from '../types';
-import { buildDraftReplyFromRecord } from '../lib/draftReplyBuilder';
+import { buildDraftReplyFromRecord, buildDraftReplyText } from '../lib/draftReplyBuilder';
 import { generateCmWhatsappMessage } from '../lib/whatsapp-generator';
+import { supabase, supabaseAdmin } from '../lib/supabase';
 
 const APPROVALS_COLLECTION = 'inpatient_approvals';
 const COMPANIES_COLLECTION = 'companies_config';
@@ -31,13 +32,25 @@ let lastPurgeTimestamp = 0;
 
 /**
  * Normalizes an approval record from Firestore or API, guaranteeing that draftBody
- * and cmWhatsappMessage are never undefined, empty, or placeholder strings.
+ * and cmWhatsappMessage are never undefined, empty, or placeholder strings, and that
+ * any changes to contractor officer or price list year are dynamically reflected.
  */
 export function normalizeApprovalRecord(id: string, rawData: any): InpatientApprovalRecord {
-  const draftBody =
+  const rawOfficer = rawData.contractorOfficer;
+  const rawYear = rawData.priceListYear;
+  let draftBody =
     (rawData.draftBody && rawData.draftBody !== 'undefined' ? rawData.draftBody : null) ||
-    (rawData.suggestedDraftReply && rawData.suggestedDraftReply !== 'undefined' ? rawData.suggestedDraftReply : null) ||
-    buildDraftReplyFromRecord(rawData);
+    (rawData.suggestedDraftReply && rawData.suggestedDraftReply !== 'undefined' ? rawData.suggestedDraftReply : null);
+
+  // Detect stale draft if the stored text doesn't match the current contractor officer or year
+  const isStaleDraft =
+    !draftBody ||
+    (rawOfficer && rawOfficer !== 'غير محدد' && !rawOfficer.includes('يتطلب تحديد') && !draftBody.includes(rawOfficer.trim())) ||
+    (rawYear && !draftBody.includes(rawYear));
+
+  if (isStaleDraft) {
+    draftBody = buildDraftReplyFromRecord(rawData);
+  }
 
   const cmWhatsappMessage =
     (rawData.cmWhatsappMessage &&
@@ -296,12 +309,20 @@ export async function updateApprovalStatus(
 /**
  * Triggers manual drafting for an approval that was held back due to detected replies or approval notes.
  */
-export async function triggerManualDraft(id: string): Promise<void> {
+export async function triggerManualDraft(
+  id: string,
+  options?: {
+    draftText?: string;
+    contractorOfficer?: string;
+    priceListYear?: string;
+  }
+): Promise<void> {
   // 1. Attempt local/proxied REST draft trigger
   try {
     const res = await fetch(`/api/approvals/${id}/draft`, {
       method: 'POST',
       headers: await getAuthHeaders(),
+      body: JSON.stringify(options || {}),
     });
     if (res.ok) {
       return;
@@ -311,11 +332,16 @@ export async function triggerManualDraft(id: string): Promise<void> {
   // 2. Fallback to updating Firestore doc so background watcher picks it up
   try {
     const docRef = doc(db, APPROVALS_COLLECTION, id);
-    await updateDoc(docRef, {
+    const updates: Record<string, any> = {
       status: 'draft_created',
       manualDraftRequested: true,
       draftedAt: serverTimestamp(),
-    });
+    };
+    if (options?.draftText) {
+      updates.draftBody = options.draftText;
+      updates.suggestedDraftReply = options.draftText;
+    }
+    await updateDoc(docRef, updates);
   } catch (err: any) {
     console.warn('[Approvals] Firestore manual draft request note:', err?.message || err);
   }
@@ -370,8 +396,9 @@ export function subscribeToCompanyConfigs(
 }
 
 /**
- * Cascades updates to all matching inpatient approvals in Firestore
+ * Cascades updates to all matching inpatient approvals in Firestore and Supabase
  * when a contractor or officer is updated or renamed.
+ * Regenerates the official draft reply text and CM WhatsApp message immediately.
  */
 export async function cascadeApprovalsForCompany(params: {
   targetName: string;
@@ -399,10 +426,25 @@ export async function cascadeApprovalsForCompany(params: {
       const norm = (data.contractorNormalized || '').trim().toLowerCase();
       const raw = (data.contractorRaw || '').trim().toLowerCase();
       if (matchNames.has(norm) || matchNames.has(raw)) {
+        const effectiveYear = priceListYear || data.priceListYear || '2026';
+        const updatedRecord = {
+          id: d.id,
+          ...data,
+          contractorNormalized: targetName.trim(),
+          contractorOfficer: contractorOfficer.trim(),
+          priceListYear: effectiveYear,
+        } as InpatientApprovalRecord;
+        const newDraftBody = buildDraftReplyFromRecord(updatedRecord);
+        const newWhatsapp = generateCmWhatsappMessage(updatedRecord);
+
         batch.update(d.ref, {
           contractorNormalized: targetName.trim(),
           contractorOfficer: contractorOfficer.trim(),
-          ...(priceListYear ? { priceListYear } : {}),
+          priceListYear: effectiveYear,
+          draftBody: newDraftBody,
+          suggestedDraftReply: newDraftBody,
+          cmWhatsappMessage: newWhatsapp,
+          updatedAt: serverTimestamp(),
         });
         count++;
       }
@@ -412,6 +454,46 @@ export async function cascadeApprovalsForCompany(params: {
       await batch.commit();
       console.log(`[Approvals] Cascaded contractor update to ${count} approval records in Firestore.`);
     }
+
+    // Cascade to Supabase PostgreSQL inpatient_approvals if client is configured
+    const supabaseClient = supabaseAdmin || supabase;
+    if (supabaseClient) {
+      try {
+        const { data: supaRows, error: sErr } = await supabaseClient
+          .from('inpatient_approvals')
+          .select('id, contractor_raw, contractor_normalized, matched_procedures, requested_services')
+          .limit(500);
+
+        if (!sErr && Array.isArray(supaRows)) {
+          for (const row of supaRows) {
+            const norm = (row.contractor_normalized || '').trim().toLowerCase();
+            const raw = (row.contractor_raw || '').trim().toLowerCase();
+            if (matchNames.has(norm) || matchNames.has(raw)) {
+              const effectiveYear = priceListYear || '2026';
+              const newDraft = buildDraftReplyText(
+                effectiveYear,
+                targetName.trim(),
+                contractorOfficer.trim(),
+                row.matched_procedures || []
+              );
+              await supabaseClient
+                .from('inpatient_approvals')
+                .update({
+                  contractor_normalized: targetName.trim(),
+                  contractor_officer: contractorOfficer.trim(),
+                  price_list_year: effectiveYear,
+                  suggested_draft_reply: newDraft,
+                  updated_at: new Date().toISOString(),
+                })
+                .eq('id', row.id);
+            }
+          }
+        }
+      } catch (dbErr) {
+        console.warn('[Approvals] Supabase cascade note:', dbErr);
+      }
+    }
+
     return count;
   } catch (err) {
     console.warn('[Approvals] Cascade to Firestore approvals failed (may be offline):', err);
@@ -605,10 +687,25 @@ export async function mergeCompanies(params: {
       const data = d.data();
       const rawNorm = (data.contractorNormalized || data.contractorRaw || '').trim().toLowerCase();
       if (namesToReplace.has(rawNorm)) {
+        const effectiveYear = priceListYear || data.priceListYear || '2026';
+        const updatedRecord = {
+          id: d.id,
+          ...data,
+          contractorNormalized: targetName.trim(),
+          contractorOfficer: contractorOfficer.trim(),
+          priceListYear: effectiveYear,
+        } as InpatientApprovalRecord;
+        const newDraftBody = buildDraftReplyFromRecord(updatedRecord);
+        const newWhatsapp = generateCmWhatsappMessage(updatedRecord);
+
         batch.update(d.ref, {
           contractorNormalized: targetName.trim(),
           contractorOfficer: contractorOfficer.trim(),
-          priceListYear,
+          priceListYear: effectiveYear,
+          draftBody: newDraftBody,
+          suggestedDraftReply: newDraftBody,
+          cmWhatsappMessage: newWhatsapp,
+          updatedAt: serverTimestamp(),
         });
         count++;
       }
@@ -616,6 +713,45 @@ export async function mergeCompanies(params: {
 
     if (count > 0) {
       await batch.commit();
+      console.log(`[Approvals] Cascaded merge update to ${count} approval records in Firestore.`);
+    }
+
+    // Cascade to Supabase PostgreSQL inpatient_approvals if client is configured
+    const supabaseClient = supabaseAdmin || supabase;
+    if (supabaseClient) {
+      try {
+        const { data: supaRows, error: sErr } = await supabaseClient
+          .from('inpatient_approvals')
+          .select('id, contractor_raw, contractor_normalized, matched_procedures, requested_services')
+          .limit(500);
+
+        if (!sErr && Array.isArray(supaRows)) {
+          for (const row of supaRows) {
+            const rawNorm = (row.contractor_normalized || row.contractor_raw || '').trim().toLowerCase();
+            if (namesToReplace.has(rawNorm)) {
+              const effectiveYear = priceListYear || '2026';
+              const newDraft = buildDraftReplyText(
+                effectiveYear,
+                targetName.trim(),
+                contractorOfficer.trim(),
+                row.matched_procedures || []
+              );
+              await supabaseClient
+                .from('inpatient_approvals')
+                .update({
+                  contractor_normalized: targetName.trim(),
+                  contractor_officer: contractorOfficer.trim(),
+                  price_list_year: effectiveYear,
+                  suggested_draft_reply: newDraft,
+                  updated_at: new Date().toISOString(),
+                })
+                .eq('id', row.id);
+            }
+          }
+        }
+      } catch (dbErr) {
+        console.warn('[Approvals] Supabase merge cascade note:', dbErr);
+      }
     }
   } catch (err) {
     console.error('Failed to merge companies in Firestore:', err);

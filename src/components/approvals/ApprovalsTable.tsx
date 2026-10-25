@@ -27,6 +27,7 @@ import {
 import { InpatientApprovalRecord, CompanyConfigRecord } from '../../types';
 import { toggleApprovalStatus, triggerManualDraft, updateApprovalStatus } from '../../services/approvalsFirebaseService';
 import { generateCmWhatsappMessageAsync } from '../../lib/whatsapp-generator';
+import { buildDraftReplyFromRecord } from '../../lib/draftReplyBuilder';
 import { stripSentFromSignatures } from '../../lib/arabic-normalizer';
 import { ViewDraftModal } from './ViewDraftModal';
 import { resolveApprovalContractorAndOfficer } from './ApprovalsHub';
@@ -125,7 +126,24 @@ export const ApprovalsTable: React.FC<ApprovalsTableProps> = ({
   const handleManualDraft = async (record: InpatientApprovalRecord) => {
     try {
       setDraftingManualId(record.id);
-      await triggerManualDraft(record.id);
+      const rawOfficer = record.contractorOfficer;
+      const rawYear = record.priceListYear;
+      let effectiveDraft = record.draftBody || record.suggestedDraftReply;
+      const isStaleDraft =
+        !effectiveDraft ||
+        effectiveDraft === 'undefined' ||
+        (rawOfficer && rawOfficer !== 'غير محدد' && !rawOfficer.includes('يتطلب تحديد') && !effectiveDraft.includes(rawOfficer.trim())) ||
+        (rawYear && !effectiveDraft.includes(rawYear));
+
+      if (isStaleDraft) {
+        effectiveDraft = buildDraftReplyFromRecord(record);
+      }
+
+      await triggerManualDraft(record.id, {
+        draftText: effectiveDraft,
+        contractorOfficer: record.contractorOfficer,
+        priceListYear: record.priceListYear,
+      });
     } catch (err) {
       console.error('Failed to trigger manual draft:', err);
     } finally {

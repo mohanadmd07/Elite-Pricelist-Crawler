@@ -1,5 +1,118 @@
 // src/mail/draftEndpoint.ts
 import { createClient } from "@supabase/supabase-js";
+import { doc as doc3, getDoc as getDoc2, collection as collection2, getDocs as getDocs2, query as query2, limit as limit2 } from "firebase/firestore";
+
+// src/firebase.ts
+import { initializeApp } from "firebase/app";
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut
+} from "firebase/auth";
+import {
+  initializeFirestore,
+  persistentLocalCache,
+  persistentMultipleTabManager,
+  memoryLocalCache,
+  getFirestore,
+  doc,
+  setDoc,
+  deleteDoc,
+  collection,
+  addDoc,
+  query,
+  orderBy,
+  limit,
+  getDocs,
+  writeBatch,
+  serverTimestamp
+} from "firebase/firestore";
+var getEnvVar = (key) => {
+  if (typeof import.meta !== "undefined" && import.meta.env && import.meta.env[key]) {
+    return String(import.meta.env[key]).trim();
+  }
+  if (typeof process !== "undefined" && process.env && process.env[key]) {
+    return String(process.env[key]).trim();
+  }
+  return "";
+};
+var firebaseConfig = {
+  apiKey: getEnvVar("VITE_FIREBASE_API_KEY"),
+  authDomain: getEnvVar("VITE_FIREBASE_AUTH_DOMAIN"),
+  projectId: getEnvVar("VITE_FIREBASE_PROJECT_ID"),
+  storageBucket: getEnvVar("VITE_FIREBASE_STORAGE_BUCKET"),
+  messagingSenderId: getEnvVar("VITE_FIREBASE_MESSAGING_SENDER_ID"),
+  appId: getEnvVar("VITE_FIREBASE_APP_ID"),
+  firestoreDatabaseId: getEnvVar("VITE_FIREBASE_DATABASE_ID") || void 0
+};
+var useEnv = Boolean(firebaseConfig.apiKey && firebaseConfig.apiKey.startsWith("AIzaSy"));
+console.log("Firebase Init Config Debug (Safe):", {
+  usingEnvOverrides: useEnv,
+  apiKeyLength: firebaseConfig.apiKey ? firebaseConfig.apiKey.length : 0,
+  apiKeyPrefix: firebaseConfig.apiKey ? firebaseConfig.apiKey.substring(0, 6) : "none",
+  projectId: firebaseConfig.projectId,
+  authDomain: firebaseConfig.authDomain,
+  firestoreDatabaseId: firebaseConfig.firestoreDatabaseId
+});
+var safeFirebaseConfig = {
+  ...firebaseConfig,
+  apiKey: firebaseConfig.apiKey || "AIzaSy_mock_api_key_for_test_runner",
+  projectId: firebaseConfig.projectId || "mock-firebase-project"
+};
+var app = initializeApp(safeFirebaseConfig);
+var authInstance;
+try {
+  authInstance = getAuth(app);
+} catch (err) {
+  authInstance = {
+    currentUser: null
+  };
+}
+function setupOptimizedFirestore() {
+  const isNode = typeof window === "undefined";
+  if (isNode) {
+    const nodeSettings = {
+      localCache: memoryLocalCache()
+    };
+    try {
+      if (firebaseConfig.firestoreDatabaseId) {
+        return initializeFirestore(app, nodeSettings, firebaseConfig.firestoreDatabaseId);
+      }
+      return initializeFirestore(app, nodeSettings);
+    } catch {
+      return firebaseConfig.firestoreDatabaseId ? getFirestore(app, firebaseConfig.firestoreDatabaseId) : getFirestore(app);
+    }
+  }
+  const multiTabSettings = {
+    localCache: persistentLocalCache({
+      tabManager: persistentMultipleTabManager()
+    }),
+    experimentalAutoDetectLongPolling: true
+  };
+  try {
+    if (firebaseConfig.firestoreDatabaseId) {
+      return initializeFirestore(app, multiTabSettings, firebaseConfig.firestoreDatabaseId);
+    }
+    return initializeFirestore(app, multiTabSettings);
+  } catch (err) {
+    console.warn("Persistent IndexedDB cache unavailable, falling back to memory cache:", err?.message || err);
+    try {
+      const memorySettings = {
+        localCache: memoryLocalCache(),
+        experimentalAutoDetectLongPolling: true
+      };
+      if (firebaseConfig.firestoreDatabaseId) {
+        return initializeFirestore(app, memorySettings, firebaseConfig.firestoreDatabaseId);
+      }
+      return initializeFirestore(app, memorySettings);
+    } catch {
+      return firebaseConfig.firestoreDatabaseId ? getFirestore(app, firebaseConfig.firestoreDatabaseId) : getFirestore(app);
+    }
+  }
+}
+var db = setupOptimizedFirestore();
+var googleProvider = new GoogleAuthProvider();
 
 // src/mail/adapters/EwsSource.ts
 import httpntlm from "httpntlm";
@@ -594,118 +707,6 @@ ${activeSignatureText}`;
   }
 };
 
-// src/firebase.ts
-import { initializeApp } from "firebase/app";
-import {
-  getAuth,
-  GoogleAuthProvider,
-  signInWithPopup,
-  signOut
-} from "firebase/auth";
-import {
-  initializeFirestore,
-  persistentLocalCache,
-  persistentMultipleTabManager,
-  memoryLocalCache,
-  getFirestore,
-  doc,
-  setDoc,
-  deleteDoc,
-  collection,
-  addDoc,
-  query,
-  orderBy,
-  limit,
-  getDocs,
-  writeBatch,
-  serverTimestamp
-} from "firebase/firestore";
-var getEnvVar = (key) => {
-  if (typeof import.meta !== "undefined" && import.meta.env && import.meta.env[key]) {
-    return String(import.meta.env[key]).trim();
-  }
-  if (typeof process !== "undefined" && process.env && process.env[key]) {
-    return String(process.env[key]).trim();
-  }
-  return "";
-};
-var firebaseConfig = {
-  apiKey: getEnvVar("VITE_FIREBASE_API_KEY"),
-  authDomain: getEnvVar("VITE_FIREBASE_AUTH_DOMAIN"),
-  projectId: getEnvVar("VITE_FIREBASE_PROJECT_ID"),
-  storageBucket: getEnvVar("VITE_FIREBASE_STORAGE_BUCKET"),
-  messagingSenderId: getEnvVar("VITE_FIREBASE_MESSAGING_SENDER_ID"),
-  appId: getEnvVar("VITE_FIREBASE_APP_ID"),
-  firestoreDatabaseId: getEnvVar("VITE_FIREBASE_DATABASE_ID") || void 0
-};
-var useEnv = Boolean(firebaseConfig.apiKey && firebaseConfig.apiKey.startsWith("AIzaSy"));
-console.log("Firebase Init Config Debug (Safe):", {
-  usingEnvOverrides: useEnv,
-  apiKeyLength: firebaseConfig.apiKey ? firebaseConfig.apiKey.length : 0,
-  apiKeyPrefix: firebaseConfig.apiKey ? firebaseConfig.apiKey.substring(0, 6) : "none",
-  projectId: firebaseConfig.projectId,
-  authDomain: firebaseConfig.authDomain,
-  firestoreDatabaseId: firebaseConfig.firestoreDatabaseId
-});
-var safeFirebaseConfig = {
-  ...firebaseConfig,
-  apiKey: firebaseConfig.apiKey || "AIzaSy_mock_api_key_for_test_runner",
-  projectId: firebaseConfig.projectId || "mock-firebase-project"
-};
-var app = initializeApp(safeFirebaseConfig);
-var authInstance;
-try {
-  authInstance = getAuth(app);
-} catch (err) {
-  authInstance = {
-    currentUser: null
-  };
-}
-function setupOptimizedFirestore() {
-  const isNode = typeof window === "undefined";
-  if (isNode) {
-    const nodeSettings = {
-      localCache: memoryLocalCache()
-    };
-    try {
-      if (firebaseConfig.firestoreDatabaseId) {
-        return initializeFirestore(app, nodeSettings, firebaseConfig.firestoreDatabaseId);
-      }
-      return initializeFirestore(app, nodeSettings);
-    } catch {
-      return firebaseConfig.firestoreDatabaseId ? getFirestore(app, firebaseConfig.firestoreDatabaseId) : getFirestore(app);
-    }
-  }
-  const multiTabSettings = {
-    localCache: persistentLocalCache({
-      tabManager: persistentMultipleTabManager()
-    }),
-    experimentalAutoDetectLongPolling: true
-  };
-  try {
-    if (firebaseConfig.firestoreDatabaseId) {
-      return initializeFirestore(app, multiTabSettings, firebaseConfig.firestoreDatabaseId);
-    }
-    return initializeFirestore(app, multiTabSettings);
-  } catch (err) {
-    console.warn("Persistent IndexedDB cache unavailable, falling back to memory cache:", err?.message || err);
-    try {
-      const memorySettings = {
-        localCache: memoryLocalCache(),
-        experimentalAutoDetectLongPolling: true
-      };
-      if (firebaseConfig.firestoreDatabaseId) {
-        return initializeFirestore(app, memorySettings, firebaseConfig.firestoreDatabaseId);
-      }
-      return initializeFirestore(app, memorySettings);
-    } catch {
-      return firebaseConfig.firestoreDatabaseId ? getFirestore(app, firebaseConfig.firestoreDatabaseId) : getFirestore(app);
-    }
-  }
-}
-var db = setupOptimizedFirestore();
-var googleProvider = new GoogleAuthProvider();
-
 // src/services/approvalFirestoreSync.ts
 import { doc as doc2, setDoc as setDoc2 } from "firebase/firestore";
 async function mirrorApprovalToFirestore(record) {
@@ -822,8 +823,15 @@ async function handler(req, res) {
     const match = req.url.match(/\/api\/approvals\/([^/?]+)\/draft/i);
     if (match) id = match[1];
   }
-  if (!id && req.body && typeof req.body === "object" && req.body.id) {
-    id = req.body.id;
+  let body = req.body || {};
+  if (typeof body === "string") {
+    try {
+      body = JSON.parse(body);
+    } catch {
+    }
+  }
+  if (!id && body && typeof body === "object" && body.id) {
+    id = body.id;
   }
   if (!id) {
     return res.status(400).json({ error: "Missing required approval ID." });
@@ -848,15 +856,77 @@ async function handler(req, res) {
       console.warn(`[Draft API] Database connection warning:`, dbErr?.message || dbErr);
     }
   }
-  const draftBody = req.body?.draftText || record?.suggested_draft_reply || (record ? buildDraftReplyFromRecord({
-    priceListYear: record.price_list_year,
-    contractorNormalized: record.contractor_normalized,
+  if (!record && db) {
+    try {
+      const docRef = doc3(db, "inpatient_approvals", id);
+      const snap = await getDoc2(docRef);
+      if (snap.exists()) {
+        const d = snap.data();
+        record = {
+          id: snap.id,
+          exchange_message_id: d.messageId,
+          conversation_id: d.conversationId,
+          patient_name: d.patientName,
+          mrn: d.mrn,
+          bed: d.bed,
+          admission_type: d.admissionType,
+          physician: d.physician,
+          contractor_raw: d.contractorRaw,
+          contractor_normalized: d.contractorNormalized,
+          contractor_officer: d.contractorOfficer,
+          price_list_year: d.priceListYear,
+          diagnosis: d.diagnosis,
+          requested_services: d.requestedServices,
+          matched_procedures: d.matchedProcedures,
+          suggested_draft_reply: d.suggestedDraftReply || d.draftBody,
+          cm_whatsapp_message: d.cmWhatsappMessage,
+          has_replies: d.hasReplies,
+          has_existing_approval: d.hasExistingApproval,
+          is_refused: d.isRefused
+        };
+      }
+    } catch (fErr) {
+      console.warn(`[Draft API] Firestore read note for ${id}:`, fErr?.message || fErr);
+    }
+  }
+  let resolvedContractor = body?.contractorNormalized || record?.contractor_normalized || record?.contractor_raw || "\u0627\u0644\u062A\u0639\u0627\u0642\u062F";
+  let resolvedOfficer = body?.contractorOfficer || record?.contractor_officer;
+  let resolvedYear = body?.priceListYear || record?.price_list_year || "2026";
+  if (db && resolvedContractor) {
+    try {
+      const compSnap = await getDocs2(query2(collection2(db, "companies_config"), limit2(250)));
+      const targetNorm = resolvedContractor.trim().toLowerCase();
+      for (const docSnap of compSnap.docs) {
+        const compData = docSnap.data();
+        const compName = (compData.name || "").trim().toLowerCase();
+        const aliases = Array.isArray(compData.aliases) ? compData.aliases.map((a) => (a || "").trim().toLowerCase()) : [];
+        if (compName === targetNorm || aliases.includes(targetNorm) || targetNorm.includes(compName)) {
+          if (!body?.contractorOfficer && compData.contractorOfficer) {
+            resolvedOfficer = compData.contractorOfficer;
+          }
+          if (!body?.priceListYear && compData.priceListYear) {
+            resolvedYear = compData.priceListYear;
+          }
+          if (compData.name) {
+            resolvedContractor = compData.name;
+          }
+          break;
+        }
+      }
+    } catch (cfgErr) {
+      console.warn("[Draft API] Companies config check note:", cfgErr);
+    }
+  }
+  const draftBody = body?.draftText || (record ? buildDraftReplyFromRecord({
+    priceListYear: resolvedYear,
+    contractorNormalized: resolvedContractor,
     contractorRaw: record.contractor_raw,
-    contractorOfficer: record.contractor_officer,
-    matchedProcedures: record.matched_procedures
-  }) : "Price list: Elite Hospital 2025\nCorporate Email: corporate@elitehospital.org\n@corporate@elitehospital.org");
-  const draftSubject = req.body?.subject || (record?.patient_name ? `RE: Inpatient Approval Request - ${record.patient_name} - ${record.mrn || ""}` : "RE: Inpatient Approval Request");
-  const draftTo = req.body?.to || "corporate@elitehospital.org";
+    contractorOfficer: resolvedOfficer,
+    matchedProcedures: record.matched_procedures,
+    requestedServices: record.requested_services
+  }) : record?.suggested_draft_reply || "Price list: Elite Hospital 2026\nCorporate Email: corporate@elitehospital.org\n@corporate@elitehospital.org");
+  const draftSubject = body?.subject || (record?.patient_name ? `RE: Inpatient Approval Request - ${record.patient_name} - ${record.mrn || ""}` : "RE: Inpatient Approval Request");
+  const draftTo = body?.to || "corporate@elitehospital.org";
   let ewsSuccess = false;
   let draftMode = "standalone";
   let ewsError = "";
@@ -870,8 +940,8 @@ async function handler(req, res) {
       subject: draftSubject,
       body: draftBody,
       to: draftTo,
-      signatureHtml: req.body?.signatureHtml,
-      signatureText: req.body?.signatureText
+      signatureHtml: body?.signatureHtml,
+      signatureText: body?.signatureText
     });
     ewsSuccess = draftResult.success;
     draftMode = draftResult.mode;
@@ -886,6 +956,10 @@ async function handler(req, res) {
       const client = createClient(supabaseUrl, supabaseKey);
       await client.from("inpatient_approvals").update({
         status: "draft_created",
+        contractor_normalized: resolvedContractor,
+        contractor_officer: resolvedOfficer,
+        price_list_year: resolvedYear,
+        suggested_draft_reply: draftBody,
         state_timestamps: {
           ...record?.state_timestamps || {},
           drafted_at: nowIso,
@@ -908,9 +982,9 @@ async function handler(req, res) {
       admissionType: record?.admission_type || "Inpatient",
       physician: record?.physician || null,
       contractorRaw: record?.contractor_raw || null,
-      contractorNormalized: record?.contractor_normalized || null,
-      contractorOfficer: record?.contractor_officer || null,
-      priceListYear: record?.price_list_year || "2025",
+      contractorNormalized: resolvedContractor,
+      contractorOfficer: resolvedOfficer,
+      priceListYear: resolvedYear,
       diagnosis: record?.diagnosis || null,
       requestedServices: record?.requested_services || [],
       matchedProcedures: record?.matched_procedures || [],

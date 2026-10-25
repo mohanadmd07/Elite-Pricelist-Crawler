@@ -81,4 +81,39 @@ describe('Draft Reply Builder & CM WhatsApp Resilience', () => {
     expect(normalized.cmWhatsappMessage).not.toBe('undefined');
     expect(normalized.cmWhatsappMessage).toContain('*مريض تجريبي*');
   });
+
+  it('normalizeApprovalRecord should dynamically update draft when contractor officer or year changes', () => {
+    // Record initially generated with old officer "زياد" and year "2025"
+    const staleRecord = {
+      patientName: 'علي ابراهيم احمد محمد',
+      mrn: '0000209854',
+      contractorRaw: 'ايبروم ميدور',
+      contractorNormalized: '(EPROM) ايبروم ميدور',
+      contractorOfficer: 'أحمد حمزة', // User changed officer in Contractors tab to أحمد حمزة
+      priceListYear: '2026', // User changed year to 2026
+      draftBody: `Price list: Elite Hospital 2025
+Contractor: (EPROM) ايبروم ميدور
+المسئول من قسم السيلز: زياد
+Corporate Email: corporate@elitehospital.org
+
+الإجراءات المتواجدة بلائحة أسعار التعاقد:
+1- جلسة عناية مركزة
+
+@corporate@elitehospital.org`,
+      suggestedDraftReply: 'stale draft',
+      requestedServices: [{ name: 'جلسة عناية مركزة' }],
+      matchedProcedures: [
+        { serviceName: 'جلسة عناية مركزة', matchedName: 'جلسة عناية مركزة', status: 'matched' as const },
+      ],
+      status: 'received' as const,
+    };
+
+    const normalized = normalizeApprovalRecord('doc_stale', staleRecord);
+
+    // Stale "زياد" and "2025" must be replaced with "أحمد حمزة" and "2026"
+    expect(normalized.draftBody).toContain('Price list: Elite Hospital 2026');
+    expect(normalized.draftBody).toContain('المسئول من قسم السيلز: أحمد حمزة');
+    expect(normalized.draftBody).not.toContain('المسئول من قسم السيلز: زياد');
+    expect(normalized.draftBody).not.toContain('Elite Hospital 2025');
+  });
 });
