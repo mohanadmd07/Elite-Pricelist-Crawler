@@ -258,8 +258,12 @@ def generate_radiology_aliases(name_en: str, name_ar: str):
             if 'carotid' in lower_en or 'الرقبة' in name_ar or 'سباتي' in name_ar:
                 aliases_en.update(['carotid doppler', 'carotid duplex', 'neck vessels doppler', 'carotid ultrasound'])
                 aliases_ar.update(['دوبلر على شرايين الرقبة', 'دوبلكس على شرايين الرقبة', 'دوبلر الشرايين السباتية', 'دوبلر شرايين الرقبة'])
-            if 'lower limb' in lower_en or 'lower extremity' in lower_en or 'طرفين سفليين' in name_ar or 'ساقين' in name_ar:
-                if 'venous' in lower_en or 'وريد' in name_ar or 'اورده' in norm_ar:
+            if 'lower limb' in lower_en or 'lower extremity' in lower_en or 'طرفين سفليين' in name_ar or 'ساقين' in name_ar or 'الطرف السفلي' in name_ar or 'الأطراف' in name_ar:
+                is_combined_art_ven = ('arterial' in lower_en and 'venous' in lower_en) or ('شرايين' in name_ar and ('اورد' in norm_ar or 'أورد' in name_ar))
+                if is_combined_art_ven:
+                    aliases_en.update(['arterial and venous doppler lower limb', 'doppler venous and arterial lower limb', 'arterial and venous duplex'])
+                    aliases_ar.update(['دوبلر شرايين واوردة الطرفين السفليين', 'دوبلر شرايين واوردة الساقين', 'دوبلكس شرايين واوردة'])
+                elif 'venous' in lower_en or 'وريد' in name_ar or 'اورده' in norm_ar or 'أوردة' in name_ar:
                     aliases_en.update(['venous doppler lower limb', 'lower limb venous doppler', 'dvt ultrasound', 'dvt study', 'venous duplex legs', 'venous doppler lower extremity'])
                     aliases_ar.update(['دوبلر اوردة الساقين', 'دوبلر على اوردة الطرفين السفليين', 'دوبلر استبعاد جلطة', 'دوبلكس اوردة الساقين'])
                     abbrevs.add('DVT')
@@ -385,7 +389,7 @@ def generate_batch_1_aliases(name_en: str, name_ar: str, cat: str):
             aliases_ar.update(['تركيب بالون معدة', 'بالون المعدة', 'استخراج بالون المعدة', 'ازالة بالون معدة'])
 
     # 3. Interventional Radiology
-    if cat == 'Intervention Radiology' or 'true cut' in lower_en or 'pigtail' in lower_en or 'nephrostomy' in lower_en or 'port' in lower_en:
+    if cat == 'Intervention Radiology' or 'true cut' in lower_en or 'pigtail' in lower_en or 'nephrostomy' in lower_en or ('portable' not in lower_en and ('port' in lower_en or 'porta' in lower_en)):
         if 'fnac' in lower_en or 'fine needle' in lower_en or 'cell block' in lower_en:
             aliases_en.update(['fna', 'fnac', 'fine needle aspiration', 'fna cytology', 'us guided fna', 'fine needle aspirate', 'us guided fnac and cell block'])
             aliases_ar.update(['عينة بالابرة الرفيعة', 'فحص خلايا بذل بالإبرة الدقيقة', 'عينة بابرة رفيعة', 'عينة خلايا بتوجيه الموجات'])
@@ -397,7 +401,7 @@ def generate_batch_1_aliases(name_en: str, name_ar: str, cat: str):
         if 'pigtail' in lower_en or 'pig tail' in lower_en or 'بيج تيل' in name_ar:
             aliases_en.update(['pigtail insertion', 'pig tail insertion', 'pigtail catheter insertion', 'pigtail catheter', 'pig-tail catheter', 'abscess drainage pigtail'])
             aliases_ar.update(['تركيب قسطرة بيج تيل', 'بيج تيل', 'تركيب بيج تيل', 'بذل وتركيب درنقة بالاشعة التداخلية', 'قسطرة بيج تيل'])
-        if 'port' in lower_en or 'بورت' in name_ar:
+        if ('portable' not in lower_en and ('port' in lower_en or 'porta' in lower_en)) or 'بورت' in name_ar:
             aliases_en.update(['port-a-cath', 'chemoport', 'tivad', 'totally implantable venous access port', 'chemo port insertion', 'portacath'])
             aliases_ar.update(['بورت كاث', 'جهاز علاج كيماوي', 'تركيب بورت كاث', 'شيموبورت'])
             abbrevs.update(['TIVAD'])

@@ -4,6 +4,7 @@
 
 import { ProcedureResult } from '../types';
 import { searchLocalPricelist } from './procedureService';
+import { findOfficialNamesForQuery, loadCatalogAliases } from './aliasService';
 
 let searchWorker: Worker | null = null;
 const pendingRequests = new Map<string, (results: ProcedureResult[]) => void>();
@@ -38,11 +39,18 @@ function getWorker(): Worker | null {
 
 export async function searchPricelistAsync(
   cashList: ProcedureResult[],
-  requestedProcedures: { name: string; arabic?: string }[]
+  requestedProcedures: { name: string; arabic?: string; aliasOfficialNames?: string[] }[]
 ): Promise<ProcedureResult[]> {
+  await loadCatalogAliases().catch(() => {});
+
+  const procsWithAliases = requestedProcedures.map((proc) => ({
+    ...proc,
+    aliasOfficialNames: proc.aliasOfficialNames || findOfficialNamesForQuery(proc.name, proc.arabic),
+  }));
+
   const worker = getWorker();
   if (!worker) {
-    return searchLocalPricelist(cashList, requestedProcedures);
+    return searchLocalPricelist(cashList, procsWithAliases);
   }
 
   const id = `req_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
@@ -51,7 +59,7 @@ export async function searchPricelistAsync(
     const timeout = setTimeout(() => {
       if (pendingRequests.has(id)) {
         pendingRequests.delete(id);
-        resolve(searchLocalPricelist(cashList, requestedProcedures));
+        resolve(searchLocalPricelist(cashList, procsWithAliases));
       }
     }, 3000);
 
@@ -60,6 +68,6 @@ export async function searchPricelistAsync(
       resolve(results);
     });
 
-    worker.postMessage({ id, cashList, requestedProcedures });
+    worker.postMessage({ id, cashList, requestedProcedures: procsWithAliases });
   });
 }

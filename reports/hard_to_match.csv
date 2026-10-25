@@ -211,7 +211,6 @@ DILTATION OF ESOPHAGEAL / DUODENAL CONSTRICTION,Endoscopy & GIT,Medium,zero_alia
 DILTATION OF GASTRIC CONSTRICTION,Endoscopy & GIT,Medium,zero_aliases,"2023, 2024",توسيع ضيق بالمعدة
 Doppler Arterial System (L) Upper Limb,Radiology,Medium,zero_aliases,2026,دوبلر علي شرايين طرف علوي (جانب أيسر)
 Doppler Arterial System (R) Upper Limb,Radiology,Medium,zero_aliases,2026,دوبلر علي شرايين طرف علوي (جانب أيمن)
-Doppler Arterial System Both Upper Limbs,Radiology,Medium,zero_aliases,"2024, 2025, 2026",دوبلر علي شرايين الاطراف العلويه (جانبين)
 Doppler Arterial System One Upper Limb,Radiology,Medium,zero_aliases,"2023, 2024, 2025",دوبلر علي شرايين طرف علوي (جانب واحد)
 Doppler Mesenteric Vessels,Radiology,Medium,zero_aliases,"2023, 2024, 2025, 2026",دوبلر علي الشرايين المعوية (جانب واحد)
 Doppler Portal Veins,Radiology,Medium,zero_aliases,"2023, 2024, 2025, 2026",دوبلر علي الوريد البابي
@@ -222,11 +221,9 @@ Doppler Pre-Shunt Assessment (Both Upper Limbs),Radiology,Medium,zero_aliases,"2
 Doppler Pre-shunt Assessment (one upper limb),Radiology,Medium,zero_aliases,"2023, 2024, 2025",دوبلر علي الطرف العلوي قبل تركيب الشنت
 Doppler Venous & Arterial Systems (L) Upper Limb,Radiology,Medium,zero_aliases; special_characters_in_name,2026,دوبلر علي شرايين و أوردة الطرف العلوي (جانب أيسر)
 Doppler Venous & Arterial Systems (R) Upper Limb,Radiology,Medium,zero_aliases; special_characters_in_name,2026,دوبلر علي شرايين و أوردة الطرف العلوي (جانب أيمن)
-Doppler Venous & Arterial Systems Both Upper Limbs,Radiology,Medium,zero_aliases; special_characters_in_name,"2023, 2024, 2025, 2026",دوبلر علي شرايين و أوردة الاطراف العلويه (جانبين)
 Doppler Venous & Arterial Systems One Upper Limb,Radiology,Medium,zero_aliases; special_characters_in_name,"2023, 2024, 2025",دوبلر علي شرايين و أوردة الطرف العلوي (جانب واحد)
 Doppler Venous System (L) Upper Limb,Radiology,Medium,zero_aliases,2026,دوبلر علي أوردة الطرف العلوي (جانب أيسر)
 Doppler Venous System (R) Upper Limb,Radiology,Medium,zero_aliases,2026,دوبلر علي أوردة الطرف العلوي (جانب أيمن)
-Doppler Venous System Both Upper Limbs,Radiology,Medium,zero_aliases,"2023, 2024, 2025, 2026",دوبلر علي أوردة الاطراف العلويه (جانبين)
 Doppler Venous System One Upper Limb,Radiology,Medium,zero_aliases,"2023, 2024, 2025",دوبلر علي أوردة الطرف العلوي (جانب واحد)
 Drain Insertion,Procedures,Medium,zero_aliases,"2025, 2026",تركيب درنقة
 Drainage Catheter,Intervention Radiology,Medium,zero_aliases,"2023, 2024, 2025, 2026",قسطره تصريف
@@ -478,6 +475,7 @@ Plasma Skin Treatment With Centrifuge (One Session),Procedures,Medium,zero_alias
 Pleurocentesis,Intervention Radiology,Medium,zero_aliases,"2023, 2024, 2025, 2026",بذل من الغشاء البللوري
 Porta Cath Insertion Intervention Radiology,Procedures,Medium,zero_aliases,2025,تركيب جهاز بورت كاث
 Porta Cath Removal,Procedures,Medium,zero_aliases,"2023, 2024, 2025",اجراء رفع بورتاكاث
+Portable U/S Abdomen Or Pelvis,Inpatient Services,Medium,zero_aliases,"2023, 2024",موجات فوق صوتية علي البطن أو الحوض متنقلة
 Portable Ultrasound Usage in ER,Procedures,Medium,zero_aliases,2023,رسم استخدام جهاز الموجات فوق الصوتية المحمول في الطوارئ
 Power liposuction usage fees,Procedures,Medium,zero_aliases,2024,رسم استخدام جهاز شفط الدهون باور
 Premium- North,Inpatient Services,Medium,zero_aliases,"2025, 2026",مميز - شمالي

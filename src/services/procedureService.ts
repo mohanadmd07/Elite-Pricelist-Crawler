@@ -13,6 +13,7 @@ import { matchProceduresWithAI, isGeminiConfigured } from './aiMatchService';
 import { getOverrideForQuery } from './procedureOverrideService';
 import { getCachedCatalog, setCachedCatalog } from '../lib/catalogCache';
 import { searchPricelistAsync } from './searchWorkerClient';
+import { findOfficialNamesForQuery, getAliasesForQuery, loadCatalogAliases } from './aliasService';
 
 // Module-level caches per react-best-practices (js-cache-function-results)
 const cashDataCache: Record<string, ProcedureResult[]> = {};
@@ -24,6 +25,7 @@ const aiMemoryCache = new Map<string, ProcedureResult[]>();
  * Pre-warms active pricelist catalogs in memory so user searches incur 0ms network fetch latency.
  */
 export function preloadPricelists(activeYear?: string): void {
+  loadCatalogAliases().catch(() => {});
   const yearsToPreload: ('2023' | '2024' | '2025' | '2026')[] = [];
   const normalizedYear = activeYear === 'Cash' ? '2026' : activeYear;
   if (normalizedYear && (normalizedYear === '2026' || normalizedYear === '2025' || normalizedYear === '2024' || normalizedYear === '2023')) {
@@ -263,7 +265,7 @@ const GENERIC_MODALITY_TERMS = new Set([
 
 export function searchLocalPricelist(
   cashList: ProcedureResult[],
-  requestedProcedures: { name: string; arabic?: string }[]
+  requestedProcedures: { name: string; arabic?: string; aliasOfficialNames?: string[] }[]
 ): ProcedureResult[] {
   const finalResults: ProcedureResult[] = [];
 
@@ -272,9 +274,12 @@ export function searchLocalPricelist(
     const qEng = normalizeText(cleanEng);
     const qEngRaw = normalizeText(proc.name);
     const qAra = proc.arabic ? normalizeArabic(proc.arabic) : '';
-    const synonyms = expandMedicalSynonyms(cleanEng || proc.name);
+    const aliasOfficialNames = proc.aliasOfficialNames || findOfficialNamesForQuery(proc.name, proc.arabic);
+    const aliasNorms = new Set(aliasOfficialNames.map((n) => normalizeText(n)));
+    const expandedAliases = getAliasesForQuery(proc.name, proc.arabic);
+    const synonyms = [...expandMedicalSynonyms(cleanEng || proc.name), ...expandedAliases];
 
-    if (!qEng && !qAra && !qEngRaw) continue;
+    if (!qEng && !qAra && !qEngRaw && aliasOfficialNames.length === 0) continue;
 
     const exactMatches: ProcedureResult[] = [];
     const partialMatches: ProcedureResult[] = [];
@@ -289,8 +294,12 @@ export function searchLocalPricelist(
 
       const isExactEng = Boolean(qEng && (itemEng === qEng || itemEng === qEngRaw));
       const isExactAra = Boolean(qAra && itemAra === qAra);
+      const isAliasMatch = Boolean(
+        aliasNorms.size > 0 &&
+          (aliasNorms.has(itemEng) || (itemAra && aliasOfficialNames.some((n) => normalizeArabic(n) === itemAra)))
+      );
 
-      if (isExactEng || isExactAra) {
+      if (isExactEng || isExactAra || isAliasMatch) {
         exactMatches.push({
           ...item,
           requestedProcedureName: proc.name,
@@ -439,6 +448,8 @@ export async function searchAllProcedures(
     pendingCount: selectedProcedures.length,
     isExtendingToAI: false,
   });
+
+  await loadCatalogAliases().catch(() => {});
 
   const localResults: ProcedureResult[] = [];
   const listsToSearch: { year: string; list: ProcedureResult[] }[] = [];

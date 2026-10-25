@@ -1,3 +1,10 @@
+var __require = /* @__PURE__ */ ((x) => typeof require !== "undefined" ? require : typeof Proxy !== "undefined" ? new Proxy(x, {
+  get: (a, b) => (typeof require !== "undefined" ? require : a)[b]
+}) : x)(function(x) {
+  if (typeof require !== "undefined") return require.apply(this, arguments);
+  throw Error('Dynamic require of "' + x + '" is not supported');
+});
+
 // src/mail/syncEngine.ts
 import fs2 from "fs";
 import path3 from "path";
@@ -2700,6 +2707,140 @@ function resolveOfficerByContractor(rawQuery, excelPath) {
   };
 }
 
+// src/services/aliasService.ts
+var cachedEntries = null;
+var exactAliasMap = null;
+var abbrevMap = null;
+function buildIndexes(entries) {
+  cachedEntries = entries;
+  exactAliasMap = /* @__PURE__ */ new Map();
+  abbrevMap = /* @__PURE__ */ new Map();
+  for (const entry of entries) {
+    const official = entry.official_name;
+    for (const ab of entry.abbreviations) {
+      const k = ab.toUpperCase().trim();
+      if (!abbrevMap.has(k)) abbrevMap.set(k, []);
+      const list = abbrevMap.get(k);
+      if (!list.includes(official)) list.push(official);
+    }
+    for (const a of entry.aliases_en) {
+      const norm = normalizeText(a);
+      if (norm) {
+        if (!exactAliasMap.has(norm)) exactAliasMap.set(norm, []);
+        const list = exactAliasMap.get(norm);
+        if (!list.includes(official)) list.push(official);
+      }
+    }
+    for (const a of entry.aliases_ar) {
+      const norm = normalizeArabic(a);
+      if (norm) {
+        if (!exactAliasMap.has(norm)) exactAliasMap.set(norm, []);
+        const list = exactAliasMap.get(norm);
+        if (!list.includes(official)) list.push(official);
+      }
+    }
+  }
+}
+function initCatalogAliasesSync() {
+  if (cachedEntries || typeof window !== "undefined") return;
+  try {
+    const fs3 = __require("fs");
+    const path4 = __require("path");
+    const filePath = path4.resolve(process.cwd(), "public", "catalog_aliases.json");
+    if (fs3.existsSync(filePath)) {
+      const raw = fs3.readFileSync(filePath, "utf-8");
+      const data = JSON.parse(raw);
+      buildIndexes(data);
+    }
+  } catch {
+  }
+}
+if (typeof window === "undefined") {
+  try {
+    initCatalogAliasesSync();
+  } catch {
+  }
+}
+function findOfficialNamesForQuery(query2, arabicQuery) {
+  if (!exactAliasMap || !abbrevMap) {
+    initCatalogAliasesSync();
+    if (!exactAliasMap || !abbrevMap) return [];
+  }
+  const results = /* @__PURE__ */ new Set();
+  const cleanEng = cleanHisProcedureQuery(query2);
+  const qEngNorm = normalizeText(cleanEng);
+  const qRawNorm = normalizeText(query2);
+  const qUpper = query2.toUpperCase().trim();
+  const qAraNorm = arabicQuery ? normalizeArabic(arabicQuery) : normalizeArabic(query2);
+  if (abbrevMap.has(qUpper)) {
+    for (const name of abbrevMap.get(qUpper)) {
+      results.add(name);
+    }
+  }
+  if (qEngNorm && exactAliasMap.has(qEngNorm)) {
+    for (const name of exactAliasMap.get(qEngNorm)) {
+      results.add(name);
+    }
+  }
+  if (qRawNorm && qRawNorm !== qEngNorm && exactAliasMap.has(qRawNorm)) {
+    for (const name of exactAliasMap.get(qRawNorm)) {
+      results.add(name);
+    }
+  }
+  if (qAraNorm && exactAliasMap.has(qAraNorm)) {
+    for (const name of exactAliasMap.get(qAraNorm)) {
+      results.add(name);
+    }
+  }
+  if (results.size === 0 && cachedEntries) {
+    const qTokens = (qEngNorm ? qEngNorm.split(/\s+/) : []).filter((t) => t.length >= 3);
+    const qAraTokens = (qAraNorm ? qAraNorm.split(/\s+/) : []).filter((t) => t.length >= 3);
+    if (qTokens.length >= 2 || qAraTokens.length >= 2) {
+      for (const entry of cachedEntries) {
+        let matched = false;
+        if (qTokens.length >= 2) {
+          for (const alias of entry.aliases_en) {
+            const aTokens = new Set(normalizeText(alias).split(/\s+/));
+            const overlap = qTokens.filter((t) => aTokens.has(t)).length;
+            if (overlap === qTokens.length) {
+              results.add(entry.official_name);
+              matched = true;
+              break;
+            }
+          }
+        }
+        if (!matched && qAraTokens.length >= 2) {
+          for (const alias of entry.aliases_ar) {
+            const aTokens = new Set(normalizeArabic(alias).split(/\s+/));
+            const overlap = qAraTokens.filter((t) => aTokens.has(t)).length;
+            if (overlap === qAraTokens.length) {
+              results.add(entry.official_name);
+              break;
+            }
+          }
+        }
+        if (results.size >= 10) break;
+      }
+    }
+  }
+  return Array.from(results);
+}
+function getAliasesForQuery(query2, arabicQuery) {
+  const officialNames = findOfficialNamesForQuery(query2, arabicQuery);
+  if (officialNames.length === 0 || !cachedEntries) return [];
+  const synonyms = /* @__PURE__ */ new Set();
+  const officialSet = new Set(officialNames);
+  for (const entry of cachedEntries) {
+    if (officialSet.has(entry.official_name)) {
+      synonyms.add(entry.official_name);
+      for (const a of entry.aliases_en) synonyms.add(a);
+      for (const a of entry.aliases_ar) synonyms.add(a);
+      for (const ab of entry.abbreviations) synonyms.add(ab);
+    }
+  }
+  return Array.from(synonyms);
+}
+
 // src/services/procedureService.ts
 function hasClinicalMismatch(queryEngNorm, queryAraNorm, rowEngNorm, rowAraNorm) {
   const queryCombined = `${queryEngNorm} ${queryAraNorm}`;
@@ -2736,8 +2877,11 @@ function searchLocalPricelist(cashList, requestedProcedures) {
     const qEng = normalizeText(cleanEng);
     const qEngRaw = normalizeText(proc.name);
     const qAra = proc.arabic ? normalizeArabic(proc.arabic) : "";
-    const synonyms = expandMedicalSynonyms(cleanEng || proc.name);
-    if (!qEng && !qAra && !qEngRaw) continue;
+    const aliasOfficialNames = proc.aliasOfficialNames || findOfficialNamesForQuery(proc.name, proc.arabic);
+    const aliasNorms = new Set(aliasOfficialNames.map((n) => normalizeText(n)));
+    const expandedAliases = getAliasesForQuery(proc.name, proc.arabic);
+    const synonyms = [...expandMedicalSynonyms(cleanEng || proc.name), ...expandedAliases];
+    if (!qEng && !qAra && !qEngRaw && aliasOfficialNames.length === 0) continue;
     const exactMatches = [];
     const partialMatches = [];
     for (const item of cashList) {
@@ -2748,7 +2892,10 @@ function searchLocalPricelist(cashList, requestedProcedures) {
       }
       const isExactEng = Boolean(qEng && (itemEng === qEng || itemEng === qEngRaw));
       const isExactAra = Boolean(qAra && itemAra === qAra);
-      if (isExactEng || isExactAra) {
+      const isAliasMatch = Boolean(
+        aliasNorms.size > 0 && (aliasNorms.has(itemEng) || itemAra && aliasOfficialNames.some((n) => normalizeArabic(n) === itemAra))
+      );
+      if (isExactEng || isExactAra || isAliasMatch) {
         exactMatches.push({
           ...item,
           requestedProcedureName: proc.name

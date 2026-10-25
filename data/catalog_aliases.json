@@ -18755,8 +18755,17 @@
       2025,
       2026
     ],
-    "aliases_en": [],
-    "aliases_ar": [],
+    "aliases_en": [
+      "arterial doppler lower extremity",
+      "arterial doppler lower limb",
+      "arterial duplex legs",
+      "lower limb arterial doppler"
+    ],
+    "aliases_ar": [
+      "دوبلر شرايين الساقين",
+      "دوبلر على شرايين الطرفين السفليين",
+      "دوبلكس شرايين الساقين"
+    ],
     "abbreviations": [],
     "catalog_occurrences": 3
   },
@@ -18974,22 +18983,16 @@
       2026
     ],
     "aliases_en": [
-      "dvt study",
-      "dvt ultrasound",
-      "lower limb venous doppler",
-      "venous doppler lower extremity",
-      "venous doppler lower limb",
-      "venous duplex legs"
+      "arterial and venous doppler lower limb",
+      "arterial and venous duplex",
+      "doppler venous and arterial lower limb"
     ],
     "aliases_ar": [
-      "دوبلر استبعاد جلطة",
-      "دوبلر اوردة الساقين",
-      "دوبلر على اوردة الطرفين السفليين",
-      "دوبلكس اوردة الساقين"
+      "دوبلر شرايين واوردة الساقين",
+      "دوبلر شرايين واوردة الطرفين السفليين",
+      "دوبلكس شرايين واوردة"
     ],
-    "abbreviations": [
-      "DVT"
-    ],
+    "abbreviations": [],
     "catalog_occurrences": 1
   },
   {
@@ -19012,22 +19015,16 @@
       2026
     ],
     "aliases_en": [
-      "dvt study",
-      "dvt ultrasound",
-      "lower limb venous doppler",
-      "venous doppler lower extremity",
-      "venous doppler lower limb",
-      "venous duplex legs"
+      "arterial and venous doppler lower limb",
+      "arterial and venous duplex",
+      "doppler venous and arterial lower limb"
     ],
     "aliases_ar": [
-      "دوبلر استبعاد جلطة",
-      "دوبلر اوردة الساقين",
-      "دوبلر على اوردة الطرفين السفليين",
-      "دوبلكس اوردة الساقين"
+      "دوبلر شرايين واوردة الساقين",
+      "دوبلر شرايين واوردة الطرفين السفليين",
+      "دوبلكس شرايين واوردة"
     ],
-    "abbreviations": [
-      "DVT"
-    ],
+    "abbreviations": [],
     "catalog_occurrences": 1
   },
   {
@@ -19053,22 +19050,16 @@
       2026
     ],
     "aliases_en": [
-      "dvt study",
-      "dvt ultrasound",
-      "lower limb venous doppler",
-      "venous doppler lower extremity",
-      "venous doppler lower limb",
-      "venous duplex legs"
+      "arterial and venous doppler lower limb",
+      "arterial and venous duplex",
+      "doppler venous and arterial lower limb"
     ],
     "aliases_ar": [
-      "دوبلر استبعاد جلطة",
-      "دوبلر اوردة الساقين",
-      "دوبلر على اوردة الطرفين السفليين",
-      "دوبلكس اوردة الساقين"
+      "دوبلر شرايين واوردة الساقين",
+      "دوبلر شرايين واوردة الطرفين السفليين",
+      "دوبلكس شرايين واوردة"
     ],
-    "abbreviations": [
-      "DVT"
-    ],
+    "abbreviations": [],
     "catalog_occurrences": 4
   },
   {
@@ -19081,8 +19072,16 @@
       2025,
       2026
     ],
-    "aliases_en": [],
-    "aliases_ar": [],
+    "aliases_en": [
+      "arterial and venous doppler lower limb",
+      "arterial and venous duplex",
+      "doppler venous and arterial lower limb"
+    ],
+    "aliases_ar": [
+      "دوبلر شرايين واوردة الساقين",
+      "دوبلر شرايين واوردة الطرفين السفليين",
+      "دوبلكس شرايين واوردة"
+    ],
     "abbreviations": [],
     "catalog_occurrences": 4
   },
@@ -19095,22 +19094,16 @@
       2025
     ],
     "aliases_en": [
-      "dvt study",
-      "dvt ultrasound",
-      "lower limb venous doppler",
-      "venous doppler lower extremity",
-      "venous doppler lower limb",
-      "venous duplex legs"
+      "arterial and venous doppler lower limb",
+      "arterial and venous duplex",
+      "doppler venous and arterial lower limb"
     ],
     "aliases_ar": [
-      "دوبلر استبعاد جلطة",
-      "دوبلر اوردة الساقين",
-      "دوبلر على اوردة الطرفين السفليين",
-      "دوبلكس اوردة الساقين"
+      "دوبلر شرايين واوردة الساقين",
+      "دوبلر شرايين واوردة الطرفين السفليين",
+      "دوبلكس شرايين واوردة"
     ],
-    "abbreviations": [
-      "DVT"
-    ],
+    "abbreviations": [],
     "catalog_occurrences": 2
   },
   {
@@ -19429,9 +19422,23 @@
       2025,
       2026
     ],
-    "aliases_en": [],
-    "aliases_ar": [],
-    "abbreviations": [],
+    "aliases_en": [
+      "dvt study",
+      "dvt ultrasound",
+      "lower limb venous doppler",
+      "venous doppler lower extremity",
+      "venous doppler lower limb",
+      "venous duplex legs"
+    ],
+    "aliases_ar": [
+      "دوبلر استبعاد جلطة",
+      "دوبلر اوردة الساقين",
+      "دوبلر على اوردة الطرفين السفليين",
+      "دوبلكس اوردة الساقين"
+    ],
+    "abbreviations": [
+      "DVT"
+    ],
     "catalog_occurrences": 4
   },
   {
@@ -43069,26 +43076,16 @@
       "cardiac ultrasound",
       "ccu",
       "ccu bed",
-      "chemo port insertion",
-      "chemoport",
       "coronary care unit",
       "echocardiography",
       "heart echo",
-      "port-a-cath",
-      "portacath",
-      "tivad",
-      "totally implantable venous access port",
       "transthoracic echocardiography",
       "tte"
     ],
     "aliases_ar": [
       "ايكو",
       "ايكو على القلب",
-      "بورت كاث",
-      "تركيب بورت كاث",
-      "جهاز علاج كيماوي",
       "رعاية قلب",
-      "شيموبورت",
       "عناية القلب المركزة",
       "عناية مركزه للقلب",
       "فحص الايكو",
@@ -43097,7 +43094,6 @@
     "abbreviations": [
       "CCU",
       "ECHO",
-      "TIVAD",
       "TTE"
     ],
     "catalog_occurrences": 2
@@ -43132,23 +43128,9 @@
       2023,
       2024
     ],
-    "aliases_en": [
-      "chemo port insertion",
-      "chemoport",
-      "port-a-cath",
-      "portacath",
-      "tivad",
-      "totally implantable venous access port"
-    ],
-    "aliases_ar": [
-      "بورت كاث",
-      "تركيب بورت كاث",
-      "جهاز علاج كيماوي",
-      "شيموبورت"
-    ],
-    "abbreviations": [
-      "TIVAD"
-    ],
+    "aliases_en": [],
+    "aliases_ar": [],
+    "abbreviations": [],
     "catalog_occurrences": 2
   },
   {

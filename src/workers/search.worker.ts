@@ -16,7 +16,7 @@ import {
 interface SearchWorkerRequest {
   id: string;
   cashList: ProcedureResult[];
-  requestedProcedures: { name: string; arabic?: string }[];
+  requestedProcedures: { name: string; arabic?: string; aliasOfficialNames?: string[] }[];
 }
 
 interface SearchWorkerResponse {
@@ -42,7 +42,7 @@ function hasClinicalMismatch(
 
 function executeSearch(
   cashList: ProcedureResult[],
-  requestedProcedures: { name: string; arabic?: string }[]
+  requestedProcedures: { name: string; arabic?: string; aliasOfficialNames?: string[] }[]
 ): ProcedureResult[] {
   const finalResults: ProcedureResult[] = [];
 
@@ -51,8 +51,10 @@ function executeSearch(
     const qEng = normalizeText(cleanEng);
     const qEngRaw = normalizeText(proc.name);
     const qAra = proc.arabic ? normalizeArabic(proc.arabic) : '';
+    const aliasOfficialNames = proc.aliasOfficialNames || [];
+    const aliasNorms = new Set(aliasOfficialNames.map(n => normalizeText(n)));
 
-    if (!qEng && !qAra && !qEngRaw) continue;
+    if (!qEng && !qAra && !qEngRaw && aliasOfficialNames.length === 0) continue;
 
     const exactMatches: ProcedureResult[] = [];
     const partialMatches: ProcedureResult[] = [];
@@ -67,8 +69,9 @@ function executeSearch(
 
       const isExactEng = Boolean(qEng && (itemEng === qEng || itemEng === qEngRaw));
       const isExactAra = Boolean(qAra && itemAra === qAra);
+      const isAliasMatch = Boolean(aliasNorms.size > 0 && (aliasNorms.has(itemEng) || (itemAra && aliasOfficialNames.some(n => normalizeArabic(n) === itemAra))));
 
-      if (isExactEng || isExactAra) {
+      if (isExactEng || isExactAra || isAliasMatch) {
         exactMatches.push({
           ...item,
           requestedProcedureName: proc.name,
