@@ -724,7 +724,7 @@ ELITE-2025-04451,AUTO-2025-4451,Intervention Radiology,procedure,Permcath Remova
 ELITE-2025-04452,AUTO-2025-4452,Intervention Radiology,procedure,Pig Tail Catheter,أنبوبة بيج تيل,10650.0,ok,,,,,,,
 ELITE-2025-04453,P.647,Intervention Radiology,procedure,Pleurocentesis,بذل من الغشاء البلوري,8500.0,ok,,,,,,,
 ELITE-2025-04454,AUTO-2025-4454,Procedures,procedure,Porta Cath Removal,رفع بورت كاث,15600.0,needs_clinician_review,,device_implant_separate: implant/device cost usually billed separately from procedural fee,price_spike_yoy: +5471.4% vs 2024 (280.0 -> 15600.0 EGP),,,,
-ELITE-2025-04455,AUTO-2025-4455,Procedures,procedure,Porta Cath Insertion Intervention Radiology,تركيب جهاز بورت كاث,19200.0,needs_clinician_review,,device_implant_separate: implant/device cost usually billed separately from procedural fee,,,,,
+ELITE-2025-04455,AUTO-2025-4455,Procedures,procedure,Porta Cath Insertion Intervention Radiology,تركيب جهاز بورت كاث,19200.0,needs_clinician_review,,device_implant_separate: implant/device cost usually billed separately from procedural fee,,,TIVAD,,
 ELITE-2025-04456,P.724,Intervention Radiology,procedure,Seldinger Catheter,قسطره تصريف بسلك و موسعات,16700.0,ok,,,,,,,
 ELITE-2025-04457,P.872,Intervention Radiology,procedure,Tumor Clips Insertion,تركيب كليبس في ورم,8700.0,ok,,,,,,,
 ELITE-2025-04458,P.873,Intervention Radiology,procedure,Tumor Guide Wire Insertion,إدخال سلك إرشادي في ورم,8700.0,ok,,,,,,,

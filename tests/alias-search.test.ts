@@ -83,4 +83,34 @@ describe('Catalog Alias Search Integration', () => {
     expect(resHrct.length).toBeGreaterThan(0);
     expect(resHrct[0].nameEnglish).toBe('CT Chest');
   });
+
+  it('matches Portacath insertion query to Porta Cath catalog item seamlessly', () => {
+    const catalog2025: ProcedureResult[] = [
+      {
+        nameEnglish: 'Porta Cath Insertion Intervention Radiology',
+        nameArabic: 'تركيب بورت كاث بالاشعة التداخلية',
+        price: '19200',
+        sectionName: 'Procedures',
+        sourceFile: 'Elite 2025',
+      },
+      {
+        nameEnglish: 'Porta Cath Removal',
+        nameArabic: 'ازالة بورت كاث',
+        price: '5000',
+        sectionName: 'Procedures',
+        sourceFile: 'Elite 2025',
+      },
+    ];
+
+    // User query with merged "Portacath"
+    const results = searchLocalPricelist(catalog2025, [{ name: 'Portacath insertion Intervention Radiology' }]);
+    expect(results.length).toBeGreaterThan(0);
+    expect(results[0].nameEnglish).toBe('Porta Cath Insertion Intervention Radiology');
+    expect(results[0].price).toBe('19200');
+
+    // User query with removal
+    const removalResults = searchLocalPricelist(catalog2025, [{ name: 'Portacath removal' }]);
+    expect(removalResults.length).toBeGreaterThan(0);
+    expect(removalResults[0].nameEnglish).toBe('Porta Cath Removal');
+  });
 });

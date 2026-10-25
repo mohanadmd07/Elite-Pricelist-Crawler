@@ -666,6 +666,7 @@ function normalizeText(str) {
   if (!str) return "";
   let normalized = normalizeHomoglyphs(str).toLowerCase();
   normalized = normalized.replace(/\b([a-z])\s*\.\s*/g, "$1");
+  normalized = normalized.replace(/\bporta\s*[- ]\s*cath\b/g, "portacath").replace(/\bport\s*[- ]\s*a\s*[- ]\s*cath\b/g, "portacath").replace(/\bpig\s*[- ]\s*tail\b/g, "pigtail").replace(/\btrue?\s*[- ]\s*cut\b/g, "trucut").replace(/\bintercostal\s*tube\b/g, "intercostal tube");
   normalized = normalized.replace(/\s*[-/,]\s*(investigations?|procedures?|tests?|testing|panels?|profiles?|screens?|screening|analysis|packages?|scans?|counts?)\b/g, "").replace(/\s+\b(investigations?|procedures?|tests?|testing|panels?|profiles?|screens?|screening|analysis|packages?|scans?|counts?)$/g, "");
   return normalized.replace(/[\u064B-\u065F\u0670\u0640]/g, "").replace(/[\u0660-\u0669\u06F0-\u06F9]/g, (d) => String(d.charCodeAt(0) & 15)).replace(/[أإآا]/g, "\u0627").replace(/[ىيی]/g, "\u064A").replace(/[كک]/g, "\u0643").replace(/[ةهھۀ]/g, "\u0647").replace(/[ئؤ]/g, "\u0621").replace(/[^a-zA-Z0-9\u0621-\u064A\s]/g, " ").replace(/\s+/g, " ").trim();
 }
@@ -2910,6 +2911,17 @@ function searchLocalPricelist(cashList, requestedProcedures) {
           requestedProcedureName: proc.name
         });
         continue;
+      }
+      const qTokens = (qEng || qEngRaw).split(/\s+/).filter((t) => t.length >= 3);
+      if (qTokens.length >= 2) {
+        const itemTokens = new Set(itemEng.split(/\s+/));
+        if (qTokens.every((t) => itemTokens.has(t) || itemEng.includes(t))) {
+          partialMatches.push({
+            ...item,
+            requestedProcedureName: proc.name
+          });
+          continue;
+        }
       }
       if (synonyms.length > 0) {
         let isSynMatch = false;

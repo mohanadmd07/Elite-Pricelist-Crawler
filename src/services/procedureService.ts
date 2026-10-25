@@ -318,6 +318,19 @@ export function searchLocalPricelist(
         continue;
       }
 
+      // Multi-token overlap matching (e.g. out of order words or compound terms)
+      const qTokens = (qEng || qEngRaw).split(/\s+/).filter((t) => t.length >= 3);
+      if (qTokens.length >= 2) {
+        const itemTokens = new Set(itemEng.split(/\s+/));
+        if (qTokens.every((t) => itemTokens.has(t) || itemEng.includes(t))) {
+          partialMatches.push({
+            ...item,
+            requestedProcedureName: proc.name,
+          });
+          continue;
+        }
+      }
+
       // Check clinical synonym expansions (e.g. CXR -> X - Ray Chest, CTPA -> CT Pulmonary Angio)
       if (synonyms.length > 0) {
         let isSynMatch = false;

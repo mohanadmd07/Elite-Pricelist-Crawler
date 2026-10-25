@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Search, Loader2, Plus } from 'lucide-react';
 import { StandardProcedure } from '../../types';
-import { normalizeArabic } from '../../lib/arabic-normalizer';
+import { normalizeArabic, normalizeText } from '../../lib/arabic-normalizer';
 
 interface ProcedureSearchBarProps {
   input: string;
@@ -43,9 +43,31 @@ export const ProcedureSearchBar: React.FC<ProcedureSearchBarProps> = ({
 
   const filteredProcedures = standardProcedures
     .filter((p) => {
-      const q = normalizeArabic(input);
-      if (!q) return false;
-      return normalizeArabic(p.english).includes(q) || normalizeArabic(p.arabic).includes(q);
+      if (!input.trim()) return false;
+      const qNorm = normalizeText(input);
+      const qAra = normalizeArabic(input);
+      if (!qNorm && !qAra) return false;
+
+      const pEng = normalizeText(p.english);
+      const pAra = normalizeArabic(p.arabic);
+
+      if (qNorm && pEng.includes(qNorm)) return true;
+      if (qAra && pAra.includes(qAra)) return true;
+
+      // Multi-token overlap matching (e.g. out of order words or compound terms)
+      const qTokens = qNorm.split(/\s+/).filter((t) => t.length >= 2);
+      if (qTokens.length >= 2) {
+        const pTokens = new Set(pEng.split(/\s+/));
+        if (qTokens.every((t) => pTokens.has(t) || pEng.includes(t))) return true;
+      }
+
+      const qAraTokens = qAra.split(/\s+/).filter((t) => t.length >= 2);
+      if (qAraTokens.length >= 2) {
+        const pAraTokens = new Set(pAra.split(/\s+/));
+        if (qAraTokens.every((t) => pAraTokens.has(t) || pAra.includes(t))) return true;
+      }
+
+      return false;
     })
     .slice(0, 40);
 

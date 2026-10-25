@@ -2105,8 +2105,8 @@ ALIAS-DENT-2103,Dental & Derma,Pocket Curettage Per Quadrant (Multiple Pockets),
 ALIAS-DENT-2104,Dental & Derma,Porcelain Crown PFMT,,porcelain crown pfmt,طربوش بورسلين,2026,1
 ALIAS-LABO-2105,Laboratory,Porphobilinogen in urine,,porphobilinogen in urine,,"2023, 2024",2
 ALIAS-LABO-2106,Laboratory,Porphyrins in urine,,porphyrins in urine,,"2023, 2024, 2026",3
-ALIAS-PROC-2107,Procedures,Porta Cath Insertion Intervention Radiology,,,,2025,1
-ALIAS-PROC-2108,Procedures,Porta Cath Removal,,,,"2023, 2024, 2025",4
+ALIAS-PROC-2107,Procedures,Porta Cath Insertion Intervention Radiology,TIVAD,chemoport insertion | port-a-cath insertion | porta cath insertion | porta cath insertion intervention radiology | portacath insertion | portacath insertion intervention radiology | tivad insertion,بورت كاث اشعة تداخلية | تركيب بورت كاث | تركيب بورتاكاث | تركيب جهاز بورت كاث | شيموبورت,2025,1
+ALIAS-PROC-2108,Procedures,Porta Cath Removal,,chemo port removal | port-a-cath removal | porta cath removal | portacath removal | removal of portacath,ازالة بورت كاث | رفع بورت كاث | رفع بورتاكات | رفع بورتاكاث,"2023, 2024, 2025",4
 ALIAS-INPA-2109,Inpatient Services,Portable Echocardiography,"CCU, ECHO, TTE",cardiac intensive care | cardiac ultrasound | ccu | ccu bed | coronary care unit | echocardiography | heart echo | transthoracic echocardiography | tte,ايكو | ايكو على القلب | رعاية قلب | عناية القلب المركزة | عناية مركزه للقلب | فحص الايكو | موجات فوق صوتية على القلب,"2023, 2024",2
 ALIAS-HOME-2110,Home Care,Portable Suction,,domiciliary healthcare | home care service | home visit | portable suction,جهاز شفط 5 لتر | خدمة رعاية منزلية | رعاية منزلية | زيارة منزلية,2026,1
 ALIAS-INPA-2111,Inpatient Services,Portable U/S Abdomen Or Pelvis,,,,"2023, 2024",2

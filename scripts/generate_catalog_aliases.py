@@ -733,7 +733,7 @@ def generate_batch_3_aliases(name_en: str, name_ar: str, cat: str):
             aliases_en.update(['cvp catheter insertion', 'central line insertion', 'central venous catheter placement', 'cvc insertion', 'us guided cvp insertion'])
             aliases_ar.update(['تركيب قسطرة وريد مركزي', 'اجراء تركيب قسطرة وريد مركزي', 'قسطرة وريد مركزي', 'تركيب قسطرة مركزية بالسونار'])
         abbrevs.update(['CVP', 'CVC'])
-    # Porta Cath Needle
+    # Porta Cath Needle, Insertion & Removal
     if 'porta cath' in lower_en or 'portacath' in lower_en or 'بورتاكات' in norm_ar or 'بورتاكاث' in norm_ar or 'بورت كاث' in norm_ar:
         if 'needle' in lower_en or 'سن' in norm_ar:
             if 'removal' in lower_en or 'رفع' in norm_ar or 'ازالة' in norm_ar:
@@ -742,6 +742,13 @@ def generate_batch_3_aliases(name_en: str, name_ar: str, cat: str):
             else:
                 aliases_en.update(['insertion of porta cath needle', 'portacath needle insertion', 'huber needle insertion'])
                 aliases_ar.update(['تركيب سن بورتاكات', 'اجراء تركيب سن بورتاكاث', 'تركيب ابرة بورتاكاث', 'تركيب سن بورت كاث'])
+        elif 'removal' in lower_en or 'رفع' in norm_ar or 'ازالة' in norm_ar:
+            aliases_en.update(['portacath removal', 'porta cath removal', 'port-a-cath removal', 'removal of portacath', 'chemo port removal'])
+            aliases_ar.update(['رفع بورت كاث', 'ازالة بورت كاث', 'رفع بورتاكاث', 'رفع بورتاكات'])
+        else:
+            aliases_en.update(['portacath insertion', 'porta cath insertion', 'portacath insertion intervention radiology', 'porta cath insertion intervention radiology', 'port-a-cath insertion', 'chemoport insertion', 'tivad insertion'])
+            aliases_ar.update(['تركيب بورت كاث', 'تركيب جهاز بورت كاث', 'تركيب بورتاكاث', 'بورت كاث اشعة تداخلية', 'شيموبورت'])
+            abbrevs.update(['TIVAD'])
     # Cannula (Exclude Nasal Cannula)
     if ('cannula' in lower_en or 'كانيولا' in norm_ar) and 'nasal' not in lower_en and 'انف' not in norm_ar:
         if 'intraosseous' in lower_en or 'العظام' in norm_ar:

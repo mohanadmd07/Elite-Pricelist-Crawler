@@ -56,6 +56,14 @@ export function normalizeText(str: string): string {
   // Merge dotted abbreviations like "E.E.G." or "E. C. G." -> "eeg" / "ecg"
   normalized = normalized.replace(/\b([a-z])\s*\.\s*/g, '$1');
 
+  // Fold common split / hyphenated compound medical terms
+  normalized = normalized
+    .replace(/\bporta\s*[- ]\s*cath\b/g, 'portacath')
+    .replace(/\bport\s*[- ]\s*a\s*[- ]\s*cath\b/g, 'portacath')
+    .replace(/\bpig\s*[- ]\s*tail\b/g, 'pigtail')
+    .replace(/\btrue?\s*[- ]\s*cut\b/g, 'trucut')
+    .replace(/\bintercostal\s*tube\b/g, 'intercostal tube');
+
   // Strip common suffixes often appended to procedures in billing lists
   normalized = normalized
     .replace(/\s*[-/,]\s*(investigations?|procedures?|tests?|testing|panels?|profiles?|screens?|screening|analysis|packages?|scans?|counts?)\b/g, '')

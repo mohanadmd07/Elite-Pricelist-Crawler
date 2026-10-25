@@ -43044,9 +43044,25 @@
     "years_available": [
       2025
     ],
-    "aliases_en": [],
-    "aliases_ar": [],
-    "abbreviations": [],
+    "aliases_en": [
+      "chemoport insertion",
+      "port-a-cath insertion",
+      "porta cath insertion",
+      "porta cath insertion intervention radiology",
+      "portacath insertion",
+      "portacath insertion intervention radiology",
+      "tivad insertion"
+    ],
+    "aliases_ar": [
+      "بورت كاث اشعة تداخلية",
+      "تركيب بورت كاث",
+      "تركيب بورتاكاث",
+      "تركيب جهاز بورت كاث",
+      "شيموبورت"
+    ],
+    "abbreviations": [
+      "TIVAD"
+    ],
     "catalog_occurrences": 1
   },
   {
@@ -43058,8 +43074,19 @@
       2024,
       2025
     ],
-    "aliases_en": [],
-    "aliases_ar": [],
+    "aliases_en": [
+      "chemo port removal",
+      "port-a-cath removal",
+      "porta cath removal",
+      "portacath removal",
+      "removal of portacath"
+    ],
+    "aliases_ar": [
+      "ازالة بورت كاث",
+      "رفع بورت كاث",
+      "رفع بورتاكات",
+      "رفع بورتاكاث"
+    ],
     "abbreviations": [],
     "catalog_occurrences": 4
   },
