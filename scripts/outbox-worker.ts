@@ -9,8 +9,10 @@
  * 4. Full replayability to completely reconstruct Firestore from scratch.
  */
 
-import 'dotenv/config';
-import { doc, setDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
+import dotenv from 'dotenv';
+dotenv.config({ path: '.env.local' });
+dotenv.config();
+import { doc, setDoc, deleteDoc, collection, getDocs, serverTimestamp } from 'firebase/firestore';
 import { db } from '../src/firebase';
 import { supabaseAdmin, supabase } from '../src/lib/supabase';
 
@@ -196,6 +198,25 @@ export async function replayAllToFirestore(): Promise<{ totalReplayed: number }>
   }
 
   console.log(`Found ${approvals.length} approvals in PostgreSQL. Replaying into Firestore...`);
+  const activeIds = new Set(approvals.map((a) => a.id));
+
+  // Prune deleted or stale docs from Firestore so total documents match exactly
+  try {
+    const snap = await getDocs(collection(db, 'inpatient_approvals'));
+    let pruned = 0;
+    for (const d of snap.docs) {
+      if (!activeIds.has(d.id)) {
+        await deleteDoc(d.ref);
+        pruned++;
+      }
+    }
+    if (pruned > 0) {
+      console.log(`  🗑️ Pruned ${pruned} stale duplicate reply docs from Firestore.`);
+    }
+  } catch (err) {
+    console.warn('  ⚠️ Could not prune stale Firestore docs:', err);
+  }
+
   let count = 0;
 
   for (const app of approvals) {

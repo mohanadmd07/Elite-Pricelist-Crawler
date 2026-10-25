@@ -93,10 +93,10 @@ export default function App() {
   });
 
   const priceLists = [
-    { name: 'Elite Hospital 2026', path: '/2026.pdf' },
-    { name: 'Elite Hospital 2025', path: '/2025.pdf' },
-    { name: 'Elite Hospital 2024', path: '/2024.pdf' },
-    { name: 'Elite Hospital 2023', path: '/2023.pdf' },
+    { year: '2026', name: 'Elite Hospital 2026', catalogPath: '/2026_cash.json', count: 1822 },
+    { year: '2025', name: 'Elite Hospital 2025', catalogPath: '/2025_cash.json', count: 1615 },
+    { year: '2024', name: 'Elite Hospital 2024', catalogPath: '/2024_cash.json', count: 1882 },
+    { year: '2023', name: 'Elite Hospital 2023', catalogPath: '/2023_cash.json', count: 1847 },
   ];
 
   // Auth listener with recovery
@@ -154,22 +154,21 @@ export default function App() {
     };
   }, [user?.uid]);
 
-  // Check PDF status on mount
+  // Check Pricelist Catalog availability on mount (JSON datasets)
   useEffect(() => {
-    const checkFiles = async () => {
+    const checkCatalogs = async () => {
       const status: Record<string, boolean> = {};
       for (const list of priceLists) {
         try {
-          const res = await fetch(list.path, { method: 'HEAD' });
-          const contentType = res.headers.get('Content-Type');
-          status[list.path] = res.ok && Boolean(contentType?.includes('application/pdf'));
+          const res = await fetch(list.catalogPath, { method: 'HEAD' });
+          status[list.year] = res.ok;
         } catch {
-          status[list.path] = false;
+          status[list.year] = false;
         }
       }
       setFileStatus(status);
     };
-    checkFiles();
+    checkCatalogs();
   }, []);
 
   // Pre-warm pricelist catalogs in idle time per /vercel-optimize
@@ -446,7 +445,7 @@ export default function App() {
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div className="flex flex-wrap items-center gap-2">
                 {priceLists.map((list) => {
-                  const isAvailable = fileStatus[list.path];
+                  const isAvailable = fileStatus[list.year] ?? true;
                   const isTargeted =
                     selectedCompany && list.name.includes(selectedCompany.priceListYear);
                   const isExcluded =
@@ -454,34 +453,30 @@ export default function App() {
 
                   return (
                     <div
-                      key={list.path}
+                      key={list.year}
                       className={`px-3.5 py-2 border rounded-xl text-xs font-bold flex items-center gap-2 transition-all ${
                         isTargeted
                           ? 'bg-teal-50 border-teal-300 text-teal-900 ring-2 ring-teal-500/20'
                           : isExcluded
                           ? 'opacity-40 filter grayscale bg-slate-50 border-slate-200 text-slate-400'
-                          : isAvailable === true
+                          : isAvailable
                           ? 'bg-slate-50 border-emerald-200 text-emerald-800'
-                          : isAvailable === false
-                          ? 'bg-rose-50 border-rose-200 text-rose-800'
-                          : 'bg-slate-50 border-slate-200 text-slate-600'
+                          : 'bg-rose-50 border-rose-200 text-rose-800'
                       }`}
                     >
                       <div
                         className={`w-2 h-2 rounded-full ${
                           isTargeted
                             ? 'bg-teal-600 shadow-[0_0_8px_rgba(13,148,136,0.6)]'
-                            : isAvailable === true
-                            ? 'bg-emerald-500'
-                            : isAvailable === false
-                            ? 'bg-rose-500'
-                            : 'bg-slate-300'
+                            : isAvailable
+                            ? 'bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.4)]'
+                            : 'bg-rose-500'
                         }`}
                       />
                       <span className="text-xs tracking-tight">{list.name}</span>
-                      {isAvailable === false && (
-                        <span className="opacity-60 text-[10px] font-normal">(Missing PDF)</span>
-                      )}
+                      <span className="text-[10px] text-slate-400 font-normal">
+                        ({list.count.toLocaleString('en-US')} بند)
+                      </span>
                     </div>
                   );
                 })}

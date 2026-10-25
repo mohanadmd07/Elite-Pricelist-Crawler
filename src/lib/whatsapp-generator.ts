@@ -280,6 +280,12 @@ export function generateCmWhatsappMessage(record: InpatientApprovalRecord): stri
     limitFormatted = ` (حد أقصى: ${record.approvedAmountLimit.toLocaleString('en-US')} ج.م)`;
   }
 
+  // Patient share / co-payment formatting
+  let copayFormatted = '';
+  if (record.patientSharePercentage && record.patientSharePercentage > 0) {
+    copayFormatted = ` (نسبة التحمل: ${record.patientSharePercentage}%)`;
+  }
+
   // Procedures unlisted in the contractor pricelist -> "مطلوب موافقة سعرية بمبلغ X" (X from another pricelist)
   const unlisted = (record.matchedProcedures || []).filter(
     (m) => m.status === 'unmatched' && (m.suggestedPrice || 0) > 0 && !isAccommodationOrGenericFee(m.serviceName)
@@ -311,7 +317,7 @@ export function generateCmWhatsappMessage(record: InpatientApprovalRecord): stri
     // "موافقة سعرية بمبلغ معين" -> state it as a price approval, not as a max limit / ceiling
     line3 = `*تمت الموافقة على: ${procText} - ${priceText}*`;
   } else if (isApproved) {
-    line3 = `*تمت الموافقة على: ${procText}${limitFormatted}*`;
+    line3 = `*تمت الموافقة على: ${procText}${limitFormatted}${copayFormatted}*`;
   } else if (isRefused) {
     line3 = `*تم رفض طلب الموافقة على: ${procText}*`;
   } else {

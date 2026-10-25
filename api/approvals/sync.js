@@ -547,6 +547,10 @@ function generateCmWhatsappMessage(record) {
   } else if (record.approvedAmountLimit && record.approvedAmountLimit > 0) {
     limitFormatted = ` (\u062D\u062F \u0623\u0642\u0635\u0649: ${record.approvedAmountLimit.toLocaleString("en-US")} \u062C.\u0645)`;
   }
+  let copayFormatted = "";
+  if (record.patientSharePercentage && record.patientSharePercentage > 0) {
+    copayFormatted = ` (\u0646\u0633\u0628\u0629 \u0627\u0644\u062A\u062D\u0645\u0644: ${record.patientSharePercentage}%)`;
+  }
   const unlisted = (record.matchedProcedures || []).filter(
     (m) => m.status === "unmatched" && (m.suggestedPrice || 0) > 0 && !isAccommodationOrGenericFee(m.serviceName)
   );
@@ -570,7 +574,7 @@ ${line2}
   } else if (isApproved && priceMode === "approved") {
     line3 = `*\u062A\u0645\u062A \u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0629 \u0639\u0644\u0649: ${procText} - ${priceText}*`;
   } else if (isApproved) {
-    line3 = `*\u062A\u0645\u062A \u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0629 \u0639\u0644\u0649: ${procText}${limitFormatted}*`;
+    line3 = `*\u062A\u0645\u062A \u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0629 \u0639\u0644\u0649: ${procText}${limitFormatted}${copayFormatted}*`;
   } else if (isRefused) {
     line3 = `*\u062A\u0645 \u0631\u0641\u0636 \u0637\u0644\u0628 \u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0629 \u0639\u0644\u0649: ${procText}*`;
   } else {
@@ -608,25 +612,89 @@ var REFUSAL_KEYWORDS = [
   "\u062E\u0627\u0631\u062C \u0627\u0644\u062A\u063A\u0637\u064A\u0647"
 ];
 var APPROVAL_KEYWORDS = [
+  // Direct Arabic approvals
   "\u0644\u0627 \u0645\u0627\u0646\u0639",
-  "approved",
-  "approve",
-  "\u0645\u0639\u062A\u0645\u062F",
+  "\u0644\u0627\u0645\u0627\u0646\u0639",
+  "\u0644\u0627 \u0645\u0627\u0646\u0639 \u0645\u0646 \u0627\u0644\u062F\u062E\u0648\u0644",
+  "\u0644\u0627\u0645\u0627\u0646\u0639 \u0645\u0646 \u0627\u0644\u062F\u062E\u0648\u0644",
+  "\u0644\u0627 \u0645\u0627\u0646\u0639 \u0645\u0646 \u0639\u0645\u0644 \u0627\u0644\u0644\u0627\u0632\u0645",
+  "\u0644\u0627\u0645\u0627\u0646\u0639 \u0645\u0646 \u0639\u0645\u0644 \u0627\u0644\u0644\u0627\u0632\u0645",
+  "\u0644\u0627 \u0645\u0627\u0646\u0639 \u0637\u0628\u0642\u0627 \u0644\u0644\u062A\u0639\u0627\u0642\u062F",
+  "\u0644\u0627\u0645\u0627\u0646\u0639 \u0637\u0628\u0642\u0627 \u0644\u0644\u062A\u0639\u0627\u0642\u062F",
+  "\u0644\u0627 \u0645\u0627\u0646\u0639 \u0645\u0646 \u0639\u0645\u0644 \u0627\u0644\u0639\u0645\u0644\u064A\u0647",
+  "\u0644\u0627\u0645\u0627\u0646\u0639 \u0645\u0646 \u0639\u0645\u0644 \u0627\u0644\u0639\u0645\u0644\u064A\u0647",
+  "\u0644\u0627 \u0645\u0627\u0646\u0639 \u0645\u0646 \u0639\u0645\u0644 \u0627\u0644\u0639\u0645\u0644\u064A\u0629",
+  "\u0644\u0627\u0645\u0627\u0646\u0639 \u0645\u0646 \u0639\u0645\u0644 \u0627\u0644\u0639\u0645\u0644\u064A\u0629",
+  "\u0644\u0627 \u0645\u0627\u0646\u0639 \u0645\u0646 \u0627\u062C\u0631\u0627\u0621",
+  "\u0644\u0627\u0645\u0627\u0646\u0639 \u0645\u0646 \u0627\u062C\u0631\u0627\u0621",
+  "\u0644\u0627 \u0645\u0627\u0646\u0639 \u0645\u0646 \u062A\u0642\u062F\u064A\u0645",
+  "\u0644\u0627\u0645\u0627\u0646\u0639 \u0645\u0646 \u062A\u0642\u062F\u064A\u0645",
+  "\u0644\u0627 \u0645\u0627\u0646\u0639 \u0648\u0641\u0642\u0627 \u0644\u0644\u0627\u0626\u062D\u0629",
+  "\u0644\u0627 \u0645\u0627\u0646\u0639 \u0648\u0641\u0642\u0627 \u0644\u0644\u0627\u0626\u062D\u0647",
+  "\u0644\u0627 \u0645\u0627\u0646\u0639 \u062D\u0633\u0628 \u0627\u0644\u062A\u0639\u0627\u0642\u062F",
+  "\u0644\u0627 \u0645\u0627\u0646\u0639 \u0628\u0623\u0633\u0639\u0627\u0631 \u0627\u0644\u062A\u0639\u0627\u0642\u062F",
+  "\u0644\u0627 \u0645\u0627\u0646\u0639 \u0628\u0627\u0633\u0639\u0627\u0631 \u0627\u0644\u062A\u0639\u0627\u0642\u062F",
+  // Attachments / Forwarded approvals
+  "\u0645\u0631\u0641\u0642 \u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0647",
+  "\u0645\u0631\u0641\u0642 \u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0629",
+  "\u0645\u0631\u0641\u0642 \u0627\u0644\u064A\u0643\u0645 \u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0647",
+  "\u0645\u0631\u0641\u0642 \u0627\u0644\u064A\u0643\u0645 \u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0629",
+  "\u0645\u0631\u0641\u0642 \u0625\u0644\u064A\u0643\u0645 \u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0629",
+  "\u0645\u0631\u0641\u0642 \u0625\u0644\u064A\u0643\u0645 \u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0647",
+  "\u0645\u0631\u0641\u0642 \u0644\u0633\u064A\u0627\u062F\u062A\u0643\u0645 \u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0629",
+  "\u0645\u0631\u0641\u0642 \u0644\u0633\u064A\u0627\u062F\u062A\u0643\u0645 \u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0647",
+  "\u0645\u0631\u0641\u0642 \u0637\u064A\u0647 \u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0629",
+  "\u0645\u0631\u0641\u0642 \u0637\u064A\u0647 \u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0647",
+  "\u0645\u0631\u0641\u0642 \u062A\u0642\u0631\u064A\u0631 \u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0629",
+  "\u0645\u0631\u0641\u0642 \u062A\u0642\u0631\u064A\u0631 \u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0647",
+  "\u0645\u0631\u0641\u0642 \u0635\u0648\u0631\u0629 \u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0629",
+  "\u0645\u0631\u0641\u0642 \u0635\u0648\u0631\u0647 \u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0647",
+  "\u0645\u0631\u0641\u0642 \u0635\u0648\u0631\u0647 \u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0629",
+  // Price & contractual terms
+  "\u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0629 \u0627\u0644\u0633\u0639\u0631\u064A\u0629 \u0637\u0631\u0641\u0649",
+  "\u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0647 \u0627\u0644\u0633\u0639\u0631\u064A\u0647 \u0637\u0631\u0641\u0649",
+  "\u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0629 \u0627\u0644\u0633\u0639\u0631\u064A\u0629 \u0637\u0631\u0641\u0646\u0627",
+  "\u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0647 \u0627\u0644\u0633\u0639\u0631\u064A\u0647 \u0637\u0631\u0641\u0646\u0627",
+  "\u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0629 \u0627\u0644\u0633\u0639\u0631\u064A\u0629",
+  "\u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0647 \u0627\u0644\u0633\u0639\u0631\u064A\u0647",
   "\u0645\u0648\u0627\u0641\u0642\u0629 \u0633\u0639\u0631\u064A\u0629",
   "\u0645\u0648\u0627\u0641\u0642\u0647 \u0633\u0639\u0631\u064A\u0647",
+  "\u062A\u0633\u0639\u064A\u0631\u0629 \u0633\u0639\u0631\u064A\u0629",
+  "\u062A\u0633\u0639\u064A\u0631\u0647 \u0633\u0639\u0631\u064A\u0647",
+  "\u062A\u0633\u0639\u064A\u0631\u0629",
+  "\u062A\u0633\u0639\u064A\u0631\u0647",
   "\u062A\u0645\u062A \u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0629",
   "\u062A\u0645\u062A \u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0647",
+  "\u062A\u0645\u062A \u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0629 \u0639\u0644\u0649",
+  "\u062A\u0645\u062A \u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0647 \u0639\u0644\u0649",
+  "\u062A\u0645\u062A \u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0629 \u0639\u0644\u064A",
+  "\u062A\u0645\u062A \u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0647 \u0639\u0644\u064A",
+  "\u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0629 \u0639\u0644\u0649",
+  "\u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0647 \u0639\u0644\u0649",
+  "\u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0629 \u0639\u0644\u064A",
+  "\u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0647 \u0639\u0644\u064A",
   "\u0645\u0648\u0627\u0641\u0642\u0629 \u0628\u0627\u0644\u0644\u0627\u0626\u062D\u0629",
   "\u0645\u0648\u0627\u0641\u0642\u0647 \u0628\u0627\u0644\u0644\u0627\u0626\u062D\u0647",
+  "\u0628\u0623\u0633\u0639\u0627\u0631 \u0627\u0644\u062A\u0639\u0627\u0642\u062F",
+  "\u0628\u0627\u0633\u0639\u0627\u0631 \u0627\u0644\u062A\u0639\u0627\u0642\u062F",
+  "\u0648\u0641\u0642\u0627 \u0644\u062A\u0639\u0644\u064A\u0645\u0627\u062A \u0627\u0644\u062A\u0634\u063A\u064A\u0644",
+  "\u0648\u0641\u0642\u0627\u064B \u0644\u062A\u0639\u0644\u064A\u0645\u0627\u062A \u0627\u0644\u062A\u0634\u063A\u064A\u0644",
+  "\u0637\u0628\u0642\u0627 \u0644\u0644\u062A\u0639\u0627\u0642\u062F",
+  "\u0637\u0628\u0642\u0627\u064B \u0644\u0644\u062A\u0639\u0627\u0642\u062F",
   "\u064A\u0636\u0627\u0641 \u0639\u0644\u064A \u0627\u0644\u0641\u0627\u062A\u0648\u0631\u0647",
   "\u064A\u0636\u0627\u0641 \u0639\u0644\u0649 \u0627\u0644\u0641\u0627\u062A\u0648\u0631\u0629",
   "\u0628\u0641\u0627\u062A\u0648\u0631\u0647 \u0627\u0644\u0634\u0631\u0627\u0621",
   "\u0628\u0641\u0627\u062A\u0648\u0631\u0629 \u0627\u0644\u0634\u0631\u0627\u0621",
+  "\u0645\u0639\u062A\u0645\u062F",
   "\u0645\u0648\u0627\u0641\u0642",
-  "\u062A\u0633\u0639\u064A\u0631\u0629 \u0633\u0639\u0631\u064A\u0629",
-  "\u062A\u0633\u0639\u064A\u0631\u0647 \u0633\u0639\u0631\u064A\u0647",
-  "\u062A\u0633\u0639\u064A\u0631\u0629",
-  "\u062A\u0633\u0639\u064A\u0631\u0647"
+  "\u0646\u062D\u064A\u0637\u0643\u0645 \u0639\u0644\u0645\u0627 \u0628\u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0629",
+  "\u0646\u062D\u064A\u0637\u0643\u0645 \u0639\u0644\u0645\u0627 \u0628\u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0647",
+  // English approval keywords
+  "approved",
+  "approve",
+  "approval granted",
+  "approval confirmed",
+  "kind regards"
 ];
 function decodeHtmlEntities(str) {
   if (!str) return "";
@@ -636,10 +704,78 @@ function cleanTextFromHtml(input) {
   if (!input) return "";
   return input.replace(/<style[^>]*>[\s\S]*?<\/style>/gi, "").replace(/<script[^>]*>[\s\S]*?<\/script>/gi, "").replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim();
 }
+function extractCleanReplyBody(html, text) {
+  if (html) {
+    let cleaned = html.replace(/<style[^>]*>[\s\S]*?<\/style>/gi, "").replace(/<script[^>]*>[\s\S]*?<\/script>/gi, "");
+    const separatorRegexes = [
+      /<hr[\s>]/i,
+      /<div[^>]*id=["\x27]?divRplyFwdMsg["\x27]?/i,
+      /<div[^>]*id=["\x27]?ms-outlook-mobile-body-separator-line["\x27]?/i,
+      /<div[^>]*class=["\x27]?gmail_quote["\x27]?/i,
+      /<div[^>]*class=["\x27]?gmail_attr["\x27]?/i,
+      /<blockquote[\s>]/i,
+      /-----Original Message-----/i,
+      /----- Original Message -----/i,
+      /<b[^>]*>From:<\/b>/i,
+      /<b[^>]*>Sent:<\/b>/i,
+      /From:\s*HIS\s*Notifications/i,
+      /From:\s*Approvals/i,
+      /<b>من:<\/b>/i,
+      /<b>أرسلت:<\/b>/i
+    ];
+    let earliestIdx = cleaned.length;
+    for (const r of separatorRegexes) {
+      const match = cleaned.search(r);
+      if (match !== -1 && match < earliestIdx) {
+        earliestIdx = match;
+      }
+    }
+    if (earliestIdx === cleaned.length) {
+      const isInitialRequest = /Patient\s+Information/i.test(cleaned) || /SELECTED\s+SERVICES/i.test(cleaned) || /Patient\s+Barcode/i.test(cleaned) || /Type:\s*Request/i.test(cleaned) || /Category:\s*Approval/i.test(cleaned) || /HIS\s*Notifications/i.test(cleaned);
+      if (isInitialRequest) {
+        return "";
+      }
+    }
+    const topHtml = cleaned.substring(0, earliestIdx);
+    const $ = cheerio.load(topHtml);
+    let reply = $("body").text().replace(/\s+/g, " ").trim();
+    if (!reply) {
+      reply = cleanTextFromHtml(topHtml);
+    }
+    reply = cleanTextFromHtml(reply);
+    reply = reply.replace(/Get Outlook for (?:iOS|Android)/gi, "").replace(/Sent from my (?:iPhone|iPad|Galaxy)/gi, "").replace(/تم الإرسال من (?:هاتفي|Outlook)/gi, "").trim();
+    if (/Patient\s+Information/i.test(reply) || /SELECTED\s+SERVICES/i.test(reply) || /Type:\s*Request/i.test(reply)) {
+      return "";
+    }
+    if (reply.length > 0) return reply;
+  }
+  const textSeparators = [
+    /-----Original Message-----/i,
+    /----- Original Message -----/i,
+    /From:\s*[^\n\r]+Sent:/i,
+    /On\s+.+wrote:/i,
+    /Get Outlook for/i,
+    /From:\s*HIS\s*Notifications/i,
+    /From:\s*Approvals/i
+  ];
+  let raw = text || "";
+  let cut = raw.length;
+  for (const sep of textSeparators) {
+    const match = raw.search(sep);
+    if (match !== -1 && match < cut) {
+      cut = match;
+    }
+  }
+  const candidate = cleanTextFromHtml(raw.substring(0, cut).trim());
+  if (/Patient\s+Information/i.test(candidate) || /SELECTED\s+SERVICES/i.test(candidate) || /Type:\s*Request/i.test(candidate)) {
+    return "";
+  }
+  return candidate;
+}
 function extractCreditLimit(text) {
   if (!text) return {};
   const normalized = text.normalize("NFKC").replace(/[\u200e\u200f\u202a-\u202e]/g, " ");
-  const pattern = /(?:الحد\s+ال[اأإآ]قص[ىي]|بحد\s+[اأإآ]قص[ىي]|سقف\s+الموافق[ةه]|بمبلغ\s+لا\s+يتجاوز|في\s+حدود|موافق[ةه](?:\s+سعري[ةه])?\s+بمبلغ|معتمد\s+بمبلغ|لا\s+مانع(?:[^\d\n\r]{0,30})بمبلغ|تحصيل\s+مبلغ|مبلغ\s+(?:ت[اأإآ]مين\s+)?)(?:[^\d\n\r]{0,25})(\d+(?:[\.,]\d+)?)\s*(الف|ألف|الاف|آلاف|k)?/i;
+  const pattern = /(?:الحد\s+ال[اأإآ]قص[ىي]|بحد\s+[اأإآ]قص[ىي]|سقف\s+الموافق[ةه]|بمبلغ\s+لا\s+يتجاوز|في\s+حدود|موافق[ةه](?:\s+سعري[ةه])?\s+بمبلغ|معتمد\s+بمبلغ|لا\s+مانع(?:[^\d\n\r]{0,30})بمبلغ|تحصيل\s+مبلغ|مبلغ\s+(?:ت[اأإآ]مين\s+)?|(?:maximum\s+)?limit(?:\s+of)?|approved\s+limit|ceiling)(?:[^\d\n\r]{0,25})(\d+(?:[\.,]\d+)?)\s*(الف|ألف|الاف|آلاف|k)?/i;
   const match = normalized.match(pattern);
   if (match) {
     let num = parseFloat(match[1].replace(/,/g, ""));
@@ -656,7 +792,42 @@ function extractCreditLimit(text) {
   }
   return {};
 }
-function detectRefusal(text, subject) {
+function extractCoPayment(text) {
+  if (!text) return {};
+  const normalized = text.normalize("NFKC").replace(/[\u200e\u200f\u202a-\u202e]/g, " ");
+  const pattern = /(?:co-?payment(?:\s+of)?|co-?pay|copay|patient\s+share|تحمل(?:\s+المريض)?|نسبة(?:\s+ال)?تحمل)(?:[^\d\n\r%]{0,25})(\d+(?:\.\d+)?)\s*(?:%|بالمائة|بالمائه|في\s+الم(?:ي|ائ)ة)?/i;
+  const match = normalized.match(pattern);
+  if (match) {
+    const val = parseFloat(match[1]);
+    if (!isNaN(val) && val > 0 && val <= 100) {
+      return {
+        percentage: val,
+        formatted: `${val}%`
+      };
+    }
+  }
+  const revMatch = normalized.match(/(\d+(?:\.\d+)?)\s*%\s*(?:co-?pay(?:ment)?|تحمل)/i);
+  if (revMatch) {
+    const val = parseFloat(revMatch[1]);
+    if (!isNaN(val) && val > 0 && val <= 100) {
+      return {
+        percentage: val,
+        formatted: `${val}%`
+      };
+    }
+  }
+  return {};
+}
+function detectRefusal(text, subject, cleanReply) {
+  if (cleanReply && cleanReply.trim().length > 0) {
+    const normReply = cleanReply.normalize("NFKC").toLowerCase().replace(/[إأآ]/g, "\u0627").replace(/ة/g, "\u0647");
+    for (const kw of REFUSAL_KEYWORDS) {
+      const kwNorm = kw.normalize("NFKC").toLowerCase().replace(/[إأآ]/g, "\u0627").replace(/ة/g, "\u0647");
+      if (normReply.includes(kwNorm)) {
+        return { hasRefusal: true, snippet: cleanReply.trim() };
+      }
+    }
+  }
   const normText = (text || "").normalize("NFKC");
   const normSubj = (subject || "").normalize("NFKC");
   const cleanBody = cleanTextFromHtml(normText);
@@ -668,7 +839,7 @@ function detectRefusal(text, subject) {
     const idx = normalized.indexOf(kwNorm);
     if (idx !== -1) {
       const start = Math.max(0, idx - 25);
-      const end = Math.min(combined.length, idx + kw.length + 80);
+      const end = Math.min(combined.length, idx + kw.length + 150);
       let snippet = stripSentFromSignatures(combined.substring(start, end)).trim();
       if (start > 0) snippet = "..." + snippet;
       if (end < combined.length) snippet = snippet + "...";
@@ -677,18 +848,65 @@ function detectRefusal(text, subject) {
   }
   return { hasRefusal: false, snippet: "" };
 }
-function detectExistingApproval(text, subject) {
-  const normText = (text || "").normalize("NFKC");
-  const normSubj = (subject || "").normalize("NFKC");
-  const refusalCheck = detectRefusal(normText, normSubj);
+function detectExistingApproval(text, subject, cleanReply) {
+  const refusalCheck = detectRefusal(text, subject, cleanReply);
   if (refusalCheck.hasRefusal) {
     return { hasApproval: false, snippet: "" };
   }
+  if (cleanReply && cleanReply.trim().length > 0) {
+    const normReply = cleanReply.normalize("NFKC").toLowerCase().replace(/[إأآ]/g, "\u0627").replace(/ة/g, "\u0647").replace(/(?<![\u0600-\u06FF])لا\s*مانع/g, "\u0644\u0627 \u0645\u0627\u0646\u0639");
+    const credit2 = extractCreditLimit(cleanReply) || extractCreditLimit(text);
+    const copay2 = extractCoPayment(cleanReply) || extractCoPayment(text);
+    if (!/خارج\s*(?:ال)?تعاقد/.test(normReply)) {
+      const attachedMatch = normReply.search(/مرفق\s+(?:اليكم|إليكم|لسيادتكم|طيه|تقرير\s+|صورة\s+|صوره\s+)?(?:ال)?موافق/);
+      if (attachedMatch !== -1) {
+        return {
+          hasApproval: true,
+          snippet: cleanReply.trim(),
+          creditLimit: credit2.limit,
+          creditLimitText: credit2.formatted,
+          patientSharePercentage: copay2.percentage
+        };
+      }
+      const approvalSearchText2 = normReply.replace(
+        /(?:الرجاء|رجاء|برجاء|نرجو|يرجي|يرجى|المطلوب|مطلوب|نطلب|طلب)\s+(?:من\s+سيادتكم\s+)?(?:ال)?موافق[ةه]?(?![\u0600-\u06FF])/g,
+        " "
+      ).replace(
+        /(?:يجب|سوف|سيتم|يتم|لاحضار|احضار|بإحضار|باحضار|عمل|اعمل|لعمل|برجاء\s+احضار)\s+(?:يتم\s+)?(?:احضار\s+)?(?:اصل\s+)?(?:ال)?موافق[ةه]?(?:\s+سعري[ةه])?(?![\u0600-\u06FF])/g,
+        " "
+      );
+      for (const kw of APPROVAL_KEYWORDS) {
+        const kwNorm = kw.normalize("NFKC").toLowerCase().replace(/[إأآ]/g, "\u0627").replace(/ة/g, "\u0647").replace(/(?<![\u0600-\u06FF])لا\s*مانع/g, "\u0644\u0627 \u0645\u0627\u0646\u0639");
+        const idx = kwNorm === "\u0645\u0648\u0627\u0641\u0642" ? approvalSearchText2.search(/(?<![\u0600-\u06FF])موافق(?![\u0600-\u06FF])/) : approvalSearchText2.indexOf(kwNorm);
+        if (idx !== -1) {
+          return {
+            hasApproval: true,
+            snippet: cleanReply.trim(),
+            creditLimit: credit2.limit,
+            creditLimitText: credit2.formatted,
+            patientSharePercentage: copay2.percentage
+          };
+        }
+      }
+      if (credit2.limit) {
+        return {
+          hasApproval: true,
+          snippet: cleanReply.trim(),
+          creditLimit: credit2.limit,
+          creditLimitText: credit2.formatted,
+          patientSharePercentage: copay2.percentage
+        };
+      }
+    }
+  }
+  const normText = (text || "").normalize("NFKC");
+  const normSubj = (subject || "").normalize("NFKC");
   const cleanBody = cleanTextFromHtml(normText);
   const cleanSubj = cleanTextFromHtml(normSubj);
   const combined = `${cleanSubj} ${cleanBody}`.trim();
-  const normalized = combined.toLowerCase().replace(/[إأآ]/g, "\u0627").replace(/ة/g, "\u0647");
+  const normalized = combined.toLowerCase().replace(/[إأآ]/g, "\u0627").replace(/ة/g, "\u0647").replace(/(?<![\u0600-\u06FF])لا\s*مانع/g, "\u0644\u0627 \u0645\u0627\u0646\u0639");
   const credit = extractCreditLimit(combined);
+  const copay = extractCoPayment(combined);
   if (/خارج\s*(?:ال)?تعاقد/.test(normalized)) {
     return { hasApproval: false, snippet: "" };
   }
@@ -699,20 +917,26 @@ function detectExistingApproval(text, subject) {
     /(?:يجب|سوف|سيتم|يتم|لاحضار|احضار|بإحضار|باحضار|عمل|اعمل|لعمل|برجاء\s+احضار)\s+(?:يتم\s+)?(?:احضار\s+)?(?:اصل\s+)?(?:ال)?موافق[ةه]?(?:\s+سعري[ةه])?(?![\u0600-\u06FF])/g,
     " "
   );
-  const attachedIdx = approvalSearchText.search(/مرفق\s+(?:تقرير\s+)?(?:ال)?موافق/);
+  const attachedIdx = approvalSearchText.search(/مرفق\s+(?:اليكم|إليكم|لسيادتكم|طيه|تقرير\s+|صورة\s+|صوره\s+)?(?:ال)?موافق/);
   if (attachedIdx !== -1) {
     const start = Math.max(0, attachedIdx - 25);
-    const end = Math.min(combined.length, attachedIdx + 80);
+    const end = Math.min(combined.length, attachedIdx + 120);
     let snippet = stripSentFromSignatures(combined.substring(start, end)).trim();
     if (start > 0) snippet = "..." + snippet;
-    return { hasApproval: true, snippet, creditLimit: credit.limit, creditLimitText: credit.formatted };
+    return {
+      hasApproval: true,
+      snippet,
+      creditLimit: credit.limit,
+      creditLimitText: credit.formatted,
+      patientSharePercentage: copay.percentage
+    };
   }
   for (const kw of APPROVAL_KEYWORDS) {
-    const kwNorm = kw.normalize("NFKC").toLowerCase().replace(/[إأآ]/g, "\u0627").replace(/ة/g, "\u0647");
+    const kwNorm = kw.normalize("NFKC").toLowerCase().replace(/[إأآ]/g, "\u0627").replace(/ة/g, "\u0647").replace(/(?<![\u0600-\u06FF])لا\s*مانع/g, "\u0644\u0627 \u0645\u0627\u0646\u0639");
     const idx = kwNorm === "\u0645\u0648\u0627\u0641\u0642" ? approvalSearchText.search(/(?<![\u0600-\u06FF])موافق(?![\u0600-\u06FF])/) : approvalSearchText.indexOf(kwNorm);
     if (idx !== -1) {
       const start = Math.max(0, idx - 25);
-      const end = Math.min(combined.length, idx + kw.length + 80);
+      const end = Math.min(combined.length, idx + kw.length + 150);
       let snippet = stripSentFromSignatures(combined.substring(start, end)).trim();
       if (start > 0) snippet = "..." + snippet;
       if (end < combined.length) snippet = snippet + "...";
@@ -720,16 +944,18 @@ function detectExistingApproval(text, subject) {
         hasApproval: true,
         snippet,
         creditLimit: credit.limit,
-        creditLimitText: credit.formatted
+        creditLimitText: credit.formatted,
+        patientSharePercentage: copay.percentage
       };
     }
   }
   if (credit.limit && approvalSearchText === normalized) {
     return {
       hasApproval: true,
-      snippet: stripSentFromSignatures(combined.substring(0, 120)).trim(),
+      snippet: stripSentFromSignatures(combined.substring(0, 150)).trim(),
       creditLimit: credit.limit,
-      creditLimitText: credit.formatted
+      creditLimitText: credit.formatted,
+      patientSharePercentage: copay.percentage
     };
   }
   return { hasApproval: false, snippet: "" };
@@ -740,14 +966,20 @@ function detectReplies(parsed) {
   const hasInReplyTo = Boolean(parsed.inReplyTo);
   const hasReferences = Array.isArray(parsed.references) ? parsed.references.length > 0 : Boolean(parsed.references);
   const rawContent = (parsed.text || "") + "\n" + (parsed.html || "");
-  const hasQuotedMarkers = /-----Original Message-----/i.test(rawContent) || /From:.*Sent:.*To:/is.test(rawContent) || /On\s+.+wrote:/i.test(rawContent) || /بتاريخ\s+.+كتب/i.test(rawContent);
-  if (isReSubject || hasInReplyTo || hasReferences || hasQuotedMarkers) {
+  const hasQuotedMarkers = /-----Original Message-----/i.test(rawContent) || /From:.*Sent:.*To:/is.test(rawContent) || /On\s+.+wrote:/i.test(rawContent) || /بتاريخ\s+.+كتب/i.test(rawContent) || /id=["\x27]?divRplyFwdMsg["\x27]?/i.test(rawContent) || /id=["\x27]?ms-outlook-mobile-body-separator-line["\x27]?/i.test(rawContent);
+  if (isReSubject || hasInReplyTo || hasReferences || hasQuotedMarkers || parsed.cleanReply && parsed.cleanReply.length > 0) {
+    if (parsed.cleanReply && parsed.cleanReply.length > 0) {
+      return {
+        hasReplies: true,
+        snippet: parsed.cleanReply
+      };
+    }
     let replySnippet = "";
     const cleanContent = cleanTextFromHtml(parsed.text || (parsed.html ? parsed.html : ""));
     const sentences = cleanContent.split(/[.\n\r]+/).map((s) => s.trim()).filter((s) => s.length > 4);
     for (const s of sentences) {
       if (!s.toLowerCase().includes("inpatient approval") && !s.toLowerCase().includes("patient information") && !s.toLowerCase().includes("selected services") && !s.toLowerCase().includes("from:") && !s.toLowerCase().includes("to:") && !s.toLowerCase().includes("sent:") && !s.toLowerCase().includes("subject:")) {
-        replySnippet = stripSentFromSignatures(s).substring(0, 120);
+        replySnippet = stripSentFromSignatures(s);
         if (replySnippet.length > 4) break;
       }
     }
@@ -889,14 +1121,18 @@ function parseHisApprovalEmail(msg) {
       });
     }
   }
-  const refusal = detectRefusal(fullText, msg.subject);
-  const approval = detectExistingApproval(fullText, msg.subject);
-  const replies = detectReplies({
+  const cleanReply = extractCleanReplyBody(msg.htmlBody, msg.textBody);
+  const isReply = /^(re|رد|fw|fwd)\s*:/i.test(msg.subject) || Boolean(msg.inReplyTo) || cleanReply.length > 0;
+  const refusal = isReply ? detectRefusal(fullText, msg.subject, cleanReply) : { hasRefusal: false, snippet: "" };
+  const approval = isReply ? detectExistingApproval(fullText, msg.subject, cleanReply) : { hasApproval: false, snippet: "" };
+  const replies = isReply ? detectReplies({
     subject: msg.subject,
     text: msg.textBody,
-    html: msg.htmlBody
-  });
-  const credit = extractCreditLimit(fullText);
+    html: msg.htmlBody,
+    cleanReply
+  }) : { hasReplies: false, snippet: "" };
+  const credit = isReply ? (cleanReply ? extractCreditLimit(cleanReply) : null) || extractCreditLimit(fullText) || {} : {};
+  const copay = isReply ? (cleanReply ? extractCoPayment(cleanReply) : null) || extractCoPayment(fullText) || {} : {};
   return {
     patientName: patientName || "\u063A\u064A\u0631 \u0645\u0633\u062C\u0644",
     mrn: mrn || "000000",
@@ -910,13 +1146,15 @@ function parseHisApprovalEmail(msg) {
     requestedServices,
     financialTerms: {
       approvedAmountLimit: credit.limit || null,
-      patientSharePercentage: null,
-      coverageConditions: approval.snippet || void 0
+      patientSharePercentage: copay.percentage || null,
+      coverageConditions: approval.snippet || cleanReply || void 0
     },
-    hasReplies: replies.hasReplies,
-    hasExistingApproval: approval.hasApproval,
-    isRefused: refusal.hasRefusal,
-    statusReasonArabic: refusal.hasRefusal ? refusal.snippet : approval.hasApproval ? approval.snippet : void 0,
+    hasReplies: isReply,
+    hasExistingApproval: isReply && approval.hasApproval,
+    isRefused: isReply && refusal.hasRefusal,
+    statusReasonArabic: isReply ? refusal.hasRefusal ? refusal.snippet : approval.hasApproval ? approval.snippet : cleanReply || void 0 : void 0,
+    cleanReplyBody: isReply && cleanReply ? cleanReply : void 0,
+    isReplyMessage: isReply,
     attachments: msg.attachments || [],
     rawBody: msg.htmlBody || msg.textBody || ""
   };
@@ -1135,14 +1373,30 @@ async function persistApprovalToPostgres(record) {
   if (!client2) {
     return { success: false, error: "Supabase client is not configured." };
   }
+  const convKey = record.conversationId;
   const deliveryKey = record.messageId || record.exchangeItemId;
-  const rawSeed = deliveryKey || record.conversationId || record.id || record.mrn;
+  const rawSeed = convKey || deliveryKey || record.id || record.mrn;
   let uuid = toDeterministicUuid(rawSeed);
-  if (deliveryKey) {
+  let receivedIso = record.receivedAt && record.receivedAt.toDate ? record.receivedAt.toDate().toISOString() : typeof record.receivedAt === "string" ? record.receivedAt : (/* @__PURE__ */ new Date()).toISOString();
+  if (convKey) {
     try {
-      const { data: existing } = await client2.from("inpatient_approvals").select("id").eq("exchange_message_id", deliveryKey).maybeSingle();
+      const { data: existing } = await client2.from("inpatient_approvals").select("id, received_at").eq("conversation_id", convKey).maybeSingle();
       if (existing?.id) {
         uuid = existing.id;
+        if (existing.received_at && new Date(existing.received_at) < new Date(receivedIso)) {
+          receivedIso = existing.received_at;
+        }
+      }
+    } catch {
+    }
+  } else if (deliveryKey) {
+    try {
+      const { data: existing } = await client2.from("inpatient_approvals").select("id, received_at").eq("exchange_message_id", deliveryKey).maybeSingle();
+      if (existing?.id) {
+        uuid = existing.id;
+        if (existing.received_at && new Date(existing.received_at) < new Date(receivedIso)) {
+          receivedIso = existing.received_at;
+        }
       }
     } catch {
     }
@@ -1151,7 +1405,6 @@ async function persistApprovalToPostgres(record) {
     `${record.conversationId || ""}|${record.messageId || ""}|${record.mrn || ""}|${record.receivedAt || ""}|${record.diagnosis || ""}`
   ).digest("hex");
   const mrnHash = crypto2.createHash("sha256").update(`salt_elite_approvals_${record.mrn || ""}`).digest("hex");
-  const receivedIso = record.receivedAt && record.receivedAt.toDate ? record.receivedAt.toDate().toISOString() : typeof record.receivedAt === "string" ? record.receivedAt : (/* @__PURE__ */ new Date()).toISOString();
   const allowedStatuses = ["received", "parsed", "matched", "needs_review", "draft_created", "answered", "refused"];
   const dbStatus = allowedStatuses.includes(record.status || "") ? record.status : "received";
   const payload = {
@@ -1180,7 +1433,7 @@ async function persistApprovalToPostgres(record) {
       coverageConditions: record.coverageConditions ?? ""
     },
     status: dbStatus,
-    status_reason_arabic: record.statusReasonArabic || null,
+    status_reason_arabic: record.statusReasonArabic ? record.statusReasonArabic.replace(/<style[^>]*>[\s\S]*?<\/style>/gi, "").replace(/<script[^>]*>[\s\S]*?<\/script>/gi, "").replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim() : null,
     state_timestamps: {
       received_at: receivedIso,
       updated_at: (/* @__PURE__ */ new Date()).toISOString(),
@@ -1561,6 +1814,19 @@ ${unmatchedLines}]`;
 
 // src/mail/syncEngine.ts
 var client3 = supabaseAdmin || supabase;
+async function getExistingApprovalByConversation(conversationId) {
+  if (!client3 || !conversationId) return null;
+  try {
+    const { data, error } = await client3.from("inpatient_approvals").select("*").eq("conversation_id", conversationId).maybeSingle();
+    if (error) {
+      console.warn(`[Sync Engine] Error checking conversation existence:`, error.message);
+      return null;
+    }
+    return data;
+  } catch {
+    return null;
+  }
+}
 async function isMessageAlreadyIngested(messageId) {
   if (!client3) return false;
   try {
@@ -1650,16 +1916,112 @@ async function runMailSync(options) {
     stats.nextCursorToken = nextCursor.token;
     console.log(`[Sync Engine] \u{1F4E8} Retrieved ${messages.length} messages from Exchange.`);
     for (const msg of messages) {
+      const convId = msg.conversationId || msg.messageId;
+      const existing = await getExistingApprovalByConversation(convId);
+      const parsed = parseHisApprovalEmail(msg);
+      if (existing) {
+        const earliestReceivedAt = new Date(msg.receivedAt) < new Date(existing.received_at) ? msg.receivedAt : existing.received_at;
+        let updatedStatus = existing.status;
+        let hasApproval = existing.has_existing_approval || parsed.hasExistingApproval;
+        let isRefused = existing.is_refused || parsed.isRefused;
+        if (parsed.isRefused) {
+          updatedStatus = "refused";
+          isRefused = true;
+        } else if (parsed.hasExistingApproval) {
+          updatedStatus = "answered";
+          hasApproval = true;
+        }
+        const updatedApprovedLimit = parsed.financialTerms?.approvedAmountLimit && parsed.financialTerms.approvedAmountLimit > 0 ? parsed.financialTerms.approvedAmountLimit : existing.financial_terms?.approvedAmountLimit && existing.financial_terms.approvedAmountLimit > 0 ? existing.financial_terms.approvedAmountLimit : -1;
+        const updatedCreditLimitText = updatedApprovedLimit > 0 ? `${updatedApprovedLimit.toLocaleString()} EGP` : existing.financial_terms?.creditLimitText || null;
+        let updatedReplyText = parsed.cleanReplyBody || parsed.statusReasonArabic || (existing.status_reason_arabic && !existing.status_reason_arabic.includes("<div") && !existing.status_reason_arabic.includes("<html>") ? existing.status_reason_arabic : "") || existing.financial_terms?.coverageConditions || "";
+        if (updatedReplyText.includes("<") && updatedReplyText.includes(">")) {
+          updatedReplyText = extractCleanReplyBody(updatedReplyText) || cleanTextFromHtml(updatedReplyText);
+        }
+        const updatedFinancialTerms = {
+          patientSharePercentage: parsed.financialTerms?.patientSharePercentage ?? existing.financial_terms?.patientSharePercentage ?? -1,
+          approvedAmountLimit: updatedApprovedLimit,
+          creditLimitText: updatedCreditLimitText,
+          coverageConditions: updatedReplyText
+        };
+        const patientName = existing.patient_name && existing.patient_name !== "\u063A\u064A\u0631 \u0645\u0633\u062C\u0644" ? existing.patient_name : parsed.patientName;
+        const mrn = existing.mrn && existing.mrn !== "000000" ? existing.mrn : parsed.mrn;
+        const bed = existing.bed || parsed.bed;
+        const admissionType = existing.admission_type || parsed.admissionType;
+        const physician = existing.physician || parsed.physician;
+        const contractorRaw = existing.contractor_raw || parsed.contractorRaw;
+        const contractorNormalized2 = existing.contractor_normalized || parsed.contractorNormalized;
+        const contractorOfficer2 = existing.contractor_officer || resolveOfficerByContractor(contractorRaw).officerName;
+        const priceListYear2 = existing.price_list_year || "2025";
+        const diagnosis = existing.diagnosis && existing.diagnosis !== "Clinical Inpatient Evaluation" ? existing.diagnosis : parsed.diagnosis;
+        const requestedServices = existing.requested_services?.length > 0 ? existing.requested_services : parsed.requestedServices;
+        const matchedProcedures2 = existing.matched_procedures?.length > 0 ? existing.matched_procedures : matchServicesAgainstPricelist(requestedServices, priceListYear2);
+        const cmWhatsappMessage2 = generateCmWhatsappMessage({
+          patientName,
+          bed: bed || "",
+          contractorNormalized: contractorNormalized2,
+          contractorRaw,
+          requestedServices,
+          matchedProcedures: matchedProcedures2,
+          diagnosis,
+          status: updatedStatus,
+          hasExistingApproval: hasApproval,
+          isRefused,
+          approvedAmountLimit: updatedApprovedLimit > 0 ? updatedApprovedLimit : void 0,
+          patientSharePercentage: updatedFinancialTerms.patientSharePercentage > 0 ? updatedFinancialTerms.patientSharePercentage : void 0,
+          coverageConditions: updatedReplyText
+        });
+        const draftBody2 = buildDraftReplyText(
+          priceListYear2,
+          contractorNormalized2,
+          contractorOfficer2,
+          matchedProcedures2
+        );
+        const latestReplyAt = new Date(msg.receivedAt) > new Date(existing.state_timestamps?.latest_reply_at || existing.received_at) ? msg.receivedAt : existing.state_timestamps?.latest_reply_at;
+        const { error: updateError } = await client3.from("inpatient_approvals").update({
+          received_at: earliestReceivedAt,
+          patient_name: patientName,
+          mrn,
+          bed,
+          admission_type: admissionType,
+          physician,
+          contractor_raw: contractorRaw,
+          contractor_normalized: contractorNormalized2,
+          contractor_officer: contractorOfficer2,
+          diagnosis,
+          requested_services: requestedServices,
+          matched_procedures: matchedProcedures2,
+          status: updatedStatus,
+          has_replies: true,
+          has_existing_approval: hasApproval,
+          is_refused: isRefused,
+          financial_terms: updatedFinancialTerms,
+          status_reason_arabic: updatedReplyText,
+          cm_whatsapp_message: cmWhatsappMessage2,
+          suggested_draft_reply: draftBody2,
+          state_timestamps: {
+            ...existing.state_timestamps,
+            received_at: earliestReceivedAt,
+            latest_reply_at: latestReplyAt,
+            updated_at: (/* @__PURE__ */ new Date()).toISOString()
+          },
+          updated_at: (/* @__PURE__ */ new Date()).toISOString()
+        }).eq("id", existing.id);
+        if (updateError) {
+          console.error(`[Sync Engine] Failed to update approval ${existing.id}:`, updateError.message);
+        } else {
+          stats.messagesProcessed++;
+        }
+        continue;
+      }
       const alreadyIngested = await isMessageAlreadyIngested(msg.messageId);
       if (alreadyIngested) {
         stats.messagesSkipped++;
         continue;
       }
-      const parsed = parseHisApprovalEmail(msg);
       const officerMatch = resolveOfficerByContractor(parsed.contractorRaw);
       const contractorNormalized = officerMatch.contractorNormalized || cleanContractorName(parsed.contractorRaw);
       const contractorOfficer = officerMatch.officerName || "\u063A\u064A\u0631 \u0645\u062D\u062F\u062F (\u064A\u062A\u0637\u0644\u0628 \u062A\u062D\u062F\u064A\u062F \u0645\u0646\u0633\u0642 \u0627\u0644\u0633\u064A\u0644\u0632)";
-      const priceListYear = officerMatch.matched ? "2025" : "2025";
+      const priceListYear = "2025";
       const matchedProcedures = matchServicesAgainstPricelist(parsed.requestedServices, priceListYear);
       let initialStatus = "received";
       if (parsed.isRefused) {
@@ -1703,13 +2065,15 @@ async function runMailSync(options) {
         isRefused: parsed.isRefused,
         approvedAmountLimit: parsed.financialTerms?.approvedAmountLimit,
         patientSharePercentage: parsed.financialTerms?.patientSharePercentage,
-        coverageConditions: parsed.financialTerms?.coverageConditions
+        coverageConditions: parsed.financialTerms?.coverageConditions || parsed.cleanReplyBody
       });
+      const deterministicId = toDeterministicUuid(convId);
       const record = {
-        id: msg.id,
-        conversationId: msg.conversationId || msg.messageId,
+        id: deterministicId,
+        conversationId: convId,
         messageId: msg.messageId,
         receivedAt: msg.receivedAt,
+        // Timing of the approval mail itself!
         patientName: parsed.patientName,
         mrn: parsed.mrn,
         bed: parsed.bed,
@@ -1723,7 +2087,7 @@ async function runMailSync(options) {
         requestedServices: parsed.requestedServices,
         matchedProcedures,
         status: initialStatus,
-        statusReasonArabic: parsed.statusReasonArabic,
+        statusReasonArabic: parsed.isReplyMessage ? parsed.statusReasonArabic || parsed.cleanReplyBody : void 0,
         draftBody,
         suggestedDraftReply: draftBody,
         cmWhatsappMessage,
@@ -1733,7 +2097,7 @@ async function runMailSync(options) {
         isRefused: parsed.isRefused,
         approvedAmountLimit: parsed.financialTerms?.approvedAmountLimit,
         patientSharePercentage: parsed.financialTerms?.patientSharePercentage,
-        coverageConditions: parsed.financialTerms?.coverageConditions
+        coverageConditions: parsed.financialTerms?.coverageConditions || parsed.cleanReplyBody
       };
       const persistRes = await persistApprovalToPostgres(record);
       if (persistRes.success) {

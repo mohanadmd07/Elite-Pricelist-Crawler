@@ -26,25 +26,92 @@ export const REFUSAL_KEYWORDS = [
 ];
 
 export const APPROVAL_KEYWORDS = [
+  // Direct Arabic approvals
   'لا مانع',
-  'approved',
-  'approve',
-  'معتمد',
+  'لامانع',
+  'لا مانع من الدخول',
+  'لامانع من الدخول',
+  'لا مانع من عمل اللازم',
+  'لامانع من عمل اللازم',
+  'لا مانع طبقا للتعاقد',
+  'لامانع طبقا للتعاقد',
+  'لا مانع من عمل العمليه',
+  'لامانع من عمل العمليه',
+  'لا مانع من عمل العملية',
+  'لامانع من عمل العملية',
+  'لا مانع من اجراء',
+  'لامانع من اجراء',
+  'لا مانع من تقديم',
+  'لامانع من تقديم',
+  'لا مانع وفقا للائحة',
+  'لا مانع وفقا للائحه',
+  'لا مانع حسب التعاقد',
+  'لا مانع بأسعار التعاقد',
+  'لا مانع باسعار التعاقد',
+
+  // Attachments / Forwarded approvals
+  'مرفق الموافقه',
+  'مرفق الموافقة',
+  'مرفق اليكم الموافقه',
+  'مرفق اليكم الموافقة',
+  'مرفق إليكم الموافقة',
+  'مرفق إليكم الموافقه',
+  'مرفق لسيادتكم الموافقة',
+  'مرفق لسيادتكم الموافقه',
+  'مرفق طيه الموافقة',
+  'مرفق طيه الموافقه',
+  'مرفق تقرير الموافقة',
+  'مرفق تقرير الموافقه',
+  'مرفق صورة الموافقة',
+  'مرفق صوره الموافقه',
+  'مرفق صوره الموافقة',
+
+  // Price & contractual terms
+  'الموافقة السعرية طرفى',
+  'الموافقه السعريه طرفى',
+  'الموافقة السعرية طرفنا',
+  'الموافقه السعريه طرفنا',
+  'الموافقة السعرية',
+  'الموافقه السعريه',
   'موافقة سعرية',
   'موافقه سعريه',
-  'تمت الموافقة',
-  'تمت الموافقه',
-  'موافقة باللائحة',
-  'موافقه باللائحه',
-  'يضاف علي الفاتوره',
-  'يضاف على الفاتورة',
-  'بفاتوره الشراء',
-  'بفاتورة الشراء',
-  'موافق',
   'تسعيرة سعرية',
   'تسعيره سعريه',
   'تسعيرة',
   'تسعيره',
+  'تمت الموافقة',
+  'تمت الموافقه',
+  'تمت الموافقة على',
+  'تمت الموافقه على',
+  'تمت الموافقة علي',
+  'تمت الموافقه علي',
+  'الموافقة على',
+  'الموافقه على',
+  'الموافقة علي',
+  'الموافقه علي',
+  'موافقة باللائحة',
+  'موافقه باللائحه',
+  'بأسعار التعاقد',
+  'باسعار التعاقد',
+  'وفقا لتعليمات التشغيل',
+  'وفقاً لتعليمات التشغيل',
+  'طبقا للتعاقد',
+  'طبقاً للتعاقد',
+  'يضاف علي الفاتوره',
+  'يضاف على الفاتورة',
+  'بفاتوره الشراء',
+  'بفاتورة الشراء',
+  'معتمد',
+  'موافق',
+  'نحيطكم علما بالموافقة',
+  'نحيطكم علما بالموافقه',
+
+  // English approval keywords
+  'approved',
+  'approve',
+  'approval granted',
+  'approval confirmed',
+  'kind regards',
 ];
 
 export function decodeHtmlEntities(str: string): string {
@@ -70,12 +137,116 @@ export function cleanTextFromHtml(input: string): string {
     .trim();
 }
 
+/**
+ * Extracts the clean reply body from an email, slicing off quoted replies,
+ * Outlook header dividers, hr lines, and mobile signatures.
+ */
+export function extractCleanReplyBody(html?: string, text?: string): string {
+  if (html) {
+    let cleaned = html
+      .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
+      .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
+
+    const separatorRegexes = [
+      /<hr[\s>]/i,
+      /<div[^>]*id=["\x27]?divRplyFwdMsg["\x27]?/i,
+      /<div[^>]*id=["\x27]?ms-outlook-mobile-body-separator-line["\x27]?/i,
+      /<div[^>]*class=["\x27]?gmail_quote["\x27]?/i,
+      /<div[^>]*class=["\x27]?gmail_attr["\x27]?/i,
+      /<blockquote[\s>]/i,
+      /-----Original Message-----/i,
+      /----- Original Message -----/i,
+      /<b[^>]*>From:<\/b>/i,
+      /<b[^>]*>Sent:<\/b>/i,
+      /From:\s*HIS\s*Notifications/i,
+      /From:\s*Approvals/i,
+      /<b>من:<\/b>/i,
+      /<b>أرسلت:<\/b>/i,
+    ];
+
+    let earliestIdx = cleaned.length;
+    for (const r of separatorRegexes) {
+      const match = cleaned.search(r);
+      if (match !== -1 && match < earliestIdx) {
+        earliestIdx = match;
+      }
+    }
+
+    // If no separator matched, check if this is an original approval request email
+    if (earliestIdx === cleaned.length) {
+      const isInitialRequest =
+        /Patient\s+Information/i.test(cleaned) ||
+        /SELECTED\s+SERVICES/i.test(cleaned) ||
+        /Patient\s+Barcode/i.test(cleaned) ||
+        /Type:\s*Request/i.test(cleaned) ||
+        /Category:\s*Approval/i.test(cleaned) ||
+        /HIS\s*Notifications/i.test(cleaned);
+      if (isInitialRequest) {
+        return '';
+      }
+    }
+
+    const topHtml = cleaned.substring(0, earliestIdx);
+    const $ = cheerio.load(topHtml);
+    let reply = $('body').text().replace(/\s+/g, ' ').trim();
+    if (!reply) {
+      reply = cleanTextFromHtml(topHtml);
+    }
+    reply = cleanTextFromHtml(reply);
+    reply = reply
+      .replace(/Get Outlook for (?:iOS|Android)/gi, '')
+      .replace(/Sent from my (?:iPhone|iPad|Galaxy)/gi, '')
+      .replace(/تم الإرسال من (?:هاتفي|Outlook)/gi, '')
+      .trim();
+
+    // Verify reply doesn't contain approval form boilerplate
+    if (
+      /Patient\s+Information/i.test(reply) ||
+      /SELECTED\s+SERVICES/i.test(reply) ||
+      /Type:\s*Request/i.test(reply)
+    ) {
+      return '';
+    }
+
+    if (reply.length > 0) return reply;
+  }
+
+  // Fallback to plain text
+  const textSeparators = [
+    /-----Original Message-----/i,
+    /----- Original Message -----/i,
+    /From:\s*[^\n\r]+Sent:/i,
+    /On\s+.+wrote:/i,
+    /Get Outlook for/i,
+    /From:\s*HIS\s*Notifications/i,
+    /From:\s*Approvals/i,
+  ];
+
+  let raw = text || '';
+  let cut = raw.length;
+  for (const sep of textSeparators) {
+    const match = raw.search(sep);
+    if (match !== -1 && match < cut) {
+      cut = match;
+    }
+  }
+  const candidate = cleanTextFromHtml(raw.substring(0, cut).trim());
+  if (
+    /Patient\s+Information/i.test(candidate) ||
+    /SELECTED\s+SERVICES/i.test(candidate) ||
+    /Type:\s*Request/i.test(candidate)
+  ) {
+    return '';
+  }
+  return candidate;
+}
+
 export function extractCreditLimit(text: string): { limit?: number; formatted?: string } {
   if (!text) return {};
   const normalized = text.normalize('NFKC').replace(/[\u200e\u200f\u202a-\u202e]/g, ' ');
 
   const pattern =
-    /(?:الحد\s+ال[اأإآ]قص[ىي]|بحد\s+[اأإآ]قص[ىي]|سقف\s+الموافق[ةه]|بمبلغ\s+لا\s+يتجاوز|في\s+حدود|موافق[ةه](?:\s+سعري[ةه])?\s+بمبلغ|معتمد\s+بمبلغ|لا\s+مانع(?:[^\d\n\r]{0,30})بمبلغ|تحصيل\s+مبلغ|مبلغ\s+(?:ت[اأإآ]مين\s+)?)(?:[^\d\n\r]{0,25})(\d+(?:[\.,]\d+)?)\s*(الف|ألف|الاف|آلاف|k)?/i;
+    /(?:الحد\s+ال[اأإآ]قص[ىي]|بحد\s+[اأإآ]قص[ىي]|سقف\s+الموافق[ةه]|بمبلغ\s+لا\s+يتجاوز|في\s+حدود|موافق[ةه](?:\s+سعري[ةه])?\s+بمبلغ|معتمد\s+بمبلغ|لا\s+مانع(?:[^\d\n\r]{0,30})بمبلغ|تحصيل\s+مبلغ|مبلغ\s+(?:ت[اأإآ]مين\s+)?|(?:maximum\s+)?limit(?:\s+of)?|approved\s+limit|ceiling)(?:[^\d\n\r]{0,25})(\d+(?:[\.,]\d+)?)\s*(الف|ألف|الاف|آلاف|k)?/i;
   const match = normalized.match(pattern);
   if (match) {
     let num = parseFloat(match[1].replace(/,/g, ''));
@@ -94,7 +265,49 @@ export function extractCreditLimit(text: string): { limit?: number; formatted?: 
   return {};
 }
 
-export function detectRefusal(text: string, subject: string): { hasRefusal: boolean; snippet: string } {
+export function extractCoPayment(text: string): { percentage?: number; formatted?: string } {
+  if (!text) return {};
+  const normalized = text.normalize('NFKC').replace(/[\u200e\u200f\u202a-\u202e]/g, ' ');
+
+  const pattern =
+    /(?:co-?payment(?:\s+of)?|co-?pay|copay|patient\s+share|تحمل(?:\s+المريض)?|نسبة(?:\s+ال)?تحمل)(?:[^\d\n\r%]{0,25})(\d+(?:\.\d+)?)\s*(?:%|بالمائة|بالمائه|في\s+الم(?:ي|ائ)ة)?/i;
+  const match = normalized.match(pattern);
+  if (match) {
+    const val = parseFloat(match[1]);
+    if (!isNaN(val) && val > 0 && val <= 100) {
+      return {
+        percentage: val,
+        formatted: `${val}%`,
+      };
+    }
+  }
+
+  const revMatch = normalized.match(/(\d+(?:\.\d+)?)\s*%\s*(?:co-?pay(?:ment)?|تحمل)/i);
+  if (revMatch) {
+    const val = parseFloat(revMatch[1]);
+    if (!isNaN(val) && val > 0 && val <= 100) {
+      return {
+        percentage: val,
+        formatted: `${val}%`,
+      };
+    }
+  }
+
+  return {};
+}
+
+export function detectRefusal(text: string, subject: string, cleanReply?: string): { hasRefusal: boolean; snippet: string } {
+  // If cleanReply exists, prioritize checking it directly
+  if (cleanReply && cleanReply.trim().length > 0) {
+    const normReply = cleanReply.normalize('NFKC').toLowerCase().replace(/[إأآ]/g, 'ا').replace(/ة/g, 'ه');
+    for (const kw of REFUSAL_KEYWORDS) {
+      const kwNorm = kw.normalize('NFKC').toLowerCase().replace(/[إأآ]/g, 'ا').replace(/ة/g, 'ه');
+      if (normReply.includes(kwNorm)) {
+        return { hasRefusal: true, snippet: cleanReply.trim() };
+      }
+    }
+  }
+
   const normText = (text || '').normalize('NFKC');
   const normSubj = (subject || '').normalize('NFKC');
   const cleanBody = cleanTextFromHtml(normText);
@@ -115,7 +328,7 @@ export function detectRefusal(text: string, subject: string): { hasRefusal: bool
     const idx = normalized.indexOf(kwNorm);
     if (idx !== -1) {
       const start = Math.max(0, idx - 25);
-      const end = Math.min(combined.length, idx + kw.length + 80);
+      const end = Math.min(combined.length, idx + kw.length + 150);
       let snippet = stripSentFromSignatures(combined.substring(start, end)).trim();
       if (start > 0) snippet = '...' + snippet;
       if (end < combined.length) snippet = snippet + '...';
@@ -129,25 +342,97 @@ export function detectRefusal(text: string, subject: string): { hasRefusal: bool
 
 export function detectExistingApproval(
   text: string,
-  subject: string
-): { hasApproval: boolean; snippet: string; creditLimit?: number; creditLimitText?: string } {
-  const normText = (text || '').normalize('NFKC');
-  const normSubj = (subject || '').normalize('NFKC');
-
-  const refusalCheck = detectRefusal(normText, normSubj);
+  subject: string,
+  cleanReply?: string
+): { hasApproval: boolean; snippet: string; creditLimit?: number; creditLimitText?: string; patientSharePercentage?: number } {
+  const refusalCheck = detectRefusal(text, subject, cleanReply);
   if (refusalCheck.hasRefusal) {
     return { hasApproval: false, snippet: '' };
   }
 
+  // 1. If cleanReply exists, check cleanReply directly
+  if (cleanReply && cleanReply.trim().length > 0) {
+    const normReply = cleanReply
+      .normalize('NFKC')
+      .toLowerCase()
+      .replace(/[إأآ]/g, 'ا')
+      .replace(/ة/g, 'ه')
+      .replace(/(?<![\u0600-\u06FF])لا\s*مانع/g, 'لا مانع');
+    const credit = extractCreditLimit(cleanReply) || extractCreditLimit(text);
+    const copay = extractCoPayment(cleanReply) || extractCoPayment(text);
+
+    if (!/خارج\s*(?:ال)?تعاقد/.test(normReply)) {
+      // Check attached approval pattern in cleanReply directly!
+      const attachedMatch = normReply.search(/مرفق\s+(?:اليكم|إليكم|لسيادتكم|طيه|تقرير\s+|صورة\s+|صوره\s+)?(?:ال)?موافق/);
+      if (attachedMatch !== -1) {
+        return {
+          hasApproval: true,
+          snippet: cleanReply.trim(),
+          creditLimit: credit.limit,
+          creditLimitText: credit.formatted,
+          patientSharePercentage: copay.percentage,
+        };
+      }
+
+      const approvalSearchText = normReply
+        .replace(
+          /(?:الرجاء|رجاء|برجاء|نرجو|يرجي|يرجى|المطلوب|مطلوب|نطلب|طلب)\s+(?:من\s+سيادتكم\s+)?(?:ال)?موافق[ةه]?(?![\u0600-\u06FF])/g,
+          ' '
+        )
+        .replace(
+          /(?:يجب|سوف|سيتم|يتم|لاحضار|احضار|بإحضار|باحضار|عمل|اعمل|لعمل|برجاء\s+احضار)\s+(?:يتم\s+)?(?:احضار\s+)?(?:اصل\s+)?(?:ال)?موافق[ةه]?(?:\s+سعري[ةه])?(?![\u0600-\u06FF])/g,
+          ' '
+        );
+
+      for (const kw of APPROVAL_KEYWORDS) {
+        const kwNorm = kw
+          .normalize('NFKC')
+          .toLowerCase()
+          .replace(/[إأآ]/g, 'ا')
+          .replace(/ة/g, 'ه')
+          .replace(/(?<![\u0600-\u06FF])لا\s*مانع/g, 'لا مانع');
+
+        const idx =
+          kwNorm === 'موافق'
+            ? approvalSearchText.search(/(?<![\u0600-\u06FF])موافق(?![\u0600-\u06FF])/)
+            : approvalSearchText.indexOf(kwNorm);
+        if (idx !== -1) {
+          return {
+            hasApproval: true,
+            snippet: cleanReply.trim(),
+            creditLimit: credit.limit,
+            creditLimitText: credit.formatted,
+            patientSharePercentage: copay.percentage,
+          };
+        }
+      }
+
+      if (credit.limit) {
+        return {
+          hasApproval: true,
+          snippet: cleanReply.trim(),
+          creditLimit: credit.limit,
+          creditLimitText: credit.formatted,
+          patientSharePercentage: copay.percentage,
+        };
+      }
+    }
+  }
+
+  // 2. Fallback to full text scanning
+  const normText = (text || '').normalize('NFKC');
+  const normSubj = (subject || '').normalize('NFKC');
   const cleanBody = cleanTextFromHtml(normText);
   const cleanSubj = cleanTextFromHtml(normSubj);
   const combined = `${cleanSubj} ${cleanBody}`.trim();
   const normalized = combined
     .toLowerCase()
     .replace(/[إأآ]/g, 'ا')
-    .replace(/ة/g, 'ه');
+    .replace(/ة/g, 'ه')
+    .replace(/(?<![\u0600-\u06FF])لا\s*مانع/g, 'لا مانع');
 
   const credit = extractCreditLimit(combined);
+  const copay = extractCoPayment(combined);
 
   if (/خارج\s*(?:ال)?تعاقد/.test(normalized)) {
     return { hasApproval: false, snippet: '' };
@@ -163,13 +448,19 @@ export function detectExistingApproval(
       ' '
     );
 
-  const attachedIdx = approvalSearchText.search(/مرفق\s+(?:تقرير\s+)?(?:ال)?موافق/);
+  const attachedIdx = approvalSearchText.search(/مرفق\s+(?:اليكم|إليكم|لسيادتكم|طيه|تقرير\s+|صورة\s+|صوره\s+)?(?:ال)?موافق/);
   if (attachedIdx !== -1) {
     const start = Math.max(0, attachedIdx - 25);
-    const end = Math.min(combined.length, attachedIdx + 80);
+    const end = Math.min(combined.length, attachedIdx + 120);
     let snippet = stripSentFromSignatures(combined.substring(start, end)).trim();
     if (start > 0) snippet = '...' + snippet;
-    return { hasApproval: true, snippet, creditLimit: credit.limit, creditLimitText: credit.formatted };
+    return {
+      hasApproval: true,
+      snippet,
+      creditLimit: credit.limit,
+      creditLimitText: credit.formatted,
+      patientSharePercentage: copay.percentage,
+    };
   }
 
   for (const kw of APPROVAL_KEYWORDS) {
@@ -177,7 +468,8 @@ export function detectExistingApproval(
       .normalize('NFKC')
       .toLowerCase()
       .replace(/[إأآ]/g, 'ا')
-      .replace(/ة/g, 'ه');
+      .replace(/ة/g, 'ه')
+      .replace(/(?<![\u0600-\u06FF])لا\s*مانع/g, 'لا مانع');
 
     const idx =
       kwNorm === 'موافق'
@@ -185,7 +477,7 @@ export function detectExistingApproval(
         : approvalSearchText.indexOf(kwNorm);
     if (idx !== -1) {
       const start = Math.max(0, idx - 25);
-      const end = Math.min(combined.length, idx + kw.length + 80);
+      const end = Math.min(combined.length, idx + kw.length + 150);
       let snippet = stripSentFromSignatures(combined.substring(start, end)).trim();
       if (start > 0) snippet = '...' + snippet;
       if (end < combined.length) snippet = snippet + '...';
@@ -195,6 +487,7 @@ export function detectExistingApproval(
         snippet,
         creditLimit: credit.limit,
         creditLimitText: credit.formatted,
+        patientSharePercentage: copay.percentage,
       };
     }
   }
@@ -202,9 +495,10 @@ export function detectExistingApproval(
   if (credit.limit && approvalSearchText === normalized) {
     return {
       hasApproval: true,
-      snippet: stripSentFromSignatures(combined.substring(0, 120)).trim(),
+      snippet: stripSentFromSignatures(combined.substring(0, 150)).trim(),
       creditLimit: credit.limit,
       creditLimitText: credit.formatted,
+      patientSharePercentage: copay.percentage,
     };
   }
 
@@ -217,6 +511,7 @@ export function detectReplies(parsed: {
   references?: string | string[];
   text?: string;
   html?: string | false;
+  cleanReply?: string;
 }): { hasReplies: boolean; snippet: string } {
   const subject = parsed.subject || '';
   const isReSubject = /^(re|رد|fw|fwd)\s*:/i.test(subject.trim());
@@ -230,9 +525,18 @@ export function detectReplies(parsed: {
     /-----Original Message-----/i.test(rawContent) ||
     /From:.*Sent:.*To:/is.test(rawContent) ||
     /On\s+.+wrote:/i.test(rawContent) ||
-    /بتاريخ\s+.+كتب/i.test(rawContent);
+    /بتاريخ\s+.+كتب/i.test(rawContent) ||
+    /id=["\x27]?divRplyFwdMsg["\x27]?/i.test(rawContent) ||
+    /id=["\x27]?ms-outlook-mobile-body-separator-line["\x27]?/i.test(rawContent);
 
-  if (isReSubject || hasInReplyTo || hasReferences || hasQuotedMarkers) {
+  if (isReSubject || hasInReplyTo || hasReferences || hasQuotedMarkers || (parsed.cleanReply && parsed.cleanReply.length > 0)) {
+    if (parsed.cleanReply && parsed.cleanReply.length > 0) {
+      return {
+        hasReplies: true,
+        snippet: parsed.cleanReply,
+      };
+    }
+
     let replySnippet = '';
     const cleanContent = cleanTextFromHtml(parsed.text || (parsed.html ? parsed.html : ''));
     const sentences = cleanContent.split(/[.\n\r]+/).map((s) => s.trim()).filter((s) => s.length > 4);
@@ -247,7 +551,7 @@ export function detectReplies(parsed: {
         !s.toLowerCase().includes('sent:') &&
         !s.toLowerCase().includes('subject:')
       ) {
-        replySnippet = stripSentFromSignatures(s).substring(0, 120);
+        replySnippet = stripSentFromSignatures(s);
         if (replySnippet.length > 4) break;
       }
     }
@@ -442,16 +746,28 @@ export function parseHisApprovalEmail(msg: RawMailMessage): ParsedApprovalEmail 
     }
   }
 
-  // Detect state conditions
-  const refusal = detectRefusal(fullText, msg.subject);
-  const approval = detectExistingApproval(fullText, msg.subject);
-  const replies = detectReplies({
-    subject: msg.subject,
-    text: msg.textBody,
-    html: msg.htmlBody,
-  });
+  // Extract clean reply text if this message is a thread reply
+  const cleanReply = extractCleanReplyBody(msg.htmlBody, msg.textBody);
+  const isReply = /^(re|رد|fw|fwd)\s*:/i.test(msg.subject) || Boolean((msg as any).inReplyTo) || cleanReply.length > 0;
 
-  const credit = extractCreditLimit(fullText);
+  // Detect state conditions (only applicable if message is an actual reply)
+  const refusal = isReply ? detectRefusal(fullText, msg.subject, cleanReply) : { hasRefusal: false, snippet: '' };
+  const approval = isReply ? detectExistingApproval(fullText, msg.subject, cleanReply) : { hasApproval: false, snippet: '' };
+  const replies = isReply
+    ? detectReplies({
+        subject: msg.subject,
+        text: msg.textBody,
+        html: msg.htmlBody,
+        cleanReply,
+      })
+    : { hasReplies: false, snippet: '' };
+
+  const credit = isReply
+    ? (cleanReply ? extractCreditLimit(cleanReply) : null) || extractCreditLimit(fullText) || {}
+    : {};
+  const copay = isReply
+    ? (cleanReply ? extractCoPayment(cleanReply) : null) || extractCoPayment(fullText) || {}
+    : {};
 
   return {
     patientName: patientName || 'غير مسجل',
@@ -466,17 +782,21 @@ export function parseHisApprovalEmail(msg: RawMailMessage): ParsedApprovalEmail 
     requestedServices,
     financialTerms: {
       approvedAmountLimit: credit.limit || null,
-      patientSharePercentage: null,
-      coverageConditions: approval.snippet || undefined,
+      patientSharePercentage: copay.percentage || null,
+      coverageConditions: approval.snippet || cleanReply || undefined,
     },
-    hasReplies: replies.hasReplies,
-    hasExistingApproval: approval.hasApproval,
-    isRefused: refusal.hasRefusal,
-    statusReasonArabic: refusal.hasRefusal
-      ? refusal.snippet
-      : approval.hasApproval
-      ? approval.snippet
+    hasReplies: isReply,
+    hasExistingApproval: isReply && approval.hasApproval,
+    isRefused: isReply && refusal.hasRefusal,
+    statusReasonArabic: isReply
+      ? (refusal.hasRefusal
+          ? refusal.snippet
+          : approval.hasApproval
+          ? approval.snippet
+          : cleanReply || undefined)
       : undefined,
+    cleanReplyBody: isReply && cleanReply ? cleanReply : undefined,
+    isReplyMessage: isReply,
     attachments: msg.attachments || [],
     rawBody: msg.htmlBody || msg.textBody || '',
   };

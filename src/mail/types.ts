@@ -57,6 +57,8 @@ export interface ParsedApprovalEmail {
   hasExistingApproval: boolean;
   isRefused: boolean;
   statusReasonArabic?: string;
+  cleanReplyBody?: string;
+  isReplyMessage?: boolean;
   attachments: AttachmentMeta[];
   rawBody?: string;
 }

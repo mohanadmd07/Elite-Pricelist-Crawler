@@ -42,20 +42,45 @@ export async function persistApprovalToPostgres(record: InpatientApprovalRecord)
     return { success: false, error: 'Supabase client is not configured.' };
   }
 
+  const convKey = record.conversationId;
   const deliveryKey = record.messageId || record.exchangeItemId;
-  const rawSeed = deliveryKey || record.conversationId || record.id || record.mrn;
+  const rawSeed = convKey || deliveryKey || record.id || record.mrn;
   let uuid = toDeterministicUuid(rawSeed);
 
-  // If exchange_message_id already exists in DB, preserve its existing primary key id
-  if (deliveryKey) {
+  let receivedIso =
+    record.receivedAt && (record.receivedAt as any).toDate
+      ? (record.receivedAt as any).toDate().toISOString()
+      : typeof record.receivedAt === 'string'
+      ? record.receivedAt
+      : new Date().toISOString();
+
+  // If conversation_id already exists in DB, preserve its existing primary key id and earliest received_at
+  if (convKey) {
     try {
       const { data: existing } = await client
         .from('inpatient_approvals')
-        .select('id')
+        .select('id, received_at')
+        .eq('conversation_id', convKey)
+        .maybeSingle();
+      if (existing?.id) {
+        uuid = existing.id;
+        if (existing.received_at && new Date(existing.received_at) < new Date(receivedIso)) {
+          receivedIso = existing.received_at;
+        }
+      }
+    } catch {}
+  } else if (deliveryKey) {
+    try {
+      const { data: existing } = await client
+        .from('inpatient_approvals')
+        .select('id, received_at')
         .eq('exchange_message_id', deliveryKey)
         .maybeSingle();
       if (existing?.id) {
         uuid = existing.id;
+        if (existing.received_at && new Date(existing.received_at) < new Date(receivedIso)) {
+          receivedIso = existing.received_at;
+        }
       }
     } catch {}
   }
@@ -71,13 +96,6 @@ export async function persistApprovalToPostgres(record: InpatientApprovalRecord)
     .createHash('sha256')
     .update(`salt_elite_approvals_${record.mrn || ''}`)
     .digest('hex');
-
-  const receivedIso =
-    record.receivedAt && (record.receivedAt as any).toDate
-      ? (record.receivedAt as any).toDate().toISOString()
-      : typeof record.receivedAt === 'string'
-      ? record.receivedAt
-      : new Date().toISOString();
 
   // Map application status to database state machine constraint
   const allowedStatuses = ['received', 'parsed', 'matched', 'needs_review', 'draft_created', 'answered', 'refused'];
@@ -109,7 +127,15 @@ export async function persistApprovalToPostgres(record: InpatientApprovalRecord)
       coverageConditions: record.coverageConditions ?? '',
     },
     status: dbStatus,
-    status_reason_arabic: record.statusReasonArabic || null,
+    status_reason_arabic: record.statusReasonArabic
+      ? record.statusReasonArabic
+          .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
+          .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
+          .replace(/<[^>]+>/g, ' ')
+          .replace(/&nbsp;/g, ' ')
+          .replace(/\s+/g, ' ')
+          .trim()
+      : null,
     state_timestamps: {
       received_at: receivedIso,
       updated_at: new Date().toISOString(),
