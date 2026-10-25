@@ -97,8 +97,9 @@ export default async function handler(req: any, res: any) {
 
   const draftTo = req.body?.to || 'corporate@elitehospital.org';
 
-  // 4. Attempt EWS draft creation in Exchange
+  // 4. Attempt EWS in-thread Reply-All draft creation in Exchange
   let ewsSuccess = false;
+  let draftMode: 'reply_all' | 'standalone' = 'standalone';
   let ewsError = '';
   try {
     const ews = new EwsSource();
@@ -108,11 +109,16 @@ export default async function handler(req: any, res: any) {
 
     const draftResult = await ews.createDraft({
       itemId: itemIdClean,
+      messageId: itemIdClean,
+      conversationId: record?.conversation_id,
       subject: draftSubject,
       body: draftBody,
       to: draftTo,
+      signatureHtml: req.body?.signatureHtml,
+      signatureText: req.body?.signatureText,
     });
     ewsSuccess = draftResult.success;
+    draftMode = draftResult.mode;
     if (!ewsSuccess) ewsError = draftResult.error || 'EWS draft creation returned non-success';
   } catch (ewsErr: any) {
     console.warn(`[Draft API] EWS operation note:`, ewsErr?.message || ewsErr);
@@ -174,9 +180,12 @@ export default async function handler(req: any, res: any) {
   return res.status(200).json({
     success: true,
     draftedInOutlook: ewsSuccess,
+    mode: draftMode,
     id,
     message: ewsSuccess
-      ? 'Draft created successfully in Outlook Drafts folder.'
+      ? (draftMode === 'reply_all'
+          ? 'In-thread Reply-All draft created successfully in Outlook with all To/Cc recipients and signature.'
+          : 'Draft created in Outlook Drafts folder.')
       : 'Draft status registered and queued for Exchange synchronization.',
     note: ewsSuccess ? undefined : ewsError,
     timestamp: nowIso,

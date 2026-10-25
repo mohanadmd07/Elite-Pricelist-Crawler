@@ -4,6 +4,28 @@ import { createClient } from "@supabase/supabase-js";
 // src/mail/adapters/EwsSource.ts
 import httpntlm from "httpntlm";
 var EXACT_INAPPROVALS_FOLDER_ID = "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgAuAAAAAAA4U9epEFcNRbR5QhtWJDZyAQCVKjW+UMYOTr9U/HR/zy7WAAActvclAAA=";
+var DEFAULT_OUTLOOK_SIGNATURE_HTML = `
+<br><br>
+<table class="MsoNormalTable" border="0" cellspacing="0" cellpadding="0" style="border-collapse:collapse">
+  <tbody>
+    <tr>
+      <td style="padding: 0cm 5.4pt;">
+        <p class="MsoNormal" style="margin: 0cm; font-size: 9.5pt; font-family: 'Maiandra GD', Calibri, sans-serif; color: gray;">
+          <b>Mohanad M. El Maamoun</b><br>
+          Duty Manager | Elite Hospital<br>
+          <b><u>Mob.:</u></b> &nbsp; 01148085552<br>
+          <b><u>Email:</u></b> &nbsp; <a href="mailto:Mohanad.elmaamoun@elitehospital.org" style="color: #467886; text-decoration: underline;">Mohanad.elmaamoun@elitehospital.org</a>
+        </p>
+      </td>
+    </tr>
+  </tbody>
+</table>`;
+var DEFAULT_OUTLOOK_SIGNATURE_TEXT = `
+
+Mohanad M. El Maamoun
+Duty Manager | Elite Hospital
+Mob.:    01148085552
+Email:  Mohanad.elmaamoun@elitehospital.org`;
 var EwsSource = class {
   constructor(config) {
     const rawUser = config?.username || process.env.EXCHANGE_USER || process.env.IMAP_USER || "";
@@ -346,13 +368,119 @@ var EwsSource = class {
     };
   }
   /**
-   * Creates an in-thread Reply-All draft, or standalone draft in Exchange Drafts folder.
+   * Searches for an email in Exchange by its InternetMessageId or ConversationId
+   * to obtain the exact EWS ItemId and fresh ChangeKey required for in-thread Reply-All.
+   */
+  async findItemByMessageIdOrConversation(messageId, conversationId, folderId = EXACT_INAPPROVALS_FOLDER_ID) {
+    const cleanMsgId = messageId ? messageId.replace(/&lt;|&gt;|<|>/g, "").trim() : "";
+    if (cleanMsgId) {
+      try {
+        const soap = `<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xmlns:m="http://schemas.microsoft.com/exchange/services/2006/messages"
+               xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types"
+               xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Header>
+    <t:RequestServerVersion Version="Exchange2016" />
+  </soap:Header>
+  <soap:Body>
+    <m:FindItem Traversal="Shallow">
+      <m:ItemShape>
+        <t:BaseShape>IdOnly</t:BaseShape>
+        <t:AdditionalProperties>
+          <t:FieldURI FieldURI="message:InternetMessageId"/>
+        </t:AdditionalProperties>
+      </m:ItemShape>
+      <m:Restriction>
+        <t:Contains ContainmentMode="Substring" ContainmentComparison="IgnoreCase">
+          <t:FieldURI FieldURI="message:InternetMessageId"/>
+          <t:Constant Value="${cleanMsgId}"/>
+        </t:Contains>
+      </m:Restriction>
+      <m:ParentFolderIds>
+        <t:FolderId Id="${folderId}"/>
+      </m:ParentFolderIds>
+    </m:FindItem>
+  </soap:Body>
+</soap:Envelope>`;
+        const resp = await this.ewsRequest(soap);
+        const match = resp.match(/<t:ItemId Id="([^"]+)"(?:\s+ChangeKey="([^"]+)")?/);
+        if (match) {
+          console.log(`[EWS] Discovered target message by InternetMessageId: ${match[1].substring(0, 30)}...`);
+          return { itemId: match[1], changeKey: match[2] || "" };
+        }
+      } catch (err) {
+        console.warn(`[EWS] Search by InternetMessageId note:`, err?.message || err);
+      }
+    }
+    if (conversationId) {
+      try {
+        const convSoap = `<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xmlns:m="http://schemas.microsoft.com/exchange/services/2006/messages"
+               xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types"
+               xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Header>
+    <t:RequestServerVersion Version="Exchange2016" />
+  </soap:Header>
+  <soap:Body>
+    <m:FindItem Traversal="Shallow">
+      <m:ItemShape>
+        <t:BaseShape>IdOnly</t:BaseShape>
+        <t:AdditionalProperties>
+          <t:FieldURI FieldURI="item:ConversationId"/>
+          <t:FieldURI FieldURI="item:DateTimeReceived"/>
+        </t:AdditionalProperties>
+      </m:ItemShape>
+      <m:ParentFolderIds>
+        <t:FolderId Id="${folderId}"/>
+      </m:ParentFolderIds>
+    </m:FindItem>
+  </soap:Body>
+</soap:Envelope>`;
+        const resp = await this.ewsRequest(convSoap);
+        const messageBlocks = [...resp.matchAll(/<t:Message>([\s\S]*?)<\/t:Message>/g)];
+        for (const mb of messageBlocks) {
+          const block = mb[1];
+          if (block.includes(conversationId)) {
+            const idMatch = block.match(/<t:ItemId Id="([^"]+)"(?:\s+ChangeKey="([^"]+)")?/);
+            if (idMatch) {
+              console.log(`[EWS] Discovered target message by ConversationId: ${idMatch[1].substring(0, 30)}...`);
+              return { itemId: idMatch[1], changeKey: idMatch[2] || "" };
+            }
+          }
+        }
+      } catch (err) {
+        console.warn(`[EWS] Search by ConversationId note:`, err?.message || err);
+      }
+    }
+    return null;
+  }
+  /**
+   * Creates an in-thread "Reply All" draft in Exchange using EWS ReplyAllToItem.
+   * - Preserves the entire email thread (same conversation, topic, and quoted history).
+   * - Automatically includes all original "To" and "Cc" recipients.
+   * - Automatically includes the user's predefined Outlook signature below the draft text.
    */
   async createDraft(params) {
-    const { itemId, changeKey, body, subject, to } = params;
-    if (itemId) {
-      let currentChangeKey = changeKey;
-      if (!currentChangeKey) {
+    const { itemId, changeKey, messageId, conversationId, body, subject, to, signatureHtml, signatureText } = params;
+    const activeSignatureHtml = signatureHtml || process.env.OUTLOOK_SIGNATURE_HTML || DEFAULT_OUTLOOK_SIGNATURE_HTML;
+    const activeSignatureText = signatureText || process.env.OUTLOOK_SIGNATURE_TEXT || DEFAULT_OUTLOOK_SIGNATURE_TEXT;
+    const formattedDraftHtml = body.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, "<br>");
+    const fullDraftHtml = `<div style="font-family: Calibri, Aptos, Arial, sans-serif; font-size: 11pt; color: #000000;">${formattedDraftHtml}${activeSignatureHtml}</div>`;
+    const fullDraftText = `${body}
+${activeSignatureText}`;
+    let targetItemId = itemId && !itemId.includes("@") && itemId.length > 40 ? itemId : "";
+    let targetChangeKey = changeKey || "";
+    if (!targetItemId && (messageId || conversationId || itemId)) {
+      const found = await this.findItemByMessageIdOrConversation(messageId || itemId, conversationId);
+      if (found) {
+        targetItemId = found.itemId;
+        targetChangeKey = found.changeKey;
+      }
+    }
+    if (targetItemId) {
+      if (!targetChangeKey) {
         try {
           const getXml = `<?xml version="1.0" encoding="utf-8"?>
 <soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -368,19 +496,19 @@ var EwsSource = class {
         <t:BaseShape>IdOnly</t:BaseShape>
       </m:ItemShape>
       <m:ItemIds>
-        <t:ItemId Id="${itemId}"/>
+        <t:ItemId Id="${targetItemId}"/>
       </m:ItemIds>
     </m:GetItem>
   </soap:Body>
 </soap:Envelope>`;
           const resp = await this.ewsRequest(getXml);
           const ckMatch = resp.match(/ChangeKey="([^"]+)"/);
-          if (ckMatch) currentChangeKey = ckMatch[1];
+          if (ckMatch) targetChangeKey = ckMatch[1];
         } catch (err) {
           console.warn("[EWS] Could not retrieve fresh ChangeKey:", err?.message || err);
         }
       }
-      if (currentChangeKey) {
+      if (targetChangeKey) {
         const replySoap = `<?xml version="1.0" encoding="utf-8"?>
 <soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                xmlns:m="http://schemas.microsoft.com/exchange/services/2006/messages"
@@ -393,8 +521,8 @@ var EwsSource = class {
     <m:CreateItem MessageDisposition="SaveOnly">
       <m:Items>
         <t:ReplyAllToItem>
-          <t:ReferenceItemId Id="${itemId}" ChangeKey="${currentChangeKey}" />
-          <t:NewBodyContent BodyType="Text">${body.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")}</t:NewBodyContent>
+          <t:ReferenceItemId Id="${targetItemId}" ChangeKey="${targetChangeKey}" />
+          <t:NewBodyContent BodyType="HTML">${fullDraftHtml.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")}</t:NewBodyContent>
         </t:ReplyAllToItem>
       </m:Items>
     </m:CreateItem>
@@ -403,14 +531,23 @@ var EwsSource = class {
         try {
           const xml = await this.ewsRequest(replySoap);
           if (xml.includes('ResponseClass="Success"')) {
-            console.log(`[EWS] In-thread Reply-All draft created successfully for item: ${itemId}`);
-            return { success: true };
+            const draftIdMatch = xml.match(/<t:ItemId Id="([^"]+)"/);
+            const createdDraftId = draftIdMatch ? draftIdMatch[1] : void 0;
+            console.log(`[EWS] In-thread Reply-All draft created successfully in same thread with all To/Cc recipients and signature.`);
+            return {
+              success: true,
+              mode: "reply_all",
+              draftId: createdDraftId
+            };
+          } else {
+            console.warn(`[EWS] ReplyAllToItem non-success, falling back to standalone draft:`, xml.substring(0, 300));
           }
         } catch (err) {
           console.warn("[EWS] ReplyAllToItem failed, falling back to standalone draft:", err?.message || err);
         }
       }
     }
+    console.log(`[EWS] Creating standalone draft in Drafts folder...`);
     const standaloneSoap = `<?xml version="1.0" encoding="utf-8"?>
 <soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                xmlns:m="http://schemas.microsoft.com/exchange/services/2006/messages"
@@ -427,7 +564,7 @@ var EwsSource = class {
       <m:Items>
         <t:Message>
           <t:Subject>${subject.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")}</t:Subject>
-          <t:Body BodyType="Text">${body.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")}</t:Body>
+          <t:Body BodyType="HTML">${fullDraftHtml.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")}</t:Body>
           <t:ToRecipients>
             <t:Mailbox>
               <t:EmailAddress>${to || "corporate@elitehospital.org"}</t:EmailAddress>
@@ -441,12 +578,18 @@ var EwsSource = class {
     try {
       const xml = await this.ewsRequest(standaloneSoap);
       if (xml.includes('ResponseClass="Success"')) {
+        const draftIdMatch = xml.match(/<t:ItemId Id="([^"]+)"/);
+        const createdDraftId = draftIdMatch ? draftIdMatch[1] : void 0;
         console.log(`[EWS] Standalone draft created in Exchange Drafts folder.`);
-        return { success: true };
+        return {
+          success: true,
+          mode: "standalone",
+          draftId: createdDraftId
+        };
       }
-      return { success: false, error: xml.substring(0, 300) };
+      return { success: false, mode: "standalone", error: xml.substring(0, 300) };
     } catch (err) {
-      return { success: false, error: err?.message || String(err) };
+      return { success: false, mode: "standalone", error: err?.message || String(err) };
     }
   }
 };
@@ -715,17 +858,23 @@ async function handler(req, res) {
   const draftSubject = req.body?.subject || (record?.patient_name ? `RE: Inpatient Approval Request - ${record.patient_name} - ${record.mrn || ""}` : "RE: Inpatient Approval Request");
   const draftTo = req.body?.to || "corporate@elitehospital.org";
   let ewsSuccess = false;
+  let draftMode = "standalone";
   let ewsError = "";
   try {
     const ews = new EwsSource();
     const itemIdClean = record?.exchange_message_id ? record.exchange_message_id.replace(/&lt;|&gt;|<|>/g, "") : void 0;
     const draftResult = await ews.createDraft({
       itemId: itemIdClean,
+      messageId: itemIdClean,
+      conversationId: record?.conversation_id,
       subject: draftSubject,
       body: draftBody,
-      to: draftTo
+      to: draftTo,
+      signatureHtml: req.body?.signatureHtml,
+      signatureText: req.body?.signatureText
     });
     ewsSuccess = draftResult.success;
+    draftMode = draftResult.mode;
     if (!ewsSuccess) ewsError = draftResult.error || "EWS draft creation returned non-success";
   } catch (ewsErr) {
     console.warn(`[Draft API] EWS operation note:`, ewsErr?.message || ewsErr);
@@ -778,8 +927,9 @@ async function handler(req, res) {
   return res.status(200).json({
     success: true,
     draftedInOutlook: ewsSuccess,
+    mode: draftMode,
     id,
-    message: ewsSuccess ? "Draft created successfully in Outlook Drafts folder." : "Draft status registered and queued for Exchange synchronization.",
+    message: ewsSuccess ? draftMode === "reply_all" ? "In-thread Reply-All draft created successfully in Outlook with all To/Cc recipients and signature." : "Draft created in Outlook Drafts folder." : "Draft status registered and queued for Exchange synchronization.",
     note: ewsSuccess ? void 0 : ewsError,
     timestamp: nowIso
   });
