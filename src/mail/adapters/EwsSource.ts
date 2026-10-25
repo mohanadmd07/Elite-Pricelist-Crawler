@@ -415,4 +415,122 @@ export class EwsSource implements MailSource {
       moreAvailable: !includesLast && createdIds.length > 0,
     };
   }
+
+  /**
+   * Creates an in-thread Reply-All draft, or standalone draft in Exchange Drafts folder.
+   */
+  public async createDraft(params: {
+    itemId?: string;
+    changeKey?: string;
+    subject: string;
+    body: string;
+    to?: string;
+  }): Promise<{ success: boolean; error?: string }> {
+    const { itemId, changeKey, body, subject, to } = params;
+
+    // 1. If itemId is available, attempt ReplyAllToItem
+    if (itemId) {
+      let currentChangeKey = changeKey;
+      if (!currentChangeKey) {
+        try {
+          const getXml = `<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xmlns:m="http://schemas.microsoft.com/exchange/services/2006/messages"
+               xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types"
+               xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Header>
+    <t:RequestServerVersion Version="Exchange2016" />
+  </soap:Header>
+  <soap:Body>
+    <m:GetItem>
+      <m:ItemShape>
+        <t:BaseShape>IdOnly</t:BaseShape>
+      </m:ItemShape>
+      <m:ItemIds>
+        <t:ItemId Id="${itemId}"/>
+      </m:ItemIds>
+    </m:GetItem>
+  </soap:Body>
+</soap:Envelope>`;
+          const resp = await this.ewsRequest(getXml);
+          const ckMatch = resp.match(/ChangeKey="([^"]+)"/);
+          if (ckMatch) currentChangeKey = ckMatch[1];
+        } catch (err: any) {
+          console.warn('[EWS] Could not retrieve fresh ChangeKey:', err?.message || err);
+        }
+      }
+
+      if (currentChangeKey) {
+        const replySoap = `<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xmlns:m="http://schemas.microsoft.com/exchange/services/2006/messages"
+               xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types"
+               xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Header>
+    <t:RequestServerVersion Version="Exchange2016" />
+  </soap:Header>
+  <soap:Body>
+    <m:CreateItem MessageDisposition="SaveOnly">
+      <m:Items>
+        <t:ReplyAllToItem>
+          <t:ReferenceItemId Id="${itemId}" ChangeKey="${currentChangeKey}" />
+          <t:NewBodyContent BodyType="Text">${body.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</t:NewBodyContent>
+        </t:ReplyAllToItem>
+      </m:Items>
+    </m:CreateItem>
+  </soap:Body>
+</soap:Envelope>`;
+
+        try {
+          const xml = await this.ewsRequest(replySoap);
+          if (xml.includes('ResponseClass="Success"')) {
+            console.log(`[EWS] In-thread Reply-All draft created successfully for item: ${itemId}`);
+            return { success: true };
+          }
+        } catch (err: any) {
+          console.warn('[EWS] ReplyAllToItem failed, falling back to standalone draft:', err?.message || err);
+        }
+      }
+    }
+
+    // 2. Standalone draft in drafts folder
+    const standaloneSoap = `<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xmlns:m="http://schemas.microsoft.com/exchange/services/2006/messages"
+               xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types"
+               xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Header>
+    <t:RequestServerVersion Version="Exchange2016" />
+  </soap:Header>
+  <soap:Body>
+    <m:CreateItem MessageDisposition="SaveOnly">
+      <m:SavedItemFolderId>
+        <t:DistinguishedFolderId Id="drafts"/>
+      </m:SavedItemFolderId>
+      <m:Items>
+        <t:Message>
+          <t:Subject>${subject.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</t:Subject>
+          <t:Body BodyType="Text">${body.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</t:Body>
+          <t:ToRecipients>
+            <t:Mailbox>
+              <t:EmailAddress>${to || 'corporate@elitehospital.org'}</t:EmailAddress>
+            </t:Mailbox>
+          </t:ToRecipients>
+        </t:Message>
+      </m:Items>
+    </m:CreateItem>
+  </soap:Body>
+</soap:Envelope>`;
+
+    try {
+      const xml = await this.ewsRequest(standaloneSoap);
+      if (xml.includes('ResponseClass="Success"')) {
+        console.log(`[EWS] Standalone draft created in Exchange Drafts folder.`);
+        return { success: true };
+      }
+      return { success: false, error: xml.substring(0, 300) };
+    } catch (err: any) {
+      return { success: false, error: err?.message || String(err) };
+    }
+  }
 }

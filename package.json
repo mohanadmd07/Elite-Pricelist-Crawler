@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --port=3000 --host=0.0.0.0",
-    "build:api": "esbuild src/mail/syncEndpoint.ts --bundle --platform=node --format=esm --packages=external --outfile=api/approvals/sync.js",
+    "build:api": "esbuild src/mail/syncEndpoint.ts --bundle --platform=node --format=esm --packages=external --outfile=api/approvals/sync.js && esbuild src/mail/draftEndpoint.ts --bundle --platform=node --format=esm --packages=external --outfile=api/approvals/draft.js && mkdir -p \"api/approvals/[id]\" && cp api/approvals/draft.js \"api/approvals/[id]/draft.js\"",
     "build": "npm run build:api && vite build",
     "preview": "vite preview",
     "clean": "rm -rf dist",

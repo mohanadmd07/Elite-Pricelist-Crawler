@@ -22,6 +22,10 @@
   ],
   "rewrites": [
     {
+      "source": "/api/approvals/:id/draft",
+      "destination": "/api/approvals/draft?id=:id"
+    },
+    {
       "source": "/api/(.*)",
       "destination": "/api/$1"
     },
@@ -33,6 +37,10 @@
   "functions": {
     "api/approvals/sync.js": {
       "maxDuration": 60,
+      "memory": 1024
+    },
+    "api/approvals/draft.js": {
+      "maxDuration": 30,
       "memory": 1024
     }
   },
