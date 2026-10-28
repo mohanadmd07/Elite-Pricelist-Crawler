@@ -75,6 +75,19 @@ export default async function handler(req: any, res: any) {
           approvedAmountLimit: row.financial_terms?.approvedAmountLimit,
           patientSharePercentage: row.financial_terms?.patientSharePercentage,
           coverageConditions: row.financial_terms?.coverageConditions,
+          classifierStatus: row.classifier_status,
+          itemsJson: row.items_json,
+          pricedItemsJson: row.priced_items_json,
+          historyHintsJson: row.history_hints_json,
+          contractTotal: row.contract_total,
+          priceApprovalTotal: row.price_approval_total,
+          priceApprovalRequired: row.price_approval_required,
+          priceApprovalDraftEn: row.price_approval_draft_en,
+          priceApprovalStatus: row.price_approval_status,
+          needsHumanReview: row.needs_human_review,
+          reviewReasons: row.review_reasons,
+          approvalReference: row.approval_reference,
+          statusLockedByHuman: row.status_locked_by_human,
         }));
         return res.status(200).json(mapped);
       }

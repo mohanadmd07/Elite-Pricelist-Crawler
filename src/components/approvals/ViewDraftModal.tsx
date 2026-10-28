@@ -372,6 +372,85 @@ export const ViewDraftModal: React.FC<ViewDraftModalProps> = ({
                   ))}
                 </div>
               </div>
+
+              {/* Per-Item Classifier Decision Ledger */}
+              {approval.itemsJson && approval.itemsJson.length > 0 && (
+                <div className="border border-teal-200 rounded-xl p-4 bg-teal-50/30 space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <h4 className="text-xs font-bold text-teal-900 uppercase tracking-wider">
+                      سجل قرارات البنود الطبية (7-Pass Classifier Ledger)
+                    </h4>
+                    {approval.classifierStatus && (
+                      <span className="px-2 py-0.5 rounded text-[10px] font-extrabold bg-teal-100 text-teal-900 border border-teal-300">
+                        Verdict: {approval.classifierStatus}
+                      </span>
+                    )}
+                  </div>
+                  <div className="space-y-2">
+                    {approval.itemsJson.map((item: any, idx: number) => (
+                      <div key={idx} className="p-2.5 rounded-lg bg-white border border-slate-200 text-xs space-y-1">
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="font-bold text-slate-900" dir="auto">
+                            {item.item_name_raw} {item.canonical_name_en ? `(${item.canonical_name_en})` : ''}
+                          </span>
+                          <span
+                            className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${
+                              item.decision === 'APPROVED'
+                                ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
+                                : item.decision === 'REJECTED'
+                                ? 'bg-rose-50 text-rose-800 border-rose-300'
+                                : 'bg-amber-50 text-amber-900 border-amber-300'
+                            }`}
+                          >
+                            {item.decision} (Qty: {item.approved_quantity ?? item.requested_quantity ?? 1})
+                          </span>
+                        </div>
+                        {item.conditions && item.conditions.length > 0 && (
+                          <p className="text-[11px] text-amber-900 font-medium" dir="auto">
+                            ⚠️ الشروط / المطلوب: {item.conditions.join(' • ')}
+                          </p>
+                        )}
+                        {(item.rejection_reason_ar || item.rejection_reason_en) && (
+                          <p className="text-[11px] text-rose-800 font-semibold" dir="auto">
+                            ❌ سبب الرفض: {item.rejection_reason_ar || item.rejection_reason_en}
+                          </p>
+                        )}
+                        {item.evidence_quote && (
+                          <p className="text-[11px] text-slate-500 italic" dir="auto">
+                            "{item.evidence_quote}"
+                          </p>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Advisory Historical Patterns */}
+              {approval.historyHintsJson && approval.historyHintsJson.length > 0 && (
+                <div className="border border-indigo-200 rounded-xl p-3.5 bg-indigo-50/40 space-y-1.5">
+                  <div className="text-[11px] font-extrabold text-indigo-900 uppercase tracking-wider">
+                    📊 Historical pattern (advisory, not a decision)
+                  </div>
+                  {approval.historyHintsJson.map((hint: any, hIdx: number) => (
+                    <div key={hIdx} className="text-xs text-indigo-950 bg-white/80 p-2 rounded-lg border border-indigo-100">
+                      <span className="font-bold">{hint.canonical_procedure}:</span>{' '}
+                      {hint.insufficient_history ? (
+                        <span className="text-slate-500">Insufficient history (n={hint.sample_size})</span>
+                      ) : (
+                        <span>
+                          Sample n={hint.sample_size} (Approved: {hint.approved_count}, Conditional: {hint.conditional_count}, Rejected: {hint.rejected_count})
+                        </span>
+                      )}
+                      {hint.anomaly_flags && hint.anomaly_flags.length > 0 && (
+                        <span className="ml-2 px-1.5 py-0.5 rounded bg-rose-100 text-rose-800 text-[10px] font-bold">
+                          Anomaly: {hint.anomaly_flags.join(', ')}
+                        </span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 
@@ -411,6 +490,56 @@ export const ViewDraftModal: React.FC<ViewDraftModalProps> = ({
                 </div>
               </div>
 
+              {/* Two-Tier Pricing Breakdown (Contract vs 2026 Price Approval) */}
+              {approval.pricedItemsJson && approval.pricedItemsJson.length > 0 && (
+                <div className="p-4 rounded-xl border border-slate-200 bg-white space-y-3">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <h5 className="text-xs font-bold text-slate-800 uppercase tracking-wider">
+                      التسعير ثنائي المستوى (Two-Tier Pricing: Contract vs موافقة سعرية)
+                    </h5>
+                    <div className="flex items-center gap-2 text-xs font-bold">
+                      {approval.contractTotal !== undefined && (
+                        <span className="px-2 py-0.5 rounded bg-emerald-50 text-emerald-900 border border-emerald-200">
+                          إجمالي التعاقد: {approval.contractTotal.toLocaleString()} ج.م
+                        </span>
+                      )}
+                      {approval.priceApprovalTotal !== undefined && approval.priceApprovalTotal > 0 && (
+                        <span className="px-2 py-0.5 rounded bg-amber-100 text-amber-950 border border-amber-300">
+                          إجمالي موافقة سعرية (2026): {approval.priceApprovalTotal.toLocaleString()} ج.م
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  <div className="divide-y divide-slate-100">
+                    {approval.pricedItemsJson.map((pi: any, pIdx: number) => (
+                      <div key={pIdx} className="py-2 flex flex-wrap items-center justify-between gap-2 text-xs">
+                        <div>
+                          <div className="font-bold text-slate-900" dir="auto">{pi.item_name_raw}</div>
+                          <div className="text-[11px] text-slate-500">
+                            Matched: {pi.matched_name || '—'} • Qty: {pi.quantity} × {pi.unit_price?.toLocaleString() ?? '—'} EGP
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          {pi.price_source === 'CONTRACT' ? (
+                            <span className="px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-900 border border-emerald-200 font-bold text-[11px]">
+                              CONTRACT: {pi.line_total?.toLocaleString()} EGP
+                            </span>
+                          ) : pi.price_source === 'LIST_2026_PRICE_APPROVAL' ? (
+                            <span className="px-2.5 py-1 rounded-full bg-amber-100 text-amber-950 border border-amber-300 font-extrabold text-[11px]">
+                              🏷️ موافقة سعرية (2026 Gross): {pi.line_total?.toLocaleString()} EGP
+                            </span>
+                          ) : (
+                            <span className="px-2.5 py-1 rounded-full bg-rose-50 text-rose-900 border border-rose-200 font-bold text-[11px]">
+                              {pi.price_source}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {/* Conditions / Prerequisites */}
               <div className="p-4 rounded-xl border border-slate-200 bg-white">
                 <h5 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
@@ -432,6 +561,30 @@ export const ViewDraftModal: React.FC<ViewDraftModalProps> = ({
           {/* TAB 3: SMART EMAIL DRAFT */}
           {activeTab === 'draft' && (
             <div className="space-y-4">
+              {approval.priceApprovalDraftEn && (
+                <div className="p-4 rounded-xl bg-amber-50/90 border border-amber-300 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-extrabold text-amber-950 uppercase tracking-wider">
+                      🏷️ Corporate Sales Price-Approval Request (موافقة سعرية — 2026 Gross List)
+                    </span>
+                    <button
+                      onClick={() => {
+                        navigator.clipboard?.writeText(approval.priceApprovalDraftEn || '');
+                      }}
+                      className="px-2.5 py-1 rounded-lg bg-amber-800 hover:bg-amber-900 text-white text-[11px] font-bold flex items-center gap-1 cursor-pointer"
+                    >
+                      <Copy size={12} />
+                      <span>Copy English Price-Approval Draft</span>
+                    </button>
+                  </div>
+                  <pre
+                    dir="ltr"
+                    className="w-full p-3 rounded-lg bg-white text-slate-900 font-mono text-[11px] leading-relaxed whitespace-pre-wrap border border-amber-200 max-h-60 overflow-y-auto"
+                  >
+                    {approval.priceApprovalDraftEn}
+                  </pre>
+                </div>
+              )}
               <div className="relative">
                 <pre
                   dir="rtl"

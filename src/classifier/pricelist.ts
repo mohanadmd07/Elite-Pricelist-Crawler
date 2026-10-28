@@ -142,14 +142,18 @@ export class StaticContractResolver implements ContractResolver {
     const rec =
       this.contractors.find((c) => [c.id, c.name, ...(c.aliases || [])].some((n) => n && normalizeArabic(String(n)) === key)) ?? null;
     if (!rec) return null;
-    const year = Number(rec.priceListYear);
-    if (!VALID_YEARS.has(year)) return null;
-    // 0% is a real, valid discount. Only a missing value is unmapped.
-    if (rec.discountPercentage === null || rec.discountPercentage === undefined || Number.isNaN(Number(rec.discountPercentage))) return null;
+    let year = Number(rec.priceListYear);
+    if (!VALID_YEARS.has(year)) {
+      year = 2026;
+    }
+    const discount =
+      rec.discountPercentage !== null && rec.discountPercentage !== undefined && !Number.isNaN(Number(rec.discountPercentage))
+        ? Number(rec.discountPercentage)
+        : 0;
     return {
       insurerId: rec.id || rec.name,
       year,
-      discountPercent: Number(rec.discountPercentage),
+      discountPercent: discount,
       pricelistId: `cash-${year}`,
       source: this.source,
     };
@@ -195,23 +199,46 @@ export class DefaultContractResolver implements ContractResolver {
   }
 
   private async loadContractors(): Promise<ContractorRecord[]> {
-    // Supabase `companies` (cloud) first
+    let baseList: ContractorRecord[] = [];
+    try {
+      const p = path.resolve(process.cwd(), 'data', 'contractors.json');
+      if (fs.existsSync(p)) {
+        baseList = JSON.parse(fs.readFileSync(p, 'utf8'));
+      }
+    } catch {}
+
+    // Supabase `companies` (cloud) updates / overrides
     try {
       const { supabaseAdmin } = await import('../lib/supabase');
       if (supabaseAdmin) {
         const { data } = await supabaseAdmin.from('companies').select('name, price_list_year, discount_percentage');
-        if (data?.length)
-          return data.map((c: any) => ({ name: c.name, priceListYear: c.price_list_year, discountPercentage: Number(c.discount_percentage) }));
+        if (data?.length) {
+          const cloudMap = new Map(data.map((c: any) => [c.name, c]));
+          for (const item of baseList) {
+            const cloudMatch = cloudMap.get(item.name);
+            if (cloudMatch) {
+              if (cloudMatch.price_list_year) item.priceListYear = cloudMatch.price_list_year;
+              if (cloudMatch.discount_percentage !== undefined && cloudMatch.discount_percentage !== null) {
+                item.discountPercentage = Number(cloudMatch.discount_percentage);
+              }
+            }
+          }
+          // Also include any cloud companies not yet in contractors.json
+          const existingNames = new Set(baseList.map((b) => b.name));
+          for (const c of data) {
+            if (!existingNames.has((c as any).name)) {
+              baseList.push({
+                name: (c as any).name,
+                priceListYear: (c as any).price_list_year,
+                discountPercentage: Number((c as any).discount_percentage),
+              });
+            }
+          }
+        }
       }
     } catch {
       /* fall through */
     }
-    try {
-      const p = path.resolve(process.cwd(), 'data', 'contractors.json');
-      if (fs.existsSync(p)) return JSON.parse(fs.readFileSync(p, 'utf8'));
-    } catch {
-      /* none */
-    }
-    return [];
+    return baseList;
   }
 }

@@ -722,8 +722,20 @@ init_EwsSource();
 
 // src/services/approvalFirestoreSync.ts
 import { doc as doc2, setDoc as setDoc2 } from "firebase/firestore";
+function sanitizeForFirestore(val) {
+  if (val === void 0) return null;
+  if (val === null || typeof val !== "object") return val;
+  if (Array.isArray(val)) return val.map(sanitizeForFirestore);
+  const out = {};
+  for (const [k, v] of Object.entries(val)) {
+    if (v !== void 0) {
+      out[k] = sanitizeForFirestore(v);
+    }
+  }
+  return out;
+}
 async function mirrorApprovalToFirestore(record) {
-  if (!db || !record.id) return;
+  if (!db || !record.id) return { success: false, error: "Firestore db not initialized or missing id" };
   try {
     const docRef = doc2(db, "inpatient_approvals", record.id);
     const firestorePayload = {
@@ -772,9 +784,11 @@ async function mirrorApprovalToFirestore(record) {
       ...record.reviewReasons !== void 0 ? { reviewReasons: record.reviewReasons } : {},
       ...record.approvalReference !== void 0 ? { approvalReference: record.approvalReference } : {}
     };
-    await setDoc2(docRef, firestorePayload, { merge: true });
+    await setDoc2(docRef, sanitizeForFirestore(firestorePayload), { merge: true });
+    return { success: true };
   } catch (err) {
     console.warn(`[Firestore Mirror] Failed to mirror approval ${record.id}:`, err?.message || err);
+    return { success: false, error: err?.message || String(err) };
   }
 }
 

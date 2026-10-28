@@ -129,7 +129,7 @@ export interface ClassifyThreadInput {
 }
 
 export interface ClassifyDeps {
-  llm: LlmClient;
+  llm?: LlmClient;
   contractResolver?: ContractResolver;
   pricelistProvider?: PricelistProvider;
   adjudicator?: Adjudicator;
@@ -150,8 +150,9 @@ export function isLearningEnabled(env: Record<string, string | undefined> = proc
 
 export async function classifyApprovalThread(
   input: ClassifyThreadInput,
-  deps: ClassifyDeps
+  deps: ClassifyDeps = {}
 ): Promise<ClassificationResult> {
+  const activeLlm = deps.llm || createDefaultAuditedLlmClient();
   // Idempotency: if this exact source_message_id was already classified, return the prior result.
   if (
     input.alreadyClassifiedSourceMessageId &&
@@ -170,7 +171,7 @@ export async function classifyApprovalThread(
   const approvalKey = input.approvalId || input.sourceMessageId;
 
   // Apply only APPROVED alias rules from the learning store.
-  if (deps.learningStore) {
+  if (deps?.learningStore) {
     const aliasRules = await getActiveRules(deps.learningStore, input.insurer, 'ALIAS');
     setApprovedAliasRules(
       aliasRules
@@ -187,7 +188,7 @@ export async function classifyApprovalThread(
       if ('text' in a && typeof a.text === 'string' && !('mimeType' in a)) {
         if (a.text) atts.push({ name: a.name, text: a.text });
       } else {
-        const txt = await extractAttachmentText(deps.llm, a as BinaryAttachment, { known, approvalKey, env: deps.env });
+        const txt = await extractAttachmentText(activeLlm, a as BinaryAttachment, { known, approvalKey, env: deps.env });
         if (txt) atts.push({ name: a.name, text: txt });
       }
     }
@@ -200,7 +201,7 @@ export async function classifyApprovalThread(
   const fewShots = await retrieveFewShotsForLedger(deps.learningStore, input.insurer, primaryCategory);
 
   // Pass 2: Per-item decision ledger.
-  const ledgerRun = await runLedgerPass(deps.llm, {
+  const ledgerRun = await runLedgerPass(activeLlm, {
     messages: reconstructed,
     requested: input.requested,
     fewShots,
@@ -217,7 +218,7 @@ export async function classifyApprovalThread(
   const scoped = enforceScope(rev.items, input.requested);
 
   // Pass 3: Independent verifier (separate Gemini call + deterministic cue checks).
-  const verification = await runVerifier(deps.llm, {
+  const verification = await runVerifier(activeLlm, {
     ledger: ledgerRun.ledger,
     items: scoped.items,
     messages: reconstructed,
@@ -237,7 +238,7 @@ export async function classifyApprovalThread(
   // Pass 4 & Pass 5: Coverage matching and two-tier pricing in code.
   const contractResolver = deps.contractResolver ?? new DefaultContractResolver();
   const pricelistProvider = deps.pricelistProvider ?? new CashDataPricelistProvider();
-  const adjudicator = deps.adjudicator ?? new LlmAdjudicator(deps.llm, { known, approvalKey });
+  const adjudicator = deps.adjudicator ?? new LlmAdjudicator(activeLlm, { known, approvalKey });
 
   const contract = await contractResolver.resolve(input.insurer);
   const contractRows = contract ? await pricelistProvider.loadRows(contract.year) : [];

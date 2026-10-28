@@ -2,12 +2,25 @@ import { db } from '../firebase';
 import { doc, setDoc } from 'firebase/firestore';
 import { InpatientApprovalRecord } from '../types';
 
+function sanitizeForFirestore(val: any): any {
+  if (val === undefined) return null;
+  if (val === null || typeof val !== 'object') return val;
+  if (Array.isArray(val)) return val.map(sanitizeForFirestore);
+  const out: Record<string, any> = {};
+  for (const [k, v] of Object.entries(val)) {
+    if (v !== undefined) {
+      out[k] = sanitizeForFirestore(v);
+    }
+  }
+  return out;
+}
+
 /**
  * Directly synchronizes an InpatientApprovalRecord from sync engine to Firestore.
  * Conforms strictly to Firestore security rules: mrn != null & valid status.
  */
-export async function mirrorApprovalToFirestore(record: InpatientApprovalRecord): Promise<void> {
-  if (!db || !record.id) return;
+export async function mirrorApprovalToFirestore(record: InpatientApprovalRecord): Promise<{ success: boolean; error?: string }> {
+  if (!db || !record.id) return { success: false, error: 'Firestore db not initialized or missing id' };
   try {
     const docRef = doc(db, 'inpatient_approvals', record.id);
     const firestorePayload: Record<string, any> = {
@@ -56,8 +69,10 @@ export async function mirrorApprovalToFirestore(record: InpatientApprovalRecord)
       ...(record.reviewReasons !== undefined ? { reviewReasons: record.reviewReasons } : {}),
       ...(record.approvalReference !== undefined ? { approvalReference: record.approvalReference } : {}),
     };
-    await setDoc(docRef, firestorePayload, { merge: true });
+    await setDoc(docRef, sanitizeForFirestore(firestorePayload), { merge: true });
+    return { success: true };
   } catch (err: any) {
     console.warn(`[Firestore Mirror] Failed to mirror approval ${record.id}:`, err?.message || err);
+    return { success: false, error: err?.message || String(err) };
   }
 }

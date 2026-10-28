@@ -3753,8 +3753,20 @@ var googleProvider = new GoogleAuthProvider();
 
 // src/services/approvalFirestoreSync.ts
 import { doc as doc2, setDoc as setDoc2 } from "firebase/firestore";
+function sanitizeForFirestore(val) {
+  if (val === void 0) return null;
+  if (val === null || typeof val !== "object") return val;
+  if (Array.isArray(val)) return val.map(sanitizeForFirestore);
+  const out = {};
+  for (const [k, v] of Object.entries(val)) {
+    if (v !== void 0) {
+      out[k] = sanitizeForFirestore(v);
+    }
+  }
+  return out;
+}
 async function mirrorApprovalToFirestore(record) {
-  if (!db || !record.id) return;
+  if (!db || !record.id) return { success: false, error: "Firestore db not initialized or missing id" };
   try {
     const docRef = doc2(db, "inpatient_approvals", record.id);
     const firestorePayload = {
@@ -3803,9 +3815,11 @@ async function mirrorApprovalToFirestore(record) {
       ...record.reviewReasons !== void 0 ? { reviewReasons: record.reviewReasons } : {},
       ...record.approvalReference !== void 0 ? { approvalReference: record.approvalReference } : {}
     };
-    await setDoc2(docRef, firestorePayload, { merge: true });
+    await setDoc2(docRef, sanitizeForFirestore(firestorePayload), { merge: true });
+    return { success: true };
   } catch (err) {
     console.warn(`[Firestore Mirror] Failed to mirror approval ${record.id}:`, err?.message || err);
+    return { success: false, error: err?.message || String(err) };
   }
 }
 
@@ -7577,13 +7591,15 @@ var StaticContractResolver = class {
     if (!key) return null;
     const rec = this.contractors.find((c) => [c.id, c.name, ...c.aliases || []].some((n) => n && normalizeArabic(String(n)) === key)) ?? null;
     if (!rec) return null;
-    const year = Number(rec.priceListYear);
-    if (!VALID_YEARS.has(year)) return null;
-    if (rec.discountPercentage === null || rec.discountPercentage === void 0 || Number.isNaN(Number(rec.discountPercentage))) return null;
+    let year = Number(rec.priceListYear);
+    if (!VALID_YEARS.has(year)) {
+      year = 2026;
+    }
+    const discount = rec.discountPercentage !== null && rec.discountPercentage !== void 0 && !Number.isNaN(Number(rec.discountPercentage)) ? Number(rec.discountPercentage) : 0;
     return {
       insurerId: rec.id || rec.name,
       year,
-      discountPercent: Number(rec.discountPercentage),
+      discountPercent: discount,
       pricelistId: `cash-${year}`,
       source: this.source
     };
@@ -7622,21 +7638,44 @@ var DefaultContractResolver = class {
     }
   }
   async loadContractors() {
+    let baseList = [];
     try {
-      const { supabaseAdmin: supabaseAdmin2 } = await Promise.resolve().then(() => (init_supabase(), supabase_exports));
-      if (supabaseAdmin2) {
-        const { data } = await supabaseAdmin2.from("companies").select("name, price_list_year, discount_percentage");
-        if (data?.length)
-          return data.map((c) => ({ name: c.name, priceListYear: c.price_list_year, discountPercentage: Number(c.discount_percentage) }));
+      const p = path3.resolve(process.cwd(), "data", "contractors.json");
+      if (fs2.existsSync(p)) {
+        baseList = JSON.parse(fs2.readFileSync(p, "utf8"));
       }
     } catch {
     }
     try {
-      const p = path3.resolve(process.cwd(), "data", "contractors.json");
-      if (fs2.existsSync(p)) return JSON.parse(fs2.readFileSync(p, "utf8"));
+      const { supabaseAdmin: supabaseAdmin2 } = await Promise.resolve().then(() => (init_supabase(), supabase_exports));
+      if (supabaseAdmin2) {
+        const { data } = await supabaseAdmin2.from("companies").select("name, price_list_year, discount_percentage");
+        if (data?.length) {
+          const cloudMap = new Map(data.map((c) => [c.name, c]));
+          for (const item of baseList) {
+            const cloudMatch = cloudMap.get(item.name);
+            if (cloudMatch) {
+              if (cloudMatch.price_list_year) item.priceListYear = cloudMatch.price_list_year;
+              if (cloudMatch.discount_percentage !== void 0 && cloudMatch.discount_percentage !== null) {
+                item.discountPercentage = Number(cloudMatch.discount_percentage);
+              }
+            }
+          }
+          const existingNames = new Set(baseList.map((b) => b.name));
+          for (const c of data) {
+            if (!existingNames.has(c.name)) {
+              baseList.push({
+                name: c.name,
+                priceListYear: c.price_list_year,
+                discountPercentage: Number(c.discount_percentage)
+              });
+            }
+          }
+        }
+      }
     } catch {
     }
-    return [];
+    return baseList;
   }
 };
 
@@ -9187,7 +9226,8 @@ function isClassifierEnabled(env = process.env) {
 function isLearningEnabled(env = process.env) {
   return (env.LEARNING_ENABLED || "").toLowerCase() === "true";
 }
-async function classifyApprovalThread(input, deps) {
+async function classifyApprovalThread(input, deps = {}) {
+  const activeLlm = deps.llm || createDefaultAuditedLlmClient();
   if (input.alreadyClassifiedSourceMessageId && input.alreadyClassifiedSourceMessageId === input.sourceMessageId && input.previousResult) {
     return { ...input.previousResult, skipped: "IDEMPOTENT" };
   }
@@ -9198,7 +9238,7 @@ async function classifyApprovalThread(input, deps) {
     physician: input.physician
   };
   const approvalKey = input.approvalId || input.sourceMessageId;
-  if (deps.learningStore) {
+  if (deps?.learningStore) {
     const aliasRules = await getActiveRules(deps.learningStore, input.insurer, "ALIAS");
     setApprovedAliasRules(
       aliasRules.map((r) => ({ alias: String(r.payload?.alias || ""), canonical_en: String(r.payload?.canonical_en || "") })).filter((x) => x.alias && x.canonical_en)
@@ -9211,7 +9251,7 @@ async function classifyApprovalThread(input, deps) {
       if ("text" in a && typeof a.text === "string" && !("mimeType" in a)) {
         if (a.text) atts.push({ name: a.name, text: a.text });
       } else {
-        const txt = await extractAttachmentText(deps.llm, a, { known, approvalKey, env: deps.env });
+        const txt = await extractAttachmentText(activeLlm, a, { known, approvalKey, env: deps.env });
         if (txt) atts.push({ name: a.name, text: txt });
       }
     }
@@ -9220,7 +9260,7 @@ async function classifyApprovalThread(input, deps) {
   const reconstructed = reconstructThread(rawWithText);
   const primaryCategory = input.requested[0]?.category;
   const fewShots = await retrieveFewShotsForLedger(deps.learningStore, input.insurer, primaryCategory);
-  const ledgerRun = await runLedgerPass(deps.llm, {
+  const ledgerRun = await runLedgerPass(activeLlm, {
     messages: reconstructed,
     requested: input.requested,
     fewShots,
@@ -9231,7 +9271,7 @@ async function classifyApprovalThread(input, deps) {
   const validated = validateLedger(ledgerRun.ledger, reconstructed, { requestedCount: Math.max(1, input.requested.length) });
   const rev = resolveRevisions(validated.items, reconstructed);
   const scoped = enforceScope(rev.items, input.requested);
-  const verification = await runVerifier(deps.llm, {
+  const verification = await runVerifier(activeLlm, {
     ledger: ledgerRun.ledger,
     items: scoped.items,
     messages: reconstructed,
@@ -9246,7 +9286,7 @@ async function classifyApprovalThread(input, deps) {
   ];
   const contractResolver = deps.contractResolver ?? new DefaultContractResolver();
   const pricelistProvider = deps.pricelistProvider ?? new CashDataPricelistProvider();
-  const adjudicator = deps.adjudicator ?? new LlmAdjudicator(deps.llm, { known, approvalKey });
+  const adjudicator = deps.adjudicator ?? new LlmAdjudicator(activeLlm, { known, approvalKey });
   const contract = await contractResolver.resolve(input.insurer);
   const contractRows = contract ? await pricelistProvider.loadRows(contract.year) : [];
   const list2026Rows = contract && contract.year === 2026 ? contractRows : await pricelistProvider.loadRows(2026);

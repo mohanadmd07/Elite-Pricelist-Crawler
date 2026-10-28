@@ -619,6 +619,34 @@ export const ApprovalsTable: React.FC<ApprovalsTableProps> = ({
                               ⚠️ Has unlisted item
                             </span>
                           )}
+
+                          {/* Two-Tier Classifier Pricing Breakdown */}
+                          {record.pricedItemsJson && record.pricedItemsJson.length > 0 && (
+                            <div className="mt-2 pt-2 border-t border-slate-100 space-y-1">
+                              {record.pricedItemsJson.map((pi: any, pIdx: number) => (
+                                <div key={pIdx} className="flex flex-wrap items-center justify-between gap-1 text-[10px] bg-slate-50 px-1.5 py-1 rounded border border-slate-200/80">
+                                  <span className="font-semibold text-slate-700 truncate max-w-[120px]" title={pi.item_name_raw}>
+                                    {pi.item_name_raw}
+                                  </span>
+                                  <div className="flex items-center gap-1">
+                                    {pi.price_source === 'CONTRACT' ? (
+                                      <span className="px-1.5 py-0.2 rounded bg-emerald-100 text-emerald-900 font-bold">
+                                        {pi.line_total?.toLocaleString()} ج.م (تعاقد)
+                                      </span>
+                                    ) : pi.price_source === 'LIST_2026_PRICE_APPROVAL' ? (
+                                      <span className="px-1.5 py-0.2 rounded bg-amber-100 text-amber-950 font-bold border border-amber-300">
+                                        {pi.line_total?.toLocaleString()} ج.م (موافقة سعرية)
+                                      </span>
+                                    ) : (
+                                      <span className="px-1.5 py-0.2 rounded bg-rose-100 text-rose-900 font-bold">
+                                        {pi.price_source}
+                                      </span>
+                                    )}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          )}
                         </td>
 
                         {/* Status Badge */}
@@ -672,6 +700,40 @@ export const ApprovalsTable: React.FC<ApprovalsTableProps> = ({
                               <Clock size={11} className="text-amber-600" />
                               Pending
                             </span>
+                          )}
+
+                          {/* Classifier Status & Price Approval Badges */}
+                          {record.classifierStatus && (
+                            <div className="mt-1.5 flex flex-col items-center gap-1">
+                              <span
+                                className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[9px] font-extrabold border ${
+                                  record.classifierStatus === 'APPROVED'
+                                    ? 'bg-emerald-50 text-emerald-900 border-emerald-300'
+                                    : record.classifierStatus === 'PARTIAL'
+                                    ? 'bg-indigo-50 text-indigo-900 border-indigo-300'
+                                    : record.classifierStatus === 'REJECTED'
+                                    ? 'bg-rose-50 text-rose-900 border-rose-300'
+                                    : 'bg-amber-50 text-amber-900 border-amber-300'
+                                }`}
+                                title={`AI Classifier Verdict: ${record.classifierStatus}`}
+                              >
+                                <Sparkles size={9} />
+                                {record.classifierStatus}
+                              </span>
+                              {record.priceApprovalRequired && (
+                                <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[9px] font-black bg-amber-100 text-amber-950 border border-amber-300">
+                                  🏷️ موافقة سعرية ({record.priceApprovalTotal?.toLocaleString()} ج.م)
+                                </span>
+                              )}
+                              {record.needsHumanReview && (
+                                <span
+                                  className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[9px] font-bold bg-rose-100 text-rose-900 border border-rose-300"
+                                  title={(record.reviewReasons || []).join(', ')}
+                                >
+                                  ⚠️ مراجعة بشرية
+                                </span>
+                              )}
+                            </div>
                           )}
                         </td>
 
