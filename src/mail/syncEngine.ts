@@ -95,7 +95,7 @@ async function maybeRunClassifierOnSync(params: {
       coverage_results_json: result.coverage,
       priced_items_json: result.priced,
       history_hints_json: result.history_hints,
-      contractor_pricelist_id: result.contractor_pricelist_id,
+      contractor_pricelist_id: (typeof result.contractor_pricelist_id === 'string' && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(result.contractor_pricelist_id)) ? result.contractor_pricelist_id : null,
       contract_total: result.contract_total,
       price_approval_total: result.price_approval_total,
       price_approval_required: result.price_approval_required,
@@ -562,6 +562,18 @@ export async function runMailSync(options?: {
 
       const deterministicId = toDeterministicUuid(convId);
 
+      const classifierColumns = await maybeRunClassifierOnSync({
+        approvalId: deterministicId,
+        sourceMessageId: msg.messageId,
+        insurer: contractorNormalized || parsed.contractorRaw,
+        patientName: parsed.patientName,
+        mrn: parsed.mrn,
+        bed: parsed.bed,
+        physician: parsed.physician,
+        requestedServices: parsed.requestedServices,
+        msg,
+      });
+
       // Build InpatientApprovalRecord
       const record: InpatientApprovalRecord = {
         id: deterministicId,
@@ -592,6 +604,18 @@ export async function runMailSync(options?: {
         approvedAmountLimit: parsed.financialTerms?.approvedAmountLimit,
         patientSharePercentage: parsed.financialTerms?.patientSharePercentage,
         coverageConditions: parsed.financialTerms?.coverageConditions || parsed.cleanReplyBody,
+        classifierStatus: classifierColumns.classifier_status,
+        itemsJson: classifierColumns.items_json,
+        pricedItemsJson: classifierColumns.priced_items_json,
+        historyHintsJson: classifierColumns.history_hints_json,
+        contractTotal: classifierColumns.contract_total,
+        priceApprovalTotal: classifierColumns.price_approval_total,
+        priceApprovalRequired: classifierColumns.price_approval_required,
+        priceApprovalDraftEn: classifierColumns.price_approval_draft_en,
+        priceApprovalStatus: classifierColumns.price_approval_status,
+        needsHumanReview: classifierColumns.needs_human_review,
+        reviewReasons: classifierColumns.review_reasons,
+        approvalReference: classifierColumns.approval_reference,
       };
 
       // Persist to Supabase PostgreSQL (authoritative)

@@ -165,7 +165,7 @@ export async function persistApprovalToPostgres(record: InpatientApprovalRecord)
     ...(record.coverageResultsJson !== undefined ? { coverage_results_json: record.coverageResultsJson } : {}),
     ...(record.pricedItemsJson !== undefined ? { priced_items_json: record.pricedItemsJson } : {}),
     ...(record.historyHintsJson !== undefined ? { history_hints_json: record.historyHintsJson } : {}),
-    ...(record.contractorPricelistId !== undefined ? { contractor_pricelist_id: record.contractorPricelistId } : {}),
+    ...(record.contractorPricelistId !== undefined ? { contractor_pricelist_id: (typeof record.contractorPricelistId === 'string' && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(record.contractorPricelistId)) ? record.contractorPricelistId : null } : {}),
     ...(record.contractTotal !== undefined ? { contract_total: record.contractTotal } : {}),
     ...(record.priceApprovalTotal !== undefined ? { price_approval_total: record.priceApprovalTotal } : {}),
     ...(record.priceApprovalRequired !== undefined ? { price_approval_required: record.priceApprovalRequired } : {}),

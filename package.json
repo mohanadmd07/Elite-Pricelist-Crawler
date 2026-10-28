@@ -16,6 +16,7 @@
     "eval:matching": "tsx scripts/eval-matching.ts",
     "eval:golden": "tsx scripts/eval-golden-classifier.ts",
     "classifier:backfill": "tsx .agent/skills/approval-reply-classifier/scripts/backfill-history.ts",
+    "classifier:backfill-all": "tsx scripts/backfill-all-approvals.ts",
     "classifier:recompute-stats": "tsx .agent/skills/approval-reply-classifier/scripts/recompute-stats.ts",
     "classifier:propose-rules": "tsx .agent/skills/approval-reply-classifier/scripts/propose-learned-rules.ts",
     "health:check": "tsx scripts/monitor-health.ts",
