@@ -757,7 +757,20 @@ async function mirrorApprovalToFirestore(record) {
       hasReplies: Boolean(record.hasReplies),
       hasExistingApproval: Boolean(record.hasExistingApproval),
       isRefused: Boolean(record.isRefused),
-      updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+      updatedAt: (/* @__PURE__ */ new Date()).toISOString(),
+      ...record.classifierStatus !== void 0 ? { classifierStatus: record.classifierStatus } : {},
+      ...record.statusLockedByHuman !== void 0 ? { statusLockedByHuman: record.statusLockedByHuman } : {},
+      ...record.itemsJson !== void 0 ? { itemsJson: record.itemsJson } : {},
+      ...record.pricedItemsJson !== void 0 ? { pricedItemsJson: record.pricedItemsJson } : {},
+      ...record.historyHintsJson !== void 0 ? { historyHintsJson: record.historyHintsJson } : {},
+      ...record.contractTotal !== void 0 ? { contractTotal: record.contractTotal } : {},
+      ...record.priceApprovalTotal !== void 0 ? { priceApprovalTotal: record.priceApprovalTotal } : {},
+      ...record.priceApprovalRequired !== void 0 ? { priceApprovalRequired: record.priceApprovalRequired } : {},
+      ...record.priceApprovalDraftEn !== void 0 ? { priceApprovalDraftEn: record.priceApprovalDraftEn } : {},
+      ...record.priceApprovalStatus !== void 0 ? { priceApprovalStatus: record.priceApprovalStatus } : {},
+      ...record.needsHumanReview !== void 0 ? { needsHumanReview: record.needsHumanReview } : {},
+      ...record.reviewReasons !== void 0 ? { reviewReasons: record.reviewReasons } : {},
+      ...record.approvalReference !== void 0 ? { approvalReference: record.approvalReference } : {}
     };
     await setDoc2(docRef, firestorePayload, { merge: true });
   } catch (err) {

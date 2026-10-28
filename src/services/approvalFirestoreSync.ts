@@ -42,6 +42,19 @@ export async function mirrorApprovalToFirestore(record: InpatientApprovalRecord)
       hasExistingApproval: Boolean(record.hasExistingApproval),
       isRefused: Boolean(record.isRefused),
       updatedAt: new Date().toISOString(),
+      ...(record.classifierStatus !== undefined ? { classifierStatus: record.classifierStatus } : {}),
+      ...(record.statusLockedByHuman !== undefined ? { statusLockedByHuman: record.statusLockedByHuman } : {}),
+      ...(record.itemsJson !== undefined ? { itemsJson: record.itemsJson } : {}),
+      ...(record.pricedItemsJson !== undefined ? { pricedItemsJson: record.pricedItemsJson } : {}),
+      ...(record.historyHintsJson !== undefined ? { historyHintsJson: record.historyHintsJson } : {}),
+      ...(record.contractTotal !== undefined ? { contractTotal: record.contractTotal } : {}),
+      ...(record.priceApprovalTotal !== undefined ? { priceApprovalTotal: record.priceApprovalTotal } : {}),
+      ...(record.priceApprovalRequired !== undefined ? { priceApprovalRequired: record.priceApprovalRequired } : {}),
+      ...(record.priceApprovalDraftEn !== undefined ? { priceApprovalDraftEn: record.priceApprovalDraftEn } : {}),
+      ...(record.priceApprovalStatus !== undefined ? { priceApprovalStatus: record.priceApprovalStatus } : {}),
+      ...(record.needsHumanReview !== undefined ? { needsHumanReview: record.needsHumanReview } : {}),
+      ...(record.reviewReasons !== undefined ? { reviewReasons: record.reviewReasons } : {}),
+      ...(record.approvalReference !== undefined ? { approvalReference: record.approvalReference } : {}),
     };
     await setDoc(docRef, firestorePayload, { merge: true });
   } catch (err: any) {

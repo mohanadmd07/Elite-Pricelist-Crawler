@@ -3788,7 +3788,20 @@ async function mirrorApprovalToFirestore(record) {
       hasReplies: Boolean(record.hasReplies),
       hasExistingApproval: Boolean(record.hasExistingApproval),
       isRefused: Boolean(record.isRefused),
-      updatedAt: (/* @__PURE__ */ new Date()).toISOString()
+      updatedAt: (/* @__PURE__ */ new Date()).toISOString(),
+      ...record.classifierStatus !== void 0 ? { classifierStatus: record.classifierStatus } : {},
+      ...record.statusLockedByHuman !== void 0 ? { statusLockedByHuman: record.statusLockedByHuman } : {},
+      ...record.itemsJson !== void 0 ? { itemsJson: record.itemsJson } : {},
+      ...record.pricedItemsJson !== void 0 ? { pricedItemsJson: record.pricedItemsJson } : {},
+      ...record.historyHintsJson !== void 0 ? { historyHintsJson: record.historyHintsJson } : {},
+      ...record.contractTotal !== void 0 ? { contractTotal: record.contractTotal } : {},
+      ...record.priceApprovalTotal !== void 0 ? { priceApprovalTotal: record.priceApprovalTotal } : {},
+      ...record.priceApprovalRequired !== void 0 ? { priceApprovalRequired: record.priceApprovalRequired } : {},
+      ...record.priceApprovalDraftEn !== void 0 ? { priceApprovalDraftEn: record.priceApprovalDraftEn } : {},
+      ...record.priceApprovalStatus !== void 0 ? { priceApprovalStatus: record.priceApprovalStatus } : {},
+      ...record.needsHumanReview !== void 0 ? { needsHumanReview: record.needsHumanReview } : {},
+      ...record.reviewReasons !== void 0 ? { reviewReasons: record.reviewReasons } : {},
+      ...record.approvalReference !== void 0 ? { approvalReference: record.approvalReference } : {}
     };
     await setDoc2(docRef, firestorePayload, { merge: true });
   } catch (err) {
@@ -9168,7 +9181,8 @@ ${candList}`;
   }
 };
 function isClassifierEnabled(env = process.env) {
-  return (env.CLASSIFIER_ENABLED || "").toLowerCase() === "true";
+  const val = (env.CLASSIFIER_ENABLED || "true").toLowerCase();
+  return val !== "false" && val !== "0";
 }
 function isLearningEnabled(env = process.env) {
   return (env.LEARNING_ENABLED || "").toLowerCase() === "true";
@@ -9652,7 +9666,19 @@ async function runMailSync(options) {
             cmWhatsappMessage: cmWhatsappMessage2,
             draftBody: draftBody2,
             suggestedDraftReply: draftBody2,
-            draftedAt: existing.state_timestamps?.drafted_at || (/* @__PURE__ */ new Date()).toISOString()
+            draftedAt: existing.state_timestamps?.drafted_at || (/* @__PURE__ */ new Date()).toISOString(),
+            classifierStatus: classifierColumns.classifier_status,
+            itemsJson: classifierColumns.items_json,
+            pricedItemsJson: classifierColumns.priced_items_json,
+            historyHintsJson: classifierColumns.history_hints_json,
+            contractTotal: classifierColumns.contract_total,
+            priceApprovalTotal: classifierColumns.price_approval_total,
+            priceApprovalRequired: classifierColumns.price_approval_required,
+            priceApprovalDraftEn: classifierColumns.price_approval_draft_en,
+            priceApprovalStatus: classifierColumns.price_approval_status,
+            needsHumanReview: classifierColumns.needs_human_review,
+            reviewReasons: classifierColumns.review_reasons,
+            approvalReference: classifierColumns.approval_reference
           });
         }
         continue;

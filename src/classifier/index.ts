@@ -140,7 +140,8 @@ export interface ClassifyDeps {
 }
 
 export function isClassifierEnabled(env: Record<string, string | undefined> = process.env): boolean {
-  return (env.CLASSIFIER_ENABLED || '').toLowerCase() === 'true';
+  const val = (env.CLASSIFIER_ENABLED || 'true').toLowerCase();
+  return val !== 'false' && val !== '0';
 }
 
 export function isLearningEnabled(env: Record<string, string | undefined> = process.env): boolean {

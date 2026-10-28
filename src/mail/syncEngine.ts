@@ -474,6 +474,18 @@ export async function runMailSync(options?: {
             draftBody,
             suggestedDraftReply: draftBody,
             draftedAt: existing.state_timestamps?.drafted_at || new Date().toISOString(),
+            classifierStatus: classifierColumns.classifier_status,
+            itemsJson: classifierColumns.items_json,
+            pricedItemsJson: classifierColumns.priced_items_json,
+            historyHintsJson: classifierColumns.history_hints_json,
+            contractTotal: classifierColumns.contract_total,
+            priceApprovalTotal: classifierColumns.price_approval_total,
+            priceApprovalRequired: classifierColumns.price_approval_required,
+            priceApprovalDraftEn: classifierColumns.price_approval_draft_en,
+            priceApprovalStatus: classifierColumns.price_approval_status,
+            needsHumanReview: classifierColumns.needs_human_review,
+            reviewReasons: classifierColumns.review_reasons,
+            approvalReference: classifierColumns.approval_reference,
           } as any);
         }
         continue;
