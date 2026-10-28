@@ -1,3 +1,606 @@
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __esm = (fn, res) => function __init() {
+  return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
+};
+
+// src/mail/adapters/EwsSource.ts
+import httpntlm from "httpntlm";
+var EXACT_INAPPROVALS_FOLDER_ID, DEFAULT_OUTLOOK_SIGNATURE_HTML, DEFAULT_OUTLOOK_SIGNATURE_TEXT, EwsSource;
+var init_EwsSource = __esm({
+  "src/mail/adapters/EwsSource.ts"() {
+    EXACT_INAPPROVALS_FOLDER_ID = "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgAuAAAAAAA4U9epEFcNRbR5QhtWJDZyAQCVKjW+UMYOTr9U/HR/zy7WAAActvclAAA=";
+    DEFAULT_OUTLOOK_SIGNATURE_HTML = `
+<br><br>
+<table class="MsoNormalTable" border="0" cellspacing="0" cellpadding="0" style="border-collapse:collapse">
+  <tbody>
+    <tr>
+      <td style="padding: 0cm 5.4pt;">
+        <p class="MsoNormal" style="margin: 0cm; font-size: 9.5pt; font-family: 'Maiandra GD', Calibri, sans-serif; color: gray;">
+          <b>Mohanad M. El Maamoun</b><br>
+          Duty Manager | Elite Hospital<br>
+          <b><u>Mob.:</u></b> &nbsp; 01148085552<br>
+          <b><u>Email:</u></b> &nbsp; <a href="mailto:Mohanad.elmaamoun@elitehospital.org" style="color: #467886; text-decoration: underline;">Mohanad.elmaamoun@elitehospital.org</a>
+        </p>
+      </td>
+    </tr>
+  </tbody>
+</table>`;
+    DEFAULT_OUTLOOK_SIGNATURE_TEXT = `
+
+Mohanad M. El Maamoun
+Duty Manager | Elite Hospital
+Mob.:    01148085552
+Email:  Mohanad.elmaamoun@elitehospital.org`;
+    EwsSource = class {
+      constructor(config) {
+        const rawUser = config?.username || process.env.EXCHANGE_USER || process.env.IMAP_USER || "";
+        const cleanUser = rawUser.includes("@") ? rawUser.split("@")[0] : rawUser;
+        this.config = {
+          url: config?.url || process.env.EWS_URL || `https://${process.env.IMAP_HOST || "wmail.elitehospital.org"}/EWS/Exchange.asmx`,
+          username: cleanUser,
+          password: config?.password || process.env.EXCHANGE_PASSWORD || process.env.IMAP_PASSWORD || "",
+          domain: config?.domain || process.env.EXCHANGE_DOMAIN || "elitehospital",
+          folderName: config?.folderName || process.env.EWS_FOLDER || process.env.IMAP_FOLDER || "InApprovals"
+        };
+      }
+      /**
+       * Executes an NTLM-authenticated SOAP request to the EWS endpoint.
+       */
+      async ewsRequest(soapBody) {
+        return new Promise((resolve, reject) => {
+          if (!this.config.username || !this.config.password) {
+            return reject(new Error("EWS credentials (username/password) are not configured."));
+          }
+          httpntlm.post(
+            {
+              url: this.config.url,
+              username: this.config.username,
+              password: this.config.password,
+              domain: this.config.domain,
+              body: soapBody,
+              headers: {
+                "Content-Type": "text/xml; charset=utf-8"
+              },
+              rejectUnauthorized: false
+            },
+            (err, res) => {
+              if (err) return reject(err);
+              if (res.statusCode !== 200) {
+                return reject(new Error(`EWS HTTP ${res.statusCode}: ${res.body?.substring(0, 300)}`));
+              }
+              resolve(res.body);
+            }
+          );
+        });
+      }
+      /**
+       * Tests connectivity to EWS endpoint.
+       */
+      async testConnection() {
+        const testSoap = `<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xmlns:m="http://schemas.microsoft.com/exchange/services/2006/messages"
+               xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types"
+               xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Header>
+    <t:RequestServerVersion Version="Exchange2016" />
+  </soap:Header>
+  <soap:Body>
+    <m:FindFolder Traversal="Shallow">
+      <m:FolderShape>
+        <t:BaseShape>IdOnly</t:BaseShape>
+      </m:FolderShape>
+      <m:ParentFolderIds>
+        <t:DistinguishedFolderId Id="inbox"/>
+      </m:ParentFolderIds>
+    </m:FindFolder>
+  </soap:Body>
+</soap:Envelope>`;
+        try {
+          const response = await this.ewsRequest(testSoap);
+          if (response.includes("FindFolderResponse") && response.includes('ResponseClass="Success"')) {
+            return { ok: true, message: "Successfully authenticated with Exchange EWS." };
+          }
+          return { ok: false, message: `EWS response: ${response.substring(0, 200)}` };
+        } catch (err) {
+          return { ok: false, message: `Failed to connect to EWS: ${err.message || err}` };
+        }
+      }
+      /**
+       * Resolves the FolderId for a named folder or returns distinguished folder id.
+       */
+      async resolveFolderId(folderName) {
+        const raw = folderName || this.config.folderName || "InApprovals";
+        const lower = raw.toLowerCase();
+        if (lower === "inapprovals" || raw.startsWith("AAMk") || raw.startsWith("AQMk")) {
+          return EXACT_INAPPROVALS_FOLDER_ID;
+        }
+        if (["inbox", "drafts", "deleteditems", "sentitems", "msgfolderroot"].includes(lower)) {
+          return lower;
+        }
+        const soap = `<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xmlns:m="http://schemas.microsoft.com/exchange/services/2006/messages"
+               xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types"
+               xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Header>
+    <t:RequestServerVersion Version="Exchange2016" />
+  </soap:Header>
+  <soap:Body>
+    <m:FindFolder Traversal="Deep">
+      <m:FolderShape>
+        <t:BaseShape>IdOnly</t:BaseShape>
+        <t:AdditionalProperties>
+          <t:FieldURI FieldURI="folder:DisplayName"/>
+        </t:AdditionalProperties>
+      </m:FolderShape>
+      <m:IndexedPageFolderView MaxEntriesReturned="100" Offset="0" BasePoint="Beginning"/>
+      <m:ParentFolderIds>
+        <t:DistinguishedFolderId Id="msgfolderroot"/>
+      </m:ParentFolderIds>
+    </m:FindFolder>
+  </soap:Body>
+</soap:Envelope>`;
+        try {
+          const xml = await this.ewsRequest(soap);
+          const regex = new RegExp(
+            `<t:Folder>[\\s\\S]*?<t:FolderId Id="([^"]+)" ChangeKey="([^"]+)"[\\s\\S]*?<t:DisplayName>${raw}<\\/t:DisplayName>[\\s\\S]*?<\\/t:Folder>`,
+            "i"
+          );
+          const match = xml.match(regex);
+          if (match) return match[1];
+        } catch (err) {
+          console.warn(`[EWS Source] Failed to dynamically resolve folder "${raw}", falling back to default.`, err);
+        }
+        return EXACT_INAPPROVALS_FOLDER_ID;
+      }
+      /**
+       * Finds recent items in an Exchange folder with date restriction and pagination.
+       */
+      async findItemsInFolder(folderId, maxEntries = 100, sinceDateIso) {
+        const isDistinguished = ["inbox", "drafts", "deleteditems", "sentitems", "msgfolderroot"].includes(folderId.toLowerCase());
+        const folderXml = isDistinguished ? `<t:DistinguishedFolderId Id="${folderId}"/>` : `<t:FolderId Id="${folderId}"/>`;
+        const restrictionXml = sinceDateIso ? `
+      <m:Restriction>
+        <t:IsGreaterThanOrEqualTo>
+          <t:FieldURI FieldURI="item:DateTimeReceived"/>
+          <t:FieldURIOrConstant>
+            <t:Constant Value="${sinceDateIso}"/>
+          </t:FieldURIOrConstant>
+        </t:IsGreaterThanOrEqualTo>
+      </m:Restriction>` : "";
+        const allResults = [];
+        const pageSize = Math.min(maxEntries, 250);
+        const soap = `<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xmlns:m="http://schemas.microsoft.com/exchange/services/2006/messages"
+               xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types"
+               xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Header>
+    <t:RequestServerVersion Version="Exchange2016" />
+  </soap:Header>
+  <soap:Body>
+    <m:FindItem Traversal="Shallow">
+      <m:ItemShape>
+        <t:BaseShape>IdOnly</t:BaseShape>
+        <t:AdditionalProperties>
+          <t:FieldURI FieldURI="item:Subject"/>
+          <t:FieldURI FieldURI="item:DateTimeReceived"/>
+        </t:AdditionalProperties>
+      </m:ItemShape>
+      <m:IndexedPageItemView MaxEntriesReturned="${pageSize}" Offset="0" BasePoint="Beginning"/>
+      ${restrictionXml}
+      <m:SortOrder>
+        <t:FieldOrder Order="Descending">
+          <t:FieldURI FieldURI="item:DateTimeReceived"/>
+        </t:FieldOrder>
+      </m:SortOrder>
+      <m:ParentFolderIds>
+        ${folderXml}
+      </m:ParentFolderIds>
+    </m:FindItem>
+  </soap:Body>
+</soap:Envelope>`;
+        try {
+          const xml = await this.ewsRequest(soap);
+          const itemMatches = xml.matchAll(/<t:Message>([\s\S]*?)<\/t:Message>/g);
+          for (const match of itemMatches) {
+            const msgBlock = match[1];
+            const idMatch = msgBlock.match(/<t:ItemId Id="([^"]+)"/);
+            const subjMatch = msgBlock.match(/<t:Subject>([^<]*)<\/t:Subject>/);
+            const dateMatch = msgBlock.match(/<t:DateTimeReceived>([^<]*)<\/t:DateTimeReceived>/);
+            if (idMatch) {
+              allResults.push({
+                id: idMatch[1],
+                subject: subjMatch ? subjMatch[1] : "",
+                dateTimeReceived: dateMatch ? dateMatch[1] : void 0
+              });
+            }
+          }
+        } catch (err) {
+          console.warn(`[EWS Source] Error finding items in folder "${folderId}":`, err);
+        }
+        return allResults;
+      }
+      /**
+       * Fetches full message details in batch for a list of EWS item IDs.
+       */
+      async getItemsBatch(itemIds) {
+        if (itemIds.length === 0) return [];
+        const idsXml = itemIds.map((id) => `<t:ItemId Id="${id}"/>`).join("\n");
+        const soap = `<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xmlns:m="http://schemas.microsoft.com/exchange/services/2006/messages"
+               xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types"
+               xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Header>
+    <t:RequestServerVersion Version="Exchange2016" />
+  </soap:Header>
+  <soap:Body>
+    <m:GetItem>
+      <m:ItemShape>
+        <t:BaseShape>AllProperties</t:BaseShape>
+        <t:BodyType>HTML</t:BodyType>
+      </m:ItemShape>
+      <m:ItemIds>
+        ${idsXml}
+      </m:ItemIds>
+    </m:GetItem>
+  </soap:Body>
+</soap:Envelope>`;
+        for (let attempt = 1; attempt <= 3; attempt++) {
+          try {
+            const xml = await this.ewsRequest(soap);
+            const messageBlocks = [...xml.matchAll(/<t:Message>([\s\S]*?)<\/t:Message>/g)];
+            return messageBlocks.map((mb) => {
+              const block = mb[1];
+              const idMatch = block.match(/<t:ItemId Id="([^"]+)"(?:\s+ChangeKey="([^"]+)")?/);
+              const itemId = idMatch ? idMatch[1] : "";
+              const changeKey = idMatch?.[2] || "";
+              const subject = block.match(/<t:Subject>([^<]*)<\/t:Subject>/)?.[1] || "";
+              const messageId = block.match(/<t:InternetMessageId>([^<]*)<\/t:InternetMessageId>/)?.[1] || `<${itemId}@exchange>`;
+              const from = block.match(/<t:From>[\s\S]*?<t:EmailAddress>([^<]+)<\/t:EmailAddress>/)?.[1] || "";
+              const bodyHtml = block.match(/<t:Body[^>]*>([\s\S]*?)<\/t:Body>/)?.[1] || "";
+              const conversationId = block.match(/<t:ConversationId Id="([^"]+)"/)?.[1] || "";
+              const receivedAtStr = block.match(/<t:DateTimeReceived>([^<]+)<\/t:DateTimeReceived>/)?.[1];
+              const receivedAt = receivedAtStr ? new Date(receivedAtStr).toISOString() : (/* @__PURE__ */ new Date()).toISOString();
+              const attachments = [];
+              const attMatches = block.matchAll(/<t:FileAttachment>[\s\S]*?<t:AttachmentId Id="([^"]+)"[\s\S]*?<t:Name>([^<]+)<\/t:Name>(?:[\s\S]*?<t:ContentType>([^<]+)<\/t:ContentType>)?(?:[\s\S]*?<t:Size>([^<]+)<\/t:Size>)?/g);
+              for (const am of attMatches) {
+                attachments.push({
+                  id: am[1],
+                  name: am[2],
+                  contentType: am[3] || "application/octet-stream",
+                  sizeBytes: Number(am[4]) || 0
+                });
+              }
+              return {
+                id: itemId,
+                changeKey,
+                messageId,
+                conversationId,
+                subject,
+                sender: from,
+                receivedAt,
+                htmlBody: bodyHtml,
+                textBody: bodyHtml.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim(),
+                attachments
+              };
+            });
+          } catch (err) {
+            const isThrottled = String(err).includes("ErrorServerBusy") || String(err).includes("503");
+            if (attempt < 3 && isThrottled) {
+              const delay = attempt * 1500;
+              await new Promise((r) => setTimeout(r, delay));
+              continue;
+            }
+            if (attempt === 3) throw err;
+          }
+        }
+        return [];
+      }
+      /**
+       * Incrementally fetches messages since the given cursor.
+       */
+      async fetchSince(cursor, maxItems = 50) {
+        const folderId = await this.resolveFolderId(cursor.folderName || this.config.folderName);
+        const isDistinguished = ["inbox", "drafts", "deleteditems", "sentitems", "msgfolderroot"].includes(folderId.toLowerCase());
+        const folderXml = isDistinguished ? `<t:DistinguishedFolderId Id="${folderId}"/>` : `<t:FolderId Id="${folderId}"/>`;
+        const syncStateXml = cursor.token ? `<m:SyncState>${cursor.token}</m:SyncState>` : "";
+        const soap = `<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xmlns:m="http://schemas.microsoft.com/exchange/services/2006/messages"
+               xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types"
+               xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Header>
+    <t:RequestServerVersion Version="Exchange2016" />
+  </soap:Header>
+  <soap:Body>
+    <m:SyncFolderItems>
+      <m:ItemShape>
+        <t:BaseShape>IdOnly</t:BaseShape>
+      </m:ItemShape>
+      <m:SyncFolderId>
+        ${folderXml}
+      </m:SyncFolderId>
+      ${syncStateXml}
+      <m:MaxChangesReturned>${Math.min(maxItems, 250)}</m:MaxChangesReturned>
+      <m:SyncScope>NormalItems</m:SyncScope>
+    </m:SyncFolderItems>
+  </soap:Body>
+</soap:Envelope>`;
+        let xml = "";
+        try {
+          xml = await this.ewsRequest(soap);
+        } catch (err) {
+          if (String(err).includes("ErrorInvalidSyncStateData")) {
+            console.warn("[EWS Source] Invalid SyncState token encountered; resetting token and requesting full sync.");
+            const resetCursor = { ...cursor, token: void 0 };
+            return this.fetchSince(resetCursor, maxItems);
+          }
+          throw err;
+        }
+        const syncStateMatch = xml.match(/<m:SyncState>([^<]+)<\/m:SyncState>/);
+        const nextSyncState = syncStateMatch ? syncStateMatch[1] : cursor.token;
+        const includesLast = xml.includes("<m:IncludesLastItemInRange>true</m:IncludesLastItemInRange>");
+        const createdIds = [];
+        const createMatches = xml.matchAll(/<t:Create>[\s\S]*?<t:ItemId Id="([^"]+)"/g);
+        for (const match of createMatches) {
+          createdIds.push(match[1]);
+        }
+        if (createdIds.length === 0) {
+          const defaultSince = new Date(Date.now() - 3 * 24 * 60 * 60 * 1e3).toISOString();
+          const sinceDateIso = cursor.lastSyncedAt ? new Date(new Date(cursor.lastSyncedAt).getTime() - 24 * 60 * 60 * 1e3).toISOString() : defaultSince;
+          console.log(`[EWS Source] SyncFolderItems returned 0 changes. Running FindItem fallback (since ${sinceDateIso})...`);
+          const recentItems = await this.findItemsInFolder(folderId, maxItems, sinceDateIso);
+          for (const item of recentItems) {
+            if (!createdIds.includes(item.id)) {
+              createdIds.push(item.id);
+            }
+          }
+          console.log(`[EWS Source] FindItem fallback discovered ${createdIds.length} candidate items.`);
+        }
+        const messages = await this.getItemsBatch(createdIds);
+        return {
+          messages,
+          nextCursor: {
+            folderName: cursor.folderName,
+            token: nextSyncState,
+            lastSyncedAt: (/* @__PURE__ */ new Date()).toISOString(),
+            totalSyncedCount: (cursor.totalSyncedCount || 0) + messages.length
+          },
+          moreAvailable: !includesLast && createdIds.length > 0
+        };
+      }
+      /**
+       * Searches for an email in Exchange by its InternetMessageId or ConversationId
+       * to obtain the exact EWS ItemId and fresh ChangeKey required for in-thread Reply-All.
+       */
+      async findItemByMessageIdOrConversation(messageId, conversationId, folderId = EXACT_INAPPROVALS_FOLDER_ID) {
+        const cleanMsgId = messageId ? messageId.replace(/&lt;|&gt;|<|>/g, "").trim() : "";
+        if (cleanMsgId) {
+          try {
+            const soap = `<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xmlns:m="http://schemas.microsoft.com/exchange/services/2006/messages"
+               xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types"
+               xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Header>
+    <t:RequestServerVersion Version="Exchange2016" />
+  </soap:Header>
+  <soap:Body>
+    <m:FindItem Traversal="Shallow">
+      <m:ItemShape>
+        <t:BaseShape>IdOnly</t:BaseShape>
+        <t:AdditionalProperties>
+          <t:FieldURI FieldURI="message:InternetMessageId"/>
+        </t:AdditionalProperties>
+      </m:ItemShape>
+      <m:Restriction>
+        <t:Contains ContainmentMode="Substring" ContainmentComparison="IgnoreCase">
+          <t:FieldURI FieldURI="message:InternetMessageId"/>
+          <t:Constant Value="${cleanMsgId}"/>
+        </t:Contains>
+      </m:Restriction>
+      <m:ParentFolderIds>
+        <t:FolderId Id="${folderId}"/>
+      </m:ParentFolderIds>
+    </m:FindItem>
+  </soap:Body>
+</soap:Envelope>`;
+            const resp = await this.ewsRequest(soap);
+            const match = resp.match(/<t:ItemId Id="([^"]+)"(?:\s+ChangeKey="([^"]+)")?/);
+            if (match) {
+              console.log(`[EWS] Discovered target message by InternetMessageId: ${match[1].substring(0, 30)}...`);
+              return { itemId: match[1], changeKey: match[2] || "" };
+            }
+          } catch (err) {
+            console.warn(`[EWS] Search by InternetMessageId note:`, err?.message || err);
+          }
+        }
+        if (conversationId) {
+          try {
+            const convSoap = `<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xmlns:m="http://schemas.microsoft.com/exchange/services/2006/messages"
+               xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types"
+               xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Header>
+    <t:RequestServerVersion Version="Exchange2016" />
+  </soap:Header>
+  <soap:Body>
+    <m:FindItem Traversal="Shallow">
+      <m:ItemShape>
+        <t:BaseShape>IdOnly</t:BaseShape>
+        <t:AdditionalProperties>
+          <t:FieldURI FieldURI="item:ConversationId"/>
+          <t:FieldURI FieldURI="item:DateTimeReceived"/>
+        </t:AdditionalProperties>
+      </m:ItemShape>
+      <m:ParentFolderIds>
+        <t:FolderId Id="${folderId}"/>
+      </m:ParentFolderIds>
+    </m:FindItem>
+  </soap:Body>
+</soap:Envelope>`;
+            const resp = await this.ewsRequest(convSoap);
+            const messageBlocks = [...resp.matchAll(/<t:Message>([\s\S]*?)<\/t:Message>/g)];
+            for (const mb of messageBlocks) {
+              const block = mb[1];
+              if (block.includes(conversationId)) {
+                const idMatch = block.match(/<t:ItemId Id="([^"]+)"(?:\s+ChangeKey="([^"]+)")?/);
+                if (idMatch) {
+                  console.log(`[EWS] Discovered target message by ConversationId: ${idMatch[1].substring(0, 30)}...`);
+                  return { itemId: idMatch[1], changeKey: idMatch[2] || "" };
+                }
+              }
+            }
+          } catch (err) {
+            console.warn(`[EWS] Search by ConversationId note:`, err?.message || err);
+          }
+        }
+        return null;
+      }
+      /**
+       * Creates an in-thread "Reply All" draft in Exchange using EWS ReplyAllToItem.
+       * - Preserves the entire email thread (same conversation, topic, and quoted history).
+       * - Automatically includes all original "To" and "Cc" recipients.
+       * - Automatically includes the user's predefined Outlook signature below the draft text.
+       */
+      async createDraft(params) {
+        const { itemId, changeKey, messageId, conversationId, body, subject, to, signatureHtml, signatureText } = params;
+        const activeSignatureHtml = signatureHtml || process.env.OUTLOOK_SIGNATURE_HTML || DEFAULT_OUTLOOK_SIGNATURE_HTML;
+        const activeSignatureText = signatureText || process.env.OUTLOOK_SIGNATURE_TEXT || DEFAULT_OUTLOOK_SIGNATURE_TEXT;
+        const formattedDraftHtml = body.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, "<br>");
+        const fullDraftHtml = `<div style="font-family: Calibri, Aptos, Arial, sans-serif; font-size: 11pt; color: #000000;">${formattedDraftHtml}${activeSignatureHtml}</div>`;
+        const fullDraftText = `${body}
+${activeSignatureText}`;
+        let targetItemId = itemId && !itemId.includes("@") && itemId.length > 40 ? itemId : "";
+        let targetChangeKey = changeKey || "";
+        if (!targetItemId && (messageId || conversationId || itemId)) {
+          const found = await this.findItemByMessageIdOrConversation(messageId || itemId, conversationId);
+          if (found) {
+            targetItemId = found.itemId;
+            targetChangeKey = found.changeKey;
+          }
+        }
+        if (targetItemId) {
+          if (!targetChangeKey) {
+            try {
+              const getXml = `<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xmlns:m="http://schemas.microsoft.com/exchange/services/2006/messages"
+               xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types"
+               xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Header>
+    <t:RequestServerVersion Version="Exchange2016" />
+  </soap:Header>
+  <soap:Body>
+    <m:GetItem>
+      <m:ItemShape>
+        <t:BaseShape>IdOnly</t:BaseShape>
+      </m:ItemShape>
+      <m:ItemIds>
+        <t:ItemId Id="${targetItemId}"/>
+      </m:ItemIds>
+    </m:GetItem>
+  </soap:Body>
+</soap:Envelope>`;
+              const resp = await this.ewsRequest(getXml);
+              const ckMatch = resp.match(/ChangeKey="([^"]+)"/);
+              if (ckMatch) targetChangeKey = ckMatch[1];
+            } catch (err) {
+              console.warn("[EWS] Could not retrieve fresh ChangeKey:", err?.message || err);
+            }
+          }
+          if (targetChangeKey) {
+            const replySoap = `<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xmlns:m="http://schemas.microsoft.com/exchange/services/2006/messages"
+               xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types"
+               xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Header>
+    <t:RequestServerVersion Version="Exchange2016" />
+  </soap:Header>
+  <soap:Body>
+    <m:CreateItem MessageDisposition="SaveOnly">
+      <m:Items>
+        <t:ReplyAllToItem>
+          <t:ReferenceItemId Id="${targetItemId}" ChangeKey="${targetChangeKey}" />
+          <t:NewBodyContent BodyType="HTML">${fullDraftHtml.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")}</t:NewBodyContent>
+        </t:ReplyAllToItem>
+      </m:Items>
+    </m:CreateItem>
+  </soap:Body>
+</soap:Envelope>`;
+            try {
+              const xml = await this.ewsRequest(replySoap);
+              if (xml.includes('ResponseClass="Success"')) {
+                const draftIdMatch = xml.match(/<t:ItemId Id="([^"]+)"/);
+                const createdDraftId = draftIdMatch ? draftIdMatch[1] : void 0;
+                console.log(`[EWS] In-thread Reply-All draft created successfully in same thread with all To/Cc recipients and signature.`);
+                return {
+                  success: true,
+                  mode: "reply_all",
+                  draftId: createdDraftId
+                };
+              } else {
+                console.warn(`[EWS] ReplyAllToItem non-success, falling back to standalone draft:`, xml.substring(0, 300));
+              }
+            } catch (err) {
+              console.warn("[EWS] ReplyAllToItem failed, falling back to standalone draft:", err?.message || err);
+            }
+          }
+        }
+        console.log(`[EWS] Creating standalone draft in Drafts folder...`);
+        const standaloneSoap = `<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xmlns:m="http://schemas.microsoft.com/exchange/services/2006/messages"
+               xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types"
+               xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Header>
+    <t:RequestServerVersion Version="Exchange2016" />
+  </soap:Header>
+  <soap:Body>
+    <m:CreateItem MessageDisposition="SaveOnly">
+      <m:SavedItemFolderId>
+        <t:DistinguishedFolderId Id="drafts"/>
+      </m:SavedItemFolderId>
+      <m:Items>
+        <t:Message>
+          <t:Subject>${subject.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")}</t:Subject>
+          <t:Body BodyType="HTML">${fullDraftHtml.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")}</t:Body>
+          <t:ToRecipients>
+            <t:Mailbox>
+              <t:EmailAddress>${to || "corporate@elitehospital.org"}</t:EmailAddress>
+            </t:Mailbox>
+          </t:ToRecipients>
+        </t:Message>
+      </m:Items>
+    </m:CreateItem>
+  </soap:Body>
+</soap:Envelope>`;
+        try {
+          const xml = await this.ewsRequest(standaloneSoap);
+          if (xml.includes('ResponseClass="Success"')) {
+            const draftIdMatch = xml.match(/<t:ItemId Id="([^"]+)"/);
+            const createdDraftId = draftIdMatch ? draftIdMatch[1] : void 0;
+            console.log(`[EWS] Standalone draft created in Exchange Drafts folder.`);
+            return {
+              success: true,
+              mode: "standalone",
+              draftId: createdDraftId
+            };
+          }
+          return { success: false, mode: "standalone", error: xml.substring(0, 300) };
+        } catch (err) {
+          return { success: false, mode: "standalone", error: err?.message || String(err) };
+        }
+      }
+    };
+  }
+});
+
 // src/mail/draftEndpoint.ts
 import { createClient } from "@supabase/supabase-js";
 import { doc as doc3, getDoc as getDoc2, collection as collection2, getDocs as getDocs2, query as query2, limit as limit2 } from "firebase/firestore";
@@ -114,598 +717,8 @@ function setupOptimizedFirestore() {
 var db = setupOptimizedFirestore();
 var googleProvider = new GoogleAuthProvider();
 
-// src/mail/adapters/EwsSource.ts
-import httpntlm from "httpntlm";
-var EXACT_INAPPROVALS_FOLDER_ID = "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgAuAAAAAAA4U9epEFcNRbR5QhtWJDZyAQCVKjW+UMYOTr9U/HR/zy7WAAActvclAAA=";
-var DEFAULT_OUTLOOK_SIGNATURE_HTML = `
-<br><br>
-<table class="MsoNormalTable" border="0" cellspacing="0" cellpadding="0" style="border-collapse:collapse">
-  <tbody>
-    <tr>
-      <td style="padding: 0cm 5.4pt;">
-        <p class="MsoNormal" style="margin: 0cm; font-size: 9.5pt; font-family: 'Maiandra GD', Calibri, sans-serif; color: gray;">
-          <b>Mohanad M. El Maamoun</b><br>
-          Duty Manager | Elite Hospital<br>
-          <b><u>Mob.:</u></b> &nbsp; 01148085552<br>
-          <b><u>Email:</u></b> &nbsp; <a href="mailto:Mohanad.elmaamoun@elitehospital.org" style="color: #467886; text-decoration: underline;">Mohanad.elmaamoun@elitehospital.org</a>
-        </p>
-      </td>
-    </tr>
-  </tbody>
-</table>`;
-var DEFAULT_OUTLOOK_SIGNATURE_TEXT = `
-
-Mohanad M. El Maamoun
-Duty Manager | Elite Hospital
-Mob.:    01148085552
-Email:  Mohanad.elmaamoun@elitehospital.org`;
-var EwsSource = class {
-  constructor(config) {
-    const rawUser = config?.username || process.env.EXCHANGE_USER || process.env.IMAP_USER || "";
-    const cleanUser = rawUser.includes("@") ? rawUser.split("@")[0] : rawUser;
-    this.config = {
-      url: config?.url || process.env.EWS_URL || `https://${process.env.IMAP_HOST || "wmail.elitehospital.org"}/EWS/Exchange.asmx`,
-      username: cleanUser,
-      password: config?.password || process.env.EXCHANGE_PASSWORD || process.env.IMAP_PASSWORD || "",
-      domain: config?.domain || process.env.EXCHANGE_DOMAIN || "elitehospital",
-      folderName: config?.folderName || process.env.EWS_FOLDER || process.env.IMAP_FOLDER || "InApprovals"
-    };
-  }
-  /**
-   * Executes an NTLM-authenticated SOAP request to the EWS endpoint.
-   */
-  async ewsRequest(soapBody) {
-    return new Promise((resolve, reject) => {
-      if (!this.config.username || !this.config.password) {
-        return reject(new Error("EWS credentials (username/password) are not configured."));
-      }
-      httpntlm.post(
-        {
-          url: this.config.url,
-          username: this.config.username,
-          password: this.config.password,
-          domain: this.config.domain,
-          body: soapBody,
-          headers: {
-            "Content-Type": "text/xml; charset=utf-8"
-          },
-          rejectUnauthorized: false
-        },
-        (err, res) => {
-          if (err) return reject(err);
-          if (res.statusCode !== 200) {
-            return reject(new Error(`EWS HTTP ${res.statusCode}: ${res.body?.substring(0, 300)}`));
-          }
-          resolve(res.body);
-        }
-      );
-    });
-  }
-  /**
-   * Tests connectivity to EWS endpoint.
-   */
-  async testConnection() {
-    const testSoap = `<?xml version="1.0" encoding="utf-8"?>
-<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-               xmlns:m="http://schemas.microsoft.com/exchange/services/2006/messages"
-               xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types"
-               xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-  <soap:Header>
-    <t:RequestServerVersion Version="Exchange2016" />
-  </soap:Header>
-  <soap:Body>
-    <m:FindFolder Traversal="Shallow">
-      <m:FolderShape>
-        <t:BaseShape>IdOnly</t:BaseShape>
-      </m:FolderShape>
-      <m:ParentFolderIds>
-        <t:DistinguishedFolderId Id="inbox"/>
-      </m:ParentFolderIds>
-    </m:FindFolder>
-  </soap:Body>
-</soap:Envelope>`;
-    try {
-      const response = await this.ewsRequest(testSoap);
-      if (response.includes("FindFolderResponse") && response.includes('ResponseClass="Success"')) {
-        return { ok: true, message: "Successfully authenticated with Exchange EWS." };
-      }
-      return { ok: false, message: `EWS response: ${response.substring(0, 200)}` };
-    } catch (err) {
-      return { ok: false, message: `Failed to connect to EWS: ${err.message || err}` };
-    }
-  }
-  /**
-   * Resolves the FolderId for a named folder or returns distinguished folder id.
-   */
-  async resolveFolderId(folderName) {
-    const raw = folderName || this.config.folderName || "InApprovals";
-    const lower = raw.toLowerCase();
-    if (lower === "inapprovals" || raw.startsWith("AAMk") || raw.startsWith("AQMk")) {
-      return EXACT_INAPPROVALS_FOLDER_ID;
-    }
-    if (["inbox", "drafts", "deleteditems", "sentitems", "msgfolderroot"].includes(lower)) {
-      return lower;
-    }
-    const soap = `<?xml version="1.0" encoding="utf-8"?>
-<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-               xmlns:m="http://schemas.microsoft.com/exchange/services/2006/messages"
-               xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types"
-               xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-  <soap:Header>
-    <t:RequestServerVersion Version="Exchange2016" />
-  </soap:Header>
-  <soap:Body>
-    <m:FindFolder Traversal="Deep">
-      <m:FolderShape>
-        <t:BaseShape>IdOnly</t:BaseShape>
-        <t:AdditionalProperties>
-          <t:FieldURI FieldURI="folder:DisplayName"/>
-        </t:AdditionalProperties>
-      </m:FolderShape>
-      <m:IndexedPageFolderView MaxEntriesReturned="100" Offset="0" BasePoint="Beginning"/>
-      <m:ParentFolderIds>
-        <t:DistinguishedFolderId Id="msgfolderroot"/>
-      </m:ParentFolderIds>
-    </m:FindFolder>
-  </soap:Body>
-</soap:Envelope>`;
-    try {
-      const xml = await this.ewsRequest(soap);
-      const regex = new RegExp(
-        `<t:Folder>[\\s\\S]*?<t:FolderId Id="([^"]+)" ChangeKey="([^"]+)"[\\s\\S]*?<t:DisplayName>${raw}<\\/t:DisplayName>[\\s\\S]*?<\\/t:Folder>`,
-        "i"
-      );
-      const match = xml.match(regex);
-      if (match) return match[1];
-    } catch (err) {
-      console.warn(`[EWS Source] Failed to dynamically resolve folder "${raw}", falling back to default.`, err);
-    }
-    return EXACT_INAPPROVALS_FOLDER_ID;
-  }
-  /**
-   * Finds recent items in an Exchange folder with date restriction and pagination.
-   */
-  async findItemsInFolder(folderId, maxEntries = 100, sinceDateIso) {
-    const isDistinguished = ["inbox", "drafts", "deleteditems", "sentitems", "msgfolderroot"].includes(folderId.toLowerCase());
-    const folderXml = isDistinguished ? `<t:DistinguishedFolderId Id="${folderId}"/>` : `<t:FolderId Id="${folderId}"/>`;
-    const restrictionXml = sinceDateIso ? `
-      <m:Restriction>
-        <t:IsGreaterThanOrEqualTo>
-          <t:FieldURI FieldURI="item:DateTimeReceived"/>
-          <t:FieldURIOrConstant>
-            <t:Constant Value="${sinceDateIso}"/>
-          </t:FieldURIOrConstant>
-        </t:IsGreaterThanOrEqualTo>
-      </m:Restriction>` : "";
-    const allResults = [];
-    const pageSize = Math.min(maxEntries, 250);
-    const soap = `<?xml version="1.0" encoding="utf-8"?>
-<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-               xmlns:m="http://schemas.microsoft.com/exchange/services/2006/messages"
-               xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types"
-               xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-  <soap:Header>
-    <t:RequestServerVersion Version="Exchange2016" />
-  </soap:Header>
-  <soap:Body>
-    <m:FindItem Traversal="Shallow">
-      <m:ItemShape>
-        <t:BaseShape>IdOnly</t:BaseShape>
-        <t:AdditionalProperties>
-          <t:FieldURI FieldURI="item:Subject"/>
-          <t:FieldURI FieldURI="item:DateTimeReceived"/>
-        </t:AdditionalProperties>
-      </m:ItemShape>
-      <m:IndexedPageItemView MaxEntriesReturned="${pageSize}" Offset="0" BasePoint="Beginning"/>
-      ${restrictionXml}
-      <m:SortOrder>
-        <t:FieldOrder Order="Descending">
-          <t:FieldURI FieldURI="item:DateTimeReceived"/>
-        </t:FieldOrder>
-      </m:SortOrder>
-      <m:ParentFolderIds>
-        ${folderXml}
-      </m:ParentFolderIds>
-    </m:FindItem>
-  </soap:Body>
-</soap:Envelope>`;
-    try {
-      const xml = await this.ewsRequest(soap);
-      const itemMatches = xml.matchAll(/<t:Message>([\s\S]*?)<\/t:Message>/g);
-      for (const match of itemMatches) {
-        const msgBlock = match[1];
-        const idMatch = msgBlock.match(/<t:ItemId Id="([^"]+)"/);
-        const subjMatch = msgBlock.match(/<t:Subject>([^<]*)<\/t:Subject>/);
-        const dateMatch = msgBlock.match(/<t:DateTimeReceived>([^<]*)<\/t:DateTimeReceived>/);
-        if (idMatch) {
-          allResults.push({
-            id: idMatch[1],
-            subject: subjMatch ? subjMatch[1] : "",
-            dateTimeReceived: dateMatch ? dateMatch[1] : void 0
-          });
-        }
-      }
-    } catch (err) {
-      console.warn(`[EWS Source] Error finding items in folder "${folderId}":`, err);
-    }
-    return allResults;
-  }
-  /**
-   * Fetches full message details in batch for a list of EWS item IDs.
-   */
-  async getItemsBatch(itemIds) {
-    if (itemIds.length === 0) return [];
-    const idsXml = itemIds.map((id) => `<t:ItemId Id="${id}"/>`).join("\n");
-    const soap = `<?xml version="1.0" encoding="utf-8"?>
-<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-               xmlns:m="http://schemas.microsoft.com/exchange/services/2006/messages"
-               xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types"
-               xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-  <soap:Header>
-    <t:RequestServerVersion Version="Exchange2016" />
-  </soap:Header>
-  <soap:Body>
-    <m:GetItem>
-      <m:ItemShape>
-        <t:BaseShape>AllProperties</t:BaseShape>
-        <t:BodyType>HTML</t:BodyType>
-      </m:ItemShape>
-      <m:ItemIds>
-        ${idsXml}
-      </m:ItemIds>
-    </m:GetItem>
-  </soap:Body>
-</soap:Envelope>`;
-    for (let attempt = 1; attempt <= 3; attempt++) {
-      try {
-        const xml = await this.ewsRequest(soap);
-        const messageBlocks = [...xml.matchAll(/<t:Message>([\s\S]*?)<\/t:Message>/g)];
-        return messageBlocks.map((mb) => {
-          const block = mb[1];
-          const idMatch = block.match(/<t:ItemId Id="([^"]+)"(?:\s+ChangeKey="([^"]+)")?/);
-          const itemId = idMatch ? idMatch[1] : "";
-          const changeKey = idMatch?.[2] || "";
-          const subject = block.match(/<t:Subject>([^<]*)<\/t:Subject>/)?.[1] || "";
-          const messageId = block.match(/<t:InternetMessageId>([^<]*)<\/t:InternetMessageId>/)?.[1] || `<${itemId}@exchange>`;
-          const from = block.match(/<t:From>[\s\S]*?<t:EmailAddress>([^<]+)<\/t:EmailAddress>/)?.[1] || "";
-          const bodyHtml = block.match(/<t:Body[^>]*>([\s\S]*?)<\/t:Body>/)?.[1] || "";
-          const conversationId = block.match(/<t:ConversationId Id="([^"]+)"/)?.[1] || "";
-          const receivedAtStr = block.match(/<t:DateTimeReceived>([^<]+)<\/t:DateTimeReceived>/)?.[1];
-          const receivedAt = receivedAtStr ? new Date(receivedAtStr).toISOString() : (/* @__PURE__ */ new Date()).toISOString();
-          const attachments = [];
-          const attMatches = block.matchAll(/<t:FileAttachment>[\s\S]*?<t:AttachmentId Id="([^"]+)"[\s\S]*?<t:Name>([^<]+)<\/t:Name>(?:[\s\S]*?<t:ContentType>([^<]+)<\/t:ContentType>)?(?:[\s\S]*?<t:Size>([^<]+)<\/t:Size>)?/g);
-          for (const am of attMatches) {
-            attachments.push({
-              id: am[1],
-              name: am[2],
-              contentType: am[3] || "application/octet-stream",
-              sizeBytes: Number(am[4]) || 0
-            });
-          }
-          return {
-            id: itemId,
-            changeKey,
-            messageId,
-            conversationId,
-            subject,
-            sender: from,
-            receivedAt,
-            htmlBody: bodyHtml,
-            textBody: bodyHtml.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim(),
-            attachments
-          };
-        });
-      } catch (err) {
-        const isThrottled = String(err).includes("ErrorServerBusy") || String(err).includes("503");
-        if (attempt < 3 && isThrottled) {
-          const delay = attempt * 1500;
-          await new Promise((r) => setTimeout(r, delay));
-          continue;
-        }
-        if (attempt === 3) throw err;
-      }
-    }
-    return [];
-  }
-  /**
-   * Incrementally fetches messages since the given cursor.
-   */
-  async fetchSince(cursor, maxItems = 50) {
-    const folderId = await this.resolveFolderId(cursor.folderName || this.config.folderName);
-    const isDistinguished = ["inbox", "drafts", "deleteditems", "sentitems", "msgfolderroot"].includes(folderId.toLowerCase());
-    const folderXml = isDistinguished ? `<t:DistinguishedFolderId Id="${folderId}"/>` : `<t:FolderId Id="${folderId}"/>`;
-    const syncStateXml = cursor.token ? `<m:SyncState>${cursor.token}</m:SyncState>` : "";
-    const soap = `<?xml version="1.0" encoding="utf-8"?>
-<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-               xmlns:m="http://schemas.microsoft.com/exchange/services/2006/messages"
-               xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types"
-               xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-  <soap:Header>
-    <t:RequestServerVersion Version="Exchange2016" />
-  </soap:Header>
-  <soap:Body>
-    <m:SyncFolderItems>
-      <m:ItemShape>
-        <t:BaseShape>IdOnly</t:BaseShape>
-      </m:ItemShape>
-      <m:SyncFolderId>
-        ${folderXml}
-      </m:SyncFolderId>
-      ${syncStateXml}
-      <m:MaxChangesReturned>${Math.min(maxItems, 250)}</m:MaxChangesReturned>
-      <m:SyncScope>NormalItems</m:SyncScope>
-    </m:SyncFolderItems>
-  </soap:Body>
-</soap:Envelope>`;
-    let xml = "";
-    try {
-      xml = await this.ewsRequest(soap);
-    } catch (err) {
-      if (String(err).includes("ErrorInvalidSyncStateData")) {
-        console.warn("[EWS Source] Invalid SyncState token encountered; resetting token and requesting full sync.");
-        const resetCursor = { ...cursor, token: void 0 };
-        return this.fetchSince(resetCursor, maxItems);
-      }
-      throw err;
-    }
-    const syncStateMatch = xml.match(/<m:SyncState>([^<]+)<\/m:SyncState>/);
-    const nextSyncState = syncStateMatch ? syncStateMatch[1] : cursor.token;
-    const includesLast = xml.includes("<m:IncludesLastItemInRange>true</m:IncludesLastItemInRange>");
-    const createdIds = [];
-    const createMatches = xml.matchAll(/<t:Create>[\s\S]*?<t:ItemId Id="([^"]+)"/g);
-    for (const match of createMatches) {
-      createdIds.push(match[1]);
-    }
-    if (createdIds.length === 0) {
-      const defaultSince = new Date(Date.now() - 3 * 24 * 60 * 60 * 1e3).toISOString();
-      const sinceDateIso = cursor.lastSyncedAt ? new Date(new Date(cursor.lastSyncedAt).getTime() - 24 * 60 * 60 * 1e3).toISOString() : defaultSince;
-      console.log(`[EWS Source] SyncFolderItems returned 0 changes. Running FindItem fallback (since ${sinceDateIso})...`);
-      const recentItems = await this.findItemsInFolder(folderId, maxItems, sinceDateIso);
-      for (const item of recentItems) {
-        if (!createdIds.includes(item.id)) {
-          createdIds.push(item.id);
-        }
-      }
-      console.log(`[EWS Source] FindItem fallback discovered ${createdIds.length} candidate items.`);
-    }
-    const messages = await this.getItemsBatch(createdIds);
-    return {
-      messages,
-      nextCursor: {
-        folderName: cursor.folderName,
-        token: nextSyncState,
-        lastSyncedAt: (/* @__PURE__ */ new Date()).toISOString(),
-        totalSyncedCount: (cursor.totalSyncedCount || 0) + messages.length
-      },
-      moreAvailable: !includesLast && createdIds.length > 0
-    };
-  }
-  /**
-   * Searches for an email in Exchange by its InternetMessageId or ConversationId
-   * to obtain the exact EWS ItemId and fresh ChangeKey required for in-thread Reply-All.
-   */
-  async findItemByMessageIdOrConversation(messageId, conversationId, folderId = EXACT_INAPPROVALS_FOLDER_ID) {
-    const cleanMsgId = messageId ? messageId.replace(/&lt;|&gt;|<|>/g, "").trim() : "";
-    if (cleanMsgId) {
-      try {
-        const soap = `<?xml version="1.0" encoding="utf-8"?>
-<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-               xmlns:m="http://schemas.microsoft.com/exchange/services/2006/messages"
-               xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types"
-               xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-  <soap:Header>
-    <t:RequestServerVersion Version="Exchange2016" />
-  </soap:Header>
-  <soap:Body>
-    <m:FindItem Traversal="Shallow">
-      <m:ItemShape>
-        <t:BaseShape>IdOnly</t:BaseShape>
-        <t:AdditionalProperties>
-          <t:FieldURI FieldURI="message:InternetMessageId"/>
-        </t:AdditionalProperties>
-      </m:ItemShape>
-      <m:Restriction>
-        <t:Contains ContainmentMode="Substring" ContainmentComparison="IgnoreCase">
-          <t:FieldURI FieldURI="message:InternetMessageId"/>
-          <t:Constant Value="${cleanMsgId}"/>
-        </t:Contains>
-      </m:Restriction>
-      <m:ParentFolderIds>
-        <t:FolderId Id="${folderId}"/>
-      </m:ParentFolderIds>
-    </m:FindItem>
-  </soap:Body>
-</soap:Envelope>`;
-        const resp = await this.ewsRequest(soap);
-        const match = resp.match(/<t:ItemId Id="([^"]+)"(?:\s+ChangeKey="([^"]+)")?/);
-        if (match) {
-          console.log(`[EWS] Discovered target message by InternetMessageId: ${match[1].substring(0, 30)}...`);
-          return { itemId: match[1], changeKey: match[2] || "" };
-        }
-      } catch (err) {
-        console.warn(`[EWS] Search by InternetMessageId note:`, err?.message || err);
-      }
-    }
-    if (conversationId) {
-      try {
-        const convSoap = `<?xml version="1.0" encoding="utf-8"?>
-<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-               xmlns:m="http://schemas.microsoft.com/exchange/services/2006/messages"
-               xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types"
-               xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-  <soap:Header>
-    <t:RequestServerVersion Version="Exchange2016" />
-  </soap:Header>
-  <soap:Body>
-    <m:FindItem Traversal="Shallow">
-      <m:ItemShape>
-        <t:BaseShape>IdOnly</t:BaseShape>
-        <t:AdditionalProperties>
-          <t:FieldURI FieldURI="item:ConversationId"/>
-          <t:FieldURI FieldURI="item:DateTimeReceived"/>
-        </t:AdditionalProperties>
-      </m:ItemShape>
-      <m:ParentFolderIds>
-        <t:FolderId Id="${folderId}"/>
-      </m:ParentFolderIds>
-    </m:FindItem>
-  </soap:Body>
-</soap:Envelope>`;
-        const resp = await this.ewsRequest(convSoap);
-        const messageBlocks = [...resp.matchAll(/<t:Message>([\s\S]*?)<\/t:Message>/g)];
-        for (const mb of messageBlocks) {
-          const block = mb[1];
-          if (block.includes(conversationId)) {
-            const idMatch = block.match(/<t:ItemId Id="([^"]+)"(?:\s+ChangeKey="([^"]+)")?/);
-            if (idMatch) {
-              console.log(`[EWS] Discovered target message by ConversationId: ${idMatch[1].substring(0, 30)}...`);
-              return { itemId: idMatch[1], changeKey: idMatch[2] || "" };
-            }
-          }
-        }
-      } catch (err) {
-        console.warn(`[EWS] Search by ConversationId note:`, err?.message || err);
-      }
-    }
-    return null;
-  }
-  /**
-   * Creates an in-thread "Reply All" draft in Exchange using EWS ReplyAllToItem.
-   * - Preserves the entire email thread (same conversation, topic, and quoted history).
-   * - Automatically includes all original "To" and "Cc" recipients.
-   * - Automatically includes the user's predefined Outlook signature below the draft text.
-   */
-  async createDraft(params) {
-    const { itemId, changeKey, messageId, conversationId, body, subject, to, signatureHtml, signatureText } = params;
-    const activeSignatureHtml = signatureHtml || process.env.OUTLOOK_SIGNATURE_HTML || DEFAULT_OUTLOOK_SIGNATURE_HTML;
-    const activeSignatureText = signatureText || process.env.OUTLOOK_SIGNATURE_TEXT || DEFAULT_OUTLOOK_SIGNATURE_TEXT;
-    const formattedDraftHtml = body.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, "<br>");
-    const fullDraftHtml = `<div style="font-family: Calibri, Aptos, Arial, sans-serif; font-size: 11pt; color: #000000;">${formattedDraftHtml}${activeSignatureHtml}</div>`;
-    const fullDraftText = `${body}
-${activeSignatureText}`;
-    let targetItemId = itemId && !itemId.includes("@") && itemId.length > 40 ? itemId : "";
-    let targetChangeKey = changeKey || "";
-    if (!targetItemId && (messageId || conversationId || itemId)) {
-      const found = await this.findItemByMessageIdOrConversation(messageId || itemId, conversationId);
-      if (found) {
-        targetItemId = found.itemId;
-        targetChangeKey = found.changeKey;
-      }
-    }
-    if (targetItemId) {
-      if (!targetChangeKey) {
-        try {
-          const getXml = `<?xml version="1.0" encoding="utf-8"?>
-<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-               xmlns:m="http://schemas.microsoft.com/exchange/services/2006/messages"
-               xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types"
-               xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-  <soap:Header>
-    <t:RequestServerVersion Version="Exchange2016" />
-  </soap:Header>
-  <soap:Body>
-    <m:GetItem>
-      <m:ItemShape>
-        <t:BaseShape>IdOnly</t:BaseShape>
-      </m:ItemShape>
-      <m:ItemIds>
-        <t:ItemId Id="${targetItemId}"/>
-      </m:ItemIds>
-    </m:GetItem>
-  </soap:Body>
-</soap:Envelope>`;
-          const resp = await this.ewsRequest(getXml);
-          const ckMatch = resp.match(/ChangeKey="([^"]+)"/);
-          if (ckMatch) targetChangeKey = ckMatch[1];
-        } catch (err) {
-          console.warn("[EWS] Could not retrieve fresh ChangeKey:", err?.message || err);
-        }
-      }
-      if (targetChangeKey) {
-        const replySoap = `<?xml version="1.0" encoding="utf-8"?>
-<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-               xmlns:m="http://schemas.microsoft.com/exchange/services/2006/messages"
-               xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types"
-               xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-  <soap:Header>
-    <t:RequestServerVersion Version="Exchange2016" />
-  </soap:Header>
-  <soap:Body>
-    <m:CreateItem MessageDisposition="SaveOnly">
-      <m:Items>
-        <t:ReplyAllToItem>
-          <t:ReferenceItemId Id="${targetItemId}" ChangeKey="${targetChangeKey}" />
-          <t:NewBodyContent BodyType="HTML">${fullDraftHtml.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")}</t:NewBodyContent>
-        </t:ReplyAllToItem>
-      </m:Items>
-    </m:CreateItem>
-  </soap:Body>
-</soap:Envelope>`;
-        try {
-          const xml = await this.ewsRequest(replySoap);
-          if (xml.includes('ResponseClass="Success"')) {
-            const draftIdMatch = xml.match(/<t:ItemId Id="([^"]+)"/);
-            const createdDraftId = draftIdMatch ? draftIdMatch[1] : void 0;
-            console.log(`[EWS] In-thread Reply-All draft created successfully in same thread with all To/Cc recipients and signature.`);
-            return {
-              success: true,
-              mode: "reply_all",
-              draftId: createdDraftId
-            };
-          } else {
-            console.warn(`[EWS] ReplyAllToItem non-success, falling back to standalone draft:`, xml.substring(0, 300));
-          }
-        } catch (err) {
-          console.warn("[EWS] ReplyAllToItem failed, falling back to standalone draft:", err?.message || err);
-        }
-      }
-    }
-    console.log(`[EWS] Creating standalone draft in Drafts folder...`);
-    const standaloneSoap = `<?xml version="1.0" encoding="utf-8"?>
-<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-               xmlns:m="http://schemas.microsoft.com/exchange/services/2006/messages"
-               xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types"
-               xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
-  <soap:Header>
-    <t:RequestServerVersion Version="Exchange2016" />
-  </soap:Header>
-  <soap:Body>
-    <m:CreateItem MessageDisposition="SaveOnly">
-      <m:SavedItemFolderId>
-        <t:DistinguishedFolderId Id="drafts"/>
-      </m:SavedItemFolderId>
-      <m:Items>
-        <t:Message>
-          <t:Subject>${subject.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")}</t:Subject>
-          <t:Body BodyType="HTML">${fullDraftHtml.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")}</t:Body>
-          <t:ToRecipients>
-            <t:Mailbox>
-              <t:EmailAddress>${to || "corporate@elitehospital.org"}</t:EmailAddress>
-            </t:Mailbox>
-          </t:ToRecipients>
-        </t:Message>
-      </m:Items>
-    </m:CreateItem>
-  </soap:Body>
-</soap:Envelope>`;
-    try {
-      const xml = await this.ewsRequest(standaloneSoap);
-      if (xml.includes('ResponseClass="Success"')) {
-        const draftIdMatch = xml.match(/<t:ItemId Id="([^"]+)"/);
-        const createdDraftId = draftIdMatch ? draftIdMatch[1] : void 0;
-        console.log(`[EWS] Standalone draft created in Exchange Drafts folder.`);
-        return {
-          success: true,
-          mode: "standalone",
-          draftId: createdDraftId
-        };
-      }
-      return { success: false, mode: "standalone", error: xml.substring(0, 300) };
-    } catch (err) {
-      return { success: false, mode: "standalone", error: err?.message || String(err) };
-    }
-  }
-};
+// src/mail/draftEndpoint.ts
+init_EwsSource();
 
 // src/services/approvalFirestoreSync.ts
 import { doc as doc2, setDoc as setDoc2 } from "firebase/firestore";
@@ -788,6 +801,37 @@ function buildDraftReplyFromRecord(record) {
     status: "matched"
   }));
   return buildDraftReplyText(record.priceListYear, contractor, record.contractorOfficer, procedures);
+}
+
+// src/classifier/draft.ts
+var RecipientBlockedError = class extends Error {
+  constructor(msg) {
+    super(msg);
+    this.name = "RecipientBlockedError";
+  }
+};
+function loadRecipientConfig(env = process.env) {
+  return {
+    recipient: (env.CORPORATE_SALES_RECIPIENT || "corporate@elitehospital.org").trim().toLowerCase(),
+    allowedDomains: (env.ALLOWED_RECIPIENT_DOMAINS || "elitehospital.org").split(",").map((d) => d.trim().toLowerCase()).filter(Boolean)
+  };
+}
+var EMAIL_RE = /^[a-z0-9._%+\-]+@([a-z0-9\-]+(?:\.[a-z0-9\-]+)+)$/i;
+function assertInternalRecipient(to, cfg = loadRecipientConfig()) {
+  const list = Array.isArray(to) ? to : [to ?? ""];
+  if (list.length !== 1) throw new RecipientBlockedError("Exactly one recipient is allowed");
+  let addr = (list[0] || "").trim();
+  const angle = addr.match(/<([^<>]+)>\s*$/);
+  if (angle) addr = angle[1].trim();
+  if (/[;,\s]/.test(addr)) throw new RecipientBlockedError("Multiple recipients / distribution lists are not allowed");
+  const m = addr.match(EMAIL_RE);
+  if (!m) throw new RecipientBlockedError(`Invalid recipient address "${addr}"`);
+  const domain = m[1].toLowerCase();
+  if (!cfg.allowedDomains.includes(domain)) throw new RecipientBlockedError(`Domain "${domain}" is not an allowed internal domain`);
+  const cfgDomain = cfg.recipient.split("@")[1];
+  if (!cfgDomain || !cfg.allowedDomains.includes(cfgDomain)) throw new RecipientBlockedError("CORPORATE_SALES_RECIPIENT is not on an allowed internal domain");
+  if (addr.toLowerCase() !== cfg.recipient) throw new RecipientBlockedError(`Only the Corporate Sales recipient (${cfg.recipient}) is allowed`);
+  return addr.toLowerCase();
 }
 
 // src/mail/draftEndpoint.ts
@@ -917,7 +961,8 @@ async function handler(req, res) {
       console.warn("[Draft API] Companies config check note:", cfgErr);
     }
   }
-  const draftBody = body?.draftText || (record ? buildDraftReplyFromRecord({
+  const isPriceApprovalDraft = Boolean(body?.isPriceApprovalDraft);
+  const draftBody = body?.draftText || (isPriceApprovalDraft && record?.price_approval_draft_en ? record.price_approval_draft_en : record ? buildDraftReplyFromRecord({
     priceListYear: resolvedYear,
     contractorNormalized: resolvedContractor,
     contractorRaw: record.contractor_raw,
@@ -925,8 +970,13 @@ async function handler(req, res) {
     matchedProcedures: record.matched_procedures,
     requestedServices: record.requested_services
   }) : record?.suggested_draft_reply || "Price list: Elite Hospital 2026\nCorporate Email: corporate@elitehospital.org\n@corporate@elitehospital.org");
-  const draftSubject = body?.subject || (record?.patient_name ? `RE: Inpatient Approval Request - ${record.patient_name} - ${record.mrn || ""}` : "RE: Inpatient Approval Request");
-  const draftTo = body?.to || "corporate@elitehospital.org";
+  const draftSubject = body?.subject || (isPriceApprovalDraft ? `[Price Approval Request] ${resolvedContractor} \u2014 Ref ${record?.approval_reference || record?.mrn || id}` : record?.patient_name ? `RE: Inpatient Approval Request - ${record.patient_name} - ${record.mrn || ""}` : "RE: Inpatient Approval Request");
+  const draftTo = body?.to || process.env.CORPORATE_SALES_RECIPIENT || "corporate@elitehospital.org";
+  try {
+    assertInternalRecipient(draftTo);
+  } catch (domainErr) {
+    return res.status(403).json({ error: domainErr?.message || "Blocked external recipient domain." });
+  }
   let ewsSuccess = false;
   let draftMode = "standalone";
   let ewsError = "";

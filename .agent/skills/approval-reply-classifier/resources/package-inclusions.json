@@ -1,0 +1,35 @@
+{
+  "_note": "UNREVIEWED SEED. Source: 2026 list 'General rules' sheet says standard procedure prices EXCLUDE drugs and consumables (جميع الإجراءات في قائمة الأسعار لا تشمل الأدوية والمستلزمات) unless an 'all-inclusive agreement' / package applies. Only real package rows listed below. An ancillary item next to a package whose rule is UNKNOWN is NEEDS_REVIEW, never silently included. Corporate Sales must confirm each package's inclusions before this file is trusted.",
+  "ancillary_types": {
+    "anesthesia": ["anesthesia", "anaesthesia", "anesthetic", "تخدير", "مخدر"],
+    "consumables": ["consumable", "consumables", "supplies", "disposable", "مستلزمات", "مستهلكات", "مستلزم"],
+    "nursing": ["nursing", "nurse", "تمريض"],
+    "ward_stay": ["ward", "room", "accommodation", "bed day", "stay", "اقامه", "إقامة", "اقامة", "غرفه", "غرفة"]
+  },
+  "packages": [
+    {
+      "id": "HC_PACKAGE",
+      "match": ["hc package", "باكدج الرعاية المنزلية"],
+      "includes": ["nursing"],
+      "reviewed": false
+    },
+    {
+      "id": "PHYSIOTHERAPY_PACKAGE",
+      "match": ["physiotherapy package", "hydrotherapy full package", "باكدج علاج طبيعي", "علاج مائي كلي"],
+      "includes": ["nursing"],
+      "reviewed": false
+    },
+    {
+      "id": "DIALYSIS_PACKAGE",
+      "match": ["dialysis package", "باكدجات وحدة الغسيل", "باكدج غسيل"],
+      "includes": ["nursing", "consumables"],
+      "reviewed": false
+    },
+    {
+      "id": "SURGICAL_PACKAGE",
+      "match": ["laparoscopic cholecystectomy", "cesarean section", "استئصال المرارة بالمنظار", "ولادة قيصرية"],
+      "includes": ["anesthesia", "nursing", "ward_stay"],
+      "reviewed": false
+    }
+  ]
+}

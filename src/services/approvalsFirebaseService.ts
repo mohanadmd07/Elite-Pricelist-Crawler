@@ -304,6 +304,49 @@ export async function updateApprovalStatus(
   } catch (err) {
     console.error('Failed to update approval status:', err);
   }
+
+  // Additive classifier hook: lock status by human and record confirmation/correction in Supabase if configured
+  const supaClient = supabaseAdmin || supabase;
+  if (supaClient) {
+    try {
+      const mappedClassifierStatus =
+        newStatus === 'approved'
+          ? 'APPROVED'
+          : newStatus === 'refused'
+          ? 'REJECTED'
+          : newStatus === 'partially_approved' || newStatus === 'conditionally_approved'
+          ? 'PARTIAL'
+          : null;
+      if (mappedClassifierStatus) {
+        const { data: prev } = await supaClient
+          .from('inpatient_approvals')
+          .select('classifier_status, items_json, priced_items_json')
+          .eq('id', id)
+          .maybeSingle();
+        await supaClient
+          .from('inpatient_approvals')
+          .update({
+            classifier_status: mappedClassifierStatus,
+            status_locked_by_human: true,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('id', id);
+        if (prev?.classifier_status && prev.classifier_status !== mappedClassifierStatus) {
+          await supaClient.from('classification_corrections').insert({
+            approval_id: id,
+            original_status: prev.classifier_status,
+            original_items_json: prev.items_json || null,
+            original_pricing_json: prev.priced_items_json || null,
+            corrected_status: mappedClassifierStatus,
+            corrected_items_json: prev.items_json || null,
+            corrected_pricing_json: prev.priced_items_json || null,
+            reason: reason || null,
+            corrected_by: auth.currentUser?.email || 'human_ui',
+          });
+        }
+      }
+    } catch {}
+  }
 }
 
 /**

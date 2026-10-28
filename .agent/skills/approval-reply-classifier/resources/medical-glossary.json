@@ -1,0 +1,3092 @@
+{
+  "_note": "SEEDED. A clinician must review every entry (set \"reviewed\": true) before relying on it. Auto entries come from the 2026 hospital pricelist.",
+  "generated_at": "2026-10-28T11:53:28.426Z",
+  "entries": [
+    {
+      "canonical_en": "Laparoscopic cholecystectomy",
+      "aliases": [
+        "lap chole",
+        "LC",
+        "lap cholecystectomy",
+        "استئصال المرارة بالمنظار",
+        "عملية المرارة منظار",
+        "عمليه المراره بالمنظار",
+        "lap chole operation"
+      ],
+      "category": "PROCEDURE",
+      "code": null,
+      "laterality": null,
+      "approach": "laparoscopic",
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Open cholecystectomy",
+      "aliases": [
+        "open chole",
+        "استئصال المرارة جراحة مفتوحة",
+        "عملية المرارة مفتوحة"
+      ],
+      "category": "PROCEDURE",
+      "code": null,
+      "laterality": null,
+      "approach": "open",
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Appendectomy (open)",
+      "aliases": [
+        "open appendectomy",
+        "appendicectomy",
+        "استئصال الزائدة الدودية",
+        "عملية الزايدة",
+        "عملية الزائدة",
+        "appendix operation"
+      ],
+      "category": "PROCEDURE",
+      "code": null,
+      "laterality": null,
+      "approach": "open",
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Laparoscopic appendectomy",
+      "aliases": [
+        "lap appendectomy",
+        "lap appendicectomy",
+        "استئصال الزائدة بالمنظار",
+        "عملية الزايدة منظار"
+      ],
+      "category": "PROCEDURE",
+      "code": null,
+      "laterality": null,
+      "approach": "laparoscopic",
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Inguinal hernia repair with mesh",
+      "aliases": [
+        "inguinal hernia mesh",
+        "inguinal hernioplasty",
+        "اصلاح فتق اربي بشبكة",
+        "عملية فتق اربي بالشبكة",
+        "فتق اربي ميش"
+      ],
+      "category": "PROCEDURE",
+      "code": null,
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "tags": [
+        "mesh"
+      ],
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Inguinal hernia repair without mesh",
+      "aliases": [
+        "inguinal herniorrhaphy",
+        "inguinal hernia no mesh",
+        "اصلاح فتق اربي بدون شبكة",
+        "فتق اربي بدون شبكه"
+      ],
+      "category": "PROCEDURE",
+      "code": null,
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Umbilical hernia repair with mesh",
+      "aliases": [
+        "umbilical hernia mesh",
+        "اصلاح فتق سري بشبكة",
+        "فتق سري بالشبكة"
+      ],
+      "category": "PROCEDURE",
+      "code": null,
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "tags": [
+        "mesh"
+      ],
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Umbilical hernia repair without mesh",
+      "aliases": [
+        "umbilical hernia",
+        "اصلاح فتق سري",
+        "فتق سري بدون شبكة"
+      ],
+      "category": "PROCEDURE",
+      "code": null,
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Incisional hernia repair with mesh",
+      "aliases": [
+        "incisional hernia mesh",
+        "ventral hernia mesh",
+        "اصلاح فتق جراحي بشبكة",
+        "فتق في موضع الجرح بالشبكة"
+      ],
+      "category": "PROCEDURE",
+      "code": null,
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "tags": [
+        "mesh"
+      ],
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Incisional hernia repair without mesh",
+      "aliases": [
+        "incisional hernia",
+        "اصلاح فتق جراحي بدون شبكة"
+      ],
+      "category": "PROCEDURE",
+      "code": null,
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Cesarean section",
+      "aliases": [
+        "C-section",
+        "CS",
+        "c/s",
+        "caesarean",
+        "LSCS",
+        "ولادة قيصرية",
+        "عملية قيصرية",
+        "قيصرية",
+        "عملية ولادة قيصري"
+      ],
+      "category": "PROCEDURE",
+      "code": null,
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Transurethral resection of the prostate (TURP)",
+      "aliases": [
+        "TURP",
+        "TUR-P",
+        "استئصال البروستاتا بالمنظار",
+        "تقشير البروستاتا",
+        "عملية البروستاتا منظار"
+      ],
+      "category": "PROCEDURE",
+      "code": null,
+      "laterality": null,
+      "approach": "endoscopic",
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Ureteroscopy",
+      "aliases": [
+        "URS",
+        "URS stone",
+        "ureteroscopic lithotripsy",
+        "منظار الحالب",
+        "تفتيت حصوات الحالب بالمنظار",
+        "منظار حالب"
+      ],
+      "category": "PROCEDURE",
+      "code": null,
+      "laterality": null,
+      "approach": "endoscopic",
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Extracorporeal shock wave lithotripsy (ESWL)",
+      "aliases": [
+        "ESWL",
+        "SWL",
+        "lithotripsy",
+        "تفتيت الحصوات بالموجات",
+        "تفتيت حصوات بالموجات التصادمية",
+        "تفتيت حصوات الكلى بالموجات"
+      ],
+      "category": "PROCEDURE",
+      "code": null,
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Cystoscopy",
+      "aliases": [
+        "cysto",
+        "مناظير المثانة",
+        "منظار مثانة",
+        "منظار المثانة"
+      ],
+      "category": "PROCEDURE",
+      "code": null,
+      "laterality": null,
+      "approach": "endoscopic",
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "ERCP",
+      "aliases": [
+        "endoscopic retrograde cholangiopancreatography",
+        "ERCP stone extraction",
+        "ERCP stent",
+        "منظار القنوات المرارية",
+        "ايرسي بي"
+      ],
+      "category": "PROCEDURE",
+      "code": null,
+      "laterality": null,
+      "approach": "endoscopic",
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Diagnostic cardiac catheterization",
+      "aliases": [
+        "cardiac cath",
+        "coronary angiography",
+        "CAG",
+        "diagnostic cath",
+        "قسطرة قلب تشخيصية",
+        "قسطرة تشخيصية",
+        "قسطرة القلب",
+        "قسطره تشخيصيه"
+      ],
+      "category": "PROCEDURE",
+      "code": null,
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Coronary angioplasty with stent (PCI)",
+      "aliases": [
+        "PCI",
+        "PTCA",
+        "stent",
+        "coronary stent",
+        "DES",
+        "تركيب دعامة",
+        "دعامة تاجية",
+        "قسطرة علاجية",
+        "قسطرة وتركيب دعامه",
+        "قسطرة علاجية بدعامة"
+      ],
+      "category": "PROCEDURE",
+      "code": null,
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "tags": [
+        "implant:stent"
+      ],
+      "reviewed": false
+    },
+    {
+      "canonical_en": "CT scan with contrast",
+      "aliases": [
+        "CT with contrast",
+        "CT w contrast",
+        "CT with dye",
+        "اشعة CT بالصبغة",
+        "اشعه مقطعية بالصبغة",
+        "اشعة مقطعية بالصبغه",
+        "مقطعية بالصبغة",
+        "CT بالصبغة",
+        "c.t with contrast"
+      ],
+      "category": "INVESTIGATION",
+      "code": null,
+      "laterality": null,
+      "approach": null,
+      "contrast": "with",
+      "reviewed": false
+    },
+    {
+      "canonical_en": "CT scan without contrast",
+      "aliases": [
+        "CT without contrast",
+        "CT plain",
+        "non contrast CT",
+        "CT بدون صبغة",
+        "اشعة مقطعية بدون صبغة",
+        "مقطعية بدون صبغه",
+        "اشعه CT بدون صبغه"
+      ],
+      "category": "INVESTIGATION",
+      "code": null,
+      "laterality": null,
+      "approach": null,
+      "contrast": "without",
+      "reviewed": false
+    },
+    {
+      "canonical_en": "MRI with contrast",
+      "aliases": [
+        "MRI with contrast",
+        "MRI w contrast",
+        "MRI with gado",
+        "رنين مغناطيسي بالصبغة",
+        "رنين بالصبغه",
+        "MRI بالصبغة"
+      ],
+      "category": "INVESTIGATION",
+      "code": null,
+      "laterality": null,
+      "approach": null,
+      "contrast": "with",
+      "reviewed": false
+    },
+    {
+      "canonical_en": "MRI without contrast",
+      "aliases": [
+        "MRI without contrast",
+        "MRI plain",
+        "MRI non contrast",
+        "رنين مغناطيسي بدون صبغة",
+        "رنين بدون صبغه",
+        "MRI بدون صبغة"
+      ],
+      "category": "INVESTIGATION",
+      "code": null,
+      "laterality": null,
+      "approach": null,
+      "contrast": "without",
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Hemodialysis session",
+      "aliases": [
+        "dialysis",
+        "HD",
+        "HD session",
+        "dialysis session",
+        "غسيل كلوي",
+        "جلسة غسيل كلى",
+        "جلسة غسيل كلوي",
+        "غسيل كلى"
+      ],
+      "category": "PROCEDURE",
+      "code": null,
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "ICU day",
+      "aliases": [
+        "ICU",
+        "ICU stay",
+        "ICU day",
+        "intensive care",
+        "العناية المركزة",
+        "رعاية مركزة",
+        "ايام عناية مركزة",
+        "اقامة عناية مركزة",
+        "يوم عناية مركزة"
+      ],
+      "category": "ICU_DAYS",
+      "code": null,
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "CCU day",
+      "aliases": [
+        "CCU",
+        "CCU stay",
+        "cardiac care unit",
+        "عناية القلب",
+        "رعاية قلب",
+        "اقامة عناية قلب",
+        "عناية قلبية"
+      ],
+      "category": "ICU_DAYS",
+      "code": null,
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "NICU day",
+      "aliases": [
+        "NICU",
+        "NICU stay",
+        "incubator",
+        "neonatal ICU",
+        "حضانة",
+        "عناية اطفال حديثي الولادة",
+        "اقامة حضانة",
+        "حضانات"
+      ],
+      "category": "ICU_DAYS",
+      "code": null,
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Open reduction and internal fixation (ORIF)",
+      "aliases": [
+        "ORIF",
+        "ORIF fracture",
+        "internal fixation",
+        "تثبيت كسر بالمسامير والشرائح",
+        "تثبيت داخلي للكسر",
+        "عملية تثبيت كسر",
+        "تثبيت كسر بشريحة"
+      ],
+      "category": "PROCEDURE",
+      "code": null,
+      "laterality": null,
+      "approach": "open",
+      "contrast": null,
+      "tags": [
+        "implant:plate"
+      ],
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Total knee replacement",
+      "aliases": [
+        "TKR",
+        "TKA",
+        "total knee arthroplasty",
+        "knee replacement",
+        "تغيير مفصل الركبة",
+        "استبدال مفصل الركبة",
+        "مفصل ركبة صناعي",
+        "تغيير ركبة"
+      ],
+      "category": "PROCEDURE",
+      "code": null,
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "tags": [
+        "implant:prosthesis"
+      ],
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Total hip replacement",
+      "aliases": [
+        "THR",
+        "THA",
+        "total hip arthroplasty",
+        "hip replacement",
+        "تغيير مفصل الفخذ",
+        "استبدال مفصل الورك",
+        "مفصل فخذ صناعي",
+        "تغيير مفصل الورك"
+      ],
+      "category": "PROCEDURE",
+      "code": null,
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "tags": [
+        "implant:prosthesis"
+      ],
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Inpatient admission",
+      "aliases": [
+        "admission",
+        "inpatient admission",
+        "ward admission",
+        "حجز",
+        "اقامة بالقسم الداخلي",
+        "دخول مستشفى",
+        "اقامة داخلية",
+        "حجز داخلي",
+        "اقامه"
+      ],
+      "category": "ADMISSION",
+      "code": null,
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Consultant observation (daily round)",
+      "aliases": [
+        "consultant visit",
+        "consultant round",
+        "مرور استشاري",
+        "كشف استشاري",
+        "مرور"
+      ],
+      "category": "CONSULTATION",
+      "code": null,
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Anesthesia",
+      "aliases": [
+        "anaesthesia",
+        "general anesthesia",
+        "GA",
+        "تخدير",
+        "تخدير عام",
+        "مصاريف تخدير",
+        "التخدير"
+      ],
+      "category": "OTHER",
+      "code": null,
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Upper GI endoscopy",
+      "aliases": [
+        "OGD",
+        "EGD",
+        "upper endoscopy",
+        "gastroscopy",
+        "منظار المعدة",
+        "منظار علوي",
+        "منظار على المعدة"
+      ],
+      "category": "PROCEDURE",
+      "code": null,
+      "laterality": null,
+      "approach": "endoscopic",
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Colonoscopy",
+      "aliases": [
+        "colono",
+        "lower GI endoscopy",
+        "منظار القولون",
+        "منظار القولون السفلي"
+      ],
+      "category": "PROCEDURE",
+      "code": null,
+      "laterality": null,
+      "approach": "endoscopic",
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Echocardiography",
+      "aliases": [
+        "echo",
+        "ECHO",
+        "cardiac echo",
+        "اشعة تلفزيونية على القلب",
+        "موجات صوتية على القلب",
+        "ايكو على القلب",
+        "ايكو"
+      ],
+      "category": "INVESTIGATION",
+      "code": null,
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Thyroidectomy",
+      "aliases": [
+        "total thyroidectomy",
+        "استئصال الغدة الدرقية",
+        "عملية الغدة الدرقية"
+      ],
+      "category": "PROCEDURE",
+      "code": null,
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Tonsillectomy",
+      "aliases": [
+        "T&A",
+        "tonsils",
+        "استئصال اللوز",
+        "عملية اللوز"
+      ],
+      "category": "PROCEDURE",
+      "code": null,
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Hysterectomy",
+      "aliases": [
+        "TAH",
+        "استئصال الرحم",
+        "عملية استئصال الرحم"
+      ],
+      "category": "PROCEDURE",
+      "code": null,
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Cataract surgery with IOL (phacoemulsification)",
+      "aliases": [
+        "phaco",
+        "phaco IOL",
+        "cataract",
+        "ازالة المياه البيضاء",
+        "عملية مياه بيضاء",
+        "عملية الميه البيضا",
+        "فاكو"
+      ],
+      "category": "PROCEDURE",
+      "code": null,
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "tags": [
+        "implant:iol"
+      ],
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Tpa Administration (Not Including The Tpa Medication)",
+      "aliases": [
+        "إعطاء مذيب الجلطات (بدون سعر الدواء)"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.859",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Subcutaneous Injection (S.C Inj)",
+      "aliases": [
+        "حقن تحت الجلد"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.808",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Special Nature Medication Iv Administration,( Not Including Medication Price)",
+      "aliases": [
+        "حقن أدوية ذات طابع خاص (غير متضمنة سعر الأدوية)"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.752",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Sensitivity Test (Excluding Extra Procedures Taken In Case Of Actual Sensitivity Reaction)",
+      "aliases": [
+        "اختبار حساسية (غير متضمن إجراءات علاج الحساسية في حالة ظهورها)"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.725",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "O2 Consumption /Hour In ER",
+      "aliases": [
+        "رسم استخدام الأكسجين/ ساعه بالطوارئ"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.579",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "IV Solution Insertion",
+      "aliases": [
+        "تركيب محلول وريدي"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.431",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Insertion Of Cannula",
+      "aliases": [
+        "تركيب كانيولا"
+      ],
+      "category": "PROCEDURE",
+      "code": null,
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "ER Ventilator / Hour",
+      "aliases": [
+        "رسم استخدام تنفس صناعي بالطوارئ/ الساعة"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.293",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Cdu Admission In ER",
+      "aliases": [
+        "دخول وحدة اخذ القرار"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.163",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Blood Pressure Monitoring Without Examination Or Admittance",
+      "aliases": [
+        "قياس ضغط الدم بواسطة التمريض بدون كشف أو حجز"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.134",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Blood Pressure Measurement",
+      "aliases": [
+        "قياس ضغط"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.133",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Bedsore Dressing Level One",
+      "aliases": [
+        "غيار لقرح فراش من الدرجة الأولي"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.200824.10.48.56",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "IM Injection",
+      "aliases": [
+        "حقن عضلي"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.400",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Nebulizer Session",
+      "aliases": [
+        "إجراء جلسة نيبوليزر/استنشاق"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.542",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Extra Nebulizer Session",
+      "aliases": [
+        "جلسة نيبوليزر/ استنشاق إضافي"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.311",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Blood Glucose Monitoring",
+      "aliases": [
+        "قياس سكر الدم"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.131",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Trauma Team Call Per Physician",
+      "aliases": [
+        "استدعاء فريق الحوادث / الطبيب الواحد"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.868",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Tab Block Procedure",
+      "aliases": [
+        "تاب بلوك"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.844",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Stroke Team Calling Fees Per Physician",
+      "aliases": [
+        "استدعاء فريق الجلطة / الطبيب الواحد"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.806",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Stitch Removal",
+      "aliases": [
+        "فك غرز جراحية"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.804",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Simple Fracture Reduction In Er",
+      "aliases": [
+        "إجراء رد كسر بسيط بالطوارئ"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.730",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Removal Of Nasogastric Tube",
+      "aliases": [
+        "رفع أنبوبة معدة"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.693",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Removal Of Chest Tube",
+      "aliases": [
+        "رفع أنبوبة صدر"
+      ],
+      "category": "PROCEDURE",
+      "code": "Proc46",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Reduction Of Dislocated Joint",
+      "aliases": [
+        "رد خلع بالمفصل"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.680",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Paracentesis",
+      "aliases": [
+        "بذل تجمع سائل في البطن"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.608",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Nerve Block Anesthesia",
+      "aliases": [
+        "تخدير العصب"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.544",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Intraosseous Access Insertion",
+      "aliases": [
+        "تركيب كانيولا داخل العظام"
+      ],
+      "category": "PROCEDURE",
+      "code": "36680",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Insertion Of Rectal Tube",
+      "aliases": [
+        "تركيب أنبوب شرجي"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.421",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Insertion Of Portacath Needle",
+      "aliases": [
+        "تركيب سن بورتاكاث"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.420",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Removal Of Portacath Needle",
+      "aliases": [
+        "رفع سن بورت كاث"
+      ],
+      "category": "PROCEDURE",
+      "code": null,
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Insertion Of Oropharyngeal Tube",
+      "aliases": [
+        "تركيب أنبوب فمي بلعومي"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.419",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Insertion Of Laryngeal Tube",
+      "aliases": [
+        "تركيب أنبوب حنجري"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.417",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Insertion Of Intercostal Tube",
+      "aliases": [
+        "تركيب أنبوبة صدريه ما بين الضلوع"
+      ],
+      "category": "PROCEDURE",
+      "code": null,
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Insertion Of Endotracheal Tube",
+      "aliases": [
+        "تنبيت رغامي (إدخال أنبوبة بالقصبة الهوائية)"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.414",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "General Anesthesia Procedure In Er",
+      "aliases": [
+        "إجراء تخدير كلي بالطوارئ"
+      ],
+      "category": "PROCEDURE",
+      "code": "42700",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Gastric Lavage",
+      "aliases": [
+        "غسيل معدة"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.354",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Foreign Body Extraction Under Local Anesthesia",
+      "aliases": [
+        "استخراج جسم غريب تحت تأثير مخدر موضعي"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.345",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Excision Of Ingrowing Nail Under Local Anesthesia",
+      "aliases": [
+        "استئصال ظفر غائر تحت تأثير مخدر موضعي"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.309",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Er Call To Other Specialties",
+      "aliases": [
+        "استدعاء أخصائي من تخصص آخر الي الطوارئ"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.291",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Drainage Of Fluid Collection",
+      "aliases": [
+        "بذل تجمع للسوائل"
+      ],
+      "category": "PROCEDURE",
+      "code": "62267",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Drain Insertion",
+      "aliases": [
+        "تركيب درنقة"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.267",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "CVP Catheter Removal",
+      "aliases": [
+        "إزالة قسطرة وريد مركزي"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.234",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "CVP Catheter Insertion",
+      "aliases": [
+        "تركيب قسطرة وريد مركزي"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.233",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "CPR ( Cardiopulmonary Resucitation) Without Defibrillator",
+      "aliases": [
+        "دورة انعاش قلبي رئوي بدون صدمه كهربائية"
+      ],
+      "category": "PROCEDURE",
+      "code": null,
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "CPR ( Cardiopulmonary Resucitation) With Defibrillator",
+      "aliases": [
+        "دورة انعاش قلبي رئوي مع صدمه كهربائية"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.224",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Conscious Sedation In Er",
+      "aliases": [
+        "تهدئة واعية في الطوارئ"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.206",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Bilateral Tmj Reduction(Temporomandibular Joint) Without Anesthesia",
+      "aliases": [
+        "رد جانبين المفصل الصدغي الفكي بدون تخدير"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.115",
+      "laterality": "bilateral",
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Abscess Drainage Under Local Anesthesia",
+      "aliases": [
+        "فتح خراج تحت مخدر موضعي"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.16",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Surgical Stitches / First Stitch",
+      "aliases": [
+        "غرز جراحية / الغرزة الأولي"
+      ],
+      "category": "PROCEDURE",
+      "code": null,
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Surgical Stitches / Stitch After First Stitch",
+      "aliases": [
+        "غرز جراحية / كل غرزة بعد الغرزة الأولي"
+      ],
+      "category": "PROCEDURE",
+      "code": null,
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Insertion Of Nasogastric Tube",
+      "aliases": [
+        "تركيب أنبوب تغذية"
+      ],
+      "category": "PROCEDURE",
+      "code": null,
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Cleansing Enema",
+      "aliases": [
+        "حقنة شرجية تنظيفية"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.191",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Air Mattress Use / Day",
+      "aliases": [
+        "مرتبة هوائية لليوم الواحد"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.50",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Added Fees For Portable Devices",
+      "aliases": [
+        "رسم إضافي للأجهزة المتنقلة"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.43",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "C.S.F Tapping/ Drainage",
+      "aliases": [
+        "إجراء بذل السائل السحائي"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.154",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Bed Side Endoscopic Tracheostomy",
+      "aliases": [
+        "تركيب شق حنجري سريريا بواسطه المنظار"
+      ],
+      "category": "PROCEDURE",
+      "code": "17999",
+      "laterality": null,
+      "approach": "endoscopic",
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Arterial Line Insertion",
+      "aliases": [
+        "تركيب قسطرة شريانية"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.83",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Phototherapy Capsule / Hour",
+      "aliases": [
+        "كبسولة علاج ضوئي / ساعة"
+      ],
+      "category": "PROCEDURE",
+      "code": "96910",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Phototherapy Capsule / 8 Hour",
+      "aliases": [
+        "كبسولة علاج ضوئي /8 ساعات"
+      ],
+      "category": "PROCEDURE",
+      "code": "99441",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Phototherapy Capsule /Day",
+      "aliases": [
+        "كبسولة علاج ضوئي / اليوم"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.627",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Tympanometry",
+      "aliases": [
+        "قياس ضغط أذن"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.875",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Speech Discrimination Test",
+      "aliases": [
+        "اختبار تفسير الكلام"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.794",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Single Training Session",
+      "aliases": [
+        "جلسة تدريب فردي"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.741",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Repositioning Manouver For Vertigo",
+      "aliases": [
+        "اختبار دوار الرأس بإعادة التحرك"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.697",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Reflex Auditory",
+      "aliases": [
+        "مقياس الانعكاس الصوتي"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.681",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Monthly Group Training Sessions",
+      "aliases": [
+        "جلسات تدريب جماعي شهري"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.535",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Epleys Manouver For Positional Vertigo",
+      "aliases": [
+        "تدريبات إيبلي الحركية لعلاج الدوار الحركي"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.290",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Computerized Audiogram",
+      "aliases": [
+        "قياس رسم سمع بالكمبيوتر"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.205",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Balance Training",
+      "aliases": [
+        "تمرين الاتزان - جلسة علاج حركي - رسم اتزان"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.108",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Auditory Brain Stem Response (Abr)",
+      "aliases": [
+        "تقييمات استجابة جذع الدماغ الصوتية"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.105",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Audiogram (Pure Tome Audiometry)",
+      "aliases": [
+        "قياس رسم سمع كهربائي"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.103",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Systemizing Quotient (SQ) Test",
+      "aliases": [
+        "السلوك التكيفي"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.843",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Corner Turn Test",
+      "aliases": [
+        "اختبار كورنر (اختبار فرط الحركة والتشتت الانتباه)"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.216",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Cognitive Behavioral Therapy Sessions",
+      "aliases": [
+        "جلسات علاج سلوكي"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.194",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Cars Test (Childhood Autism Rating Scale)",
+      "aliases": [
+        "مقياس كارز للتوحد (مهارة تقييم التوحد)"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.159",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Speech Session",
+      "aliases": [
+        "جلسة تخاطب"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.795",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Intelligence Quotient Test (IQ Test)",
+      "aliases": [
+        "اختبار ذكاء"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.426",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Temporary Pacemaker Insertion",
+      "aliases": [
+        "تركيب منظم ضربات القلب مؤقت"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.850",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "E.C.G",
+      "aliases": [
+        "رسم قلب عادي"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.273",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Stress E.C.G",
+      "aliases": [
+        "رسم قلب بالمجهود"
+      ],
+      "category": "PROCEDURE",
+      "code": "93015",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Repositioning Of Pacemaker",
+      "aliases": [
+        "إعادة /تعديل جهاز منظم ضربات القلب"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.698",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Pericardiocentesis",
+      "aliases": [
+        "بذل من تامور القلب"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.621",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Pacemaker Programming",
+      "aliases": [
+        "برمجه جهاز تنظيم ضربات القلب"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.613",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Neonatal Echocardiography",
+      "aliases": [
+        "موجات فوق صوتية علي القلب لحديثي الولادة"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.200124.07.11.18",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Holter Monitor (24 Hrs.)",
+      "aliases": [
+        "تركيب جهاز هولتر (24 ساعة)"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.377",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Holter Monitor (48 Hrs.)",
+      "aliases": [
+        "تركيب جهاز هولتر (48 ساعة)"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.378",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Holter Monitor (72 Hrs.)",
+      "aliases": [
+        "تركيب جهاز هولتر (72 ساعة)"
+      ],
+      "category": "PROCEDURE",
+      "code": null,
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Fluoroscopy Screening For Prosthetic Valve",
+      "aliases": [
+        "فحص التنظير الفلوري للصمام الصناعي"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.340",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Elective Cardioversion",
+      "aliases": [
+        "صدمات كهربائية لاستعادة ضربات"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.190824.03.42.46",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Dobutamine Stress Echocardiography",
+      "aliases": [
+        "موجات فوق صوتية علي القلب بالمجهود باستخدام الدوبياتامين"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.262",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Bubble Study (Transthoracic Echo)",
+      "aliases": [
+        "دراسة فقاعة مخطط صدي القلب"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.152",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "3D Pediatric Echo",
+      "aliases": [
+        "موجات فوق صوتية علي القلب للأطفال ثلاثية الأبعاد"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.5",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Transesophageal Echocardiography",
+      "aliases": [
+        "موجات فوق صوتية علي القلب عن طريق المريء"
+      ],
+      "category": "PROCEDURE",
+      "code": "93312",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Blood Pressure Measuring 24 Hours",
+      "aliases": [
+        "قياس ضغط الدم 24 ساعة"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.132",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Ivc Assessment",
+      "aliases": [
+        "تقييم الوريد الأجوف السفلي"
+      ],
+      "category": "PROCEDURE",
+      "code": null,
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Pulmonary Function Test (Computerized Spirometry)",
+      "aliases": [
+        "قياس كفاءة الرئتين بالكمبيوتر"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.674",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Flexible Bronchoscope",
+      "aliases": [
+        "منظار شعب هوائية مرن"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.330",
+      "laterality": null,
+      "approach": "endoscopic",
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Diagnostic Bronchoscopy With Biopsy",
+      "aliases": [
+        "منظار الشعب الهوائية وأخذ عينه تحت مخدر عام (لا يشمل سعر العينة)"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.251",
+      "laterality": null,
+      "approach": "endoscopic",
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Breathing Function Test Before And After Inhalation",
+      "aliases": [
+        "اختبار وظائف تنفس ما قبل وبعد الاستنشاق"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.151",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Diagnostic Bronchoscopy With Biopsy+ Foreign Body Extraction",
+      "aliases": [
+        "منظار الشعب الهوائية وأخذ عينه تحت مخدر عام + استخراج حسم غريب (لا يشمل سعر العينة)"
+      ],
+      "category": "PROCEDURE",
+      "code": null,
+      "laterality": null,
+      "approach": "endoscopic",
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Diagnostic Bronchoscopy With Biopsy+Electro Cautery",
+      "aliases": [
+        "منظار الشعب الهوائية وأخذ عينه تحت مخدر عام + كي (لا يشمل سعر العينة)"
+      ],
+      "category": "PROCEDURE",
+      "code": null,
+      "laterality": null,
+      "approach": "endoscopic",
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Middle Tardiness Test",
+      "aliases": [
+        "اختبار درجة التأخر الوسطي"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.502",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Facial Nerve Function Test",
+      "aliases": [
+        "اختبا قياس وظيفة عصب وجه"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.317",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Evoked Stimulated Efforts Test",
+      "aliases": [
+        "اختبار جهود مثاره وعصب وجه"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.299",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Event Related Stress Test",
+      "aliases": [
+        "اختبار الجهد المتعلق بالحدث"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.297",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Eustachian Tube Assessment Function Test",
+      "aliases": [
+        "قياسات سمعية لقناة أستكيوس"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.295",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "D Speech Test",
+      "aliases": [
+        "تقييم د تخاطبي"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.239",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Cochlear Response Test",
+      "aliases": [
+        "اختبار استجابة قوقعة الأذن"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.193",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "C Auditory Test",
+      "aliases": [
+        "تقييم ج سمعي"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.153",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "B Surgical Test",
+      "aliases": [
+        "تقييم ب جراحي"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.107",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "An Introductory Comprehensive Auditory Evaluation",
+      "aliases": [
+        "تقييم سمعي شامل تمهيدي"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.63",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "A Auditory Test",
+      "aliases": [
+        "تقييم أ سمعي"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.9",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Cross Matching",
+      "aliases": [
+        "إجراء توافق"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.227",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Single Blood Transfusion Procedure (Not Including Single Blood Bag)",
+      "aliases": [
+        "إجراء نقل كيس دم (غير متضمن ثمن كيس الدم)"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.200124.11.34.02",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Blood Product Transfusion (Not Including Blood Product Cost)",
+      "aliases": [
+        "نقل مشتقات الدم (غير متضمن ثمن الكيس )"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.200124.11.35.00",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Vocal Cord Function Assessment",
+      "aliases": [
+        "تقيم كفاءة الأحبال الصوتية"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.903",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Tonsillar Swap",
+      "aliases": [
+        "مسحة من اللوزتين"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.856",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Speech Valve Replacement For Laryngectomy Patients",
+      "aliases": [
+        "تبديل صمام كلام لمرضي الاستئصال الحنجري"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.796",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Anterior Nasal Packing",
+      "aliases": [
+        "حشو انف أمامي"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.80",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Posterior Nasal Packing",
+      "aliases": [
+        "حشو أنف خلفي"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.661",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Pharyngeal Suction",
+      "aliases": [
+        "تشفيط من البلعوم"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.626",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Nasal Suction",
+      "aliases": [
+        "تشفيط من الأنف"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.541",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Nasal Pack Insertion",
+      "aliases": [
+        "تركيب فتيل"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.605",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Nasal Endoscopy (Diagnostic)",
+      "aliases": [
+        "منظار أنف (تشخيصي)"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.540",
+      "laterality": null,
+      "approach": "endoscopic",
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Nasal Cautery",
+      "aliases": [
+        "كي نزيف بالأنف"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.539",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Middle Ear Injections",
+      "aliases": [
+        "حقن الأذن الوسطي"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.501",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Installation Of Ear Ventilation Tube Under Local Anesthetic",
+      "aliases": [
+        "تركيب أنبوبة تهوية للأذن بمخدر موضعي"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.424",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Incision & Drainage Of Tonsillar Abscess (Quinsy) Under Local Anesthesia",
+      "aliases": [
+        "فتح وتصريف خراج حول اللوزتين تحت مخدر موضعي"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.408",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Flexible Laryngoscope",
+      "aliases": [
+        "منظار حنجرة مرن"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.332",
+      "laterality": null,
+      "approach": "endoscopic",
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Flexible Endoscopic Evaluation Of Swallowing (Fees)",
+      "aliases": [
+        "منظار تشخيصي بالألياف الضوئية للحنجرة (دراسة البلع)"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.331",
+      "laterality": null,
+      "approach": "endoscopic",
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Fiber Optic Laryngoscope",
+      "aliases": [
+        "استخدام منظار حنجرة ضوئي"
+      ],
+      "category": "PROCEDURE",
+      "code": null,
+      "laterality": null,
+      "approach": "endoscopic",
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Extraction Of Fb (E.N.T)",
+      "aliases": [
+        "استخراج جسم غريب أنف و أذن"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.312",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Eradication Of The Salivary Gland Gallstone Under Local Anesthetic",
+      "aliases": [
+        "استئصال حصوة بالغدة اللعابية تحت مخدر موضعي"
+      ],
+      "category": "PROCEDURE",
+      "code": "42950",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Ear Wash (One Ear)",
+      "aliases": [
+        "غسيل أذن واحدة"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.278",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Ear Wash (Both Ears)",
+      "aliases": [
+        "غسيل للأذنين"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.277",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Ear Suction",
+      "aliases": [
+        "شفط من الأذن"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.276",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Ear Packing",
+      "aliases": [
+        "حشو أذن"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.275",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Drainage Of Nasal Abscess",
+      "aliases": [
+        "فتح خراج بالأنف"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.269",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Biopsy From Any E.N.T Mass Lesion Under Local Anesthesia By Endoscopy",
+      "aliases": [
+        "أخذ عينة من تورم بالأذن أو الأنف أو الحنجرة تحت مخدر موضعي بالمنظار"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.120",
+      "laterality": null,
+      "approach": "laparoscopic",
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Laryngeal Endoscopy / Rigid Videoscope",
+      "aliases": [
+        "منظار تشخيصي صلب للحنجرة"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.438",
+      "laterality": null,
+      "approach": "endoscopic",
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Diagnostic Laryngoscope",
+      "aliases": [
+        "منظار حنجري تشخيصي"
+      ],
+      "category": "PROCEDURE",
+      "code": "31575",
+      "laterality": null,
+      "approach": "endoscopic",
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Wound Vaccum",
+      "aliases": [
+        "غيار علي جرح بالفاكيوم"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.916",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Wound Debridement",
+      "aliases": [
+        "تنظيف جرح"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.915",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Spinal Cord Half Anesthesia",
+      "aliases": [
+        "تخدير نصفي للنخاع الشوكي"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.800",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Piercing Of Both Ears",
+      "aliases": [
+        "خرم أذن"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.633",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Epidural Injection Procedure",
+      "aliases": [
+        "تخدير منطقة فوق الجافية"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.289",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Insulin Pump Programming And Follow-Up",
+      "aliases": [
+        "إعادة برمجة و متابعة مضخة أنسولين"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.425",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Insertion Of Insulin Pumps",
+      "aliases": [
+        "تركيب مضخة أنسولين"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.415",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Visual Evoked Response (VER)",
+      "aliases": [
+        "فحص الاستجابة الكهربائية البصرية المستثارة"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.900",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Trigeminal NCS",
+      "aliases": [
+        "رسم عصب بالوجه جانبين - دراسة تفصيلية"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.869",
+      "laterality": "bilateral",
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Transcranial Magnetic Stimulation (TMS) / Session",
+      "aliases": [
+        "التحفيز المغناطيسي علي الجمجمة / جلسة"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.866",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Transcranial Doppler (TCD)",
+      "aliases": [
+        "أشعة صوتية علي شرايين المخ"
+      ],
+      "category": "PROCEDURE",
+      "code": "93887",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Somatosensory Evoked Potential (SSEP)",
+      "aliases": [
+        "جهد حسي"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.748",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Sleeping Study",
+      "aliases": [
+        "دراسة النوم"
+      ],
+      "category": "PROCEDURE",
+      "code": "95810",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Reservoir Tapping",
+      "aliases": [
+        "بذل من البطين بالمخ"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.700",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Repetitive Nerve Stimulation Testing-Extended",
+      "aliases": [
+        "تحفيز متكرر للأعصاب - دراسة تفصيلية"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.696",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Psychotherapy Session- 1 Hr.",
+      "aliases": [
+        "جلسة تأهيل نفسي (لمدة ساعة )"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.670",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Psychotherapy Session- Extra Time",
+      "aliases": [
+        "جلسة تأهيل نفسي (وقت الإضافي)"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.671",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Neurology Botox Injection",
+      "aliases": [
+        "حقن أعصاب بالبوتكس"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.548",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Magnetic Stimulation Of Muscles",
+      "aliases": [
+        "رسم عضلات بالتحفيز المغناطيسي"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.454",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Facial Nerve Conduction With Blink Reflex",
+      "aliases": [
+        "رسم عصب الوجه مع بلينك ريفلكس"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.316",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Extended E.E.G",
+      "aliases": [
+        "رسم مخ ممتد الأجل"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.120224.08.03.40",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Encephalogram Of The Cerebral Cortex",
+      "aliases": [
+        "رسم المخ من خلال القشرة المخية"
+      ],
+      "category": "PROCEDURE",
+      "code": "95812",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Electroneurography (More Than 2 Nerves)",
+      "aliases": [
+        "اختبار عصب حركي (أكثر من 2)"
+      ],
+      "category": "PROCEDURE",
+      "code": "95903",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Electroneurography (2 Nerves And Less)",
+      "aliases": [
+        "اختبار عصب حركي (2 فأقل)"
+      ],
+      "category": "PROCEDURE",
+      "code": "95900",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "E.E.G 24 Hours",
+      "aliases": [
+        "رسم مخ 24 ساعة"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.240224.10.00.39",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "E.E.G Inside Critical Nerve Care Unit (Up To 3 Hours)",
+      "aliases": [
+        "رسم مخ داخل وحدة عناية الأعصاب الحرجة"
+      ],
+      "category": "PROCEDURE",
+      "code": "95813",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "E.E.G",
+      "aliases": [
+        "رسم مخ"
+      ],
+      "category": "PROCEDURE",
+      "code": "95812",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Cervical Root (Sseps) - One Limbs",
+      "aliases": [
+        "دراسة جهد حسي طرف واحد"
+      ],
+      "category": "PROCEDURE",
+      "code": "95926",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "B.A.E.P Test",
+      "aliases": [
+        "جهد مستثار علي جذع المخ"
+      ],
+      "category": "PROCEDURE",
+      "code": "92585",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Nerve Conduction For One Nerve",
+      "aliases": [
+        "رسم عصب لعصب واحد"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.545",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Nerve Conduction For One Nerve ( After The First Nerve)",
+      "aliases": [
+        "رسم عصب بعد العصب الأول"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.546",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "1 Limb Nerve Conduction",
+      "aliases": [
+        "رسم عصب كامل طرف واحد"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.735",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "2 Limbs Nerve Conduction",
+      "aliases": [
+        "رسم عصب كامل طرفين"
+      ],
+      "category": "PROCEDURE",
+      "code": "95903",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "3 Limbs Nerve Conduction",
+      "aliases": [
+        "رسم عصب كامل 3 أطراف"
+      ],
+      "category": "PROCEDURE",
+      "code": null,
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "4 Limbs Nerve Conduction",
+      "aliases": [
+        "رسم عصب كامل 4 أطراف"
+      ],
+      "category": "PROCEDURE",
+      "code": "D4211",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "1 Limb E.M.G",
+      "aliases": [
+        "تخطيط عضلات طرف واحد"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.734",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "2 Limbs E.M.G",
+      "aliases": [
+        "تخطيط عضلات لطرفين"
+      ],
+      "category": "PROCEDURE",
+      "code": "95907",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "1 Limb NC/E.M.G",
+      "aliases": [
+        "رسم عصب /تخطيط عضلات طرف واحد"
+      ],
+      "category": "PROCEDURE",
+      "code": "95886",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "2 Limbs NC/E.M.G",
+      "aliases": [
+        "رسم عصب /تخطيط عضلات طرفين"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.3",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Extra Limb NC/E.M.G",
+      "aliases": [
+        "طرف إضافي ( رسم عصب/تخطيط عضلات)"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.310",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "In Body Mass Analyzer",
+      "aliases": [
+        "تحليل قياس كتلة الجسم"
+      ],
+      "category": "PROCEDURE",
+      "code": "97802",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Vaginal Wet Swap",
+      "aliases": [
+        "أخذ مسحه من المهبل"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.892",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Us Abdomen And Pelvis",
+      "aliases": [
+        "سونار في عيادة النساء والتوليد"
+      ],
+      "category": "PROCEDURE",
+      "code": "76700",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Transvaginal Ultrasound",
+      "aliases": [
+        "موجات فوق صوتية عن طريق المهبل"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.867",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Cervical Pap Smear",
+      "aliases": [
+        "أخذ مسحه من عنق الرحم"
+      ],
+      "category": "PROCEDURE",
+      "code": "88175",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Loop Insertion (Not Including Loop Price)",
+      "aliases": [
+        "تركيب لولب (بدون ثمن اللولب)"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.448",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Hormonal Loop Insertion (Not Including Loop Price)",
+      "aliases": [
+        "تركيب لولب هرموني (بدون ثمن اللوب)"
+      ],
+      "category": "PROCEDURE",
+      "code": "99199",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Loop Extraction",
+      "aliases": [
+        "خلع لولب"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.447",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Fetal Monitoring By Cardiotocoghraphy (Ctg)",
+      "aliases": [
+        "مراقبة معدل نبض الجنين"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.321",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Fetal Doppler",
+      "aliases": [
+        "دوبلر علي الجنين"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.320",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Endometrium Swab",
+      "aliases": [
+        "عينة من بطانة الرحم"
+      ],
+      "category": "PROCEDURE",
+      "code": "58100",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Contraceptive Subcutaneous Implant Removal",
+      "aliases": [
+        "خلع وسيلة منع حمل تحت الجلد"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.215",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Contraceptive Subcutaneous Implant Insertion",
+      "aliases": [
+        "زرع وسيلة منع حمل تحت الجلد"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.214",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Chemical Cauterization Of The Cervix",
+      "aliases": [
+        "كي كيميائي لعنق الرحم"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.170",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Cervical Polypectomy",
+      "aliases": [
+        "استئصال لحمية من عنق الرحم"
+      ],
+      "category": "PROCEDURE",
+      "code": "95926",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "Cervical Dilatation",
+      "aliases": [
+        "توسيع عنق الرحم"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.166",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "4D US For Single Baby",
+      "aliases": [
+        "موجات فوق الصوتية رباعية الأبعاد لجنين واحد"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.6",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "4D US For Twins",
+      "aliases": [
+        "موجات فوق الصوتية رباعية الأبعاد لتوأم"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.8",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    },
+    {
+      "canonical_en": "4D US For Triblets",
+      "aliases": [
+        "موجات فوق الصوتية رباعية الأبعاد لثلاثة أجنة"
+      ],
+      "category": "PROCEDURE",
+      "code": "P.7",
+      "laterality": null,
+      "approach": null,
+      "contrast": null,
+      "reviewed": false
+    }
+  ]
+}

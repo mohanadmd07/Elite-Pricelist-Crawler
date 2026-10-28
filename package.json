@@ -14,6 +14,10 @@
     "outbox:worker": "tsx scripts/outbox-worker.ts",
     "mail:sync": "tsx scripts/sync-now.ts",
     "eval:matching": "tsx scripts/eval-matching.ts",
+    "eval:golden": "tsx scripts/eval-golden-classifier.ts",
+    "classifier:backfill": "tsx .agent/skills/approval-reply-classifier/scripts/backfill-history.ts",
+    "classifier:recompute-stats": "tsx .agent/skills/approval-reply-classifier/scripts/recompute-stats.ts",
+    "classifier:propose-rules": "tsx .agent/skills/approval-reply-classifier/scripts/propose-learned-rules.ts",
     "health:check": "tsx scripts/monitor-health.ts",
     "watch-approvals": "tsx scripts/approvals-watcher.ts",
     "test-approvals": "tsx scripts/test-sample-approvals.ts"

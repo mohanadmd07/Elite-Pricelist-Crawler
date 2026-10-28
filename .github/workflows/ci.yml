@@ -49,5 +49,8 @@ jobs:
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
 
+      - name: Approval Reply Classifier Golden Set & Time-Split Gate
+        run: npm run eval:golden
+
       - name: Production Vite Build
         run: npm run build

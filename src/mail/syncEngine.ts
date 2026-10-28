@@ -20,8 +20,94 @@ import { buildDraftReplyText } from '../lib/draftReplyBuilder';
 import { InpatientApprovalRecord, ProcedureResult } from '../types';
 import { MailSyncStats, RawMailMessage } from './types';
 import { supabaseAdmin, supabase } from '../lib/supabase';
+import {
+  classifyApprovalThread,
+  createDefaultAuditedLlmClient,
+  isClassifierEnabled,
+  SupabaseLearningStore,
+} from '../classifier';
 
 const client = supabaseAdmin || supabase;
+
+async function maybeRunClassifierOnSync(params: {
+  approvalId: string;
+  sourceMessageId: string;
+  insurer: string;
+  patientName: string;
+  mrn?: string;
+  bed?: string;
+  physician?: string;
+  requestedServices: Array<{ name: string; rawPrice?: number }>;
+  msg: RawMailMessage;
+  existing?: any;
+}): Promise<Record<string, any>> {
+  if (!isClassifierEnabled()) return {};
+  try {
+    const llm = createDefaultAuditedLlmClient();
+    const learningStore = client ? new SupabaseLearningStore() : null;
+    const result = await classifyApprovalThread(
+      {
+        approvalId: params.approvalId,
+        sourceMessageId: params.sourceMessageId,
+        insurer: params.insurer,
+        patientName: params.patientName,
+        mrn: params.mrn,
+        bed: params.bed,
+        physician: params.physician,
+        requested: (params.requestedServices || []).map((s) => ({
+          text: s.name,
+          category: 'PROCEDURE' as const,
+          quantity: 1,
+        })),
+        messages: [
+          {
+            messageId: params.sourceMessageId,
+            sender: params.msg.sender || 'insurer@external.org',
+            date: params.msg.receivedAt,
+            subject: params.msg.subject,
+            body: params.msg.textBody || cleanTextFromHtml(params.msg.htmlBody || ''),
+            attachments: (params.msg.attachments || []).map((a) => ({
+              name: a.name,
+              mimeType: a.contentType,
+              dataBase64: a.contentBase64,
+            })),
+          },
+        ],
+        alreadyClassifiedSourceMessageId: params.existing?.source_message_id || null,
+        humanLockedStatus: params.existing?.status_locked_by_human ? params.existing?.classifier_status : null,
+      },
+      { llm, learningStore }
+    );
+    return {
+      classifier_status: result.status,
+      items_json: result.items,
+      requested_items: params.requestedServices || [],
+      rejection_reason_ar: result.rejection_reason_ar,
+      rejection_reason_en: result.rejection_reason_en,
+      rejection_type: result.rejection_type,
+      evidence_quote: result.evidence_quote,
+      confidence: result.confidence,
+      needs_human_review: result.needs_human_review,
+      review_reasons: result.review_reasons,
+      classified_at: result.classified_at,
+      source_message_id: result.source_message_id,
+      model_version: result.model_version,
+      coverage_results_json: result.coverage,
+      priced_items_json: result.priced,
+      history_hints_json: result.history_hints,
+      contractor_pricelist_id: result.contractor_pricelist_id,
+      contract_total: result.contract_total,
+      price_approval_total: result.price_approval_total,
+      price_approval_required: result.price_approval_required,
+      price_approval_draft_en: result.price_approval_draft_en,
+      price_approval_status: result.price_approval_status,
+      approval_reference: result.approval_reference,
+    };
+  } catch (err: any) {
+    console.warn(`[Sync Engine] Classifier warning for ${params.sourceMessageId}:`, err?.message || err);
+    return {};
+  }
+}
 
 /**
  * Checks if an approval record for a conversation already exists in PostgreSQL.
@@ -309,6 +395,19 @@ export async function runMailSync(options?: {
             ? msg.receivedAt
             : existing.state_timestamps?.latest_reply_at;
 
+        const classifierColumns = await maybeRunClassifierOnSync({
+          approvalId: existing.id,
+          sourceMessageId: msg.messageId,
+          insurer: contractorNormalized || contractorRaw,
+          patientName,
+          mrn,
+          bed,
+          physician,
+          requestedServices,
+          msg,
+          existing,
+        });
+
         const { error: updateError } = await client
           .from('inpatient_approvals')
           .update({
@@ -339,6 +438,7 @@ export async function runMailSync(options?: {
               updated_at: new Date().toISOString(),
             },
             updated_at: new Date().toISOString(),
+            ...classifierColumns,
           })
           .eq('id', existing.id);
 

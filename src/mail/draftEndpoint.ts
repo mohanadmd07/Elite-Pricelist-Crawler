@@ -4,6 +4,7 @@ import { db } from '../firebase';
 import { EwsSource } from './adapters/EwsSource';
 import { mirrorApprovalToFirestore } from '../services/approvalFirestoreSync';
 import { buildDraftReplyFromRecord } from '../lib/draftReplyBuilder';
+import { assertInternalRecipient } from '../classifier/draft';
 
 function isAuthorizedRequest(req: any): boolean {
   const authHeader = req.headers?.authorization || req.headers?.Authorization;
@@ -168,10 +169,14 @@ export default async function handler(req: any, res: any) {
   // 4. Resolve draft text, subject, and recipient
   // Priority:
   // a) Explicit draftText provided in req.body
-  // b) Dynamically computed from record using latest officer & price list year
+  // b) English price-approval draft when isPriceApprovalDraft=true
+  // c) Dynamically computed from record using latest officer & price list year
+  const isPriceApprovalDraft = Boolean(body?.isPriceApprovalDraft);
   const draftBody =
     body?.draftText ||
-    (record
+    (isPriceApprovalDraft && record?.price_approval_draft_en
+      ? record.price_approval_draft_en
+      : record
       ? buildDraftReplyFromRecord({
           priceListYear: resolvedYear,
           contractorNormalized: resolvedContractor,
@@ -184,11 +189,18 @@ export default async function handler(req: any, res: any) {
 
   const draftSubject =
     body?.subject ||
-    (record?.patient_name
+    (isPriceApprovalDraft
+      ? `[Price Approval Request] ${resolvedContractor} — Ref ${record?.approval_reference || record?.mrn || id}`
+      : record?.patient_name
       ? `RE: Inpatient Approval Request - ${record.patient_name} - ${record.mrn || ''}`
       : 'RE: Inpatient Approval Request');
 
-  const draftTo = body?.to || 'corporate@elitehospital.org';
+  const draftTo = body?.to || process.env.CORPORATE_SALES_RECIPIENT || 'corporate@elitehospital.org';
+  try {
+    assertInternalRecipient(draftTo);
+  } catch (domainErr: any) {
+    return res.status(403).json({ error: domainErr?.message || 'Blocked external recipient domain.' });
+  }
 
   // 5. Attempt EWS in-thread Reply-All draft creation in Exchange
   let ewsSuccess = false;

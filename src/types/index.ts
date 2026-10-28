@@ -168,6 +168,34 @@ export interface InpatientApprovalRecord {
   lastExchangeItemId?: string;
   lastExchangeChangeKey?: string;
   aiProcessingStatus?: 'processed' | 'fallback_heuristic' | 'pending_quota';
+
+  // Additive medical-aware approval-reply classifier fields
+  classifierStatus?: 'APPROVED' | 'PARTIAL' | 'REJECTED' | 'PENDING' | 'UNCLEAR';
+  statusLockedByHuman?: boolean;
+  itemsJson?: any[];
+  requestedItems?: any[];
+  rejectionReasonAr?: string | null;
+  rejectionReasonEn?: string | null;
+  rejectionType?: string | null;
+  evidenceQuote?: string | null;
+  confidence?: number;
+  needsHumanReview?: boolean;
+  reviewReasons?: string[];
+  classifiedAt?: string;
+  sourceMessageId?: string;
+  modelVersion?: string;
+  coverageResultsJson?: any[];
+  pricedItemsJson?: any[];
+  historyHintsJson?: any[];
+  contractorPricelistId?: string | null;
+  contractTotal?: number;
+  priceApprovalTotal?: number;
+  priceApprovalRequired?: boolean;
+  priceApprovalDraftEn?: string | null;
+  priceApprovalStatus?: 'DRAFT' | 'SENT' | 'APPROVED' | 'REFUSED' | null;
+  priceApprovalSentTo?: string | null;
+  priceApprovalSentAt?: string | null;
+  approvalReference?: string | null;
 }
 
 
