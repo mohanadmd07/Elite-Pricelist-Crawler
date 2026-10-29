@@ -1,6 +1,7 @@
 import { InpatientApprovalRecord } from '../types';
 import { cleanContractorName, stripSentFromSignatures, isAccommodationOrGenericFee, extractRefusalReason } from './arabic-normalizer';
 import { generateCmWhatsappWithAI, isGeminiConfigured } from '../services/aiMatchService';
+import { parseDoctorNarrative, translateDoctorIndication } from './doctorNarrativeParser';
 
 /**
  * Translates English clinical indications and symptoms commonly found in doctor notes into standard Arabic.
@@ -54,26 +55,11 @@ export function translateClinicalIndicationToArabic(englishText: string): string
  */
 export function extractClinicalIndication(rawText: string): string {
   if (!rawText) return '';
-  const text = stripSentFromSignatures(rawText).trim();
-
-  // 1. Doctor narrative pattern: "patient had <indication> and on/needs <procedure>"
-  const doctorNoteMatch = text.match(
-    /(?:patient\s+(?:had|has|is|was|suffering\s+from)?\s+)?(.+?)\s+(?:and\s+(?:is\s+)?on|and\s+needs|and\s+requires|needs|requires|scheduled\s+for|planned\s+for)\s+([a-zA-Z\s/-]+)(?:\r|\n|$)/i
-  );
-  if (doctorNoteMatch && doctorNoteMatch[1]) {
-    const rawIndication = doctorNoteMatch[1].trim();
-    return translateClinicalIndicationToArabic(rawIndication);
+  const parsed = parseDoctorNarrative(rawText);
+  if (parsed && parsed.clinicalIndicationAr && !parsed.clinicalIndicationAr.includes('قيد المتابعة')) {
+    return parsed.clinicalIndicationAr;
   }
-
-  // 2. Arabic clinical symptoms / justification
-  const araMatch = text.match(
-    /(?:المريض|المريضة|المريضه|الحالة|الحاله)\s+(?:يعاني|تعاني|يعانى|تعانى)\s+من\s+([^و\r\n<]+(?:و[^و\r\n<]+)?)/i
-  );
-  if (araMatch && araMatch[1]) {
-    return `المريض يعاني من ${araMatch[1].trim()}`;
-  }
-
-  return translateClinicalIndicationToArabic(text);
+  return translateDoctorIndication(rawText);
 }
 
 /**
@@ -83,15 +69,10 @@ export function extractClinicalIndication(rawText: string): string {
 export function extractCleanProcedurePhrase(rawText: string): string {
   if (!rawText) return '';
 
-  // 0. Doctor narrative pattern: "patient had <symptoms/diagnosis> and on/needs <procedure>"
-  const doctorNoteMatch = rawText.match(
-    /(?:patient\s+(?:had|has|is|was|suffering\s+from)?\s+)?(.+?)\s+(?:and\s+(?:is\s+)?on|and\s+needs|and\s+requires|needs|requires|scheduled\s+for|planned\s+for)\s+([a-zA-Z\s/-]+)(?:\r|\n|$)/i
-  );
-  if (doctorNoteMatch && doctorNoteMatch[2]) {
-    const candidate = doctorNoteMatch[2].trim();
-    if (candidate.length >= 3 && !candidate.toLowerCase().includes('inpatient')) {
-      return candidate;
-    }
+  // 0. Use dedicated Doctor Narrative Parser if narrative structure detected
+  const parsed = parseDoctorNarrative(rawText);
+  if (parsed && parsed.primaryProcedure && parsed.primaryProcedure !== rawText) {
+    return parsed.primaryProcedure;
   }
 
   // 1. Check if rawText has a dedicated line with an English procedure (e.g. "MRI BRAIN WITH CONTRAST")
@@ -233,6 +214,21 @@ export function formatProcedureForCmWhatsapp(proc: string): string {
     lower.includes('علاج طبيعي')
   ) {
     return 'جلسات علاج طبيعي';
+  }
+  if (
+    lower.includes('primary pci') ||
+    lower.includes('pci with stent') ||
+    lower.includes('coronary stent') ||
+    lower.includes('therapeutic cardiac catheter') ||
+    (lower.includes('pci') && lower.includes('stent'))
+  ) {
+    return 'تركيب دعامة بالقلب (Primary PCI with Stent)';
+  }
+  if (
+    lower.includes('laparoscopic appendectomy') ||
+    (lower.includes('appendectomy') && lower.includes('laparoscop'))
+  ) {
+    return 'استئصال الزائدة الدودية بالمنظار (Laparoscopic Appendectomy)';
   }
   return proc;
 }

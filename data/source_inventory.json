@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-29T20:45:58.246888+00:00",
+  "generatedAt": "2026-10-29T20:58:03.788425+00:00",
   "sources": [
     {
       "file_path": "2023 Cash.xlsx",
@@ -14,7 +14,7 @@
       "is_scanned_only": false,
       "detected_language": "mixed",
       "layout_type": "table",
-      "last_scanned_at": "2026-10-29T20:45:58.079316+00:00"
+      "last_scanned_at": "2026-10-29T20:58:03.625925+00:00"
     },
     {
       "file_path": "public/2023.pdf",
@@ -28,7 +28,7 @@
       "is_scanned_only": false,
       "detected_language": "mixed",
       "layout_type": "table",
-      "last_scanned_at": "2026-10-29T20:45:58.195240+00:00"
+      "last_scanned_at": "2026-10-29T20:58:03.738783+00:00"
     },
     {
       "file_path": "2024 Pricelist extracted.xlsx",
@@ -42,7 +42,7 @@
       "is_scanned_only": false,
       "detected_language": "mixed",
       "layout_type": "table",
-      "last_scanned_at": "2026-10-29T20:45:58.161014+00:00"
+      "last_scanned_at": "2026-10-29T20:58:03.705275+00:00"
     },
     {
       "file_path": "public/2024.pdf",
@@ -56,7 +56,7 @@
       "is_scanned_only": false,
       "detected_language": "mixed",
       "layout_type": "table",
-      "last_scanned_at": "2026-10-29T20:45:58.236676+00:00"
+      "last_scanned_at": "2026-10-29T20:58:03.778728+00:00"
     },
     {
       "file_path": "2025 Cash.xlsx",
@@ -70,7 +70,7 @@
       "is_scanned_only": false,
       "detected_language": "mixed",
       "layout_type": "table",
-      "last_scanned_at": "2026-10-29T20:45:58.180164+00:00"
+      "last_scanned_at": "2026-10-29T20:58:03.723808+00:00"
     },
     {
       "file_path": "public/2025.pdf",
@@ -84,7 +84,7 @@
       "is_scanned_only": false,
       "detected_language": "mixed",
       "layout_type": "table",
-      "last_scanned_at": "2026-10-29T20:45:58.223052+00:00"
+      "last_scanned_at": "2026-10-29T20:58:03.765758+00:00"
     },
     {
       "file_path": "2026 Elite Cash PL 12-1 (1).xlsx",
@@ -98,7 +98,7 @@
       "is_scanned_only": false,
       "detected_language": "mixed",
       "layout_type": "table",
-      "last_scanned_at": "2026-10-29T20:45:58.113527+00:00"
+      "last_scanned_at": "2026-10-29T20:58:03.658865+00:00"
     }
   ]
 }

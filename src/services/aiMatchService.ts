@@ -3,6 +3,7 @@ import { ProcedureResult, SelectedProcedure, InpatientApprovalRecord, ApprovalGr
 import { cleanContractorName, normalizeArabic, normalizeText, expandMedicalSynonyms, hasAntibodyConflict, hasLabInvestigationConflict, cleanHisProcedureQuery } from '../lib/arabic-normalizer';
 import { generateCmWhatsappMessage } from '../lib/whatsapp-generator';
 import { redactPhiFromText, assertZeroDemographics, KnownDemographics } from '../lib/deidentifier';
+import { parseDoctorNarrative, translateDoctorIndication, ParsedDoctorNarrative } from '../lib/doctorNarrativeParser';
 
 export const GEMINI_STORAGE_KEY = 'elite_gemini_api_key';
 
@@ -39,6 +40,7 @@ export interface UnifiedThreadOutput {
   coverageConditions: string;
   confidenceScore?: number;
   extractedOfficerHint?: string;
+  extractedClinicalIndication?: string;
   isAutoReply?: boolean;
   executiveSummaryArabic: string;
   matchedProcedures: Array<{
@@ -204,8 +206,32 @@ export function analyzeThreadWithHeuristics(input: UnifiedThreadInput): UnifiedT
   }
 
   // 5. Match Procedures against candidate rows
-  // If initialServices is empty or generic, but a procedure was extracted from reply, add it
-  const effectiveServices = [...input.initialServices];
+  // Decompose any doctor narrative services into clean requested items and clinical indication
+  let extractedClinicalIndication = '';
+  if (input.diagnosis && input.diagnosis !== 'Clinical Inpatient Evaluation') {
+    extractedClinicalIndication = translateDoctorIndication(input.diagnosis);
+  }
+
+  const effectiveServices: Array<{ name: string; rawPrice: number }> = [];
+  for (const srv of input.initialServices) {
+    const narrative = parseDoctorNarrative(srv.name);
+    if (narrative.clinicalIndicationAr && !narrative.clinicalIndicationAr.includes('قيد المتابعة')) {
+      if (!extractedClinicalIndication) {
+        extractedClinicalIndication = narrative.clinicalIndicationAr;
+      }
+    }
+    if (narrative.cleanServices.length > 0) {
+      for (const cs of narrative.cleanServices) {
+        effectiveServices.push({
+          name: cs.name,
+          rawPrice: cs.rawPrice ?? srv.rawPrice,
+        });
+      }
+    } else {
+      effectiveServices.push(srv);
+    }
+  }
+
   if (
     effectiveServices.length === 0 ||
     effectiveServices.every((s) => s.name.toLowerCase().includes('evaluation'))
@@ -330,7 +356,7 @@ ${matchedLines || 'لا توجد إجراءات مطابقة مباشرة بال
     contractorRaw: input.contractor,
     requestedServices: effectiveServices,
     matchedProcedures,
-    diagnosis: input.diagnosis,
+    diagnosis: extractedClinicalIndication || input.diagnosis,
     status,
     hasExistingApproval: status === 'approved',
     creditLimit: approvedAmountLimit,
@@ -346,6 +372,7 @@ ${matchedLines || 'لا توجد إجراءات مطابقة مباشرة بال
     coverageConditions,
     confidenceScore: hasApproval || hasRefusal ? 0.92 : hasPendingInfo ? 0.88 : 0.75,
     extractedOfficerHint: extractedOfficerHint || undefined,
+    extractedClinicalIndication: extractedClinicalIndication || undefined,
     isAutoReply: detectedAutoReply,
     executiveSummaryArabic,
     matchedProcedures,
@@ -449,7 +476,10 @@ YOUR TASKS:
    - A concise 2-sentence Arabic summary synthesizing the final state.
    - If approved: state clearly that the procedure/admission is approved with the credit limit, and that the case is confirmed with no missing requirements.
 
-4. CLINICAL PROCEDURE MATCHING:
+4. CLINICAL PROCEDURE & DOCTOR NARRATIVE MATCHING:
+   - DOCTOR NARRATIVE DECONSTRUCTION: When requested services contain unstructured clinical narratives (e.g. "patient had bilateral lower limb weakness due to diabetes and hx of strokes and on physiotherapy sessions" or "المريضة تعاني من ارتفاع في درجة الحرارة و تحتاج الي مد فترة حجزها لعمل التحاليل... مع عمل اشعة مقطعية علئ المخ"), you MUST extract:
+     a) The actual medical procedure requested (e.g. "Physiotherapy Sessions" or "Stay Extension" or "Laparoscopic Appendectomy").
+     b) The clinical indication in Arabic (الداعي الطبي) (e.g. "المريض يعاني من ضعف بالطرفين السفليين بسبب مرض داء السكري ، مع تاريخ مرضي من الجلطات") and populate extractedClinicalIndication.
    - For each requested service [Srv 0, 1...], identify which Candidate ID from <CandidatePricelistRows> matches it best. If none match clinically, use -1.
    - Clinical rule: TEE (Transesophageal Echocardiography) must NEVER match standard surface Echo (TTE).
    - IMMUNOGLOBULIN SPECIFICITY (CRITICAL): IgA, IgG, IgM, IgE are distinct antibodies and must NEVER match a different isotype. For example, Tissue transglutaminase (IgG) must NEVER match Tissue transglutaminase (IgA). Anti-DGP IgG must NEVER match Anti-DGP IgA.
@@ -465,14 +495,15 @@ YOUR TASKS:
 
 5. OFFICIAL RESPONSE & CM WHATSAPP DRAFTING:
    - suggestedDraftReply: Professional corporate email draft in Arabic/English responding to the latest thread state.
-   - cmWhatsappMessage: Exactly 3 lines for Case Management:
+   - cmWhatsappMessage: Case Management WhatsApp message format:
      Line 1: *${input.patientName}*${input.bed ? ` - ${input.bed.startsWith('Bed') || input.bed.startsWith('Observation') || input.bed.startsWith('ICU') ? input.bed : `Bed ${input.bed}`}` : ''}
      Line 2: ${input.contractor}
      Line 3:
        - If approved: *تمت الموافقة على: <Procedure Name in Arabic/English> (حد أقصى: <limit>)*
-       - If pending: *المطلوب موافقة <action verb: عمل / سحب تحليل / إجراء> <Procedure Name in Arabic with English>*
+       - If pending: *المطلوب موافقة <action verb: عمل / سحب تحليل / إجراء / تركيب / جلسات> <Procedure Name in Arabic with English>*
        - If the approval is a price approval ("موافقة سعرية بمبلغ X"): NEVER say "الحد الأقصى" / "سقف" / "حد أقصى"; write *تمت الموافقة على: <Procedure> - موافقة سعرية بمبلغ X*
        - If someone must bring/make a price approval ("إحضار / عمل موافقة سعرية بمبلغ X"): write *مطلوب موافقة سعرية بمبلغ X على: <Procedure>*
+     Line 4 (if clinical indication exists): الداعي الطبي: <Clinical Indication in Arabic>
 
 6. RESILIENCE & EDGE CASE RULES:
    - Automated Out of Office (OOO) / System auto-replies: Set isAutoReply to true. Do NOT treat OOO as a clinical or operational decision!
@@ -513,6 +544,10 @@ YOUR TASKS:
       extractedOfficerHint: {
         type: Type.STRING,
         description: 'Name of the officer or signatory extracted from the email signature, or empty string.',
+      },
+      extractedClinicalIndication: {
+        type: Type.STRING,
+        description: 'The extracted clinical indication in Arabic (الداعي الطبي) explaining the symptoms/diagnosis for this approval request, or empty string.',
       },
       isAutoReply: {
         type: Type.BOOLEAN,
@@ -625,6 +660,7 @@ YOUR TASKS:
         matchedProcedures,
         confidenceScore: typeof parsed.confidenceScore === 'number' ? parsed.confidenceScore : 0.95,
         extractedOfficerHint: parsed.extractedOfficerHint ? String(parsed.extractedOfficerHint).trim() : undefined,
+        extractedClinicalIndication: parsed.extractedClinicalIndication ? String(parsed.extractedClinicalIndication).trim() : undefined,
         isAutoReply: Boolean(parsed.isAutoReply),
         suggestedDraftReply: parsed.suggestedDraftReply || '',
         cmWhatsappMessage: parsed.cmWhatsappMessage || '',
@@ -923,6 +959,99 @@ CRITICAL EXTRACTION RULES:
   }
 
   return [];
+}
+
+/**
+ * Uses Gemini AI to deeply understand doctor clinical narratives, extracting both
+ * clean procedures and the Arabic clinical indication (الداعي الطبي) with high medical reasoning.
+ * Falls back safely to deterministic parser if offline or API key is unconfigured.
+ */
+export async function analyzeDoctorNarrativeWithAI(clinicalText: string): Promise<ParsedDoctorNarrative> {
+  const local = parseDoctorNarrative(clinicalText);
+  const key = getGeminiApiKey();
+  if (!key || !clinicalText || clinicalText.trim().length === 0) {
+    return local;
+  }
+
+  const ai = new GoogleGenAI({ apiKey: key });
+  const sanitizedText = redactPhiFromText(clinicalText);
+
+  const promptText = `You are a clinical coding and medical necessity specialist at Elite Hospital.
+Analyze the following doctor narrative note from an inpatient insurance approval request:
+
+Clinical Note:
+"""
+${sanitizedText.trim()}
+"""
+
+Extract structured clinical intent:
+1. primaryProcedure: The core requested medical procedure, surgery, investigation, or stay extension (in English/Arabic). Exclude patient history or symptoms.
+2. secondaryProcedures: Any additional requested procedures, imaging, or stay extensions (array of strings).
+3. clinicalIndicationAr: Formal medical indication and diagnosis in Arabic explaining why this procedure is necessary (e.g. "المريض يعاني من ضعف بالطرفين السفليين بسبب مرض داء السكري ، مع تاريخ مرضي من الجلطات").
+4. urgency: "routine" | "urgent" | "emergency".
+5. category: "surgery" | "radiology" | "laboratory" | "physiotherapy" | "rehabilitation" | "cardiology" | "stay_extension" | "procedure".
+
+Return JSON only.`;
+
+  const responseSchema = {
+    type: Type.OBJECT,
+    properties: {
+      primaryProcedure: { type: Type.STRING },
+      secondaryProcedures: { type: Type.ARRAY, items: { type: Type.STRING } },
+      clinicalIndicationAr: { type: Type.STRING },
+      urgency: { type: Type.STRING, enum: ['routine', 'urgent', 'emergency'] },
+      category: {
+        type: Type.STRING,
+        enum: ['surgery', 'radiology', 'laboratory', 'physiotherapy', 'rehabilitation', 'cardiology', 'stay_extension', 'procedure'],
+      },
+    },
+    required: ['primaryProcedure', 'secondaryProcedures', 'clinicalIndicationAr', 'urgency', 'category'],
+  };
+
+  const candidateModels = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash'];
+  for (const model of candidateModels) {
+    try {
+      const response = await Promise.race([
+        ai.models.generateContent({
+          model,
+          contents: [{ parts: [{ text: promptText }] }],
+          config: {
+            temperature: 0,
+            responseMimeType: 'application/json',
+            responseSchema,
+          },
+        }),
+        new Promise<never>((_, reject) =>
+          setTimeout(() => reject(new Error('Timeout querying Gemini')), 6000)
+        ),
+      ]);
+
+      const parsed = JSON.parse(response.text || '{}');
+      if (parsed.primaryProcedure) {
+        const cleanServices: Array<{ name: string; rawPrice?: number }> = [
+          { name: parsed.primaryProcedure, rawPrice: 0 },
+        ];
+        if (Array.isArray(parsed.secondaryProcedures)) {
+          for (const s of parsed.secondaryProcedures) {
+            cleanServices.push({ name: s, rawPrice: 0 });
+          }
+        }
+        return {
+          primaryProcedure: parsed.primaryProcedure,
+          secondaryProcedures: Array.isArray(parsed.secondaryProcedures) ? parsed.secondaryProcedures : [],
+          clinicalIndicationAr: parsed.clinicalIndicationAr || local.clinicalIndicationAr,
+          urgency: parsed.urgency || local.urgency,
+          category: parsed.category || local.category,
+          hasMultipleProcedures: cleanServices.length > 1,
+          cleanServices,
+        };
+      }
+    } catch (err) {
+      console.warn(`[AI Narrative Analysis] Model ${model} failed, using local fallback:`, err);
+    }
+  }
+
+  return local;
 }
 
 /**

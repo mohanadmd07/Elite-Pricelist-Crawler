@@ -16,6 +16,7 @@ import { resolveOfficerByContractor } from '../services/contractorOfficerResolve
 import { cleanContractorName, normalizeArabic, normalizeText, cleanHisProcedureQuery, isAccommodationOrGenericFee } from '../lib/arabic-normalizer';
 import { searchLocalPricelist } from '../services/procedureService';
 import { generateCmWhatsappMessage } from '../lib/whatsapp-generator';
+import { parseDoctorNarrative } from '../lib/doctorNarrativeParser';
 import { buildDraftReplyText } from '../lib/draftReplyBuilder';
 import { InpatientApprovalRecord, ProcedureResult } from '../types';
 import { MailSyncStats, RawMailMessage } from './types';
@@ -54,11 +55,21 @@ async function maybeRunClassifierOnSync(params: {
         mrn: params.mrn,
         bed: params.bed,
         physician: params.physician,
-        requested: (params.requestedServices || []).map((s) => ({
-          text: s.name,
-          category: 'PROCEDURE' as const,
-          quantity: 1,
-        })),
+        requested: (params.requestedServices || []).flatMap((s) => {
+          const narrative = parseDoctorNarrative(s.name);
+          if (narrative.cleanServices.length > 0) {
+            return narrative.cleanServices.map((cs) => ({
+              text: cs.name,
+              category: (narrative.category === 'surgery' ? 'PROCEDURE' : narrative.category === 'radiology' || narrative.category === 'laboratory' ? 'INVESTIGATION' : 'PROCEDURE') as any,
+              quantity: 1,
+            }));
+          }
+          return [{
+            text: s.name,
+            category: 'PROCEDURE' as const,
+            quantity: 1,
+          }];
+        }),
         messages: [
           {
             messageId: params.sourceMessageId,

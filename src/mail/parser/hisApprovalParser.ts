@@ -7,6 +7,7 @@
 import * as cheerio from 'cheerio';
 import { cleanContractorName, stripSentFromSignatures, extractRefusalReason } from '../../lib/arabic-normalizer';
 import { extractCleanProcedurePhrase, extractClinicalIndication, translateClinicalIndicationToArabic } from '../../lib/whatsapp-generator';
+import { parseDoctorNarrative, translateDoctorIndication } from '../../lib/doctorNarrativeParser';
 import { ParsedApprovalEmail, RawMailMessage } from '../types';
 
 export const REFUSAL_KEYWORDS = [
@@ -968,35 +969,44 @@ export function parseHisApprovalEmail(msg: RawMailMessage): ParsedApprovalEmail 
   });
 
   if (requestedServices.length === 0 && requestDetails) {
+    const narrative = parseDoctorNarrative(requestDetails);
     if (!diagnosis || diagnosis === 'Clinical Inpatient Evaluation') {
-      const diagMatch = requestDetails.match(/(?:يعاني|تعاني)\s+(?:المريض|المريضة|الحالة)?\s*من\s+([^و\n\r<]+)/i);
-      if (diagMatch && diagMatch[1]) {
-        diagnosis = diagMatch[1].trim();
+      if (narrative.clinicalIndicationAr && !narrative.clinicalIndicationAr.includes('قيد المتابعة')) {
+        diagnosis = narrative.clinicalIndicationAr;
       } else {
-        const clinicalIndication = extractClinicalIndication(requestDetails);
-        if (clinicalIndication && clinicalIndication !== requestDetails) {
-          diagnosis = clinicalIndication;
+        const diagMatch = requestDetails.match(/(?:يعاني|تعاني)\s+(?:المريض|المريضة|الحالة)?\s*من\s+([^و\n\r<]+)/i);
+        if (diagMatch && diagMatch[1]) {
+          diagnosis = diagMatch[1].trim();
         }
       }
     }
 
-    const cleanDetails = extractCleanProcedurePhrase(requestDetails);
-    const isDiagnosisCode = /^[A-Z]\d{2}(?:\.\d+)?\s*[-:]/i.test(cleanDetails);
-    if (isDiagnosisCode && (!diagnosis || diagnosis === 'Clinical Inpatient Evaluation')) {
-      diagnosis = cleanDetails;
-    } else if (!isDiagnosisCode && cleanDetails && cleanDetails.length > 3) {
-      const parts = splitClinicalRequests(cleanDetails);
-      for (const part of parts) {
+    if (narrative.cleanServices.length > 0) {
+      for (const srv of narrative.cleanServices) {
         requestedServices.push({
-          name: part,
+          name: srv.name,
           rawPrice: 0,
         });
+      }
+    } else {
+      const cleanDetails = extractCleanProcedurePhrase(requestDetails);
+      const isDiagnosisCode = /^[A-Z]\d{2}(?:\.\d+)?\s*[-:]/i.test(cleanDetails);
+      if (isDiagnosisCode && (!diagnosis || diagnosis === 'Clinical Inpatient Evaluation')) {
+        diagnosis = cleanDetails;
+      } else if (!isDiagnosisCode && cleanDetails && cleanDetails.length > 3) {
+        const parts = splitClinicalRequests(cleanDetails);
+        for (const part of parts) {
+          requestedServices.push({
+            name: part,
+            rawPrice: 0,
+          });
+        }
       }
     }
   }
 
-  if (diagnosis && /(?:weakness|diabetes|stroke|hypertension|patient)/i.test(diagnosis)) {
-    const translatedDiag = translateClinicalIndicationToArabic(diagnosis);
+  if (diagnosis && /(?:weakness|diabetes|stroke|hypertension|appendicitis|coronary|stemi|pain|fever|patient)/i.test(diagnosis)) {
+    const translatedDiag = translateDoctorIndication(diagnosis);
     if (translatedDiag && translatedDiag !== diagnosis) {
       diagnosis = translatedDiag;
     }

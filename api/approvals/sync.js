@@ -1194,6 +1194,235 @@ var init_deidentifier = __esm({
   }
 });
 
+// src/lib/doctorNarrativeParser.ts
+function translateDoctorIndication(text) {
+  if (!text) return "";
+  let clean = text.trim();
+  clean = clean.replace(/^(?:patient\s+(?:had|has|was|is|suffering\s+from|admitted\s+through\s+er\s+with|admitted\s+with|presenting\s+with|presented\s+with)?\s*)/i, "").trim();
+  let translated = clean;
+  let hasMatch = false;
+  for (const [re, replacement] of CLINICAL_PHRASE_TRANSLATIONS) {
+    if (re.test(translated)) {
+      hasMatch = true;
+      translated = translated.replace(re, replacement);
+    }
+  }
+  translated = translated.replace(/\b(?:and|with)\b/gi, "\u0648").replace(/\s*,\s*/g, " \u0648 ").replace(/\s+/g, " ").trim();
+  if (hasMatch) {
+    if (!translated.startsWith("\u0627\u0644\u0645\u0631\u064A\u0636") && !translated.startsWith("\u0627\u0644\u0645\u0631\u064A\u0636\u0629")) {
+      translated = `\u0627\u0644\u0645\u0631\u064A\u0636 \u064A\u0639\u0627\u0646\u064A \u0645\u0646 ${translated}`;
+    }
+    return translated;
+  }
+  return clean;
+}
+function isDoctorNarrative(text) {
+  if (!text || text.trim().length < 15) return false;
+  return /(?:patient\s+(?:had|has|is|was|admitted|presenting|presented|suffering)|due\s+to|hx\s+of|history\s+of|scheduled\s+for|planned\s+for)/i.test(text) || /(?:يعاني|تعاني|يعانى|تعانى|لاشتباه|اشتباه|لوجود|نظرا|نظراً|بسبب|مع\s+تاريخ\s+مرضي|تحتاج\s+(?:الحالة|الحاله|المريضة|المريضه)|يحتاج\s+(?:المريض|الطفل)|اوصى\s+بعمل|اوصي\s+بعمل|بحاجة\s+(?:الى|الي)|بحاجه\s+(?:الى|الي))/i.test(text);
+}
+function parseDoctorNarrative(rawText) {
+  if (!rawText) {
+    return {
+      primaryProcedure: "",
+      secondaryProcedures: [],
+      clinicalIndicationAr: "",
+      urgency: "routine",
+      category: "procedure",
+      hasMultipleProcedures: false,
+      cleanServices: []
+    };
+  }
+  const text = stripSentFromSignatures(rawText).trim();
+  if (!isDoctorNarrative(text)) {
+    return {
+      primaryProcedure: text,
+      secondaryProcedures: [],
+      clinicalIndicationAr: "",
+      urgency: "routine",
+      category: "procedure",
+      hasMultipleProcedures: false,
+      cleanServices: [{ name: text, rawPrice: 0 }]
+    };
+  }
+  let urgency = "routine";
+  if (/\b(?:emergency|stemi|shock|arrest|acute\s+coronary|massive\s+bleeding|طارئ|طوارئ|حرج|عاجل|إنقاذ\s+حياة)\b/i.test(text)) {
+    urgency = "emergency";
+  } else if (/\b(?:urgent|urgently|acute\s+appendicitis|peritonitis|severe\s+pain|مستعجل|عاجلة|حالة\s+حادة)\b/i.test(text)) {
+    urgency = "urgent";
+  }
+  const engNarrativeMatch = text.match(
+    /(?:patient\s+(?:had|has|is|was|admitted[^\n\r,]+with|presenting[^\n\r,]+with|presented[^\n\r,]+with|suffering\s+from)?\s+)?(.+?)\s+(?:and\s+(?:is\s+)?on|and\s+needs|and\s+requires|needs|requires|scheduled\s+for|planned\s+for|for)\s+([a-zA-Z0-9\s/-]+)(?:\r|\n|$)/i
+  );
+  let primaryProcedure = "";
+  let clinicalIndicationAr = "";
+  let clinicalIndicationEn = "";
+  if (engNarrativeMatch && engNarrativeMatch[2]) {
+    const candidateProc = engNarrativeMatch[2].replace(/\b(?:urgent|emergently|urgently)\b/gi, "").trim();
+    if (candidateProc.length >= 3 && !candidateProc.toLowerCase().includes("inpatient")) {
+      primaryProcedure = candidateProc;
+      clinicalIndicationEn = engNarrativeMatch[1].trim();
+      clinicalIndicationAr = translateDoctorIndication(clinicalIndicationEn);
+    }
+  }
+  if (!primaryProcedure) {
+    const araTrigger = text.match(
+      /(?:واوصي بعمل|واوصى بعمل|أوصى بعمل|اوصي بعمل|اوصى بعمل|ويحتاج الى عمل|ويحتاج الي عمل|ويحتاج لعمل|يحتاج الى عمل|يحتاج الي عمل|يحتاج لعمل|بحاجة لاجراء|بحاجة لإجراء|بحاجة الى عمل|بحاجة الي عمل|بحاجة الى|بحاجة الي|بحاجه الى عمل|بحاجه الي عمل|بحاجه الى|بحاجه الي|وتم طلب عمل|وتم طلب|تم طلب عمل|تم طلب|(?:برجاء|نرجو|يرجى)\s+(?:من\s+سيادتكم\s+)?(?:الموافقة|الموافقه|موافقة|موافقه)\s+(?:علي\s+عمل|على\s+عمل|علي|على)?|برجاء عمل|المطلوب عمل|المطلوب موافقة على|المطلوب موافقة علي|المطلوب موافقة|المطلوب موافقه|المطلوب|يحتاج الى|يحتاج الي|اوصى ب|اوصي ب|(?:وتحتاج|تحتاج|ويحتاج|يحتاج)\s+(?:الحاله|الحالة|المريض|المريضة|المريضه)\s+(?:لـ?|إلى|الى|إلي|الي)?\s*(?:عمل|إجراء|اجراء)?)\s*(.+)/is
+    );
+    if (araTrigger && araTrigger[1]) {
+      primaryProcedure = araTrigger[1].split(/(?:مع\s+عمل|بالإضافة|بالاضافة|لانها|لانه|بسبب)/i)[0].trim();
+    }
+  }
+  if (primaryProcedure) {
+    primaryProcedure = primaryProcedure.replace(/(?:\s+(?:لانه|لأنه|لانها|لأنها|متابعة|لمتابعة|لمتابعه|لتقييم|لحين|نظرا|نظراً|بسبب|بعد|لاشتباه|للاشتباه|اشتباه|لوجود|لحالة|لحاله|مع\s+تاريخ\s+مرضي|لتاريخ\s+مرضي)\s+.*)$/is, "").trim();
+    const acronymMatch = primaryProcedure.match(/\b([A-Z]{2,6})\b/);
+    if (acronymMatch && acronymMatch[1] && (primaryProcedure.match(/[\u0600-\u06FF]/g) || []).length > 0) {
+      primaryProcedure = acronymMatch[1];
+    }
+  }
+  if (!clinicalIndicationAr) {
+    const araSymptomsMatch = text.match(
+      /(?:المريض|المريضة|المريضه|الحالة|الحاله)\s+(?:يعاني|تعاني|يعانى|تعانى)\s+من\s+([^و\r\n<]+(?:و[^و\r\n<]+)*)/i
+    );
+    if (araSymptomsMatch && araSymptomsMatch[1]) {
+      clinicalIndicationAr = `\u0627\u0644\u0645\u0631\u064A\u0636 \u064A\u0639\u0627\u0646\u064A \u0645\u0646 ${araSymptomsMatch[1].trim()}`;
+    } else {
+      const trailingJustification = text.match(
+        /(?:لانها|لانه|لأنها|لأنه|نظرا\s+لـ?|نظراً\s+لـ?|بسبب|مع\s+تاريخ\s+مرضي|لاشتباه|اشتباه|لوجود)\s+([^\r\n.<]+)/i
+      );
+      if (trailingJustification && trailingJustification[1]) {
+        clinicalIndicationAr = `\u0627\u0644\u0645\u0631\u064A\u0636 \u064A\u0639\u0627\u0646\u064A \u0645\u0646 ${trailingJustification[1].trim()}`;
+      }
+    }
+  }
+  const secondaryProcedures = [];
+  const cleanServices = [];
+  const hasStayExtension = /مد\s+(?:فترة\s+)?(?:حجز|الاقامه|الإقامة|الاقامة)/i.test(text);
+  const alreadyStay = /مد|إقامة|اقامة|حجز/i.test(primaryProcedure);
+  if (hasStayExtension && !alreadyStay) {
+    secondaryProcedures.push("\u0645\u062F \u0627\u0644\u0625\u0642\u0627\u0645\u0629 \u0648\u0645\u062A\u0627\u0628\u0639\u0629 \u0637\u0628\u064A\u0629 \u0628\u0627\u0644\u0642\u0633\u0645 \u0627\u0644\u062F\u0627\u062E\u0644\u064A");
+  }
+  const hasCtScan = /اشعة\s+مقطعية|أشعة\s+مقطعية|\bct\b/i.test(text);
+  const alreadyCt = /ct|مقطعية|مقطعيه/i.test(primaryProcedure);
+  if (hasCtScan && !alreadyCt) {
+    let ctName = "\u0623\u0634\u0639\u0629 \u0645\u0642\u0637\u0639\u064A\u0629 \u0639\u0644\u0649 \u0627\u0644\u0645\u062E";
+    if (/بطن|حوض|abdomen|pelvis/i.test(text)) ctName = "\u0623\u0634\u0639\u0629 \u0645\u0642\u0637\u0639\u064A\u0629 \u0639\u0644\u0649 \u0627\u0644\u0628\u0637\u0646 \u0648\u0627\u0644\u062D\u0648\u0636";
+    else if (/صدر|chest/i.test(text)) ctName = "\u0623\u0634\u0639\u0629 \u0645\u0642\u0637\u0639\u064A\u0629 \u0639\u0644\u0649 \u0627\u0644\u0635\u062F\u0631";
+    if (!secondaryProcedures.includes(ctName)) {
+      secondaryProcedures.push(ctName);
+    }
+  }
+  const hasMri = /رنين\s+مغناطيسي|\bmri\b/i.test(text);
+  const alreadyMri = /mri|رنين/i.test(primaryProcedure);
+  if (hasMri && !alreadyMri) {
+    const mriName = "\u0623\u0634\u0639\u0629 \u0631\u0646\u064A\u0646 \u0645\u063A\u0646\u0627\u0637\u064A\u0633\u064A";
+    if (!secondaryProcedures.includes(mriName)) {
+      secondaryProcedures.push(mriName);
+    }
+  }
+  const hasEcho = /موجات\s+فوق\s+صوتية|ايكو|إيكو|\becho\b/i.test(text);
+  const alreadyEcho = /echo|ايكو|إيكو|موجات/i.test(primaryProcedure);
+  if (hasEcho && !alreadyEcho) {
+    const echoName = "\u0645\u0648\u062C\u0627\u062A \u0641\u0648\u0642 \u0635\u0648\u062A\u064A\u0629 \u0639\u0644\u0649 \u0627\u0644\u0642\u0644\u0628 (Echocardiography)";
+    if (!secondaryProcedures.includes(echoName)) {
+      secondaryProcedures.push(echoName);
+    }
+  }
+  const hasPhysio = /علاج\s+طبيعي|\bphysiotherapy\b|\bphysical\s+therapy\b/i.test(text);
+  const alreadyPhysio = /physio|طبيعي/i.test(primaryProcedure);
+  if (hasPhysio && !alreadyPhysio) {
+    const physioName = "\u062C\u0644\u0633\u0627\u062A \u0639\u0644\u0627\u062C \u0637\u0628\u064A\u0639\u064A";
+    if (!secondaryProcedures.includes(physioName)) {
+      if (!primaryProcedure) primaryProcedure = physioName;
+      else secondaryProcedures.push(physioName);
+    }
+  }
+  if (primaryProcedure) {
+    cleanServices.push({ name: primaryProcedure, rawPrice: 0 });
+  }
+  for (const sec of secondaryProcedures) {
+    if (!cleanServices.some((s) => s.name === sec)) {
+      cleanServices.push({ name: sec, rawPrice: 0 });
+    }
+  }
+  if (cleanServices.length === 0) {
+    cleanServices.push({ name: text, rawPrice: 0 });
+  }
+  let category = "procedure";
+  const combinedNames = (primaryProcedure + " " + secondaryProcedures.join(" ")).toLowerCase();
+  if (hasStayExtension && cleanServices.length === 1) {
+    category = "stay_extension";
+  } else if (/appendectomy|laparoscopic|cholecystectomy|hernia|repair|surgery|جراحة|استئصال|عملية|منظار/i.test(combinedNames)) {
+    category = "surgery";
+  } else if (/pci|catheter|stent|coronary|قسطرة|دعامة/i.test(combinedNames)) {
+    category = "cardiology";
+  } else if (/physiotherapy|physical\s+therapy|علاج\s+طبيعي/i.test(combinedNames)) {
+    category = "rehabilitation";
+  } else if (/ct|mri|x-ray|ultrasound|echo|اشعة|أشعة|رنين|سونار/i.test(combinedNames)) {
+    category = "radiology";
+  } else if (/culture|cbc|crp|تحليل|مزرعة/i.test(combinedNames)) {
+    category = "laboratory";
+  }
+  return {
+    primaryProcedure: primaryProcedure || cleanServices[0].name,
+    secondaryProcedures,
+    clinicalIndicationAr: clinicalIndicationAr || "\u0627\u0644\u062F\u0627\u0639\u064A \u0627\u0644\u0637\u0628\u064A \u0642\u064A\u062F \u0627\u0644\u0645\u062A\u0627\u0628\u0639\u0629 \u0627\u0644\u0633\u0631\u064A\u0631\u064A\u0629",
+    clinicalIndicationEn,
+    urgency,
+    category,
+    hasMultipleProcedures: cleanServices.length > 1,
+    cleanServices
+  };
+}
+var CLINICAL_PHRASE_TRANSLATIONS;
+var init_doctorNarrativeParser = __esm({
+  "src/lib/doctorNarrativeParser.ts"() {
+    init_arabic_normalizer();
+    CLINICAL_PHRASE_TRANSLATIONS = [
+      // Cardiology
+      [/\bacute\s+coronary\s+syndrome\b/gi, "\u0645\u062A\u0644\u0627\u0632\u0645\u0629 \u0627\u0644\u0634\u0631\u064A\u0627\u0646 \u0627\u0644\u062A\u0627\u062C\u064A \u0627\u0644\u062D\u0627\u062F\u0629"],
+      [/\b(?:ecg\s+shows\s+)?stemi\b/gi, "\u062C\u0644\u0637\u0629 \u062D\u0627\u062F\u0629 \u0628\u0639\u0636\u0644\u0629 \u0627\u0644\u0642\u0644\u0628"],
+      [/\bnstemi\b/gi, "\u062C\u0644\u0637\u0629 \u063A\u064A\u0631 \u0645\u0643\u062A\u0645\u0644\u0629 \u0628\u0639\u0638\u0627\u0645 \u0627\u0644\u0642\u0644\u0628"],
+      [/\bmyocardial\s+infarction\b/gi, "\u0627\u062D\u062A\u0634\u0627\u0621 \u0639\u0636\u0644\u0629 \u0627\u0644\u0642\u0644\u0628"],
+      [/\bangina\b/gi, "\u0630\u0628\u062D\u0629 \u0635\u062F\u0631\u064A\u0629"],
+      [/\bchest\s+pain\b/gi, "\u0622\u0644\u0627\u0645 \u0628\u0627\u0644\u0635\u062F\u0631"],
+      [/\bheart\s+failure\b/gi, "\u0641\u0634\u0644 \u0628\u0639\u0636\u0644\u0629 \u0627\u0644\u0642\u0644\u0628"],
+      // Neurology
+      [/\bbilateral\s+lower\s+limb\s+weakness\b/gi, "\u0636\u0639\u0641 \u0628\u0627\u0644\u0637\u0631\u0641\u064A\u0646 \u0627\u0644\u0633\u0641\u0644\u064A\u064A\u0646"],
+      [/\bbilateral\s+upper\s+limb\s+weakness\b/gi, "\u0636\u0639\u0641 \u0628\u0627\u0644\u0637\u0631\u0641\u064A\u0646 \u0627\u0644\u0639\u0644\u0648\u064A\u064A\u0646"],
+      [/\blower\s+limb\s+weakness\b/gi, "\u0636\u0639\u0641 \u0628\u0627\u0644\u0637\u0631\u0641 \u0627\u0644\u0633\u0641\u0644\u064A"],
+      [/\bupper\s+limb\s+weakness\b/gi, "\u0636\u0639\u0641 \u0628\u0627\u0644\u0637\u0631\u0641 \u0627\u0644\u0639\u0644\u0648\u064A"],
+      [/\bsevere\s+headache\b/gi, "\u0635\u062F\u0627\u0639 \u0634\u062F\u064A\u062F"],
+      [/\bheadache\b/gi, "\u0635\u062F\u0627\u0639"],
+      [/\b(?:cva|stroke)\b/gi, "\u062C\u0644\u0637\u0629 \u0628\u0627\u0644\u0645\u062E"],
+      [/\band\s+(?:hx|history)\s+of\s+strokes\b/gi, "\u060C \u0645\u0639 \u062A\u0627\u0631\u064A\u062E \u0645\u0631\u0636\u064A \u0645\u0646 \u0627\u0644\u062C\u0644\u0637\u0627\u062A"],
+      [/\band\s+(?:hx|history)\s+of\s+stroke\b/gi, "\u060C \u0645\u0639 \u062A\u0627\u0631\u064A\u062E \u0645\u0631\u0636\u064A \u0644\u062C\u0644\u0637\u0629 \u0628\u0627\u0644\u0645\u062E"],
+      [/\b(?:hx|history)\s+of\s+strokes\b/gi, "\u0645\u0639 \u062A\u0627\u0631\u064A\u062E \u0645\u0631\u0636\u064A \u0645\u0646 \u0627\u0644\u062C\u0644\u0637\u0627\u062A"],
+      [/\b(?:hx|history)\s+of\s+stroke\b/gi, "\u0645\u0639 \u062A\u0627\u0631\u064A\u062E \u0645\u0631\u0636\u064A \u0644\u062C\u0644\u0637\u0629 \u0628\u0627\u0644\u0645\u062E"],
+      // General Surgery / Abdomen
+      [/\bacute\s+appendicitis\b/gi, "\u0627\u0644\u062A\u0647\u0627\u0628 \u062D\u0627\u062F \u0628\u0627\u0644\u0632\u0627\u0626\u062F\u0629 \u0627\u0644\u062F\u0648\u062F\u064A\u0629"],
+      [/\bappendicitis\b/gi, "\u0627\u0644\u062A\u0647\u0627\u0628 \u0627\u0644\u0632\u0627\u0626\u062F\u0629 \u0627\u0644\u062F\u0648\u062F\u064A\u0629"],
+      [/\bacute\s+cholecystitis\b/gi, "\u0627\u0644\u062A\u0647\u0627\u0628 \u062D\u0627\u062F \u0628\u0627\u0644\u0645\u0631\u0627\u0631\u0629"],
+      [/\bcholecystitis\b/gi, "\u0627\u0644\u062A\u0647\u0627\u0628 \u0628\u0627\u0644\u0645\u0631\u0627\u0631\u0629"],
+      [/\bintestinal\s+obstruction\b/gi, "\u0627\u0646\u0633\u062F\u0627\u062F \u0645\u0639\u0648\u064A"],
+      [/\bsevere\s+rlq\s+(?:tenderness|pain)\b/gi, "\u0623\u0644\u0645 \u0634\u062F\u064A\u062F \u0628\u0623\u0633\u0641\u0644 \u064A\u0645\u064A\u0646 \u0627\u0644\u0628\u0637\u0646"],
+      [/\brlq\s+(?:tenderness|pain)\b/gi, "\u0623\u0644\u0645 \u0628\u0623\u0633\u0641\u0644 \u064A\u0645\u064A\u0646 \u0627\u0644\u0628\u0637\u0646"],
+      [/\babdominal\s+pain\b/gi, "\u0623\u0644\u0645 \u0628\u0627\u0644\u0628\u0637\u0646"],
+      [/\bvomiting\b/gi, "\u0642\u0626 \u0645\u0633\u062A\u0645\u0631"],
+      [/\bfever\b/gi, "\u0627\u0631\u062A\u0641\u0627\u0639 \u0641\u064A \u062F\u0631\u062C\u0629 \u0627\u0644\u062D\u0631\u0627\u0631\u0629"],
+      [/\bhigh\s+fever\b/gi, "\u0627\u0631\u062A\u0641\u0627\u0639 \u062D\u0627\u062F \u0641\u064A \u062F\u0631\u062C\u0629 \u0627\u0644\u062D\u0631\u0627\u0631\u0629"],
+      // Systemic / Comorbidities
+      [/\bdue\s+to\s+(?:diabetes(?:\s+mellitus)?|dm)\b/gi, "\u0628\u0633\u0628\u0628 \u0645\u0631\u0636 \u062F\u0627\u0621 \u0627\u0644\u0633\u0643\u0631\u064A"],
+      [/\bdue\s+to\s+(?:hypertension|htn)\b/gi, "\u0628\u0633\u0628\u0628 \u0627\u0631\u062A\u0641\u0627\u0639 \u0636\u063A\u0637 \u0627\u0644\u062F\u0645"],
+      [/\bsepsis\b/gi, "\u062A\u0633\u0645\u0645 \u062F\u0645\u0648\u064A"],
+      [/\bseptic\s+shock\b/gi, "\u0635\u062F\u0645\u0629 \u062A\u0633\u0645\u0645\u064A\u0629"],
+      [/\bdiabetic\s+ketoacidosis\b/gi, "\u062D\u0645\u0648\u0636\u0629 \u0643\u064A\u062A\u0648\u0646\u064A\u0629 \u0633\u0643\u0631\u064A\u0629"],
+      [/\bdiabetic\s+foot(?:\s+ulcer)?\b/gi, "\u0642\u062F\u0645 \u0633\u0643\u0631\u064A"],
+      [/\bdeep\s+vein\s+thrombosis\b|\bdvt\b/gi, "\u062C\u0644\u0637\u0629 \u0628\u0627\u0644\u0623\u0648\u0631\u062F\u0629 \u0627\u0644\u0639\u0645\u064A\u0642\u0629"],
+      [/\bpulmonary\s+embolism\b|\bpe\b/gi, "\u062C\u0644\u0637\u0629 \u0628\u0627\u0644\u0634\u0631\u064A\u0627\u0646 \u0627\u0644\u0631\u0626\u0648\u064A"]
+    ];
+  }
+});
+
 // src/services/aiMatchService.ts
 import { GoogleGenAI, Type } from "@google/genai";
 function getGeminiApiKey() {
@@ -1344,74 +1573,25 @@ var init_aiMatchService = __esm({
     init_arabic_normalizer();
     init_whatsapp_generator();
     init_deidentifier();
+    init_doctorNarrativeParser();
     GEMINI_STORAGE_KEY = "elite_gemini_api_key";
   }
 });
 
 // src/lib/whatsapp-generator.ts
-function translateClinicalIndicationToArabic(englishText) {
-  if (!englishText) return "";
-  let text = englishText.trim();
-  text = text.replace(/^(?:patient\s+(?:had|has|was|is|suffering\s+from)?\s*)/i, "").trim();
-  const phraseMappings = [
-    [/\bbilateral\s+lower\s+limb\s+weakness\b/gi, "\u0636\u0639\u0641 \u0628\u0627\u0644\u0637\u0631\u0641\u064A\u0646 \u0627\u0644\u0633\u0641\u0644\u064A\u064A\u0646"],
-    [/\bbilateral\s+upper\s+limb\s+weakness\b/gi, "\u0636\u0639\u0641 \u0628\u0627\u0644\u0637\u0631\u0641\u064A\u0646 \u0627\u0644\u0639\u0644\u0648\u064A\u064A\u0646"],
-    [/\blower\s+limb\s+weakness\b/gi, "\u0636\u0639\u0641 \u0628\u0627\u0644\u0637\u0631\u0641 \u0627\u0644\u0633\u0641\u0644\u064A"],
-    [/\bupper\s+limb\s+weakness\b/gi, "\u0636\u0639\u0641 \u0628\u0627\u0644\u0637\u0631\u0641 \u0627\u0644\u0639\u0644\u0648\u064A"],
-    [/\bdue\s+to\s+(?:diabetes(?:\s+mellitus)?|dm)\b/gi, "\u0628\u0633\u0628\u0628 \u0645\u0631\u0636 \u062F\u0627\u0621 \u0627\u0644\u0633\u0643\u0631\u064A"],
-    [/\bdue\s+to\s+(?:hypertension|htn)\b/gi, "\u0628\u0633\u0628\u0628 \u0627\u0631\u062A\u0641\u0627\u0639 \u0636\u063A\u0637 \u0627\u0644\u062F\u0645"],
-    [/\bdue\s+to\s+(?:stroke|cva)\b/gi, "\u0628\u0633\u0628\u0628 \u062C\u0644\u0637\u0629 \u0628\u0627\u0644\u0645\u062E"],
-    [/\band\s+(?:hx|history)\s+of\s+strokes\b/gi, "\u060C \u0645\u0639 \u062A\u0627\u0631\u064A\u062E \u0645\u0631\u0636\u064A \u0645\u0646 \u0627\u0644\u062C\u0644\u0637\u0627\u062A"],
-    [/\band\s+(?:hx|history)\s+of\s+stroke\b/gi, "\u060C \u0645\u0639 \u062A\u0627\u0631\u064A\u062E \u0645\u0631\u0636\u064A \u0644\u062C\u0644\u0637\u0629 \u0628\u0627\u0644\u0645\u062E"],
-    [/\b(?:hx|history)\s+of\s+strokes\b/gi, "\u0645\u0639 \u062A\u0627\u0631\u064A\u062E \u0645\u0631\u0636\u064A \u0645\u0646 \u0627\u0644\u062C\u0644\u0637\u0627\u062A"],
-    [/\b(?:hx|history)\s+of\s+stroke\b/gi, "\u0645\u0639 \u062A\u0627\u0631\u064A\u062E \u0645\u0631\u0636\u064A \u0644\u062C\u0644\u0637\u0629 \u0628\u0627\u0644\u0645\u062E"],
-    [/\b(?:hx|history)\s+of\s+hypertension\b/gi, "\u0645\u0639 \u062A\u0627\u0631\u064A\u062E \u0645\u0631\u0636\u064A \u0644\u0627\u0631\u062A\u0641\u0627\u0639 \u0636\u063A\u0637 \u0627\u0644\u062F\u0645"],
-    [/\b(?:hx|history)\s+of\s+diabetes\b/gi, "\u0645\u0639 \u062A\u0627\u0631\u064A\u062E \u0645\u0631\u0636\u064A \u0644\u062F\u0627\u0621 \u0627\u0644\u0633\u0643\u0631\u064A"]
-  ];
-  let translated = text;
-  let matched = false;
-  for (const [pattern, replacement] of phraseMappings) {
-    if (pattern.test(translated)) {
-      matched = true;
-      translated = translated.replace(pattern, replacement);
-    }
-  }
-  if (matched) {
-    if (!translated.startsWith("\u0627\u0644\u0645\u0631\u064A\u0636") && !translated.startsWith("\u0627\u0644\u0645\u0631\u064A\u0636\u0629")) {
-      translated = `\u0627\u0644\u0645\u0631\u064A\u0636 \u064A\u0639\u0627\u0646\u064A \u0645\u0646 ${translated}`;
-    }
-    return translated.replace(/\s+/g, " ").trim();
-  }
-  return text;
-}
 function extractClinicalIndication(rawText) {
   if (!rawText) return "";
-  const text = stripSentFromSignatures(rawText).trim();
-  const doctorNoteMatch = text.match(
-    /(?:patient\s+(?:had|has|is|was|suffering\s+from)?\s+)?(.+?)\s+(?:and\s+(?:is\s+)?on|and\s+needs|and\s+requires|needs|requires|scheduled\s+for|planned\s+for)\s+([a-zA-Z\s/-]+)(?:\r|\n|$)/i
-  );
-  if (doctorNoteMatch && doctorNoteMatch[1]) {
-    const rawIndication = doctorNoteMatch[1].trim();
-    return translateClinicalIndicationToArabic(rawIndication);
+  const parsed = parseDoctorNarrative(rawText);
+  if (parsed && parsed.clinicalIndicationAr && !parsed.clinicalIndicationAr.includes("\u0642\u064A\u062F \u0627\u0644\u0645\u062A\u0627\u0628\u0639\u0629")) {
+    return parsed.clinicalIndicationAr;
   }
-  const araMatch = text.match(
-    /(?:المريض|المريضة|المريضه|الحالة|الحاله)\s+(?:يعاني|تعاني|يعانى|تعانى)\s+من\s+([^و\r\n<]+(?:و[^و\r\n<]+)?)/i
-  );
-  if (araMatch && araMatch[1]) {
-    return `\u0627\u0644\u0645\u0631\u064A\u0636 \u064A\u0639\u0627\u0646\u064A \u0645\u0646 ${araMatch[1].trim()}`;
-  }
-  return translateClinicalIndicationToArabic(text);
+  return translateDoctorIndication(rawText);
 }
 function extractCleanProcedurePhrase(rawText) {
   if (!rawText) return "";
-  const doctorNoteMatch = rawText.match(
-    /(?:patient\s+(?:had|has|is|was|suffering\s+from)?\s+)?(.+?)\s+(?:and\s+(?:is\s+)?on|and\s+needs|and\s+requires|needs|requires|scheduled\s+for|planned\s+for)\s+([a-zA-Z\s/-]+)(?:\r|\n|$)/i
-  );
-  if (doctorNoteMatch && doctorNoteMatch[2]) {
-    const candidate = doctorNoteMatch[2].trim();
-    if (candidate.length >= 3 && !candidate.toLowerCase().includes("inpatient")) {
-      return candidate;
-    }
+  const parsed = parseDoctorNarrative(rawText);
+  if (parsed && parsed.primaryProcedure && parsed.primaryProcedure !== rawText) {
+    return parsed.primaryProcedure;
   }
   const rawLines = rawText.split(/[\r\n]+/).map((l) => l.trim()).filter(Boolean);
   for (const line of rawLines) {
@@ -1485,6 +1665,12 @@ function formatProcedureForCmWhatsapp(proc) {
   }
   if (lower.includes("physiotherapy") || lower.includes("physical therapy") || lower.includes("\u0639\u0644\u0627\u062C \u0637\u0628\u064A\u0639\u064A")) {
     return "\u062C\u0644\u0633\u0627\u062A \u0639\u0644\u0627\u062C \u0637\u0628\u064A\u0639\u064A";
+  }
+  if (lower.includes("primary pci") || lower.includes("pci with stent") || lower.includes("coronary stent") || lower.includes("therapeutic cardiac catheter") || lower.includes("pci") && lower.includes("stent")) {
+    return "\u062A\u0631\u0643\u064A\u0628 \u062F\u0639\u0627\u0645\u0629 \u0628\u0627\u0644\u0642\u0644\u0628 (Primary PCI with Stent)";
+  }
+  if (lower.includes("laparoscopic appendectomy") || lower.includes("appendectomy") && lower.includes("laparoscop")) {
+    return "\u0627\u0633\u062A\u0626\u0635\u0627\u0644 \u0627\u0644\u0632\u0627\u0626\u062F\u0629 \u0627\u0644\u062F\u0648\u062F\u064A\u0629 \u0628\u0627\u0644\u0645\u0646\u0638\u0627\u0631 (Laparoscopic Appendectomy)";
   }
   return proc;
 }
@@ -1665,6 +1851,7 @@ var init_whatsapp_generator = __esm({
   "src/lib/whatsapp-generator.ts"() {
     init_arabic_normalizer();
     init_aiMatchService();
+    init_doctorNarrativeParser();
   }
 });
 
@@ -3271,6 +3458,7 @@ import path4 from "path";
 // src/mail/parser/hisApprovalParser.ts
 init_arabic_normalizer();
 init_whatsapp_generator();
+init_doctorNarrativeParser();
 import * as cheerio from "cheerio";
 var REFUSAL_KEYWORDS = [
   "\u0627\u0644\u062D\u0627\u0644\u0629 \u0643\u0627\u0634",
@@ -3954,33 +4142,42 @@ function parseHisApprovalEmail(msg) {
     }
   });
   if (requestedServices.length === 0 && requestDetails) {
+    const narrative = parseDoctorNarrative(requestDetails);
     if (!diagnosis || diagnosis === "Clinical Inpatient Evaluation") {
-      const diagMatch = requestDetails.match(/(?:يعاني|تعاني)\s+(?:المريض|المريضة|الحالة)?\s*من\s+([^و\n\r<]+)/i);
-      if (diagMatch && diagMatch[1]) {
-        diagnosis = diagMatch[1].trim();
+      if (narrative.clinicalIndicationAr && !narrative.clinicalIndicationAr.includes("\u0642\u064A\u062F \u0627\u0644\u0645\u062A\u0627\u0628\u0639\u0629")) {
+        diagnosis = narrative.clinicalIndicationAr;
       } else {
-        const clinicalIndication = extractClinicalIndication(requestDetails);
-        if (clinicalIndication && clinicalIndication !== requestDetails) {
-          diagnosis = clinicalIndication;
+        const diagMatch = requestDetails.match(/(?:يعاني|تعاني)\s+(?:المريض|المريضة|الحالة)?\s*من\s+([^و\n\r<]+)/i);
+        if (diagMatch && diagMatch[1]) {
+          diagnosis = diagMatch[1].trim();
         }
       }
     }
-    const cleanDetails = extractCleanProcedurePhrase(requestDetails);
-    const isDiagnosisCode = /^[A-Z]\d{2}(?:\.\d+)?\s*[-:]/i.test(cleanDetails);
-    if (isDiagnosisCode && (!diagnosis || diagnosis === "Clinical Inpatient Evaluation")) {
-      diagnosis = cleanDetails;
-    } else if (!isDiagnosisCode && cleanDetails && cleanDetails.length > 3) {
-      const parts = splitClinicalRequests(cleanDetails);
-      for (const part of parts) {
+    if (narrative.cleanServices.length > 0) {
+      for (const srv of narrative.cleanServices) {
         requestedServices.push({
-          name: part,
+          name: srv.name,
           rawPrice: 0
         });
       }
+    } else {
+      const cleanDetails = extractCleanProcedurePhrase(requestDetails);
+      const isDiagnosisCode = /^[A-Z]\d{2}(?:\.\d+)?\s*[-:]/i.test(cleanDetails);
+      if (isDiagnosisCode && (!diagnosis || diagnosis === "Clinical Inpatient Evaluation")) {
+        diagnosis = cleanDetails;
+      } else if (!isDiagnosisCode && cleanDetails && cleanDetails.length > 3) {
+        const parts = splitClinicalRequests(cleanDetails);
+        for (const part of parts) {
+          requestedServices.push({
+            name: part,
+            rawPrice: 0
+          });
+        }
+      }
     }
   }
-  if (diagnosis && /(?:weakness|diabetes|stroke|hypertension|patient)/i.test(diagnosis)) {
-    const translatedDiag = translateClinicalIndicationToArabic(diagnosis);
+  if (diagnosis && /(?:weakness|diabetes|stroke|hypertension|appendicitis|coronary|stemi|pain|fever|patient)/i.test(diagnosis)) {
+    const translatedDiag = translateDoctorIndication(diagnosis);
     if (translatedDiag && translatedDiag !== diagnosis) {
       diagnosis = translatedDiag;
     }
@@ -4521,6 +4718,7 @@ init_contractorOfficerResolver();
 init_arabic_normalizer();
 init_procedureService();
 init_whatsapp_generator();
+init_doctorNarrativeParser();
 
 // src/lib/draftReplyBuilder.ts
 function buildDraftReplyText(priceListYear, contractor, officer, matchedProcedures) {
@@ -9901,11 +10099,21 @@ async function maybeRunClassifierOnSync(params) {
         mrn: params.mrn,
         bed: params.bed,
         physician: params.physician,
-        requested: (params.requestedServices || []).map((s) => ({
-          text: s.name,
-          category: "PROCEDURE",
-          quantity: 1
-        })),
+        requested: (params.requestedServices || []).flatMap((s) => {
+          const narrative = parseDoctorNarrative(s.name);
+          if (narrative.cleanServices.length > 0) {
+            return narrative.cleanServices.map((cs) => ({
+              text: cs.name,
+              category: narrative.category === "surgery" ? "PROCEDURE" : narrative.category === "radiology" || narrative.category === "laboratory" ? "INVESTIGATION" : "PROCEDURE",
+              quantity: 1
+            }));
+          }
+          return [{
+            text: s.name,
+            category: "PROCEDURE",
+            quantity: 1
+          }];
+        }),
         messages: [
           {
             messageId: params.sourceMessageId,
