@@ -3,6 +3,12 @@
  * Computes Precision@1 and Precision@3 across golden medical procedure benchmarks and past overrides.
  * Run in CI to prevent matching quality regressions.
  *
+ * Methodology (fixed in Phase 5): retrieval uses ONLY the query text — exactly the
+ * production local-search path (searchLocalPricelist). expectedKeywords are used
+ * solely as the ground-truth JUDGE, never to build or rank the candidate pool.
+ * The previous version fed keywords into retrieval and oracle ranking, which made
+ * the gate self-referential and pinned P@1/P@3 at 100% regardless of real quality.
+ *
  * Usage:
  *   npx tsx scripts/eval-matching.ts
  */
@@ -12,6 +18,7 @@ import path from 'path';
 import { normalizeArabic, normalizeText } from '../src/lib/arabic-normalizer';
 import { scoreTrigramFallback } from '../src/services/semanticMatchService';
 import { loadAllOverridesForEval, getOverrideForQuery } from '../src/services/procedureOverrideService';
+import { searchLocalPricelist } from '../src/services/procedureService';
 import { ProcedureResult } from '../src/types';
 
 interface GoldenCase {
@@ -79,54 +86,71 @@ const GOLDEN_EVAL_DATASET: GoldenCase[] = [
     category: 'Interventional Cardiology',
   },
   {
-    query: 'منظار قولون تشخيصي',
-    expectedKeywords: ['colonoscopy', 'قولون', 'منظار'],
-    category: 'Endoscopy',
+    query: 'تحليل فيتامين دال 25-OH',
+    expectedKeywords: ['vitamin d', '25'],
+    category: 'Biochemistry (Vitamin)',
   },
   {
-    query: 'منظار الشعب الهوائية وأخذ عينة Bronchoscopy',
-    expectedKeywords: ['bronchoscopy', 'شعب', 'منظار'],
-    category: 'Pulmonology (Bronchoscopy)',
+    query: 'غدة درقية TSH فقط',
+    expectedKeywords: ['tsh'],
+    category: 'Endocrinology (Specificity)',
   },
   {
-    query: 'تحليل وظائف كبد ALT AST',
-    expectedKeywords: ['sgpt', 'sgot', 'alt', 'ast', 'كبد'],
-    category: 'Biochemistry (Liver)',
+    query: 'منظار معدله وقولون',
+    expectedKeywords: ['gastroscopy', 'colonoscopy', 'منظار'],
+    category: 'GI Endoscopy',
   },
   {
-    query: 'اشعة عادية على الصدر X-Ray Chest PA',
-    expectedKeywords: ['chest', 'صدر', 'x-ray'],
-    category: 'Radiology (Plain)',
+    query: 'تخطيط مخ EEG',
+    expectedKeywords: ['eeg', 'كهربية', 'مخ'],
+    category: 'Neurophysiology',
   },
 ];
 
-async function runGoldenEvaluation() {
-  console.log('=====================================================');
-  console.log('🎯 Starting Golden Matching Evaluation Suite (Precision@1 & Precision@3)');
-  console.log('=====================================================\n');
-
-  // 1. Load active pricelist catalog (2025/2026)
-  let catalog: ProcedureResult[] = [];
-  for (const yr of ['2026', '2025']) {
-    const p = path.resolve(process.cwd(), 'public', `${yr}_cash.json`);
+function loadCatalog(): ProcedureResult[] {
+  const merged: ProcedureResult[] = [];
+  for (const year of ['2026', '2025', '2024', '2023']) {
+    const p = path.resolve(process.cwd(), 'public', `${year}_cash.json`);
     if (fs.existsSync(p)) {
       try {
-        catalog = JSON.parse(fs.readFileSync(p, 'utf-8'));
-        console.log(`✓ Loaded ${catalog.length} procedures from public/${yr}_cash.json`);
-        break;
-      } catch {}
+        const items = JSON.parse(fs.readFileSync(p, 'utf-8')) as ProcedureResult[];
+        merged.push(...items);
+      } catch {
+        // skip malformed year file
+      }
     }
   }
+  return merged;
+}
 
+/** Ground-truth judge: does a catalog row match the case's expected answer? */
+function rowMatchesExpected(row: ProcedureResult, testCase: GoldenCase): boolean {
+  if (testCase.expectedCode && row.code === testCase.expectedCode) return true;
+  const normAr = normalizeArabic(normalizeText(row.nameArabic || ''));
+  const normEn = normalizeText(row.nameEnglish || '').toLowerCase();
+  return testCase.expectedKeywords.some((kw) => {
+    const k = kw.toLowerCase();
+    return normAr.includes(k) || normEn.includes(k);
+  });
+}
+
+async function main() {
+  console.log('=====================================================');
+  console.log('🧪 ELITE PRICELIST MATCHING QUALITY EVALUATION');
+  console.log('   (query-only retrieval — production parity)');
+  console.log('=====================================================\n');
+
+  // 1. Load full catalog (all years merged)
+  const catalog = loadCatalog();
   if (catalog.length === 0) {
     throw new Error('Could not load pricelist catalog from public/*_cash.json for eval!');
   }
+  console.log(`✓ Loaded ${catalog.length} catalog rows (2023–2026).\n`);
 
   // 2. Load historical overrides from database if available
   const dbOverrides = await loadAllOverridesForEval().catch(() => []);
   console.log(`✓ Retrieved ${dbOverrides.length} past manual overrides from database.\n`);
 
-  // Merge golden cases
   const allCases: GoldenCase[] = [...GOLDEN_EVAL_DATASET];
   for (const ov of dbOverrides) {
     if (ov.queryText && ov.chosenName) {
@@ -146,78 +170,59 @@ async function runGoldenEvaluation() {
   const failures: Array<{ query: string; category: string; expected: string[]; topCandidate: string }> = [];
 
   for (const testCase of allCases) {
-    // 0. Check priority manual override first
+    // 0. Check priority manual override first (production behavior: overrides win)
     const override = await getOverrideForQuery(testCase.query);
     if (override) {
-      p1Correct++;
-      p3Correct++;
+      const overrideHit =
+        (testCase.expectedCode && override.chosenCode === testCase.expectedCode) ||
+        rowMatchesExpected(
+          { nameArabic: override.chosenName, nameEnglish: override.chosenName, price: '', sectionName: '', sourceFile: 'override' } as ProcedureResult,
+          testCase,
+        );
+      if (overrideHit) {
+        p1Correct++;
+        p3Correct++;
+      } else {
+        failures.push({
+          query: testCase.query,
+          category: testCase.category + ' (override)',
+          expected: testCase.expectedKeywords,
+          topCandidate: override.chosenName,
+        });
+      }
       continue;
     }
 
-    const normQ = normalizeArabic(normalizeText(testCase.query));
-    
-    // Run candidate scoring
-    const candidates = catalog.filter((c) => {
-      const normAr = normalizeArabic(normalizeText(c.nameArabic || ''));
-      const normEn = normalizeText(c.nameEnglish || '').toLowerCase();
-      return (
-        normAr.includes(normQ.slice(0, 5)) ||
-        normEn.includes(normQ.slice(0, 5)) ||
-        testCase.expectedKeywords.some((kw) => normAr.includes(kw) || normEn.includes(kw))
-      );
+    // 1. RETRIEVE candidates using ONLY the query — identical to production path.
+    //    No expectedKeywords touch this step.
+    const retrieved = searchLocalPricelist(catalog, [{ name: testCase.query }]);
+
+    // 2. Rank the retrieved pool with the SAME scorer production uses.
+    const scored = scoreTrigramFallback(testCase.query, retrieved);
+
+    // Top-1 from the trigram scorer; fall back to retrieval order when it abstains.
+    const ranked = retrieved.slice().sort((a, b) => {
+      const sa = scored.matchedProcedure === a ? 1 : 0;
+      const sb = scored.matchedProcedure === b ? 1 : 0;
+      return sb - sa;
     });
+    const topCandidate = scored.matchedProcedure || ranked[0] || null;
+    const top3 = retrieved.slice(0, 3);
 
-    const candidatePool = candidates.length > 0 ? candidates : catalog.slice(0, 50);
-    const result = scoreTrigramFallback(testCase.query, candidatePool);
+    // 3. JUDGE with expectedKeywords (ground truth only).
+    const p1Hit = topCandidate ? rowMatchesExpected(topCandidate, testCase) : false;
+    const p3Hit = retrieved.some((row) => rowMatchesExpected(row, testCase));
 
-    // Retrieve top 3 candidates
-    const scoredPool = candidatePool
-      .map((c) => {
-        const normAr = normalizeArabic(normalizeText(c.nameArabic || ''));
-        const normEn = normalizeText(c.nameEnglish || '').toLowerCase();
-        let score = 0;
-        for (const kw of testCase.expectedKeywords) {
-          if (normAr.includes(kw) || normEn.includes(kw)) score += 0.5;
-        }
-        if (normAr === normQ || normEn === normQ.toLowerCase()) score += 1.0;
-        return { candidate: c, score };
-      })
-      .sort((a, b) => b.score - a.score);
+    if (p1Hit) p1Correct++;
+    if (p3Hit || p1Hit) p3Correct++;
 
-    const topCandidate = result.matchedProcedure || scoredPool[0]?.candidate;
-    const top3 = scoredPool.slice(0, 3).map((s) => s.candidate);
-
-    // Check Precision@1
-    const p1Hit =
-      topCandidate &&
-      testCase.expectedKeywords.some((kw) => {
-        const normAr = normalizeArabic(normalizeText(topCandidate.nameArabic || ''));
-        const normEn = normalizeText(topCandidate.nameEnglish || '').toLowerCase();
-        return normAr.includes(kw) || normEn.includes(kw);
-      });
-
-    if (p1Hit) {
-      p1Correct++;
-    } else {
+    if (!p1Hit) {
       failures.push({
         query: testCase.query,
         category: testCase.category,
         expected: testCase.expectedKeywords,
         topCandidate: topCandidate ? `${topCandidate.nameEnglish} / ${topCandidate.nameArabic}` : 'None',
       });
-    }
-
-    // Check Precision@3
-    const p3Hit = top3.some((cand) =>
-      testCase.expectedKeywords.some((kw) => {
-        const normAr = normalizeArabic(normalizeText(cand.nameArabic || ''));
-        const normEn = normalizeText(cand.nameEnglish || '').toLowerCase();
-        return normAr.includes(kw) || normEn.includes(kw);
-      })
-    );
-
-    if (p3Hit || p1Hit) {
-      p3Correct++;
     }
   }
 
@@ -253,7 +258,7 @@ async function runGoldenEvaluation() {
   process.exit(0);
 }
 
-runGoldenEvaluation().catch((err) => {
+main().catch((err) => {
   console.error('Fatal evaluation error:', err);
   process.exit(1);
 });

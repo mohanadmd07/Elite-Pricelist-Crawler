@@ -6,7 +6,7 @@ and retired services.
 """
 
 from pathlib import Path
-from typing import List, Dict, Optional, Tuple
+from typing import Any, List, Dict, Optional, Tuple
 from crawler.config import settings
 from crawler.models import ProcedureItem
 from crawler.normalizers import parse_numeric_price, normalize_text, normalize_arabic

@@ -9,6 +9,10 @@ from typing import List, Optional
 from crawler.models import ProcedureItem
 from crawler.utils.logger import logger
 
+# Sidecar filename carrying the content checksum of each exported catalog.
+# The frontend reads `<year>_cash.version.json` before trusting a cached copy.
+VERSION_SIDECAR_SUFFIX = "_cash.version.json"
+
 
 class JsonExporter:
     """Exports items to clean, atomic, byte-identical JSON compatible with the frontend application."""
@@ -17,6 +21,8 @@ class JsonExporter:
     def export(items: List[ProcedureItem], output_path: Path, indent: Optional[int] = 2) -> str:
         """
         Writes items to disk atomically with sorted keys for reproducible builds.
+        Also writes a version sidecar (`<stem>.version.json`) containing the SHA-256
+        digest so clients can invalidate stale caches when the catalog is rebuilt.
         Returns the SHA-256 hex digest of the written file.
         """
         output_path = Path(output_path)
@@ -48,6 +54,14 @@ class JsonExporter:
 
         with open(output_path, "rb") as f:
             checksum = hashlib.sha256(f.read()).hexdigest()
+
+        # Atomic version sidecar so the frontend can invalidate stale caches.
+        sidecar_path = output_path.parent / (output_path.stem + VERSION_SIDECAR_SUFFIX)
+        sidecar_temp = sidecar_path.with_suffix(".tmp")
+        with open(sidecar_temp, "w", encoding="utf-8") as f:
+            json.dump({"checksum": checksum, "count": len(items)}, f, sort_keys=True)
+            f.write("\n")
+        sidecar_temp.replace(sidecar_path)
 
         logger.info(
             f"Successfully exported [cyan]{len(items)}[/cyan] records to "

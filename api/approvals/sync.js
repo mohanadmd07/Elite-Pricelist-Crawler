@@ -1559,10 +1559,16 @@ async function getOverrideForQuery(query2) {
   if (overrideMemoryCache.has(normKey)) {
     return overrideMemoryCache.get(normKey);
   }
+  if (overrideMissCache.has(normKey)) {
+    return null;
+  }
   if (!client3) return null;
   try {
     const { data, error } = await client3.from("procedure_overrides").select("id, query_text, query_text_normalized, chosen_procedure_id, chosen_code, chosen_name, contractor_name, overridden_by, overridden_by_email, reason, created_at").eq("query_text_normalized", normKey).order("created_at", { ascending: false }).limit(1).maybeSingle();
-    if (error || !data) return null;
+    if (error || !data) {
+      if (!error) overrideMissCache.add(normKey);
+      return null;
+    }
     const record = {
       id: data.id,
       queryText: data.query_text,
@@ -1583,13 +1589,14 @@ async function getOverrideForQuery(query2) {
     return null;
   }
 }
-var client3, overrideMemoryCache;
+var client3, overrideMemoryCache, overrideMissCache;
 var init_procedureOverrideService = __esm({
   "src/services/procedureOverrideService.ts"() {
     init_supabase();
     init_arabic_normalizer();
     client3 = supabaseAdmin || supabase;
     overrideMemoryCache = /* @__PURE__ */ new Map();
+    overrideMissCache = /* @__PURE__ */ new Set();
   }
 });
 
@@ -1618,7 +1625,7 @@ function openDatabase() {
     }
   });
 }
-async function getCachedCatalog(year) {
+async function getCachedCatalog(year, remoteChecksum) {
   const db2 = await openDatabase();
   if (!db2) return null;
   return new Promise((resolve) => {
@@ -1632,8 +1639,16 @@ async function getCachedCatalog(year) {
           resolve(null);
           return;
         }
-        const isFresh = Date.now() - record.timestamp < 24 * 60 * 60 * 1e3;
-        resolve(isFresh ? record.items : null);
+        if (remoteChecksum && record.checksum && record.checksum !== remoteChecksum) {
+          resolve(null);
+          return;
+        }
+        if (!remoteChecksum) {
+          const isFresh = Date.now() - record.timestamp < 24 * 60 * 60 * 1e3;
+          resolve(isFresh ? record.items : null);
+          return;
+        }
+        resolve(record.items.length > 0 ? record.items : null);
       };
       req.onerror = () => resolve(null);
     } catch {
@@ -1641,7 +1656,7 @@ async function getCachedCatalog(year) {
     }
   });
 }
-async function setCachedCatalog(year, items) {
+async function setCachedCatalog(year, items, checksum) {
   const db2 = await openDatabase();
   if (!db2) return;
   return new Promise((resolve) => {
@@ -1651,6 +1666,7 @@ async function setCachedCatalog(year, items) {
       const record = {
         year,
         timestamp: Date.now(),
+        checksum: checksum ?? null,
         items
       };
       store.put(record);
@@ -1665,7 +1681,7 @@ var DB_NAME, DB_VERSION, STORE_NAME;
 var init_catalogCache = __esm({
   "src/lib/catalogCache.ts"() {
     DB_NAME = "ElitePricelistCache";
-    DB_VERSION = 1;
+    DB_VERSION = 2;
     STORE_NAME = "catalogs";
   }
 });
@@ -1914,6 +1930,28 @@ var init_searchWorkerClient = __esm({
   }
 });
 
+// src/lib/sha256.ts
+var sha256_exports = {};
+__export(sha256_exports, {
+  sha256Hex: () => sha256Hex
+});
+async function sha256Hex(input) {
+  const bytes = new TextEncoder().encode(input);
+  if (typeof globalThis.crypto !== "undefined" && globalThis.crypto.subtle) {
+    const digest = await globalThis.crypto.subtle.digest("SHA-256", bytes);
+    return Array.from(new Uint8Array(digest)).map((b) => b.toString(16).padStart(2, "0")).join("");
+  }
+  const nodeCrypto = await import(
+    /* @vite-ignore */
+    "crypto"
+  );
+  return nodeCrypto.createHash("sha256").update(bytes).digest("hex");
+}
+var init_sha256 = __esm({
+  "src/lib/sha256.ts"() {
+  }
+});
+
 // src/services/procedureService.ts
 var procedureService_exports = {};
 __export(procedureService_exports, {
@@ -1959,9 +1997,18 @@ async function getCashData(year) {
       console.warn(`Node read error for ${year}_cash.json:`, err);
     }
   }
-  if (!data && typeof window !== "undefined") {
+  let remoteChecksum = null;
+  if (typeof window !== "undefined") {
     try {
-      const cached = await getCachedCatalog(year);
+      const res = await fetch(`/${year}_cash.version.json`, { cache: "no-store" });
+      if (res.ok) {
+        const meta = await res.json();
+        remoteChecksum = meta.checksum ?? null;
+      }
+    } catch {
+    }
+    try {
+      const cached = await getCachedCatalog(year, remoteChecksum);
       if (cached && cached.length > 0) {
         data = cached;
       }
@@ -1969,13 +2016,25 @@ async function getCashData(year) {
     }
   }
   if (!data) {
-    const response = await fetch(`/${year}_cash.json`);
+    const response = await fetch(
+      typeof window !== "undefined" ? `/${year}_cash.json?v=${remoteChecksum ?? Date.now()}` : `/${year}_cash.json`,
+      typeof window !== "undefined" ? { cache: "no-store" } : void 0
+    );
     if (!response.ok) {
       throw new Error(`Could not load ${year} Cash pricelist file.`);
     }
     data = await response.json();
     if (data && typeof window !== "undefined") {
-      setCachedCatalog(year, data).catch(() => {
+      let checksum = remoteChecksum;
+      if (!checksum) {
+        try {
+          const { sha256Hex: sha256Hex2 } = await Promise.resolve().then(() => (init_sha256(), sha256_exports));
+          checksum = await sha256Hex2(JSON.stringify(data));
+        } catch {
+          checksum = null;
+        }
+      }
+      setCachedCatalog(year, data, checksum).catch(() => {
       });
     }
   }
@@ -2096,7 +2155,7 @@ function searchLocalPricelist(cashList, requestedProcedures) {
     const cleanEng = cleanHisProcedureQuery(proc.name);
     const qEng = normalizeText(cleanEng);
     const qEngRaw = normalizeText(proc.name);
-    const qAra = proc.arabic ? normalizeArabic(proc.arabic) : "";
+    const qAra = proc.arabic ? normalizeArabic(proc.arabic) : normalizeArabic(proc.name);
     const aliasOfficialNames = proc.aliasOfficialNames || findOfficialNamesForQuery(proc.name, proc.arabic);
     const aliasNorms = new Set(aliasOfficialNames.map((n) => normalizeText(n)));
     const expandedAliases = getAliasesForQuery(proc.name, proc.arabic);
@@ -2131,15 +2190,31 @@ function searchLocalPricelist(cashList, requestedProcedures) {
         });
         continue;
       }
-      const qTokens = (qEng || qEngRaw).split(/\s+/).filter((t) => t.length >= 3);
-      if (qTokens.length >= 2) {
+      const qTokensEn = (qEng || qEngRaw).split(/\s+/).filter((t) => t.length >= 3);
+      if (qTokensEn.length >= 2) {
         const itemTokens = new Set(itemEng.split(/\s+/));
-        if (qTokens.every((t) => itemTokens.has(t) || itemEng.includes(t))) {
+        if (qTokensEn.every((t) => itemTokens.has(t) || itemEng.includes(t))) {
           partialMatches.push({
             ...item,
             requestedProcedureName: proc.name
           });
           continue;
+        }
+      }
+      if (qAra) {
+        const qTokensAr = qAra.split(/\s+/).filter((t) => t.length >= 3);
+        if (qTokensAr.length >= 2) {
+          const covered = qTokensAr.filter((t) => itemAra.includes(t)).length;
+          const rowTokens = itemAra.split(/\s+/).filter((t) => t.length >= 3);
+          const reverse = rowTokens.length > 0 ? rowTokens.filter((t) => qAra.includes(t)).length / rowTokens.length : 0;
+          const forward = covered / qTokensAr.length;
+          if (forward >= 0.6 || reverse >= 0.6) {
+            partialMatches.push({
+              ...item,
+              requestedProcedureName: proc.name
+            });
+            continue;
+          }
         }
       }
       if (synonyms.length > 0) {
@@ -2236,6 +2311,40 @@ function searchLocalPricelist(cashList, requestedProcedures) {
   }
   return finalResults;
 }
+async function resolveOverrideRow(override, preferredYear) {
+  const years = ["2026", "2025", "2024", "2023"];
+  if (preferredYear && years.includes(preferredYear)) {
+    years.sort((a, b) => a === preferredYear ? -1 : b === preferredYear ? 1 : 0);
+  }
+  let fallbackName = override.chosenName;
+  for (const yr of years) {
+    try {
+      const catalog = await getCashData(yr);
+      const hit = override.chosenCode ? catalog.find((c) => c.code === override.chosenCode) : catalog.find(
+        (c) => normalizeArabic(normalizeText(c.nameArabic || "")) === normalizeArabic(normalizeText(fallbackName)) || normalizeText(c.nameEnglish).toLowerCase() === normalizeText(fallbackName).toLowerCase()
+      );
+      if (hit) {
+        return {
+          ...hit,
+          requestedProcedureName: override.queryText,
+          sectionName: `${hit.sectionName || "\u0639\u0627\u0645"} \u2014 \u062A\u0639\u062F\u064A\u0644 \u064A\u062F\u0648\u064A \u0645\u0639\u062A\u0645\u062F`,
+          sourceFile: `Manual Override Priority (${yr})`
+        };
+      }
+    } catch {
+    }
+  }
+  return {
+    code: override.chosenCode,
+    nameArabic: override.chosenName,
+    nameEnglish: override.chosenName,
+    price: "",
+    priceUnresolved: true,
+    sectionName: "\u062A\u0639\u062F\u064A\u0644 \u064A\u062F\u0648\u064A \u0645\u0639\u062A\u0645\u062F (Override)",
+    sourceFile: "Manual Override Priority",
+    requestedProcedureName: override.queryText
+  };
+}
 async function searchAllProcedures(selectedProcedures, activeYear, aiSearchEnabled = true, onProgress) {
   const normalizedYear = activeYear === "Cash" ? "2026" : activeYear;
   const yearsToFetch = [];
@@ -2257,15 +2366,7 @@ async function searchAllProcedures(selectedProcedures, activeYear, aiSearchEnabl
   for (const proc of selectedProcedures) {
     const override = await getOverrideForQuery(proc.name);
     if (override) {
-      localResults.push({
-        code: override.chosenCode,
-        nameArabic: override.chosenName,
-        nameEnglish: override.chosenName,
-        price: "0.00",
-        sectionName: "\u062A\u0639\u062F\u064A\u0644 \u064A\u062F\u0648\u064A \u0645\u0639\u062A\u0645\u062F (Override)",
-        sourceFile: "Manual Override Priority",
-        requestedProcedureName: proc.name
-      });
+      localResults.push(await resolveOverrideRow(override, normalizedYear));
     } else {
       pendingProcedures.push(proc);
     }
@@ -2276,16 +2377,24 @@ async function searchAllProcedures(selectedProcedures, activeYear, aiSearchEnabl
   if (isSupabaseConfigured() && supabase) {
     try {
       const targetYear = normalizedYear ? parseInt(normalizedYear, 10) : 2026;
+      const sb = supabase;
       const rpcPromises = pendingProcedures.map(async (proc) => {
         try {
           const cleanedSearchTerm = cleanHisProcedureQuery(proc.name) || proc.name;
-          const { data, error } = await supabase.rpc("search_procedures", {
+          const rpcCall = sb.rpc("search_procedures", {
             p_pricelist_year: targetYear,
             p_search_term: cleanedSearchTerm,
             p_similarity_threshold: 0.25
           });
+          const timed = await Promise.race([
+            rpcCall,
+            new Promise((resolve) => setTimeout(() => resolve(null), 750))
+          ]);
+          if (!timed) return [];
+          const { data, error } = timed;
           if (!error && Array.isArray(data) && data.length > 0) {
             return data.map((r) => ({
+              code: r.code || void 0,
               nameArabic: r.name_arabic,
               nameEnglish: r.name_english,
               price: String(r.price),
@@ -2299,10 +2408,7 @@ async function searchAllProcedures(selectedProcedures, activeYear, aiSearchEnabl
           return [];
         }
       });
-      const rpcResults = await Promise.race([
-        Promise.all(rpcPromises),
-        new Promise((resolve) => setTimeout(() => resolve([]), 750))
-      ]);
+      const rpcResults = await Promise.all(rpcPromises);
       for (const resList of rpcResults) {
         localResults.push(...resList);
       }
@@ -2320,12 +2426,16 @@ async function searchAllProcedures(selectedProcedures, activeYear, aiSearchEnabl
       }
     })
   );
+  const combinedList = [];
   for (const item of fetchedLists) {
     if (item.list.length > 0) {
       listsToSearch.push(item);
-      const matches = await searchPricelistAsync(item.list, pendingProcedures);
-      localResults.push(...matches);
+      combinedList.push(...item.list);
     }
+  }
+  if (combinedList.length > 0) {
+    const matches = await searchPricelistAsync(combinedList, pendingProcedures);
+    localResults.push(...matches);
   }
   const unmatchedProcedures = selectedProcedures.filter(
     (proc) => !localResults.some((r) => r.requestedProcedureName === proc.name)

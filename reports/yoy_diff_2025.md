@@ -1,13 +1,13 @@
 # Elite Hospital Pricelist YoY Differential: 2024 vs 2025
 
 - **Generated:** yoy_diff.py
-- **Total Procedures (2024):** 1,545
+- **Total Procedures (2024):** 1,546
 - **Total Procedures (2025):** 1,384
 - **Unchanged Price Items:** 16
-- **Price Altered Items:** 740
-- **Newly Added Services:** 628
-- **Discontinued/Removed Services:** 789
-- **Average Price Shift:** `+35.6%`
+- **Price Altered Items:** 742
+- **Newly Added Services:** 626
+- **Discontinued/Removed Services:** 788
+- **Average Price Shift:** `+35.4%`
 
 ## Top 15 Price Adjustments
 
@@ -29,7 +29,7 @@
 | CK (Pan) |  | General | 850 | 2,000 | `+135.3%` |
 | Gardnerella Vaginalis Antigen |  | General | 450 | 1,000 | `+122.2%` |
 
-## Sample Newly Introduced Procedures (628 total)
+## Sample Newly Introduced Procedures (626 total)
 
 | Procedure | Arabic Name | Department | Price (EGP) |
 | :--- | :--- | :--- | :---: |

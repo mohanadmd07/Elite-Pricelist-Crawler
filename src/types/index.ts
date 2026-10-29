@@ -20,6 +20,8 @@ export interface ProcedureResult {
   code?: string;
   /** True for send-out tests marked with ** in the pricelist */
   outsourced?: boolean;
+  /** Set when a manual override could not be priced against any live catalog year */
+  priceUnresolved?: boolean;
   requestedProcedureName?: string;
   /** Additive provenance and audit trail */
   sources?: ProcedureProvenanceSource[];

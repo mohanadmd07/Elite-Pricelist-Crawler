@@ -1,12 +1,12 @@
 # Elite Hospital Pricelist YoY Differential: 2023 vs 2024
 
 - **Generated:** yoy_diff.py
-- **Total Procedures (2023):** 1,824
-- **Total Procedures (2024):** 1,545
+- **Total Procedures (2023):** 1,821
+- **Total Procedures (2024):** 1,546
 - **Unchanged Price Items:** 28
-- **Price Altered Items:** 1,136
-- **Newly Added Services:** 381
-- **Discontinued/Removed Services:** 660
+- **Price Altered Items:** 1,135
+- **Newly Added Services:** 383
+- **Discontinued/Removed Services:** 658
 - **Average Price Shift:** `+69.1%`
 
 ## Top 15 Price Adjustments
@@ -29,7 +29,7 @@
 | Infection control swabs |  | General | 80 | 300 | `+275.0%` |
 | Stone analysis |  | General | 100 | 375 | `+275.0%` |
 
-## Sample Newly Introduced Procedures (381 total)
+## Sample Newly Introduced Procedures (383 total)
 
 | Procedure | Arabic Name | Department | Price (EGP) |
 | :--- | :--- | :--- | :---: |

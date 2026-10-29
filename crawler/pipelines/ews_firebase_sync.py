@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import os
 import re
+from pathlib import Path
 import sys
 import logging
 import hashlib
@@ -52,7 +53,11 @@ logger = logging.getLogger("EWS-Firestore-Pipeline")
 # ==============================================================================
 # ENVIRONMENT & CONSTANTS
 # ==============================================================================
-load_dotenv()
+# Anchor to the project root so the pipeline works from any CWD; search both
+# .env.local and .env (earlier files win), which is where the credentials live.
+_PROJECT_ROOT = str(Path(__file__).resolve().parents[2])
+load_dotenv(Path(_PROJECT_ROOT) / ".env.local")
+load_dotenv(Path(_PROJECT_ROOT) / ".env")
 
 IMAP_HOST = os.getenv("IMAP_HOST", "wmail.elitehospital.org")
 IMAP_USER = os.getenv("IMAP_USER", "mohanad.elmaamoun@elitehospital.org")

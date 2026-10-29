@@ -10,7 +10,7 @@ import {
 } from '../lib/arabic-normalizer';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 import { matchProceduresWithAI, isGeminiConfigured } from './aiMatchService';
-import { getOverrideForQuery } from './procedureOverrideService';
+import { getOverrideForQuery, ProcedureOverrideRecord } from './procedureOverrideService';
 import { getCachedCatalog, setCachedCatalog } from '../lib/catalogCache';
 import { searchPricelistAsync } from './searchWorkerClient';
 import { findOfficialNamesForQuery, getAliasesForQuery, loadCatalogAliases } from './aliasService';
@@ -62,9 +62,22 @@ export async function getCashData(year: '2023' | '2024' | '2025' | '2026'): Prom
     }
   }
 
-  if (!data && typeof window !== 'undefined') {
+  // Content version of the live catalog (written by the pipeline exporter as a
+  // sidecar). Never cached by CDN/edge so it always reflects the latest build.
+  let remoteChecksum: string | null = null;
+  if (typeof window !== 'undefined') {
     try {
-      const cached = await getCachedCatalog(year);
+      const res = await fetch(`/${year}_cash.version.json`, { cache: 'no-store' });
+      if (res.ok) {
+        const meta = (await res.json()) as { checksum?: string };
+        remoteChecksum = meta.checksum ?? null;
+      }
+    } catch {
+      // Sidecar missing (pre-phase5 deploy): fall back to timestamp freshness.
+    }
+
+    try {
+      const cached = await getCachedCatalog(year, remoteChecksum);
       if (cached && cached.length > 0) {
         data = cached;
       }
@@ -74,13 +87,27 @@ export async function getCashData(year: '2023' | '2024' | '2025' | '2026'): Prom
   }
 
   if (!data) {
-    const response = await fetch(`/${year}_cash.json`);
+    const response = await fetch(
+      typeof window !== 'undefined' ? `/${year}_cash.json?v=${remoteChecksum ?? Date.now()}` : `/${year}_cash.json`,
+      typeof window !== 'undefined' ? { cache: 'no-store' } : undefined,
+    );
     if (!response.ok) {
       throw new Error(`Could not load ${year} Cash pricelist file.`);
     }
     data = await response.json();
     if (data && typeof window !== 'undefined') {
-      setCachedCatalog(year, data).catch(() => {});
+      // If the sidecar was absent, derive the checksum from the fetched bytes so
+      // future loads still get content-based invalidation once the sidecar ships.
+      let checksum = remoteChecksum;
+      if (!checksum) {
+        try {
+          const { sha256Hex } = await import('../lib/sha256');
+          checksum = await sha256Hex(JSON.stringify(data));
+        } catch {
+          checksum = null;
+        }
+      }
+      setCachedCatalog(year, data, checksum).catch(() => {});
     }
   }
 
@@ -273,7 +300,9 @@ export function searchLocalPricelist(
     const cleanEng = cleanHisProcedureQuery(proc.name);
     const qEng = normalizeText(cleanEng);
     const qEngRaw = normalizeText(proc.name);
-    const qAra = proc.arabic ? normalizeArabic(proc.arabic) : '';
+    // When callers don't pass a separate `arabic` field, derive it from the
+    // query text — otherwise Arabic token coverage never runs for Arabic queries.
+    const qAra = proc.arabic ? normalizeArabic(proc.arabic) : normalizeArabic(proc.name);
     const aliasOfficialNames = proc.aliasOfficialNames || findOfficialNamesForQuery(proc.name, proc.arabic);
     const aliasNorms = new Set(aliasOfficialNames.map((n) => normalizeText(n)));
     const expandedAliases = getAliasesForQuery(proc.name, proc.arabic);
@@ -318,16 +347,43 @@ export function searchLocalPricelist(
         continue;
       }
 
-      // Multi-token overlap matching (e.g. out of order words or compound terms)
-      const qTokens = (qEng || qEngRaw).split(/\s+/).filter((t) => t.length >= 3);
-      if (qTokens.length >= 2) {
+      // Multi-token overlap matching (e.g. out of order words or compound terms).
+      // Applied to BOTH languages: Arabic catalog names are written with the
+      // "علي/على" preposition + genitive suffixes ("القطنية والعجزية"), so a
+      // full-string containment test fails for perfectly ordinary queries like
+      // "رنين مغناطيسي على الفقرات القطنية". Token coverage is the language-
+      // agnostic form of the same rule the English path already uses.
+      const qTokensEn = (qEng || qEngRaw).split(/\s+/).filter((t) => t.length >= 3);
+      if (qTokensEn.length >= 2) {
         const itemTokens = new Set(itemEng.split(/\s+/));
-        if (qTokens.every((t) => itemTokens.has(t) || itemEng.includes(t))) {
+        if (qTokensEn.every((t) => itemTokens.has(t) || itemEng.includes(t))) {
           partialMatches.push({
             ...item,
             requestedProcedureName: proc.name,
           });
           continue;
+        }
+      }
+
+      if (qAra) {
+        // Coverage counts query tokens present in the row (exact token or substring),
+        // and row tokens present in the query — the union direction pg_trgm's
+        // word_similarity models server-side.
+        const qTokensAr = qAra.split(/\s+/).filter((t) => t.length >= 3);
+        if (qTokensAr.length >= 2) {
+          const covered = qTokensAr.filter((t) => itemAra.includes(t)).length;
+          const rowTokens = itemAra.split(/\s+/).filter((t) => t.length >= 3);
+          const reverse = rowTokens.length > 0
+            ? rowTokens.filter((t) => qAra.includes(t)).length / rowTokens.length
+            : 0;
+          const forward = covered / qTokensAr.length;
+          if (forward >= 0.6 || reverse >= 0.6) {
+            partialMatches.push({
+              ...item,
+              requestedProcedureName: proc.name,
+            });
+            continue;
+          }
         }
       }
 
@@ -436,6 +492,59 @@ export function searchLocalPricelist(
   return finalResults;
 }
 
+/**
+ * Resolves a manual override into a priced catalog row.
+ * The override stores only code + display name; we look the SKU up in the live
+ * cash catalogs so reports never carry fabricated 0.00 prices. If the SKU is
+ * absent from every year (retired procedure), the row is returned with an
+ * explicit priceUnresolved marker and null price rather than a fake zero.
+ */
+async function resolveOverrideRow(
+  override: ProcedureOverrideRecord,
+  preferredYear?: string,
+): Promise<ProcedureResult> {
+  const years: ('2023' | '2024' | '2025' | '2026')[] = ['2026', '2025', '2024', '2023'];
+  if (preferredYear && years.includes(preferredYear as any)) {
+    years.sort((a, b) => (a === preferredYear ? -1 : b === preferredYear ? 1 : 0));
+  }
+
+  let fallbackName = override.chosenName;
+  for (const yr of years) {
+    try {
+      const catalog = await getCashData(yr);
+      const hit = override.chosenCode
+        ? catalog.find((c) => c.code === override.chosenCode)
+        : catalog.find(
+            (c) =>
+              normalizeArabic(normalizeText(c.nameArabic || '')) ===
+                normalizeArabic(normalizeText(fallbackName)) ||
+              normalizeText(c.nameEnglish).toLowerCase() === normalizeText(fallbackName).toLowerCase(),
+          );
+      if (hit) {
+        return {
+          ...hit,
+          requestedProcedureName: override.queryText,
+          sectionName: `${hit.sectionName || 'عام'} — تعديل يدوي معتمد`,
+          sourceFile: `Manual Override Priority (${yr})`,
+        };
+      }
+    } catch {
+      // Catalog unavailable for this year; continue searching others.
+    }
+  }
+
+  return {
+    code: override.chosenCode,
+    nameArabic: override.chosenName,
+    nameEnglish: override.chosenName,
+    price: '',
+    priceUnresolved: true,
+    sectionName: 'تعديل يدوي معتمد (Override)',
+    sourceFile: 'Manual Override Priority',
+    requestedProcedureName: override.queryText,
+  };
+}
+
 export async function searchAllProcedures(
   selectedProcedures: SelectedProcedure[],
   activeYear?: string,
@@ -472,15 +581,7 @@ export async function searchAllProcedures(
   for (const proc of selectedProcedures) {
     const override = await getOverrideForQuery(proc.name);
     if (override) {
-      localResults.push({
-        code: override.chosenCode,
-        nameArabic: override.chosenName,
-        nameEnglish: override.chosenName,
-        price: '0.00',
-        sectionName: 'تعديل يدوي معتمد (Override)',
-        sourceFile: 'Manual Override Priority',
-        requestedProcedureName: proc.name,
-      });
+      localResults.push(await resolveOverrideRow(override, normalizedYear));
     } else {
       pendingProcedures.push(proc);
     }
@@ -491,20 +592,30 @@ export async function searchAllProcedures(
     return localResults;
   }
 
-  // 1. Parallel Supabase RPC lookup with fast 750ms timeout race
+  // 1. Parallel Supabase RPC lookup; each query gets its OWN 750ms budget so one
+  //    slow query can no longer cancel the whole batch (the previous single
+  //    Promise.race discarded every in-flight result on timeout).
   if (isSupabaseConfigured() && supabase) {
     try {
       const targetYear = normalizedYear ? parseInt(normalizedYear, 10) : 2026;
+      const sb = supabase;
       const rpcPromises = pendingProcedures.map(async (proc) => {
         try {
           const cleanedSearchTerm = cleanHisProcedureQuery(proc.name) || proc.name;
-          const { data, error } = await supabase.rpc('search_procedures', {
+          const rpcCall = sb.rpc('search_procedures', {
             p_pricelist_year: targetYear,
             p_search_term: cleanedSearchTerm,
             p_similarity_threshold: 0.25,
           });
+          const timed = await Promise.race([
+            rpcCall,
+            new Promise<null>((resolve) => setTimeout(() => resolve(null), 750)),
+          ]);
+          if (!timed) return [];
+          const { data, error } = timed;
           if (!error && Array.isArray(data) && data.length > 0) {
             return data.map((r: any) => ({
+              code: r.code || undefined,
               nameArabic: r.name_arabic,
               nameEnglish: r.name_english,
               price: String(r.price),
@@ -519,10 +630,9 @@ export async function searchAllProcedures(
         }
       });
 
-      const rpcResults = await Promise.race([
-        Promise.all(rpcPromises),
-        new Promise<ProcedureResult[][]>((resolve) => setTimeout(() => resolve([]), 750)),
-      ]);
+      // Await every per-query budget; no outer race — slow queries resolve to []
+      // individually instead of discarding the fast ones' results.
+      const rpcResults = await Promise.all(rpcPromises);
 
       for (const resList of rpcResults) {
         localResults.push(...resList);
@@ -532,7 +642,8 @@ export async function searchAllProcedures(
     }
   }
 
-  // 2. Load cached local JSON lists in parallel
+  // 2. Load cached local JSON lists in parallel, then search all years in ONE
+  //    worker round-trip (the previous per-year await serialized ~4 worker trips).
   const fetchedLists = await Promise.all(
     yearsToFetch.map(async (yr) => {
       try {
@@ -544,12 +655,17 @@ export async function searchAllProcedures(
     })
   );
 
+  const combinedList: ProcedureResult[] = [];
   for (const item of fetchedLists) {
     if (item.list.length > 0) {
       listsToSearch.push(item);
-      const matches = await searchPricelistAsync(item.list, pendingProcedures);
-      localResults.push(...matches);
+      combinedList.push(...item.list);
     }
+  }
+
+  if (combinedList.length > 0) {
+    const matches = await searchPricelistAsync(combinedList, pendingProcedures);
+    localResults.push(...matches);
   }
 
   // 3. Identify unmatched procedures

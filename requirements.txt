@@ -31,3 +31,7 @@ python-dotenv>=1.0.1
 
 # Testing & Quality Gates
 pytest>=8.0.0
+
+# EWS Inpatient-Approvals Sync (crawler/pipelines/ews_firebase_sync.py)
+exchangelib>=5.0.4
+firebase-admin>=6.5.0

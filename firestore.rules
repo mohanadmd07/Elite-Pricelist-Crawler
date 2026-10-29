@@ -41,7 +41,7 @@ service cloud.firestore {
       return isSignedIn() && (
         isAdmin() ||
         (request.auth.token.email != null && (
-          request.auth.token.email.matches('.*@elitehospital\\.org$') ||
+          request.auth.token.email.matches('^[^@]+@elitehospital[.]org$') ||
           isStaffEmail(request.auth.token.email)
         ))
       );
@@ -79,10 +79,12 @@ service cloud.firestore {
     // Inpatient Approvals Collection (Strictly Authorized Hospital Staff & Outbox Worker)
     match /inpatient_approvals/{approvalId} {
       allow read: if isAuthorizedStaff();
-      allow create, update: if isAuthorizedStaff() || (
-        request.resource.data.mrn != null &&
-        request.resource.data.status in ['received', 'parsed', 'matched', 'needs_review', 'draft_created', 'answered', 'refused']
-      );
+      // Writes are restricted to authorized staff only. The previous second
+      // disjunct let ANY authenticated principal (even a signed-in non-staff
+      // account) forge approval records by setting mrn + a valid status —
+      // a write hole. The outbox worker writes with an Admin SDK credential,
+      // which bypasses rules entirely, so it needs no open path here.
+      allow create, update: if isAuthorizedStaff();
       allow delete: if isAdmin();
     }
 

@@ -113,8 +113,8 @@ async function runMatchingQualityTests() {
   // -------------------------------------------------------------
   console.log('\nTest 4: Testing Query Hash Calculation and Persistent Caching...');
   const testQuery = 'أشعة رنين مغناطيسي للمخ';
-  const hash1 = computeQueryHash(testQuery);
-  const hash2 = computeQueryHash('اشعه رنين مغناطيسي للمخ'); // Variations normalize to same hash
+  const hash1 = await computeQueryHash(testQuery);
+  const hash2 = await computeQueryHash('اشعه رنين مغناطيسي للمخ'); // Variations normalize to same hash
   console.log(`  Hash 1: ${hash1}`);
   console.log(`  Hash 2: ${hash2}`);
   if (hash1 !== hash2) {

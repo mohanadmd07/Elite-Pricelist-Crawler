@@ -5,7 +5,6 @@
  * confidence tier evaluation, and deterministic pg_trgm fallback.
  */
 
-import crypto from 'crypto';
 import { GoogleGenAI, Type } from '@google/genai';
 import { ProcedureResult } from '../types';
 import { normalizeArabic, normalizeText } from '../lib/arabic-normalizer';
@@ -30,11 +29,29 @@ export interface StructuredMatchResult {
 const semanticMemoryCache = new Map<string, StructuredMatchResult>();
 
 /**
- * Computes SHA-256 hash of normalized query.
+ * Computes the composite cache key for a match decision.
+ * Key = SHA-256( normalized query ␟ sorted candidate codes ).
+ * Including the candidate set is essential: the same query against a different
+ * retrieval pool (different year filter, threshold, or rebuilt catalog) must NOT
+ * reuse a cached answer that was chosen from other candidates.
  */
-export function computeQueryHash(query: string): string {
-  const normalized = normalizeArabic(normalizeText(query));
-  return crypto.createHash('sha256').update(normalized).digest('hex');
+export async function computeMatchCacheKey(query: string, candidates: ProcedureResult[]): Promise<string> {
+  const { sha256Hex } = await import('../lib/sha256');
+  const normalizedQuery = normalizeArabic(normalizeText(query));
+  const candidateSignature = candidates
+    .map((c) => c.code || c.nameEnglish || c.nameArabic)
+    .sort()
+    .join('\u241f');
+  return sha256Hex(`${normalizedQuery}\u241f${candidateSignature}`);
+}
+
+/**
+ * Computes SHA-256 hash of normalized query alone (legacy key shape kept for
+ * callers/tests that only need query identity, not a decision key).
+ */
+export async function computeQueryHash(query: string): Promise<string> {
+  const { sha256Hex } = await import('../lib/sha256');
+  return sha256Hex(normalizeArabic(normalizeText(query)));
 }
 
 /**
@@ -220,7 +237,7 @@ export async function matchProcedureWithGeminiStructured(
     };
   }
 
-  const queryHash = computeQueryHash(query);
+  const queryHash = await computeMatchCacheKey(query, candidates);
 
   // 1. Check persistent & memory cache
   const cached = await getCachedMatch(queryHash, candidates);

@@ -35,13 +35,20 @@ export function getNormalizedOverrideKey(query: string): string {
 
 /**
  * Retrieves a priority override for the given query if one exists in DB or memory cache.
+ * Results (including misses) are memoized per normalized key so searchAllProcedures
+ * never pays a round-trip per procedure on repeated lookups within a session.
  */
+const overrideMissCache = new Set<string>();
+
 export async function getOverrideForQuery(query: string): Promise<ProcedureOverrideRecord | null> {
   const normKey = getNormalizedOverrideKey(query);
   if (!normKey) return null;
 
   if (overrideMemoryCache.has(normKey)) {
     return overrideMemoryCache.get(normKey)!;
+  }
+  if (overrideMissCache.has(normKey)) {
+    return null;
   }
 
   if (!client) return null;
@@ -55,7 +62,10 @@ export async function getOverrideForQuery(query: string): Promise<ProcedureOverr
       .limit(1)
       .maybeSingle();
 
-    if (error || !data) return null;
+    if (error || !data) {
+      if (!error) overrideMissCache.add(normKey);
+      return null;
+    }
 
     const record: ProcedureOverrideRecord = {
       id: data.id,
@@ -102,17 +112,20 @@ export async function logProcedureOverride(params: {
     // 1. Insert or update procedure override
     const { data, error } = await client
       .from('procedure_overrides')
-      .insert({
-        query_text: params.query,
-        query_text_normalized: normKey,
-        chosen_procedure_id: params.chosenProcedureId || null,
-        chosen_code: params.chosenCode,
-        chosen_name: params.chosenName,
-        contractor_name: params.contractorName || null,
-        overridden_by: params.userId || null,
-        overridden_by_email: params.userEmail || null,
-        reason: params.reason || 'Manual staff override',
-      })
+      .upsert(
+        {
+          query_text: params.query,
+          query_text_normalized: normKey,
+          chosen_procedure_id: params.chosenProcedureId || null,
+          chosen_code: params.chosenCode,
+          chosen_name: params.chosenName,
+          contractor_name: params.contractorName || null,
+          overridden_by: params.userId || null,
+          overridden_by_email: params.userEmail || null,
+          reason: params.reason || 'Manual staff override',
+        },
+        { onConflict: 'query_text_normalized' },
+      )
       .select('id')
       .single();
 
@@ -141,7 +154,8 @@ export async function logProcedureOverride(params: {
       console.warn('[Override Service] Audit log warning:', auditError.message);
     }
 
-    // Update local cache
+    // Update local cache and clear any memoized miss for this key
+    overrideMissCache.delete(normKey);
     overrideMemoryCache.set(normKey, {
       id: data.id,
       queryText: params.query,
