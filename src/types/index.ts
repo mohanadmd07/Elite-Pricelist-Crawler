@@ -113,6 +113,7 @@ export interface InpatientApprovalRecord {
   patientName: string;
   mrn: string;
   diagnosis: string;
+  clinicalIndication?: string;
   admissionType?: string;
   bed?: string;
   physician?: string;

@@ -3,11 +3,96 @@ import { cleanContractorName, stripSentFromSignatures, isAccommodationOrGenericF
 import { generateCmWhatsappWithAI, isGeminiConfigured } from '../services/aiMatchService';
 
 /**
+ * Translates English clinical indications and symptoms commonly found in doctor notes into standard Arabic.
+ */
+export function translateClinicalIndicationToArabic(englishText: string): string {
+  if (!englishText) return '';
+  let text = englishText.trim();
+
+  // Strip leading "patient had", "patient has", "patient was", "suffering from", etc.
+  text = text.replace(/^(?:patient\s+(?:had|has|was|is|suffering\s+from)?\s*)/i, '').trim();
+
+  // Common clinical mappings
+  const phraseMappings: Array<[RegExp, string]> = [
+    [/\bbilateral\s+lower\s+limb\s+weakness\b/gi, 'ضعف بالطرفين السفليين'],
+    [/\bbilateral\s+upper\s+limb\s+weakness\b/gi, 'ضعف بالطرفين العلويين'],
+    [/\blower\s+limb\s+weakness\b/gi, 'ضعف بالطرف السفلي'],
+    [/\bupper\s+limb\s+weakness\b/gi, 'ضعف بالطرف العلوي'],
+    [/\bdue\s+to\s+(?:diabetes(?:\s+mellitus)?|dm)\b/gi, 'بسبب مرض داء السكري'],
+    [/\bdue\s+to\s+(?:hypertension|htn)\b/gi, 'بسبب ارتفاع ضغط الدم'],
+    [/\bdue\s+to\s+(?:stroke|cva)\b/gi, 'بسبب جلطة بالمخ'],
+    [/\band\s+(?:hx|history)\s+of\s+strokes\b/gi, '، مع تاريخ مرضي من الجلطات'],
+    [/\band\s+(?:hx|history)\s+of\s+stroke\b/gi, '، مع تاريخ مرضي لجلطة بالمخ'],
+    [/\b(?:hx|history)\s+of\s+strokes\b/gi, 'مع تاريخ مرضي من الجلطات'],
+    [/\b(?:hx|history)\s+of\s+stroke\b/gi, 'مع تاريخ مرضي لجلطة بالمخ'],
+    [/\b(?:hx|history)\s+of\s+hypertension\b/gi, 'مع تاريخ مرضي لارتفاع ضغط الدم'],
+    [/\b(?:hx|history)\s+of\s+diabetes\b/gi, 'مع تاريخ مرضي لداء السكري'],
+  ];
+
+  let translated = text;
+  let matched = false;
+  for (const [pattern, replacement] of phraseMappings) {
+    if (pattern.test(translated)) {
+      matched = true;
+      translated = translated.replace(pattern, replacement);
+    }
+  }
+
+  if (matched) {
+    // If it started with symptoms, add "المريض يعاني من "
+    if (!translated.startsWith('المريض') && !translated.startsWith('المريضة')) {
+      translated = `المريض يعاني من ${translated}`;
+    }
+    return translated.replace(/\s+/g, ' ').trim();
+  }
+
+  return text;
+}
+
+/**
+ * Extracts and translates clinical indication from raw text or doctor note.
+ */
+export function extractClinicalIndication(rawText: string): string {
+  if (!rawText) return '';
+  const text = stripSentFromSignatures(rawText).trim();
+
+  // 1. Doctor narrative pattern: "patient had <indication> and on/needs <procedure>"
+  const doctorNoteMatch = text.match(
+    /(?:patient\s+(?:had|has|is|was|suffering\s+from)?\s+)?(.+?)\s+(?:and\s+(?:is\s+)?on|and\s+needs|and\s+requires|needs|requires|scheduled\s+for|planned\s+for)\s+([a-zA-Z\s/-]+)(?:\r|\n|$)/i
+  );
+  if (doctorNoteMatch && doctorNoteMatch[1]) {
+    const rawIndication = doctorNoteMatch[1].trim();
+    return translateClinicalIndicationToArabic(rawIndication);
+  }
+
+  // 2. Arabic clinical symptoms / justification
+  const araMatch = text.match(
+    /(?:المريض|المريضة|المريضه|الحالة|الحاله)\s+(?:يعاني|تعاني|يعانى|تعانى)\s+من\s+([^و\r\n<]+(?:و[^و\r\n<]+)?)/i
+  );
+  if (araMatch && araMatch[1]) {
+    return `المريض يعاني من ${araMatch[1].trim()}`;
+  }
+
+  return translateClinicalIndicationToArabic(text);
+}
+
+/**
  * Extracts clean, concise clinical procedure phrasing from raw doctor notes or service names.
  * Strips clinical backstory, symptoms, indications, and isolates English/Arabic procedure titles.
  */
 export function extractCleanProcedurePhrase(rawText: string): string {
   if (!rawText) return '';
+
+  // 0. Doctor narrative pattern: "patient had <symptoms/diagnosis> and on/needs <procedure>"
+  const doctorNoteMatch = rawText.match(
+    /(?:patient\s+(?:had|has|is|was|suffering\s+from)?\s+)?(.+?)\s+(?:and\s+(?:is\s+)?on|and\s+needs|and\s+requires|needs|requires|scheduled\s+for|planned\s+for)\s+([a-zA-Z\s/-]+)(?:\r|\n|$)/i
+  );
+  if (doctorNoteMatch && doctorNoteMatch[2]) {
+    const candidate = doctorNoteMatch[2].trim();
+    if (candidate.length >= 3 && !candidate.toLowerCase().includes('inpatient')) {
+      return candidate;
+    }
+  }
 
   // 1. Check if rawText has a dedicated line with an English procedure (e.g. "MRI BRAIN WITH CONTRAST")
   const rawLines = rawText.split(/[\r\n]+/).map((l) => l.trim()).filter(Boolean);
@@ -118,7 +203,7 @@ export function extractCleanProcedurePhrase(rawText: string): string {
   return text.trim();
 }
 
-function formatProcedureForCmWhatsapp(proc: string): string {
+export function formatProcedureForCmWhatsapp(proc: string): string {
   const lower = proc.toLowerCase().trim();
   if (
     lower.includes('transesophageal') ||
@@ -141,6 +226,13 @@ function formatProcedureForCmWhatsapp(proc: string): string {
   }
   if (lower.includes('pig tail')) {
     return 'تركيب قسطرة بيج تيل (Pig Tail Insertion)';
+  }
+  if (
+    lower.includes('physiotherapy') ||
+    lower.includes('physical therapy') ||
+    lower.includes('علاج طبيعي')
+  ) {
+    return 'جلسات علاج طبيعي';
   }
   return proc;
 }
@@ -395,7 +487,9 @@ export function generateCmWhatsappMessage(record: InpatientApprovalRecord): stri
         procText.startsWith('إقامة') ||
         procText.startsWith('اقامة') ||
         procText.startsWith('دخول') ||
-        procText.startsWith('حجز')
+        procText.startsWith('حجز') ||
+        procText.startsWith('جلسة') ||
+        procText.startsWith('جلسات')
       ) {
         actionPrefix = '';
       } else if (procText.startsWith('تحليل')) {
@@ -416,7 +510,23 @@ export function generateCmWhatsappMessage(record: InpatientApprovalRecord): stri
     }
   }
 
-  return `${line1}\n${line2}\n${line3}`;
+  // Check if clinical indication should be appended
+  let clinicalIndicationLine = '';
+  let rawIndication = (record as any).clinicalIndication || '';
+  if (!rawIndication && record.diagnosis && record.diagnosis !== 'Clinical Inpatient Evaluation') {
+    rawIndication = extractClinicalIndication(record.diagnosis);
+  }
+  if (!rawIndication && record.requestedServices && record.requestedServices.length > 0) {
+    const rawFirst = record.requestedServices[0].name;
+    if (/(?:patient\s+(?:had|has|was|is)|weakness|diabetes|stroke)/i.test(rawFirst)) {
+      rawIndication = extractClinicalIndication(rawFirst);
+    }
+  }
+  if (rawIndication && rawIndication.trim().length > 3 && !rawIndication.toLowerCase().includes('evaluation')) {
+    clinicalIndicationLine = `\nالداعي الطبي: ${rawIndication.trim()}`;
+  }
+
+  return `${line1}\n${line2}\n${line3}${clinicalIndicationLine}`;
 }
 
 /**

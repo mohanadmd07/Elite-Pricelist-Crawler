@@ -661,6 +661,10 @@ function cleanHisProcedureQuery(query2) {
   let trimmed = normalizeHomoglyphs(query2).trim();
   trimmed = trimmed.replace(/\bعلئ\b/g, "\u0639\u0644\u064A");
   trimmed = trimmed.replace(
+    /^(?:patient\s+(?:had|has|was|is|suffering\s+from)?\s+).+?\s+(?:and\s+(?:is\s+)?on|and\s+needs|and\s+requires|needs|requires|scheduled\s+for|planned\s+for)\s+/is,
+    ""
+  );
+  trimmed = trimmed.replace(
     /^(?:المريض|المريضة|المريضه|الحالة|الحاله|الطفل|الطفلة|الطفله)\s+(?:يعاني|تعاني|يعانى|تعانى)\s+من\s+.*?(?:و\s*)?(?:يحتاج|تحتاج|نحتاج|بحاجة|بحاجه)\s+(?:الى|الي|لـ?)?\s*(?:عمل|إجراء|اجراء)?\s*/is,
     ""
   );
@@ -697,7 +701,7 @@ function cleanHisProcedureQuery(query2) {
   if (/^(?:t\.?e\.?e\.?)(?:\s*-\s*investigation|\s*-\s*procedure|\s*echocardiography)?$/i.test(trimmed)) {
     return "Transesophageal Echocardiography (TEE)";
   }
-  return trimmed.replace(/\s*-\s*investigation\b/gi, "").replace(/\binvestigation\b/gi, "").replace(/\s*-\s*procedure\b/gi, "").replace(/\s*-\s*service\b/gi, "").replace(/\s*-\s*profile\b/gi, "").replace(/\b(citrulinated)\b/gi, "citrullinated").replace(/\(d\.s\)/gi, "(d's)").replace(/\s+/g, " ").trim();
+  return trimmed.replace(/\s*-\s*investigation\b/gi, "").replace(/\binvestigation\b/gi, "").replace(/\s*-\s*procedure\b/gi, "").replace(/\s*-\s*service\b/gi, "").replace(/\s*-\s*profile\b/gi, "").replace(/\b(citrulinated)\b/gi, "citrullinated").replace(/\(d\.s\)/gi, "(d's)").replace(/\bsessions\b/gi, "session").replace(/\s+/g, " ").trim();
 }
 function expandMedicalSynonyms(input) {
   if (!input) return [];
@@ -1043,6 +1047,14 @@ var init_arabic_normalizer = __esm({
       "\u0639\u0644\u0627\u062C \u0636\u0648\u0626\u064A": ["phototherapy", "\u0639\u0644\u0627\u062C \u0636\u0648\u0626\u064A \u0644\u062D\u062F\u064A\u062B\u064A \u0627\u0644\u0648\u0644\u0627\u062F\u0629"],
       "\u0641\u0635\u0644 \u0628\u0644\u0627\u0632\u0645\u0627": ["plasma pharesis", "plasmapheresis", "\u0627\u062C\u0631\u0627\u0621 \u0641\u0635\u0644 \u0628\u0644\u0627\u0632\u0645\u0627"],
       "plasmapheresis": ["plasma pharesis", "\u0627\u062C\u0631\u0627\u0621 \u0641\u0635\u0644 \u0628\u0644\u0627\u0632\u0645\u0627"],
+      // Physiotherapy & Rehabilitation
+      "physiotherapy": ["physiotherapy session for inp patients", "physiotherapy session for icu patients", "\u062C\u0644\u0633\u0629 \u0639\u0644\u0627\u062C \u0637\u0628\u064A\u0639\u064A"],
+      "physiotherapy session": ["physiotherapy session for inp patients", "physiotherapy session for icu patients", "\u062C\u0644\u0633\u0629 \u0639\u0644\u0627\u062C \u0637\u0628\u064A\u0639\u064A"],
+      "physiotherapy sessions": ["physiotherapy session for inp patients", "physiotherapy session for icu patients", "\u062C\u0644\u0633\u0629 \u0639\u0644\u0627\u062C \u0637\u0628\u064A\u0639\u064A"],
+      "physical therapy": ["physiotherapy session for inp patients", "physiotherapy session for icu patients", "\u062C\u0644\u0633\u0629 \u0639\u0644\u0627\u062C \u0637\u0628\u064A\u0639\u064A"],
+      "\u062C\u0644\u0633\u0627\u062A \u0639\u0644\u0627\u062C \u0637\u0628\u064A\u0639\u064A": ["physiotherapy session for inp patients", "physiotherapy session for icu patients", "\u062C\u0644\u0633\u0629 \u0639\u0644\u0627\u062C \u0637\u0628\u064A\u0639\u064A \u0644\u0645\u0631\u0636\u064A \u0627\u0644\u0642\u0633\u0645 \u0627\u0644\u062F\u0627\u062E\u0644\u064A"],
+      "\u062C\u0644\u0633\u0629 \u0639\u0644\u0627\u062C \u0637\u0628\u064A\u0639\u064A": ["physiotherapy session for inp patients", "physiotherapy session for icu patients", "\u062C\u0644\u0633\u0629 \u0639\u0644\u0627\u062C \u0637\u0628\u064A\u0639\u064A \u0644\u0645\u0631\u0636\u064A \u0627\u0644\u0642\u0633\u0645 \u0627\u0644\u062F\u0627\u062E\u0644\u064A"],
+      "\u0639\u0644\u0627\u062C \u0637\u0628\u064A\u0639\u064A": ["physiotherapy session for inp patients", "\u062C\u0644\u0633\u0629 \u0639\u0644\u0627\u062C \u0637\u0628\u064A\u0639\u064A \u0644\u0645\u0631\u0636\u064A \u0627\u0644\u0642\u0633\u0645 \u0627\u0644\u062F\u0627\u062E\u0644\u064A"],
       // Routine Clinical Laboratory & Endocrine (Batch 4)
       "cbc": ["complete blood count", "\u0635\u0648\u0631\u0629 \u062F\u0645 \u0643\u0627\u0645\u0644\u0629", "\u0635\u0648\u0631\u0629 \u062F\u0645", "blood picture"],
       "\u0635\u0648\u0631\u0629 \u062F\u0645": ["complete blood count", "cbc", "\u0635\u0648\u0631\u0629 \u062F\u0645 \u0643\u0627\u0645\u0644\u0629"],
@@ -1337,8 +1349,70 @@ var init_aiMatchService = __esm({
 });
 
 // src/lib/whatsapp-generator.ts
+function translateClinicalIndicationToArabic(englishText) {
+  if (!englishText) return "";
+  let text = englishText.trim();
+  text = text.replace(/^(?:patient\s+(?:had|has|was|is|suffering\s+from)?\s*)/i, "").trim();
+  const phraseMappings = [
+    [/\bbilateral\s+lower\s+limb\s+weakness\b/gi, "\u0636\u0639\u0641 \u0628\u0627\u0644\u0637\u0631\u0641\u064A\u0646 \u0627\u0644\u0633\u0641\u0644\u064A\u064A\u0646"],
+    [/\bbilateral\s+upper\s+limb\s+weakness\b/gi, "\u0636\u0639\u0641 \u0628\u0627\u0644\u0637\u0631\u0641\u064A\u0646 \u0627\u0644\u0639\u0644\u0648\u064A\u064A\u0646"],
+    [/\blower\s+limb\s+weakness\b/gi, "\u0636\u0639\u0641 \u0628\u0627\u0644\u0637\u0631\u0641 \u0627\u0644\u0633\u0641\u0644\u064A"],
+    [/\bupper\s+limb\s+weakness\b/gi, "\u0636\u0639\u0641 \u0628\u0627\u0644\u0637\u0631\u0641 \u0627\u0644\u0639\u0644\u0648\u064A"],
+    [/\bdue\s+to\s+(?:diabetes(?:\s+mellitus)?|dm)\b/gi, "\u0628\u0633\u0628\u0628 \u0645\u0631\u0636 \u062F\u0627\u0621 \u0627\u0644\u0633\u0643\u0631\u064A"],
+    [/\bdue\s+to\s+(?:hypertension|htn)\b/gi, "\u0628\u0633\u0628\u0628 \u0627\u0631\u062A\u0641\u0627\u0639 \u0636\u063A\u0637 \u0627\u0644\u062F\u0645"],
+    [/\bdue\s+to\s+(?:stroke|cva)\b/gi, "\u0628\u0633\u0628\u0628 \u062C\u0644\u0637\u0629 \u0628\u0627\u0644\u0645\u062E"],
+    [/\band\s+(?:hx|history)\s+of\s+strokes\b/gi, "\u060C \u0645\u0639 \u062A\u0627\u0631\u064A\u062E \u0645\u0631\u0636\u064A \u0645\u0646 \u0627\u0644\u062C\u0644\u0637\u0627\u062A"],
+    [/\band\s+(?:hx|history)\s+of\s+stroke\b/gi, "\u060C \u0645\u0639 \u062A\u0627\u0631\u064A\u062E \u0645\u0631\u0636\u064A \u0644\u062C\u0644\u0637\u0629 \u0628\u0627\u0644\u0645\u062E"],
+    [/\b(?:hx|history)\s+of\s+strokes\b/gi, "\u0645\u0639 \u062A\u0627\u0631\u064A\u062E \u0645\u0631\u0636\u064A \u0645\u0646 \u0627\u0644\u062C\u0644\u0637\u0627\u062A"],
+    [/\b(?:hx|history)\s+of\s+stroke\b/gi, "\u0645\u0639 \u062A\u0627\u0631\u064A\u062E \u0645\u0631\u0636\u064A \u0644\u062C\u0644\u0637\u0629 \u0628\u0627\u0644\u0645\u062E"],
+    [/\b(?:hx|history)\s+of\s+hypertension\b/gi, "\u0645\u0639 \u062A\u0627\u0631\u064A\u062E \u0645\u0631\u0636\u064A \u0644\u0627\u0631\u062A\u0641\u0627\u0639 \u0636\u063A\u0637 \u0627\u0644\u062F\u0645"],
+    [/\b(?:hx|history)\s+of\s+diabetes\b/gi, "\u0645\u0639 \u062A\u0627\u0631\u064A\u062E \u0645\u0631\u0636\u064A \u0644\u062F\u0627\u0621 \u0627\u0644\u0633\u0643\u0631\u064A"]
+  ];
+  let translated = text;
+  let matched = false;
+  for (const [pattern, replacement] of phraseMappings) {
+    if (pattern.test(translated)) {
+      matched = true;
+      translated = translated.replace(pattern, replacement);
+    }
+  }
+  if (matched) {
+    if (!translated.startsWith("\u0627\u0644\u0645\u0631\u064A\u0636") && !translated.startsWith("\u0627\u0644\u0645\u0631\u064A\u0636\u0629")) {
+      translated = `\u0627\u0644\u0645\u0631\u064A\u0636 \u064A\u0639\u0627\u0646\u064A \u0645\u0646 ${translated}`;
+    }
+    return translated.replace(/\s+/g, " ").trim();
+  }
+  return text;
+}
+function extractClinicalIndication(rawText) {
+  if (!rawText) return "";
+  const text = stripSentFromSignatures(rawText).trim();
+  const doctorNoteMatch = text.match(
+    /(?:patient\s+(?:had|has|is|was|suffering\s+from)?\s+)?(.+?)\s+(?:and\s+(?:is\s+)?on|and\s+needs|and\s+requires|needs|requires|scheduled\s+for|planned\s+for)\s+([a-zA-Z\s/-]+)(?:\r|\n|$)/i
+  );
+  if (doctorNoteMatch && doctorNoteMatch[1]) {
+    const rawIndication = doctorNoteMatch[1].trim();
+    return translateClinicalIndicationToArabic(rawIndication);
+  }
+  const araMatch = text.match(
+    /(?:المريض|المريضة|المريضه|الحالة|الحاله)\s+(?:يعاني|تعاني|يعانى|تعانى)\s+من\s+([^و\r\n<]+(?:و[^و\r\n<]+)?)/i
+  );
+  if (araMatch && araMatch[1]) {
+    return `\u0627\u0644\u0645\u0631\u064A\u0636 \u064A\u0639\u0627\u0646\u064A \u0645\u0646 ${araMatch[1].trim()}`;
+  }
+  return translateClinicalIndicationToArabic(text);
+}
 function extractCleanProcedurePhrase(rawText) {
   if (!rawText) return "";
+  const doctorNoteMatch = rawText.match(
+    /(?:patient\s+(?:had|has|is|was|suffering\s+from)?\s+)?(.+?)\s+(?:and\s+(?:is\s+)?on|and\s+needs|and\s+requires|needs|requires|scheduled\s+for|planned\s+for)\s+([a-zA-Z\s/-]+)(?:\r|\n|$)/i
+  );
+  if (doctorNoteMatch && doctorNoteMatch[2]) {
+    const candidate = doctorNoteMatch[2].trim();
+    if (candidate.length >= 3 && !candidate.toLowerCase().includes("inpatient")) {
+      return candidate;
+    }
+  }
   const rawLines = rawText.split(/[\r\n]+/).map((l) => l.trim()).filter(Boolean);
   for (const line of rawLines) {
     const stripped = stripSentFromSignatures(line).trim();
@@ -1408,6 +1482,9 @@ function formatProcedureForCmWhatsapp(proc) {
   }
   if (lower.includes("pig tail")) {
     return "\u062A\u0631\u0643\u064A\u0628 \u0642\u0633\u0637\u0631\u0629 \u0628\u064A\u062C \u062A\u064A\u0644 (Pig Tail Insertion)";
+  }
+  if (lower.includes("physiotherapy") || lower.includes("physical therapy") || lower.includes("\u0639\u0644\u0627\u062C \u0637\u0628\u064A\u0639\u064A")) {
+    return "\u062C\u0644\u0633\u0627\u062A \u0639\u0644\u0627\u062C \u0637\u0628\u064A\u0639\u064A";
   }
   return proc;
 }
@@ -1553,7 +1630,7 @@ ${line2}
       line3 = `*\u0627\u0644\u0645\u0637\u0644\u0648\u0628 \u0645\u0648\u0627\u0641\u0642\u0629 \u062F\u062E\u0648\u0644 \u0648\u0625\u0642\u0627\u0645\u0629 \u0628\u0627\u0644\u0642\u0633\u0645 \u0627\u0644\u062F\u0627\u062E\u0644\u064A${diagSuffix}*`;
     } else {
       let actionPrefix = "";
-      if (procText.startsWith("\u0633\u062D\u0628") || procText.startsWith("\u0639\u0645\u0644") || procText.startsWith("\u062A\u0631\u0643\u064A\u0628") || procText.startsWith("\u0627\u062C\u0631\u0627\u0621") || procText.startsWith("\u0625\u062C\u0631\u0627\u0621") || procText.startsWith("\u0645\u062F") || procText.startsWith("\u0625\u0642\u0627\u0645\u0629") || procText.startsWith("\u0627\u0642\u0627\u0645\u0629") || procText.startsWith("\u062F\u062E\u0648\u0644") || procText.startsWith("\u062D\u062C\u0632")) {
+      if (procText.startsWith("\u0633\u062D\u0628") || procText.startsWith("\u0639\u0645\u0644") || procText.startsWith("\u062A\u0631\u0643\u064A\u0628") || procText.startsWith("\u0627\u062C\u0631\u0627\u0621") || procText.startsWith("\u0625\u062C\u0631\u0627\u0621") || procText.startsWith("\u0645\u062F") || procText.startsWith("\u0625\u0642\u0627\u0645\u0629") || procText.startsWith("\u0627\u0642\u0627\u0645\u0629") || procText.startsWith("\u062F\u062E\u0648\u0644") || procText.startsWith("\u062D\u062C\u0632") || procText.startsWith("\u062C\u0644\u0633\u0629") || procText.startsWith("\u062C\u0644\u0633\u0627\u062A")) {
         actionPrefix = "";
       } else if (procText.startsWith("\u062A\u062D\u0644\u064A\u0644")) {
         actionPrefix = "\u0633\u062D\u0628 ";
@@ -1565,9 +1642,24 @@ ${line2}
       line3 = `*\u0627\u0644\u0645\u0637\u0644\u0648\u0628 \u0645\u0648\u0627\u0641\u0642\u0629 ${actionPrefix}${procText}*`;
     }
   }
+  let clinicalIndicationLine = "";
+  let rawIndication = record.clinicalIndication || "";
+  if (!rawIndication && record.diagnosis && record.diagnosis !== "Clinical Inpatient Evaluation") {
+    rawIndication = extractClinicalIndication(record.diagnosis);
+  }
+  if (!rawIndication && record.requestedServices && record.requestedServices.length > 0) {
+    const rawFirst = record.requestedServices[0].name;
+    if (/(?:patient\s+(?:had|has|was|is)|weakness|diabetes|stroke)/i.test(rawFirst)) {
+      rawIndication = extractClinicalIndication(rawFirst);
+    }
+  }
+  if (rawIndication && rawIndication.trim().length > 3 && !rawIndication.toLowerCase().includes("evaluation")) {
+    clinicalIndicationLine = `
+\u0627\u0644\u062F\u0627\u0639\u064A \u0627\u0644\u0637\u0628\u064A: ${rawIndication.trim()}`;
+  }
   return `${line1}
 ${line2}
-${line3}`;
+${line3}${clinicalIndicationLine}`;
 }
 var init_whatsapp_generator = __esm({
   "src/lib/whatsapp-generator.ts"() {
@@ -2578,7 +2670,33 @@ function searchLocalPricelist(cashList, requestedProcedures) {
       const isAliasMatch = Boolean(
         aliasNorms.size > 0 && (aliasNorms.has(itemEng) || itemAra && aliasOfficialNames.some((n) => normalizeArabic(n) === itemAra))
       );
-      if (isExactEng || isExactAra || isAliasMatch) {
+      let isExactSynMatch = false;
+      let isSynMatch = false;
+      if (synonyms.length > 0) {
+        for (const syn of synonyms) {
+          const normSynEn = normalizeText(syn);
+          const normSynAr = normalizeArabic(syn);
+          if (normSynEn && !GENERIC_MODALITY_TERMS.has(normSynEn) && normSynEn !== qEng) {
+            if (itemEng === normSynEn) {
+              isExactSynMatch = true;
+              break;
+            } else if (normSynEn.length >= 5 && itemEng.includes(normSynEn)) {
+              isSynMatch = true;
+              break;
+            }
+          }
+          if (normSynAr && !GENERIC_MODALITY_TERMS.has(normSynAr) && normSynAr !== qAra) {
+            if (itemAra === normSynAr) {
+              isExactSynMatch = true;
+              break;
+            } else if (normSynAr.length >= 5 && itemAra.includes(normSynAr)) {
+              isSynMatch = true;
+              break;
+            }
+          }
+        }
+      }
+      if (isExactEng || isExactAra || isAliasMatch || isExactSynMatch) {
         exactMatches.push({
           ...item,
           requestedProcedureName: proc.name
@@ -2587,7 +2705,7 @@ function searchLocalPricelist(cashList, requestedProcedures) {
       }
       const isSubEng = Boolean(qEng && itemEng.includes(qEng));
       const isSubAra = Boolean(qAra && itemAra.includes(qAra));
-      if (isSubEng || isSubAra) {
+      if (isSubEng || isSubAra || isSynMatch) {
         partialMatches.push({
           ...item,
           requestedProcedureName: proc.name
@@ -2619,43 +2737,6 @@ function searchLocalPricelist(cashList, requestedProcedures) {
             });
             continue;
           }
-        }
-      }
-      if (synonyms.length > 0) {
-        let isSynMatch = false;
-        let isExactSynMatch = false;
-        for (const syn of synonyms) {
-          const normSynEn = normalizeText(syn);
-          const normSynAr = normalizeArabic(syn);
-          if (normSynEn && !GENERIC_MODALITY_TERMS.has(normSynEn) && normSynEn !== qEng) {
-            if (itemEng === normSynEn) {
-              isExactSynMatch = true;
-              break;
-            } else if (normSynEn.length >= 5 && itemEng.includes(normSynEn)) {
-              isSynMatch = true;
-              break;
-            }
-          }
-          if (normSynAr && !GENERIC_MODALITY_TERMS.has(normSynAr) && normSynAr !== qAra) {
-            if (itemAra === normSynAr) {
-              isExactSynMatch = true;
-              break;
-            } else if (normSynAr.length >= 5 && itemAra.includes(normSynAr)) {
-              isSynMatch = true;
-              break;
-            }
-          }
-        }
-        if (isExactSynMatch) {
-          exactMatches.push({
-            ...item,
-            requestedProcedureName: proc.name
-          });
-        } else if (isSynMatch) {
-          partialMatches.push({
-            ...item,
-            requestedProcedureName: proc.name
-          });
         }
       }
     }
@@ -3877,6 +3958,11 @@ function parseHisApprovalEmail(msg) {
       const diagMatch = requestDetails.match(/(?:يعاني|تعاني)\s+(?:المريض|المريضة|الحالة)?\s*من\s+([^و\n\r<]+)/i);
       if (diagMatch && diagMatch[1]) {
         diagnosis = diagMatch[1].trim();
+      } else {
+        const clinicalIndication = extractClinicalIndication(requestDetails);
+        if (clinicalIndication && clinicalIndication !== requestDetails) {
+          diagnosis = clinicalIndication;
+        }
       }
     }
     const cleanDetails = extractCleanProcedurePhrase(requestDetails);
@@ -3891,6 +3977,12 @@ function parseHisApprovalEmail(msg) {
           rawPrice: 0
         });
       }
+    }
+  }
+  if (diagnosis && /(?:weakness|diabetes|stroke|hypertension|patient)/i.test(diagnosis)) {
+    const translatedDiag = translateClinicalIndicationToArabic(diagnosis);
+    if (translatedDiag && translatedDiag !== diagnosis) {
+      diagnosis = translatedDiag;
     }
   }
   const cleanReply = extractCleanReplyBody(msg.htmlBody, msg.textBody);

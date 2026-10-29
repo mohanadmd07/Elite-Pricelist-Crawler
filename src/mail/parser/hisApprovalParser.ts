@@ -6,7 +6,7 @@
 
 import * as cheerio from 'cheerio';
 import { cleanContractorName, stripSentFromSignatures, extractRefusalReason } from '../../lib/arabic-normalizer';
-import { extractCleanProcedurePhrase } from '../../lib/whatsapp-generator';
+import { extractCleanProcedurePhrase, extractClinicalIndication, translateClinicalIndicationToArabic } from '../../lib/whatsapp-generator';
 import { ParsedApprovalEmail, RawMailMessage } from '../types';
 
 export const REFUSAL_KEYWORDS = [
@@ -972,6 +972,11 @@ export function parseHisApprovalEmail(msg: RawMailMessage): ParsedApprovalEmail 
       const diagMatch = requestDetails.match(/(?:يعاني|تعاني)\s+(?:المريض|المريضة|الحالة)?\s*من\s+([^و\n\r<]+)/i);
       if (diagMatch && diagMatch[1]) {
         diagnosis = diagMatch[1].trim();
+      } else {
+        const clinicalIndication = extractClinicalIndication(requestDetails);
+        if (clinicalIndication && clinicalIndication !== requestDetails) {
+          diagnosis = clinicalIndication;
+        }
       }
     }
 
@@ -987,6 +992,13 @@ export function parseHisApprovalEmail(msg: RawMailMessage): ParsedApprovalEmail 
           rawPrice: 0,
         });
       }
+    }
+  }
+
+  if (diagnosis && /(?:weakness|diabetes|stroke|hypertension|patient)/i.test(diagnosis)) {
+    const translatedDiag = translateClinicalIndicationToArabic(diagnosis);
+    if (translatedDiag && translatedDiag !== diagnosis) {
+      diagnosis = translatedDiag;
     }
   }
 

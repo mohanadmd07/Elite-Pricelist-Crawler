@@ -191,6 +191,10 @@ export function cleanHisProcedureQuery(query: string): string {
   // Strip doctor clinical justification clauses preamble accidentally typed into procedure names
   // e.g. "المريضة تعاني من ارتفاع في درجة الحرارة و تحتاج الي مد فترة حجزها..." -> "مد فترة حجزها..."
   trimmed = trimmed.replace(
+    /^(?:patient\s+(?:had|has|was|is|suffering\s+from)?\s+).+?\s+(?:and\s+(?:is\s+)?on|and\s+needs|and\s+requires|needs|requires|scheduled\s+for|planned\s+for)\s+/is,
+    ''
+  );
+  trimmed = trimmed.replace(
     /^(?:المريض|المريضة|المريضه|الحالة|الحاله|الطفل|الطفلة|الطفله)\s+(?:يعاني|تعاني|يعانى|تعانى)\s+من\s+.*?(?:و\s*)?(?:يحتاج|تحتاج|نحتاج|بحاجة|بحاجه)\s+(?:الى|الي|لـ?)?\s*(?:عمل|إجراء|اجراء)?\s*/is,
     ''
   );
@@ -244,6 +248,7 @@ export function cleanHisProcedureQuery(query: string): string {
     .replace(/\s*-\s*profile\b/gi, '')
     .replace(/\b(citrulinated)\b/gi, 'citrullinated')
     .replace(/\(d\.s\)/gi, "(d's)")
+    .replace(/\bsessions\b/gi, 'session')
     .replace(/\s+/g, ' ')
     .trim();
 }
@@ -430,6 +435,15 @@ export const MEDICAL_SYNONYMS: Record<string, string[]> = {
   'علاج ضوئي': ['phototherapy', 'علاج ضوئي لحديثي الولادة'],
   'فصل بلازما': ['plasma pharesis', 'plasmapheresis', 'اجراء فصل بلازما'],
   'plasmapheresis': ['plasma pharesis', 'اجراء فصل بلازما'],
+
+  // Physiotherapy & Rehabilitation
+  'physiotherapy': ['physiotherapy session for inp patients', 'physiotherapy session for icu patients', 'جلسة علاج طبيعي'],
+  'physiotherapy session': ['physiotherapy session for inp patients', 'physiotherapy session for icu patients', 'جلسة علاج طبيعي'],
+  'physiotherapy sessions': ['physiotherapy session for inp patients', 'physiotherapy session for icu patients', 'جلسة علاج طبيعي'],
+  'physical therapy': ['physiotherapy session for inp patients', 'physiotherapy session for icu patients', 'جلسة علاج طبيعي'],
+  'جلسات علاج طبيعي': ['physiotherapy session for inp patients', 'physiotherapy session for icu patients', 'جلسة علاج طبيعي لمرضي القسم الداخلي'],
+  'جلسة علاج طبيعي': ['physiotherapy session for inp patients', 'physiotherapy session for icu patients', 'جلسة علاج طبيعي لمرضي القسم الداخلي'],
+  'علاج طبيعي': ['physiotherapy session for inp patients', 'جلسة علاج طبيعي لمرضي القسم الداخلي'],
 
   // Routine Clinical Laboratory & Endocrine (Batch 4)
   'cbc': ['complete blood count', 'صورة دم كاملة', 'صورة دم', 'blood picture'],

@@ -328,7 +328,35 @@ export function searchLocalPricelist(
           (aliasNorms.has(itemEng) || (itemAra && aliasOfficialNames.some((n) => normalizeArabic(n) === itemAra)))
       );
 
-      if (isExactEng || isExactAra || isAliasMatch) {
+      // Check clinical synonym expansions (e.g. CXR -> X - Ray Chest, CTPA -> CT Pulmonary Angio, physiotherapy -> Physiotherapy Session)
+      let isExactSynMatch = false;
+      let isSynMatch = false;
+      if (synonyms.length > 0) {
+        for (const syn of synonyms) {
+          const normSynEn = normalizeText(syn);
+          const normSynAr = normalizeArabic(syn);
+          if (normSynEn && !GENERIC_MODALITY_TERMS.has(normSynEn) && normSynEn !== qEng) {
+            if (itemEng === normSynEn) {
+              isExactSynMatch = true;
+              break;
+            } else if (normSynEn.length >= 5 && itemEng.includes(normSynEn)) {
+              isSynMatch = true;
+              break;
+            }
+          }
+          if (normSynAr && !GENERIC_MODALITY_TERMS.has(normSynAr) && normSynAr !== qAra) {
+            if (itemAra === normSynAr) {
+              isExactSynMatch = true;
+              break;
+            } else if (normSynAr.length >= 5 && itemAra.includes(normSynAr)) {
+              isSynMatch = true;
+              break;
+            }
+          }
+        }
+      }
+
+      if (isExactEng || isExactAra || isAliasMatch || isExactSynMatch) {
         exactMatches.push({
           ...item,
           requestedProcedureName: proc.name,
@@ -339,7 +367,7 @@ export function searchLocalPricelist(
       const isSubEng = Boolean(qEng && itemEng.includes(qEng));
       const isSubAra = Boolean(qAra && itemAra.includes(qAra));
 
-      if (isSubEng || isSubAra) {
+      if (isSubEng || isSubAra || isSynMatch) {
         partialMatches.push({
           ...item,
           requestedProcedureName: proc.name,
@@ -387,44 +415,7 @@ export function searchLocalPricelist(
         }
       }
 
-      // Check clinical synonym expansions (e.g. CXR -> X - Ray Chest, CTPA -> CT Pulmonary Angio)
-      if (synonyms.length > 0) {
-        let isSynMatch = false;
-        let isExactSynMatch = false;
-        for (const syn of synonyms) {
-          const normSynEn = normalizeText(syn);
-          const normSynAr = normalizeArabic(syn);
-          if (normSynEn && !GENERIC_MODALITY_TERMS.has(normSynEn) && normSynEn !== qEng) {
-            if (itemEng === normSynEn) {
-              isExactSynMatch = true;
-              break;
-            } else if (normSynEn.length >= 5 && itemEng.includes(normSynEn)) {
-              isSynMatch = true;
-              break;
-            }
-          }
-          if (normSynAr && !GENERIC_MODALITY_TERMS.has(normSynAr) && normSynAr !== qAra) {
-            if (itemAra === normSynAr) {
-              isExactSynMatch = true;
-              break;
-            } else if (normSynAr.length >= 5 && itemAra.includes(normSynAr)) {
-              isSynMatch = true;
-              break;
-            }
-          }
-        }
-        if (isExactSynMatch) {
-          exactMatches.push({
-            ...item,
-            requestedProcedureName: proc.name,
-          });
-        } else if (isSynMatch) {
-          partialMatches.push({
-            ...item,
-            requestedProcedureName: proc.name,
-          });
-        }
-      }
+
     }
 
     if (exactMatches.length > 0) {
