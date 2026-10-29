@@ -229,6 +229,30 @@ export function matchServicesAgainstPricelist(
       };
     }
 
+    // 3. Fallback to adjacent hospital pricelist years (2026, 2024, 2023) if unlisted in targetYear
+    const fallbackYears = ['2026', '2024', '2023'].filter((y) => y !== targetYear);
+    for (const altYear of fallbackYears) {
+      try {
+        const altPath = path.resolve(process.cwd(), 'public', `${altYear}_cash.json`);
+        if (fs.existsSync(altPath)) {
+          const altCatalog: ProcedureResult[] = JSON.parse(fs.readFileSync(altPath, 'utf-8'));
+          const altMatches = searchLocalPricelist(altCatalog, [{ name: srv.name }]);
+          if (altMatches.length > 0) {
+            const best = altMatches[0];
+            return {
+              serviceName: srv.name,
+              matchedName: best.nameEnglish || best.nameArabic,
+              code: best.code,
+              status: 'matched' as const,
+              suggestedPrice: Number(best.price) || undefined,
+            };
+          }
+        }
+      } catch {
+        /* try next year */
+      }
+    }
+
     return {
       serviceName: srv.name,
       matchedName: 'غير مدرج بقائمة الأسعار',

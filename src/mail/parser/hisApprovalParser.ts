@@ -824,7 +824,10 @@ export function parseHisApprovalEmail(msg: RawMailMessage): ParsedApprovalEmail 
   if (!patientName) {
     const pMatch =
       fullText.match(/Patient Name:\s*([^<\n\r]+?)(?=\s*(?:Contractor|Visit|Admission|Physician|Diagnosis|Bed|Request|Selected|جهة|الجهة|الرقم|$))/i) ||
-      fullText.match(/(?:حاله|حالة)\s*[:\/]\s*([^<\n\r]+?)(?=\s*(?:Contractor|Visit|Admission|Physician|Diagnosis|Bed|Request|Selected|جهة|الجهة|الرقم|$))/i);
+      fullText.match(/(?:حاله|حالة)\s*[:\/]\s*([^<\n\r]+?)(?=\s*(?:Contractor|Visit|Admission|Physician|Diagnosis|Bed|Request|Selected|جهة|الجهة|الرقم|$))/i) ||
+      fullText.match(/(?:اسم\s+المريض|اسم\s+الحال[ةه]|المريض|المريضة|المريضه|اسم\s+العميل)\s*[:\s]+([^<\n\r]+?)(?=\s*(?:جهة|الجهة|الرقم|التشخيص|Contractor|MRN|$))/i) ||
+      decodedHtml.match(/(?:موافقة|طلب|موافقه)\s+(?:أشعة|اشعة|تحاليل|عمليات|رنين|منظار|إجراء|اجراء)\s*\/\s*([\u0600-\u06FF\s]{4,40})(?=\s*<br>|[\n\r<]|$)/i) ||
+      decodedHtml.match(/(?:موافقة|طلب|موافقه)\s+(?:أشعة|اشعة|تحاليل|عمليات|رنين|منظار|إجراء|اجراء)\s*\/\s*(?:<br>|[\n\r]+)\s*([\u0600-\u06FF\s]{4,40})(?=\s*<br>|[\n\r<]|$)/i);
     if (pMatch) patientName = pMatch[1].replace(/(?:Contractor|Visit Type|MRN).*/i, '').trim();
   }
 
@@ -839,7 +842,8 @@ export function parseHisApprovalEmail(msg: RawMailMessage): ParsedApprovalEmail 
   if (!contractorRaw) {
     const cMatch =
       fullText.match(/Contractor(?:\s*Name)?\s*[:\s]+([^<\n\r]+?)(?=\s+(?:Visit|Admission|Physician|Diagnosis|Bed|Request|Selected|$))/i) ||
-      fullText.match(/(?:جهة\s*التعاقد|الجهة\s*التعاقدية)\s*[:\s]+([^<\n\r]+?)(?=\s+(?:التشخيص|الطبيب|رقم|تاريخ|$))/i);
+      fullText.match(/(?:جهة\s*التعاقد|الجهة\s*التعاقدية)\s*[:\s]+([^<\n\r]+?)(?=\s+(?:التشخيص|الطبيب|رقم|تاريخ|$))/i) ||
+      fullText.match(/(?:^|[^\u0600-\u06FFa-zA-Z0-9])(نكست\s*كير|ميتلايف|جلوب\s*ميد|بوبا|اكسا|أكسا|الاهلي|الأهلي|ايثدكو|بترول|جاسكو|سوميد|بابتيكو|اموك|أموك|ويبكو|الرقابة\s*الاداريه|الرقابة\s*الإدارية|وزاره\s*العدل|وزارة\s*العدل|البريد\s*المصري)(?:[^\u0600-\u06FFa-zA-Z0-9]|$)/i);
     if (cMatch) {
       const candidate = cleanContractorName(cMatch[1].trim());
       if (candidate && candidate.toLowerCase() !== 'contractor' && !candidate.includes('مستشفى إيليت')) {
@@ -893,7 +897,10 @@ export function parseHisApprovalEmail(msg: RawMailMessage): ParsedApprovalEmail 
 
   if (requestedServices.length === 0 && requestDetails) {
     const cleanDetails = extractCleanProcedurePhrase(requestDetails);
-    if (cleanDetails && cleanDetails.length > 3) {
+    const isDiagnosisCode = /^[A-Z]\d{2}(?:\.\d+)?\s*[-:]/i.test(cleanDetails);
+    if (isDiagnosisCode && (!diagnosis || diagnosis === 'Clinical Inpatient Evaluation')) {
+      diagnosis = cleanDetails;
+    } else if (!isDiagnosisCode && cleanDetails && cleanDetails.length > 3) {
       requestedServices.push({
         name: cleanDetails,
         rawPrice: 0,

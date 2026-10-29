@@ -33,15 +33,40 @@ export function extractCleanProcedurePhrase(rawText: string): string {
   let text = stripSentFromSignatures(rawText).trim();
   if (!text) return '';
 
-  // 2. Check for explicit English procedure phrase embedded anywhere in text
-  // e.g. "MRI BRAIN WITH CONTRAST", "Bed Side Endoscopic Tracheostomy", "ankle foot orthosis", "Blood Culture - Aerobic"
-  const engMatches = text.match(/\b([A-Za-z][A-Za-z0-9\s()/-]{3,}[A-Za-z0-9)])\b/g);
+  // 2. Check for explicit English procedure phrase or clinical acronym embedded anywhere in text
+  // e.g. "EEG", "EMG", "ECG", "MRI BRAIN WITH CONTRAST", "Bed Side Endoscopic Tracheostomy", "ankle foot orthosis", "Blood Culture - Aerobic"
+  const acronymMatches = text.match(/\b([A-Z]{2,6}(?:\s+[A-Za-z0-9()/-]+)?)\b/g);
+  if (acronymMatches) {
+    for (const match of acronymMatches) {
+      const m = match.trim();
+      const lower = m.toLowerCase();
+      if (
+        !lower.includes('inpatient') &&
+        !lower.includes('approval') &&
+        !lower.includes('patient') &&
+        !lower.includes('physician') &&
+        !lower.includes('contractor') &&
+        !lower.includes('admission') &&
+        !lower.includes('diagnosis') &&
+        !lower.includes('request') &&
+        !lower.startsWith('mrn') &&
+        !lower.startsWith('bed') &&
+        !lower.startsWith('zone') &&
+        !lower.startsWith('icu')
+      ) {
+        const araLetters = (text.match(/[\u0600-\u06FF]/g) || []).length;
+        if (araLetters > 0) return m;
+      }
+    }
+  }
+
+  const engMatches = text.match(/\b([A-Za-z][A-Za-z0-9\s()/-]{2,}[A-Za-z0-9)])\b/g);
   if (engMatches) {
     for (const match of engMatches) {
       const m = match.trim();
       const lower = m.toLowerCase();
       if (
-        m.length >= 4 &&
+        m.length >= 3 &&
         !lower.includes('inpatient') &&
         !lower.includes('approval') &&
         !lower.includes('patient') &&
@@ -65,7 +90,7 @@ export function extractCleanProcedurePhrase(rawText: string): string {
 
   // 3. Clinical recommendation triggers in Arabic
   const clinicalMatch = text.match(
-    /(?:واوصي بعمل|واوصى بعمل|أوصى بعمل|اوصي بعمل|اوصى بعمل|ويحتاج الى عمل|ويحتاج الي عمل|ويحتاج لعمل|يحتاج الى عمل|يحتاج الي عمل|يحتاج لعمل|بحاجة لاجراء|بحاجة لإجراء|بحاجة الى|بحاجة الي|وتم طلب عمل|وتم طلب|تم طلب عمل|تم طلب|(?:برجاء|نرجو|يرجى)\s+(?:من\s+سيادتكم\s+)?(?:الموافقة|الموافقه|موافقة|موافقه)\s+(?:علي\s+عمل|على\s+عمل|علي|على)?|برجاء عمل|المطلوب عمل|المطلوب موافقة على|المطلوب موافقة علي|المطلوب موافقة|المطلوب موافقه|المطلوب|يحتاج الى|يحتاج الي|اوصى ب|اوصي ب|(?:وتحتاج|تحتاج|ويحتاج|يحتاج)\s+(?:الحاله|الحالة|المريض|المريضة)\s+(?:لـ?|إلى|الى|إلي|الي))\s*(.+)/is
+    /(?:واوصي بعمل|واوصى بعمل|أوصى بعمل|اوصي بعمل|اوصى بعمل|ويحتاج الى عمل|ويحتاج الي عمل|ويحتاج لعمل|يحتاج الى عمل|يحتاج الي عمل|يحتاج لعمل|بحاجة لاجراء|بحاجة لإجراء|بحاجة الى عمل|بحاجة الي عمل|بحاجة الى|بحاجة الي|بحاجه الى عمل|بحاجه الي عمل|بحاجه الى|بحاجه الي|وتم طلب عمل|وتم طلب|تم طلب عمل|تم طلب|(?:برجاء|نرجو|يرجى)\s+(?:من\s+سيادتكم\s+)?(?:الموافقة|الموافقه|موافقة|موافقه)\s+(?:علي\s+عمل|على\s+عمل|علي|على)?|برجاء عمل|المطلوب عمل|المطلوب موافقة على|المطلوب موافقة علي|المطلوب موافقة|المطلوب موافقه|المطلوب|يحتاج الى|يحتاج الي|اوصى ب|اوصي ب|(?:وتحتاج|تحتاج|ويحتاج|يحتاج)\s+(?:الحاله|الحالة|المريض|المريضة|المريضه)\s+(?:لـ?|إلى|الى|إلي|الي)?\s*(?:عمل|إجراء|اجراء)?|(?:الحاله|الحالة|المريض|المريضة|المريضه)\s+(?:بحاجة|بحاجه|تحتاج|يحتاج)\s+(?:الى|الي|لـ?)\s*(?:عمل|إجراء|اجراء)?)\s*(.+)/is
   );
 
   if (clinicalMatch && clinicalMatch[1]) {
@@ -74,7 +99,7 @@ export function extractCleanProcedurePhrase(rawText: string): string {
 
   // 4. Strip trailing clinical indications, backstory, and fillers
   text = text.replace(/و?\s*بحاجة للبقاء.*$/is, '');
-  text = text.replace(/(?:\s+(?:متابعة|لمتابعة|لمتابعه|لتقييم|لحين|نظرا|نظراً|بسبب|بعد)\s+.*)$/is, '');
+  text = text.replace(/(?:\s+(?:متابعة|لمتابعة|لمتابعه|لتقييم|لحين|نظرا|نظراً|بسبب|بعد|لاشتباه|للاشتباه|اشتباه|لوجود|لحالة|لحاله)\s+.*)$/is, '');
   text = text.replace(/الحالة\s+كاش.*$/is, '');
   text = text.replace(/@\w+.*$/is, '');
   text = text.replace(/[\r\n\t]+/g, ' ').replace(/\s+/g, ' ').trim();
@@ -342,30 +367,41 @@ export function generateCmWhatsappMessage(record: InpatientApprovalRecord): stri
       ? `*تم رفض طلب الموافقة على: ${procText} (${refusalReason})*`
       : `*تم رفض طلب الموافقة على: ${procText}*`;
   } else {
-    let actionPrefix = '';
-    if (
-      procText.startsWith('سحب') ||
-      procText.startsWith('عمل') ||
-      procText.startsWith('تركيب') ||
-      procText.startsWith('اجراء') ||
-      procText.startsWith('إجراء')
-    ) {
-      actionPrefix = '';
-    } else if (procText.startsWith('تحليل')) {
-      actionPrefix = 'سحب ';
-    } else if (
-      procText.startsWith('دعامة') ||
-      procText.startsWith('دعامه') ||
-      procText.startsWith('قسطرة') ||
-      procText.startsWith('قسطره') ||
-      procText.startsWith('انبوب') ||
-      procText.startsWith('أنبوب')
-    ) {
-      actionPrefix = 'تركيب ';
+    // Check if procText is purely a clinical diagnosis / ICD-10 code rather than an explicit medical procedure
+    const isDiagnosisCode =
+      /^[A-Z]\d{2}(?:\.\d+)?\s*[-:]/i.test(procText) ||
+      /\b(?:neoplasm|carcinoma|cancer|tumor|failure|infarction|stroke|hypertension|diabetes|syndrome|infection|sepsis|hematoma)\b/i.test(procText) ||
+      /\b(?:ورم|سرطان|فشل|جلطة|جلطه|نزيف|التهاب|تجمع دموي)\b/i.test(procText);
+
+    if (isDiagnosisCode || procText === 'الدخول والإجراءات المقررة') {
+      const diagSuffix = procText && procText !== 'الدخول والإجراءات المقررة' ? ` (${procText})` : '';
+      line3 = `*المطلوب موافقة دخول وإقامة بالقسم الداخلي${diagSuffix}*`;
     } else {
-      actionPrefix = 'عمل ';
+      let actionPrefix = '';
+      if (
+        procText.startsWith('سحب') ||
+        procText.startsWith('عمل') ||
+        procText.startsWith('تركيب') ||
+        procText.startsWith('اجراء') ||
+        procText.startsWith('إجراء')
+      ) {
+        actionPrefix = '';
+      } else if (procText.startsWith('تحليل')) {
+        actionPrefix = 'سحب ';
+      } else if (
+        procText.startsWith('دعامة') ||
+        procText.startsWith('دعامه') ||
+        procText.startsWith('قسطرة') ||
+        procText.startsWith('قسطره') ||
+        procText.startsWith('انبوب') ||
+        procText.startsWith('أنبوب')
+      ) {
+        actionPrefix = 'تركيب ';
+      } else {
+        actionPrefix = 'عمل ';
+      }
+      line3 = `*المطلوب موافقة ${actionPrefix}${procText}*`;
     }
-    line3 = `*المطلوب موافقة ${actionPrefix}${procText}*`;
   }
 
   return `${line1}\n${line2}\n${line3}`;

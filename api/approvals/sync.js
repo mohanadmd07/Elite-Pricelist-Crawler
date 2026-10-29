@@ -659,8 +659,40 @@ function stripSentFromSignatures(input) {
 function cleanHisProcedureQuery(query2) {
   if (!query2) return "";
   let trimmed = normalizeHomoglyphs(query2).trim();
-  trimmed = trimmed.replace(/\s*(?:حيث\s*(?:انه|أنها|أنه|انها)|نظرا\s*(?:لانه|لأنها|لوجود|لأنه)|بسبب|نظرا|لتشخيص)\s+.*$/i, "");
-  trimmed = trimmed.replace(/\s*(?:due to|because of|for evaluation of|for suspected)\s+.*$/i, "");
+  trimmed = trimmed.replace(
+    /^(?:المريض|المريضة|المريضه|الحالة|الحاله|الطفل|الطفلة|الطفله)\s+(?:يعاني|تعاني|يعانى|تعانى)\s+من\s+[^و]+و\s*(?:يحتاج|تحتاج|نحتاج)?\s*(?:الى|الي|لـ?)?\s*/is,
+    ""
+  );
+  trimmed = trimmed.replace(
+    /^(?:المريض|المريضة|المريضه|الحالة|الحاله|الطفل|الطفلة|الطفله)\s+(?:بحاجة|بحاجه|يحتاج|تحتاج)\s+(?:الى|الي|لـ?)\s+(?:عمل|إجراء|اجراء)?\s*/is,
+    ""
+  );
+  trimmed = trimmed.replace(
+    /^(?:برجاء|يرجى|يرجي|نرجو|نرجوا|مطلوب|المطلوب|نوصي|نوصى|اوصى|اوصي|أوصى|أوصي|تم\s+طلب|وتم\s+طلب)\s+(?:من\s+سيادتكم\s+)?(?:الموافقة|الموافقه|موافقة|موافقه)?\s*(?:على|علي)?\s*(?:عمل|إجراء|اجراء|سحب)?\s*/is,
+    ""
+  );
+  trimmed = trimmed.replace(/^(?:يحتاج|تحتاج|نحتاج)\s+(?:الى|الي|لـ?)\s+(?:عمل|إجراء|اجراء)?\s*/is, "");
+  trimmed = trimmed.replace(/^(?:بحاجة|بحاجه)\s+(?:الى|الي|لـ?)\s+(?:عمل|إجراء|اجراء|اجراءات)?\s*/is, "");
+  trimmed = trimmed.replace(
+    /\s*(?:حيث\s*(?:انه|أنها|أنه|انها|يعاني|تعاني)|نظرا\s*(?:لانه|لأنها|لوجود|لأنه|لـ?)|نظراً\s*(?:لانه|لأنها|لوجود|لأنه|لـ?)|بسبب|نظرا|نظراً)\s+.*$/is,
+    ""
+  );
+  trimmed = trimmed.replace(
+    /\s*(?:لاشتباه\s+(?:وجود\s+)?|للاشتباه\s+(?:في\s+|فى\s+|وجود\s+)?|اشتباه\s+(?:في\s+|فى\s+|وجود\s+)?|لوجود\s+|لحالة\s+|لحاله\s+|لتشخيص\s+|لتقييم\s+|لمتابعة\s+|لمتابعه\s+|لحين\s+).*$/is,
+    ""
+  );
+  trimmed = trimmed.replace(/\s*(?:due to|because of|for evaluation of|for suspected|to rule out|suspected)\s+.*$/is, "");
+  const engAcronymMatch = trimmed.match(/\b([A-Z]{2,6}(?:\s+[A-Za-z0-9()/-]+)?)\b/);
+  if (engAcronymMatch && engAcronymMatch[1]) {
+    const candidate = engAcronymMatch[1].trim();
+    const lower = candidate.toLowerCase();
+    if (!["patient", "doctor", "inpatient", "hospital", "contractor", "admission", "bed", "zone", "mrn"].includes(lower)) {
+      const araLetters = (trimmed.match(/[\u0600-\u06FF]/g) || []).length;
+      if (araLetters > 0) {
+        trimmed = candidate;
+      }
+    }
+  }
   if (/^(?:t\.?e\.?e\.?)(?:\s*-\s*investigation|\s*-\s*procedure|\s*echocardiography)?$/i.test(trimmed)) {
     return "Transesophageal Echocardiography (TEE)";
   }
@@ -1312,24 +1344,35 @@ function extractCleanProcedurePhrase(rawText) {
   }
   let text = stripSentFromSignatures(rawText).trim();
   if (!text) return "";
-  const engMatches = text.match(/\b([A-Za-z][A-Za-z0-9\s()/-]{3,}[A-Za-z0-9)])\b/g);
+  const acronymMatches = text.match(/\b([A-Z]{2,6}(?:\s+[A-Za-z0-9()/-]+)?)\b/g);
+  if (acronymMatches) {
+    for (const match of acronymMatches) {
+      const m = match.trim();
+      const lower = m.toLowerCase();
+      if (!lower.includes("inpatient") && !lower.includes("approval") && !lower.includes("patient") && !lower.includes("physician") && !lower.includes("contractor") && !lower.includes("admission") && !lower.includes("diagnosis") && !lower.includes("request") && !lower.startsWith("mrn") && !lower.startsWith("bed") && !lower.startsWith("zone") && !lower.startsWith("icu")) {
+        const araLetters = (text.match(/[\u0600-\u06FF]/g) || []).length;
+        if (araLetters > 0) return m;
+      }
+    }
+  }
+  const engMatches = text.match(/\b([A-Za-z][A-Za-z0-9\s()/-]{2,}[A-Za-z0-9)])\b/g);
   if (engMatches) {
     for (const match of engMatches) {
       const m = match.trim();
       const lower = m.toLowerCase();
-      if (m.length >= 4 && !lower.includes("inpatient") && !lower.includes("approval") && !lower.includes("patient") && !lower.includes("physician") && !lower.includes("contractor") && !lower.includes("admission") && !lower.includes("diagnosis") && !lower.includes("request details") && !lower.includes("selected services") && !lower.includes("sent from") && !lower.includes("get outlook") && !lower.startsWith("mrn") && !lower.startsWith("bed") && !lower.startsWith("zone") && !lower.startsWith("icu")) {
+      if (m.length >= 3 && !lower.includes("inpatient") && !lower.includes("approval") && !lower.includes("patient") && !lower.includes("physician") && !lower.includes("contractor") && !lower.includes("admission") && !lower.includes("diagnosis") && !lower.includes("request details") && !lower.includes("selected services") && !lower.includes("sent from") && !lower.includes("get outlook") && !lower.startsWith("mrn") && !lower.startsWith("bed") && !lower.startsWith("zone") && !lower.startsWith("icu")) {
         return m;
       }
     }
   }
   const clinicalMatch = text.match(
-    /(?:واوصي بعمل|واوصى بعمل|أوصى بعمل|اوصي بعمل|اوصى بعمل|ويحتاج الى عمل|ويحتاج الي عمل|ويحتاج لعمل|يحتاج الى عمل|يحتاج الي عمل|يحتاج لعمل|بحاجة لاجراء|بحاجة لإجراء|بحاجة الى|بحاجة الي|وتم طلب عمل|وتم طلب|تم طلب عمل|تم طلب|(?:برجاء|نرجو|يرجى)\s+(?:من\s+سيادتكم\s+)?(?:الموافقة|الموافقه|موافقة|موافقه)\s+(?:علي\s+عمل|على\s+عمل|علي|على)?|برجاء عمل|المطلوب عمل|المطلوب موافقة على|المطلوب موافقة علي|المطلوب موافقة|المطلوب موافقه|المطلوب|يحتاج الى|يحتاج الي|اوصى ب|اوصي ب|(?:وتحتاج|تحتاج|ويحتاج|يحتاج)\s+(?:الحاله|الحالة|المريض|المريضة)\s+(?:لـ?|إلى|الى|إلي|الي))\s*(.+)/is
+    /(?:واوصي بعمل|واوصى بعمل|أوصى بعمل|اوصي بعمل|اوصى بعمل|ويحتاج الى عمل|ويحتاج الي عمل|ويحتاج لعمل|يحتاج الى عمل|يحتاج الي عمل|يحتاج لعمل|بحاجة لاجراء|بحاجة لإجراء|بحاجة الى عمل|بحاجة الي عمل|بحاجة الى|بحاجة الي|بحاجه الى عمل|بحاجه الي عمل|بحاجه الى|بحاجه الي|وتم طلب عمل|وتم طلب|تم طلب عمل|تم طلب|(?:برجاء|نرجو|يرجى)\s+(?:من\s+سيادتكم\s+)?(?:الموافقة|الموافقه|موافقة|موافقه)\s+(?:علي\s+عمل|على\s+عمل|علي|على)?|برجاء عمل|المطلوب عمل|المطلوب موافقة على|المطلوب موافقة علي|المطلوب موافقة|المطلوب موافقه|المطلوب|يحتاج الى|يحتاج الي|اوصى ب|اوصي ب|(?:وتحتاج|تحتاج|ويحتاج|يحتاج)\s+(?:الحاله|الحالة|المريض|المريضة|المريضه)\s+(?:لـ?|إلى|الى|إلي|الي)?\s*(?:عمل|إجراء|اجراء)?|(?:الحاله|الحالة|المريض|المريضة|المريضه)\s+(?:بحاجة|بحاجه|تحتاج|يحتاج)\s+(?:الى|الي|لـ?)\s*(?:عمل|إجراء|اجراء)?)\s*(.+)/is
   );
   if (clinicalMatch && clinicalMatch[1]) {
     text = clinicalMatch[1].trim();
   }
   text = text.replace(/و?\s*بحاجة للبقاء.*$/is, "");
-  text = text.replace(/(?:\s+(?:متابعة|لمتابعة|لمتابعه|لتقييم|لحين|نظرا|نظراً|بسبب|بعد)\s+.*)$/is, "");
+  text = text.replace(/(?:\s+(?:متابعة|لمتابعة|لمتابعه|لتقييم|لحين|نظرا|نظراً|بسبب|بعد|لاشتباه|للاشتباه|اشتباه|لوجود|لحالة|لحاله)\s+.*)$/is, "");
   text = text.replace(/الحالة\s+كاش.*$/is, "");
   text = text.replace(/@\w+.*$/is, "");
   text = text.replace(/[\r\n\t]+/g, " ").replace(/\s+/g, " ").trim();
@@ -1489,17 +1532,23 @@ ${line2}
     );
     line3 = refusalReason ? `*\u062A\u0645 \u0631\u0641\u0636 \u0637\u0644\u0628 \u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0629 \u0639\u0644\u0649: ${procText} (${refusalReason})*` : `*\u062A\u0645 \u0631\u0641\u0636 \u0637\u0644\u0628 \u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0629 \u0639\u0644\u0649: ${procText}*`;
   } else {
-    let actionPrefix = "";
-    if (procText.startsWith("\u0633\u062D\u0628") || procText.startsWith("\u0639\u0645\u0644") || procText.startsWith("\u062A\u0631\u0643\u064A\u0628") || procText.startsWith("\u0627\u062C\u0631\u0627\u0621") || procText.startsWith("\u0625\u062C\u0631\u0627\u0621")) {
-      actionPrefix = "";
-    } else if (procText.startsWith("\u062A\u062D\u0644\u064A\u0644")) {
-      actionPrefix = "\u0633\u062D\u0628 ";
-    } else if (procText.startsWith("\u062F\u0639\u0627\u0645\u0629") || procText.startsWith("\u062F\u0639\u0627\u0645\u0647") || procText.startsWith("\u0642\u0633\u0637\u0631\u0629") || procText.startsWith("\u0642\u0633\u0637\u0631\u0647") || procText.startsWith("\u0627\u0646\u0628\u0648\u0628") || procText.startsWith("\u0623\u0646\u0628\u0648\u0628")) {
-      actionPrefix = "\u062A\u0631\u0643\u064A\u0628 ";
+    const isDiagnosisCode = /^[A-Z]\d{2}(?:\.\d+)?\s*[-:]/i.test(procText) || /\b(?:neoplasm|carcinoma|cancer|tumor|failure|infarction|stroke|hypertension|diabetes|syndrome|infection|sepsis|hematoma)\b/i.test(procText) || /\b(?:ورم|سرطان|فشل|جلطة|جلطه|نزيف|التهاب|تجمع دموي)\b/i.test(procText);
+    if (isDiagnosisCode || procText === "\u0627\u0644\u062F\u062E\u0648\u0644 \u0648\u0627\u0644\u0625\u062C\u0631\u0627\u0621\u0627\u062A \u0627\u0644\u0645\u0642\u0631\u0631\u0629") {
+      const diagSuffix = procText && procText !== "\u0627\u0644\u062F\u062E\u0648\u0644 \u0648\u0627\u0644\u0625\u062C\u0631\u0627\u0621\u0627\u062A \u0627\u0644\u0645\u0642\u0631\u0631\u0629" ? ` (${procText})` : "";
+      line3 = `*\u0627\u0644\u0645\u0637\u0644\u0648\u0628 \u0645\u0648\u0627\u0641\u0642\u0629 \u062F\u062E\u0648\u0644 \u0648\u0625\u0642\u0627\u0645\u0629 \u0628\u0627\u0644\u0642\u0633\u0645 \u0627\u0644\u062F\u0627\u062E\u0644\u064A${diagSuffix}*`;
     } else {
-      actionPrefix = "\u0639\u0645\u0644 ";
+      let actionPrefix = "";
+      if (procText.startsWith("\u0633\u062D\u0628") || procText.startsWith("\u0639\u0645\u0644") || procText.startsWith("\u062A\u0631\u0643\u064A\u0628") || procText.startsWith("\u0627\u062C\u0631\u0627\u0621") || procText.startsWith("\u0625\u062C\u0631\u0627\u0621")) {
+        actionPrefix = "";
+      } else if (procText.startsWith("\u062A\u062D\u0644\u064A\u0644")) {
+        actionPrefix = "\u0633\u062D\u0628 ";
+      } else if (procText.startsWith("\u062F\u0639\u0627\u0645\u0629") || procText.startsWith("\u062F\u0639\u0627\u0645\u0647") || procText.startsWith("\u0642\u0633\u0637\u0631\u0629") || procText.startsWith("\u0642\u0633\u0637\u0631\u0647") || procText.startsWith("\u0627\u0646\u0628\u0648\u0628") || procText.startsWith("\u0623\u0646\u0628\u0648\u0628")) {
+        actionPrefix = "\u062A\u0631\u0643\u064A\u0628 ";
+      } else {
+        actionPrefix = "\u0639\u0645\u0644 ";
+      }
+      line3 = `*\u0627\u0644\u0645\u0637\u0644\u0648\u0628 \u0645\u0648\u0627\u0641\u0642\u0629 ${actionPrefix}${procText}*`;
     }
-    line3 = `*\u0627\u0644\u0645\u0637\u0644\u0648\u0628 \u0645\u0648\u0627\u0641\u0642\u0629 ${actionPrefix}${procText}*`;
   }
   return `${line1}
 ${line2}
@@ -3696,7 +3745,7 @@ function parseHisApprovalEmail(msg) {
     }
   });
   if (!patientName) {
-    const pMatch = fullText.match(/Patient Name:\s*([^<\n\r]+?)(?=\s*(?:Contractor|Visit|Admission|Physician|Diagnosis|Bed|Request|Selected|جهة|الجهة|الرقم|$))/i) || fullText.match(/(?:حاله|حالة)\s*[:\/]\s*([^<\n\r]+?)(?=\s*(?:Contractor|Visit|Admission|Physician|Diagnosis|Bed|Request|Selected|جهة|الجهة|الرقم|$))/i);
+    const pMatch = fullText.match(/Patient Name:\s*([^<\n\r]+?)(?=\s*(?:Contractor|Visit|Admission|Physician|Diagnosis|Bed|Request|Selected|جهة|الجهة|الرقم|$))/i) || fullText.match(/(?:حاله|حالة)\s*[:\/]\s*([^<\n\r]+?)(?=\s*(?:Contractor|Visit|Admission|Physician|Diagnosis|Bed|Request|Selected|جهة|الجهة|الرقم|$))/i) || fullText.match(/(?:اسم\s+المريض|اسم\s+الحال[ةه]|المريض|المريضة|المريضه|اسم\s+العميل)\s*[:\s]+([^<\n\r]+?)(?=\s*(?:جهة|الجهة|الرقم|التشخيص|Contractor|MRN|$))/i) || decodedHtml.match(/(?:موافقة|طلب|موافقه)\s+(?:أشعة|اشعة|تحاليل|عمليات|رنين|منظار|إجراء|اجراء)\s*\/\s*([\u0600-\u06FF\s]{4,40})(?=\s*<br>|[\n\r<]|$)/i) || decodedHtml.match(/(?:موافقة|طلب|موافقه)\s+(?:أشعة|اشعة|تحاليل|عمليات|رنين|منظار|إجراء|اجراء)\s*\/\s*(?:<br>|[\n\r]+)\s*([\u0600-\u06FF\s]{4,40})(?=\s*<br>|[\n\r<]|$)/i);
     if (pMatch) patientName = pMatch[1].replace(/(?:Contractor|Visit Type|MRN).*/i, "").trim();
   }
   if (!mrn) {
@@ -3704,7 +3753,7 @@ function parseHisApprovalEmail(msg) {
     if (bMatch) mrn = bMatch[1].trim();
   }
   if (!contractorRaw) {
-    const cMatch = fullText.match(/Contractor(?:\s*Name)?\s*[:\s]+([^<\n\r]+?)(?=\s+(?:Visit|Admission|Physician|Diagnosis|Bed|Request|Selected|$))/i) || fullText.match(/(?:جهة\s*التعاقد|الجهة\s*التعاقدية)\s*[:\s]+([^<\n\r]+?)(?=\s+(?:التشخيص|الطبيب|رقم|تاريخ|$))/i);
+    const cMatch = fullText.match(/Contractor(?:\s*Name)?\s*[:\s]+([^<\n\r]+?)(?=\s+(?:Visit|Admission|Physician|Diagnosis|Bed|Request|Selected|$))/i) || fullText.match(/(?:جهة\s*التعاقد|الجهة\s*التعاقدية)\s*[:\s]+([^<\n\r]+?)(?=\s+(?:التشخيص|الطبيب|رقم|تاريخ|$))/i) || fullText.match(/(?:^|[^\u0600-\u06FFa-zA-Z0-9])(نكست\s*كير|ميتلايف|جلوب\s*ميد|بوبا|اكسا|أكسا|الاهلي|الأهلي|ايثدكو|بترول|جاسكو|سوميد|بابتيكو|اموك|أموك|ويبكو|الرقابة\s*الاداريه|الرقابة\s*الإدارية|وزاره\s*العدل|وزارة\s*العدل|البريد\s*المصري)(?:[^\u0600-\u06FFa-zA-Z0-9]|$)/i);
     if (cMatch) {
       const candidate = cleanContractorName(cMatch[1].trim());
       if (candidate && candidate.toLowerCase() !== "contractor" && !candidate.includes("\u0645\u0633\u062A\u0634\u0641\u0649 \u0625\u064A\u0644\u064A\u062A")) {
@@ -3740,7 +3789,10 @@ function parseHisApprovalEmail(msg) {
   });
   if (requestedServices.length === 0 && requestDetails) {
     const cleanDetails = extractCleanProcedurePhrase(requestDetails);
-    if (cleanDetails && cleanDetails.length > 3) {
+    const isDiagnosisCode = /^[A-Z]\d{2}(?:\.\d+)?\s*[-:]/i.test(cleanDetails);
+    if (isDiagnosisCode && (!diagnosis || diagnosis === "Clinical Inpatient Evaluation")) {
+      diagnosis = cleanDetails;
+    } else if (!isDiagnosisCode && cleanDetails && cleanDetails.length > 3) {
       requestedServices.push({
         name: cleanDetails,
         rawPrice: 0
@@ -9795,6 +9847,27 @@ function matchServicesAgainstPricelist(services, year = "2025") {
         status: "matched",
         suggestedPrice: Number(bestMatch.price) || void 0
       };
+    }
+    const fallbackYears = ["2026", "2024", "2023"].filter((y) => y !== targetYear);
+    for (const altYear of fallbackYears) {
+      try {
+        const altPath = path4.resolve(process.cwd(), "public", `${altYear}_cash.json`);
+        if (fs3.existsSync(altPath)) {
+          const altCatalog = JSON.parse(fs3.readFileSync(altPath, "utf-8"));
+          const altMatches = searchLocalPricelist(altCatalog, [{ name: srv.name }]);
+          if (altMatches.length > 0) {
+            const best = altMatches[0];
+            return {
+              serviceName: srv.name,
+              matchedName: best.nameEnglish || best.nameArabic,
+              code: best.code,
+              status: "matched",
+              suggestedPrice: Number(best.price) || void 0
+            };
+          }
+        }
+      } catch {
+      }
     }
     return {
       serviceName: srv.name,

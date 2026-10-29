@@ -186,10 +186,49 @@ export function cleanHisProcedureQuery(query: string): string {
   if (!query) return '';
   let trimmed = normalizeHomoglyphs(query).trim();
 
-  // Strip doctor clinical justification clauses accidentally typed into procedure names
+  // Strip doctor clinical justification clauses preamble accidentally typed into procedure names
+  // e.g. "المريض بحاجه الي عمل EEG لاشتباه وجود جلطه بالمخ" -> "EEG"
+  trimmed = trimmed.replace(
+    /^(?:المريض|المريضة|المريضه|الحالة|الحاله|الطفل|الطفلة|الطفله)\s+(?:يعاني|تعاني|يعانى|تعانى)\s+من\s+[^و]+و\s*(?:يحتاج|تحتاج|نحتاج)?\s*(?:الى|الي|لـ?)?\s*/is,
+    ''
+  );
+  trimmed = trimmed.replace(
+    /^(?:المريض|المريضة|المريضه|الحالة|الحاله|الطفل|الطفلة|الطفله)\s+(?:بحاجة|بحاجه|يحتاج|تحتاج)\s+(?:الى|الي|لـ?)\s+(?:عمل|إجراء|اجراء)?\s*/is,
+    ''
+  );
+  trimmed = trimmed.replace(
+    /^(?:برجاء|يرجى|يرجي|نرجو|نرجوا|مطلوب|المطلوب|نوصي|نوصى|اوصى|اوصي|أوصى|أوصي|تم\s+طلب|وتم\s+طلب)\s+(?:من\s+سيادتكم\s+)?(?:الموافقة|الموافقه|موافقة|موافقه)?\s*(?:على|علي)?\s*(?:عمل|إجراء|اجراء|سحب)?\s*/is,
+    ''
+  );
+  trimmed = trimmed.replace(/^(?:يحتاج|تحتاج|نحتاج)\s+(?:الى|الي|لـ?)\s+(?:عمل|إجراء|اجراء)?\s*/is, '');
+  trimmed = trimmed.replace(/^(?:بحاجة|بحاجه)\s+(?:الى|الي|لـ?)\s+(?:عمل|إجراء|اجراء|اجراءات)?\s*/is, '');
+
+  // Strip trailing clinical justification / indications
   // e.g. "رسم سمع واتزان حيث انه يعاني من عدم اتزان و دوخة" -> "رسم سمع واتزان"
-  trimmed = trimmed.replace(/\s*(?:حيث\s*(?:انه|أنها|أنه|انها)|نظرا\s*(?:لانه|لأنها|لوجود|لأنه)|بسبب|نظرا|لتشخيص)\s+.*$/i, '');
-  trimmed = trimmed.replace(/\s*(?:due to|because of|for evaluation of|for suspected)\s+.*$/i, '');
+  trimmed = trimmed.replace(
+    /\s*(?:حيث\s*(?:انه|أنها|أنه|انها|يعاني|تعاني)|نظرا\s*(?:لانه|لأنها|لوجود|لأنه|لـ?)|نظراً\s*(?:لانه|لأنها|لوجود|لأنه|لـ?)|بسبب|نظرا|نظراً)\s+.*$/is,
+    ''
+  );
+  trimmed = trimmed.replace(
+    /\s*(?:لاشتباه\s+(?:وجود\s+)?|للاشتباه\s+(?:في\s+|فى\s+|وجود\s+)?|اشتباه\s+(?:في\s+|فى\s+|وجود\s+)?|لوجود\s+|لحالة\s+|لحاله\s+|لتشخيص\s+|لتقييم\s+|لمتابعة\s+|لمتابعه\s+|لحين\s+).*$/is,
+    ''
+  );
+  trimmed = trimmed.replace(/\s*(?:due to|because of|for evaluation of|for suspected|to rule out|suspected)\s+.*$/is, '');
+
+  // If query contains embedded English procedure acronym or phrase alongside Arabic words, extract it
+  const engAcronymMatch = trimmed.match(/\b([A-Z]{2,6}(?:\s+[A-Za-z0-9()/-]+)?)\b/);
+  if (engAcronymMatch && engAcronymMatch[1]) {
+    const candidate = engAcronymMatch[1].trim();
+    const lower = candidate.toLowerCase();
+    if (
+      !['patient', 'doctor', 'inpatient', 'hospital', 'contractor', 'admission', 'bed', 'zone', 'mrn'].includes(lower)
+    ) {
+      const araLetters = (trimmed.match(/[\u0600-\u06FF]/g) || []).length;
+      if (araLetters > 0) {
+        trimmed = candidate;
+      }
+    }
+  }
 
   // Transesophageal Echocardiography alias handling (TEE / T.E.E)
   if (/^(?:t\.?e\.?e\.?)(?:\s*-\s*investigation|\s*-\s*procedure|\s*echocardiography)?$/i.test(trimmed)) {
