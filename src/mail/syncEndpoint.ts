@@ -30,11 +30,26 @@ export default async function handler(req: any, res: any) {
     return res.status(401).json({ error: 'Unauthorized: Valid Bearer token or CRON_SECRET required.' });
   }
 
-  console.log(`[EWS Sync] Starting mail synchronization trigger...`);
+  const limit = Math.min(
+    Math.max(1, Number(req.query?.limit || req.query?.batchLimit || req.body?.limit) || 10),
+    50
+  );
+  const stageSize = Math.min(
+    Math.max(1, Number(req.query?.stageSize || req.body?.stageSize) || 5),
+    limit
+  );
+  const delayMs = Math.max(
+    0,
+    Number(req.query?.delayMs ?? req.body?.delayMs ?? 1000)
+  );
+
+  console.log(`[EWS Sync] Starting staged mail synchronization (batchLimit: ${limit}, stageSize: ${stageSize}, delay: ${delayMs}ms)...`);
   try {
     const stats = await runMailSync({
       folderName: process.env.EWS_FOLDER || 'InApprovals',
-      batchLimit: 50,
+      batchLimit: limit,
+      stageSize,
+      delayBetweenItemsMs: delayMs,
     });
 
     console.log(`[EWS Sync] Complete: success=${stats.success} fetched=${stats.messagesFetched} processed=${stats.messagesProcessed} skipped=${stats.messagesSkipped} duration=${stats.durationMs}ms`);
@@ -48,6 +63,9 @@ export default async function handler(req: any, res: any) {
       durationMs: stats.durationMs,
       error: stats.error,
       timestamp: new Date().toISOString(),
+      staged: true,
+      batchLimit: limit,
+      stageSize,
     });
   } catch (err: any) {
     console.error(`[EWS Sync] Error during sync:`, err);

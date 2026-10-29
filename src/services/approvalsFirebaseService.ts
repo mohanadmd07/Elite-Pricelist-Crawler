@@ -838,17 +838,17 @@ const MIN_SYNC_INTERVAL_MS = 2 * 60 * 1000; // 2 minutes debounce
  * Triggers an immediate approval synchronization directly via the Vercel serverless
  * endpoint or local watcher, with defensive debouncing to prevent concurrent runs.
  */
-export async function triggerManualApprovalsSync(force = false): Promise<{ success: boolean; message: string }> {
+export async function triggerManualApprovalsSync(force = false, stageLimit = 10): Promise<{ success: boolean; message: string }> {
   const now = Date.now();
   if (!force && now - lastTriggeredSyncTime < MIN_SYNC_INTERVAL_MS) {
     return { success: true, message: 'البيانات حديثة (تمت المزامنة خلال آخر دقيقتين)' };
   }
   lastTriggeredSyncTime = now;
 
-  // 1. Trigger the serverless / local sync endpoint directly
+  // 1. Trigger the serverless / local sync endpoint directly with staged batch parameters
   try {
     const headers = await getAuthHeaders();
-    const res = await fetch('/api/approvals/sync', {
+    const res = await fetch(`/api/approvals/sync?limit=${stageLimit}&stageSize=5&delayMs=1000`, {
       method: 'GET',
       headers,
     });
@@ -856,7 +856,7 @@ export async function triggerManualApprovalsSync(force = false): Promise<{ succe
       const data = await res.json();
       return {
         success: true,
-        message: `تمت المزامنة بنجاح: تم جلب ${data.messagesFetched || 0}، معالجة ${data.messagesProcessed || 0}، وتخطي ${data.messagesSkipped || 0}`,
+        message: `تمت المزامنة المرحلية: جلب ${data.messagesFetched || 0}، معالجة ${data.messagesProcessed || 0}، وتخطي ${data.messagesSkipped || 0}`,
       };
     }
   } catch (apiErr: any) {

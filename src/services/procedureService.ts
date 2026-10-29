@@ -816,7 +816,10 @@ export async function searchAllProcedures(
             aiError: aiMessage,
           });
           if (localResults.length === 0) {
-            throw aiErr;
+            if (candidatePool.length > 0) {
+              console.warn('[Procedure Service] Using candidatePool as fallback due to AI 429/error');
+              geminiResults.push(...candidatePool.slice(0, 5));
+            }
           }
         }
       }

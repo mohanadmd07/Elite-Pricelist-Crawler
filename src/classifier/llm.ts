@@ -9,6 +9,7 @@ import { redactPhiFromText, type KnownDemographics } from '../lib/deidentifier';
 import { sha256 } from './text';
 import { inferCueDecision } from './patterns';
 import { cleanTextFromHtml } from '../mail/parser/hisApprovalParser';
+import { isQuotaPaused, markQuotaPaused } from '../lib/geminiRateLimiter';
 
 export type LlmPass = 'ledger' | 'verifier' | 'adjudicator' | 'ocr';
 
@@ -156,7 +157,7 @@ export class GeminiLlmClient implements LlmClient {
   }
 
   async generateJson<T = any>(req: LlmRequest): Promise<T> {
-    if (!this.ai) {
+    if (!this.ai || isQuotaPaused()) {
       return runHeuristicLlmFallback<T>(req);
     }
     const parts: any[] = [{ text: req.prompt }];
@@ -175,8 +176,13 @@ export class GeminiLlmClient implements LlmClient {
           },
         });
         return JSON.parse(res.text || '{}') as T;
-      } catch (e) {
+      } catch (e: any) {
         lastErr = e;
+        const msg = (e?.message || String(e)).toLowerCase();
+        if (msg.includes('429') || msg.includes('resource_exhausted')) {
+          markQuotaPaused(45000);
+          break; // Stop immediately to let heuristic fallback take over and avoid further rate limit penalties
+        }
       }
     }
     console.warn('[Gemini LLM] Call failed, using heuristic fallback:', lastErr);

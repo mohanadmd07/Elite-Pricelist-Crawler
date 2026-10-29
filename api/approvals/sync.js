@@ -1423,6 +1423,53 @@ var init_doctorNarrativeParser = __esm({
   }
 });
 
+// src/lib/geminiRateLimiter.ts
+function isQuotaPaused() {
+  return Date.now() < quotaPausedUntil;
+}
+function markQuotaPaused(durationMs = 3e4) {
+  quotaPausedUntil = Math.max(quotaPausedUntil, Date.now() + durationMs);
+}
+async function executeWithRateLimitRetry(operation, options = {}) {
+  const maxRetries = options.maxRetries ?? 2;
+  const initialDelay = options.initialDelayMs ?? 800;
+  const factor = options.backoffFactor ?? 2;
+  let lastError = null;
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      return await operation(attempt);
+    } catch (err) {
+      lastError = err;
+      const msg = (err?.message || String(err)).toLowerCase();
+      const isRateLimit = msg.includes("429") || msg.includes("resource_exhausted") || msg.includes("rate limit") || msg.includes("quota");
+      if (!isRateLimit || attempt === maxRetries) {
+        if (isRateLimit) {
+          markQuotaPaused(45e3);
+        }
+        throw err;
+      }
+      const baseDelay = initialDelay * Math.pow(factor, attempt);
+      const jitter = Math.random() * 200;
+      const delayMs = baseDelay + jitter;
+      console.warn(`[Gemini Rate Limiter] 429 detected, retrying in ${Math.round(delayMs)}ms (attempt ${attempt + 1}/${maxRetries})...`);
+      await new Promise((resolve) => setTimeout(resolve, delayMs));
+    }
+  }
+  throw lastError;
+}
+var quotaPausedUntil, RECOMMENDED_GEMINI_MODELS;
+var init_geminiRateLimiter = __esm({
+  "src/lib/geminiRateLimiter.ts"() {
+    quotaPausedUntil = 0;
+    RECOMMENDED_GEMINI_MODELS = [
+      "gemini-2.0-flash",
+      "gemini-2.5-flash",
+      "gemini-1.5-flash",
+      "gemini-2.5-flash-lite"
+    ];
+  }
+});
+
 // src/services/aiMatchService.ts
 import { GoogleGenAI, Type } from "@google/genai";
 function getGeminiApiKey() {
@@ -1447,6 +1494,33 @@ function isGeminiConfigured() {
 }
 async function matchProceduresWithAI(unmatchedProcedures, candidates) {
   const key = getGeminiApiKey();
+  const runLocalCandidateMatching = () => {
+    const matches = [];
+    for (const proc of unmatchedProcedures) {
+      const qNorm = normalizeArabic(normalizeText(proc.name));
+      const qWords = qNorm.split(/\s+/).filter((w) => w.length > 2);
+      let bestCand = null;
+      let maxOverlap = 0;
+      for (const cand of candidates) {
+        const cNorm = normalizeArabic(normalizeText(`${cand.nameEnglish} ${cand.nameArabic || ""}`));
+        let overlap = 0;
+        for (const w of qWords) {
+          if (cNorm.includes(w)) overlap++;
+        }
+        if (overlap > maxOverlap) {
+          maxOverlap = overlap;
+          bestCand = cand;
+        }
+      }
+      if (bestCand && maxOverlap > 0) {
+        matches.push({
+          ...bestCand,
+          requestedProcedureName: proc.name
+        });
+      }
+    }
+    return matches;
+  };
   if (!key) {
     throw new Error(
       "Gemini API key is not configured. Please click 'AI Settings' in the top header to enter your API key, or set GEMINI_API_KEY in .env.local."
@@ -1459,6 +1533,10 @@ async function matchProceduresWithAI(unmatchedProcedures, candidates) {
     throw new Error(
       "No candidate pricelist items could be identified for AI semantic matching. Try broadening your search query."
     );
+  }
+  if (isQuotaPaused()) {
+    console.warn("[Gemini AI] Quota currently paused due to rate limits (429), using local candidate fallback.");
+    return runLocalCandidateMatching();
   }
   const ai = new GoogleGenAI({ apiKey: key });
   const proceduresListText = unmatchedProcedures.map(
@@ -1509,29 +1587,32 @@ STRICT CLINICAL EXTRACTION RULES:
     console.error("[PHI Violation Intercepted] Demographics detected in outgoing prompt:", demoCheck.violations);
     throw new Error(`De-identification check failed: ${demoCheck.violations.join("; ")}`);
   }
-  const candidateModels = ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash"];
+  const candidateModels = RECOMMENDED_GEMINI_MODELS;
   let lastError = null;
   for (const model of candidateModels) {
     try {
-      const response = await Promise.race([
-        ai.models.generateContent({
-          model,
-          contents: [
-            {
-              parts: [{ text: promptText }]
+      const response = await executeWithRateLimitRetry(
+        () => Promise.race([
+          ai.models.generateContent({
+            model,
+            contents: [
+              {
+                parts: [{ text: promptText }]
+              }
+            ],
+            config: {
+              temperature: 0,
+              // Deterministic greedy search for maximum speed
+              responseMimeType: "application/json",
+              responseSchema
             }
-          ],
-          config: {
-            temperature: 0,
-            // Deterministic greedy search for maximum speed
-            responseMimeType: "application/json",
-            responseSchema
-          }
-        }),
-        new Promise(
-          (_, reject) => setTimeout(() => reject(new Error(`Timeout querying Gemini model ${model}`)), 8e3)
-        )
-      ]);
+          }),
+          new Promise(
+            (_, reject) => setTimeout(() => reject(new Error(`Timeout querying Gemini model ${model}`)), 8e3)
+          )
+        ]),
+        { maxRetries: 1, initialDelayMs: 300 }
+      );
       const parsed = JSON.parse(response.text || "[]");
       const matches = [];
       const seenMatch = /* @__PURE__ */ new Set();
@@ -1551,19 +1632,22 @@ STRICT CLINICAL EXTRACTION RULES:
       return matches;
     } catch (err) {
       lastError = err;
-      const msg = err?.message || String(err);
+      const msg = (err?.message || String(err)).toLowerCase();
       console.warn(`Gemini model ${model} failed, trying fallback:`, msg);
-      if (msg.includes("403") || msg.includes("API key not valid") || msg.includes("PERMISSION_DENIED")) {
+      if (msg.includes("403") || msg.includes("api key not valid") || msg.includes("permission_denied")) {
         throw new Error(
           "Gemini API Key rejected (403 Permission Denied). Please verify that your API key is active and has access to Gemini in Google AI Studio."
         );
       }
-      if (msg.includes("429") || msg.includes("RESOURCE_EXHAUSTED")) {
-        throw new Error(
-          "Gemini API rate limit or quota exceeded (429). Please wait a few moments and try again."
-        );
+      if (msg.includes("429") || msg.includes("resource_exhausted")) {
+        markQuotaPaused(45e3);
       }
     }
+  }
+  const is429 = (lastError?.message || "").toLowerCase().includes("429") || (lastError?.message || "").toLowerCase().includes("resource_exhausted") || isQuotaPaused();
+  if (is429) {
+    console.warn("[Gemini AI] Quota exhausted across models; returning local candidate matching.");
+    return runLocalCandidateMatching();
   }
   throw lastError || new Error("Failed to query Gemini AI model.");
 }
@@ -1574,6 +1658,7 @@ var init_aiMatchService = __esm({
     init_whatsapp_generator();
     init_deidentifier();
     init_doctorNarrativeParser();
+    init_geminiRateLimiter();
     GEMINI_STORAGE_KEY = "elite_gemini_api_key";
   }
 });
@@ -3231,7 +3316,10 @@ async function searchAllProcedures(selectedProcedures, activeYear, aiSearchEnabl
             aiError: aiMessage
           });
           if (localResults.length === 0) {
-            throw aiErr;
+            if (candidatePool.length > 0) {
+              console.warn("[Procedure Service] Using candidatePool as fallback due to AI 429/error");
+              geminiResults.push(...candidatePool.slice(0, 5));
+            }
           }
         }
       }
@@ -4751,6 +4839,7 @@ ${unmatchedLines}]`;
 
 // src/mail/syncEngine.ts
 init_supabase();
+init_geminiRateLimiter();
 
 // .agent/skills/approval-reply-classifier/resources/medical-glossary.json
 var medical_glossary_default = {
@@ -8593,6 +8682,7 @@ function quoteInText(quote, text) {
 }
 
 // src/classifier/llm.ts
+init_geminiRateLimiter();
 var MODELS = {
   flash: process.env.CLASSIFIER_FLASH_MODEL || "gemini-2.5-flash",
   pro: process.env.CLASSIFIER_PRO_MODEL || "gemini-2.5-pro"
@@ -8692,7 +8782,7 @@ var GeminiLlmClient = class {
     }
   }
   async generateJson(req) {
-    if (!this.ai) {
+    if (!this.ai || isQuotaPaused()) {
       return runHeuristicLlmFallback(req);
     }
     const parts = [{ text: req.prompt }];
@@ -8713,6 +8803,11 @@ var GeminiLlmClient = class {
         return JSON.parse(res.text || "{}");
       } catch (e) {
         lastErr = e;
+        const msg = (e?.message || String(e)).toLowerCase();
+        if (msg.includes("429") || msg.includes("resource_exhausted")) {
+          markQuotaPaused(45e3);
+          break;
+        }
       }
     }
     console.warn("[Gemini LLM] Call failed, using heuristic fallback:", lastErr);
@@ -10087,6 +10182,10 @@ function createDefaultAuditedLlmClient() {
 var client4 = supabaseAdmin || supabase;
 async function maybeRunClassifierOnSync(params) {
   if (!isClassifierEnabled()) return {};
+  if (isQuotaPaused()) {
+    console.warn("[Sync Engine] Gemini quota currently paused, skipping LLM classifier on sync.");
+    return {};
+  }
   try {
     const llm = createDefaultAuditedLlmClient();
     const learningStore = client4 ? new SupabaseLearningStore() : null;
@@ -10159,6 +10258,11 @@ async function maybeRunClassifierOnSync(params) {
       approval_reference: result.approval_reference
     };
   } catch (err) {
+    const msg = (err?.message || String(err)).toLowerCase();
+    if (msg.includes("429") || msg.includes("resource_exhausted")) {
+      markQuotaPaused(45e3);
+      console.warn("[Sync Engine] 429 quota exhaustion in classifier; pausing quota for 45s.");
+    }
     console.warn(`[Sync Engine] Classifier warning for ${params.sourceMessageId}:`, err?.message || err);
     return {};
   }
@@ -10294,7 +10398,8 @@ function matchServicesAgainstPricelist(services, year = "2025") {
 async function runMailSync(options) {
   const startTime = Date.now();
   const folderName = options?.folderName || process.env.EWS_FOLDER || "InApprovals";
-  const batchLimit = options?.batchLimit || 50;
+  const batchLimit = options?.batchLimit || 10;
+  const delayBetweenItemsMs = options?.delayBetweenItemsMs ?? 1e3;
   const stats = {
     success: false,
     messagesFetched: 0,
@@ -10313,12 +10418,16 @@ async function runMailSync(options) {
       return stats;
     }
     const currentCursor = await loadCursorFromPostgres(folderName);
-    console.log(`[Sync Engine] \u{1F4E5} Fetching incremental approvals for "${folderName}" (Token: ${currentCursor.token ? "Active" : "Initial"})...`);
+    console.log(`[Sync Engine] \u{1F4E5} Fetching staged incremental approvals for "${folderName}" (Limit: ${batchLimit}, Token: ${currentCursor.token ? "Active" : "Initial"})...`);
     const { messages, nextCursor } = await ewsSource.fetchSince(currentCursor, batchLimit);
     stats.messagesFetched = messages.length;
     stats.nextCursorToken = nextCursor.token;
-    console.log(`[Sync Engine] \u{1F4E8} Retrieved ${messages.length} messages from Exchange.`);
-    for (const msg of messages) {
+    console.log(`[Sync Engine] \u{1F4E8} Retrieved ${messages.length} messages from Exchange (staging batch).`);
+    for (let i = 0; i < messages.length; i++) {
+      const msg = messages[i];
+      if (i > 0 && delayBetweenItemsMs > 0) {
+        await new Promise((resolve) => setTimeout(resolve, delayBetweenItemsMs));
+      }
       const convId = msg.conversationId || msg.messageId;
       const existing = await getExistingApprovalByConversation(convId);
       const parsed = parseHisApprovalEmail(msg);
@@ -10629,11 +10738,25 @@ async function handler(req, res) {
   if (!isAuthorizedRequest(req)) {
     return res.status(401).json({ error: "Unauthorized: Valid Bearer token or CRON_SECRET required." });
   }
-  console.log(`[EWS Sync] Starting mail synchronization trigger...`);
+  const limit2 = Math.min(
+    Math.max(1, Number(req.query?.limit || req.query?.batchLimit || req.body?.limit) || 10),
+    50
+  );
+  const stageSize = Math.min(
+    Math.max(1, Number(req.query?.stageSize || req.body?.stageSize) || 5),
+    limit2
+  );
+  const delayMs = Math.max(
+    0,
+    Number(req.query?.delayMs ?? req.body?.delayMs ?? 1e3)
+  );
+  console.log(`[EWS Sync] Starting staged mail synchronization (batchLimit: ${limit2}, stageSize: ${stageSize}, delay: ${delayMs}ms)...`);
   try {
     const stats = await runMailSync({
       folderName: process.env.EWS_FOLDER || "InApprovals",
-      batchLimit: 50
+      batchLimit: limit2,
+      stageSize,
+      delayBetweenItemsMs: delayMs
     });
     console.log(`[EWS Sync] Complete: success=${stats.success} fetched=${stats.messagesFetched} processed=${stats.messagesProcessed} skipped=${stats.messagesSkipped} duration=${stats.durationMs}ms`);
     return res.status(200).json({
@@ -10644,7 +10767,10 @@ async function handler(req, res) {
       attachmentsSaved: stats.attachmentsSaved,
       durationMs: stats.durationMs,
       error: stats.error,
-      timestamp: (/* @__PURE__ */ new Date()).toISOString()
+      timestamp: (/* @__PURE__ */ new Date()).toISOString(),
+      staged: true,
+      batchLimit: limit2,
+      stageSize
     });
   } catch (err) {
     console.error(`[EWS Sync] Error during sync:`, err);

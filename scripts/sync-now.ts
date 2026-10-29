@@ -13,7 +13,8 @@ async function main() {
 
   const args = process.argv.slice(2);
   let folder = process.env.EWS_FOLDER || 'InApprovals';
-  let limit = 50;
+  let limit = 10;
+  let delay = 1000;
 
   for (let i = 0; i < args.length; i++) {
     if (args[i] === '--folder' && args[i + 1]) {
@@ -22,10 +23,13 @@ async function main() {
     if (args[i] === '--limit' && args[i + 1]) {
       limit = parseInt(args[i + 1], 10);
     }
+    if (args[i] === '--delay' && args[i + 1]) {
+      delay = parseInt(args[i + 1], 10);
+    }
   }
 
-  console.log(`Config: Folder="${folder}", BatchLimit=${limit}`);
-  const result = await runMailSync({ folderName: folder, batchLimit: limit });
+  console.log(`Config: Folder="${folder}", BatchLimit=${limit}, DelayBetweenItems=${delay}ms`);
+  const result = await runMailSync({ folderName: folder, batchLimit: limit, delayBetweenItemsMs: delay });
 
   console.log('\n-----------------------------------------------------');
   console.log('📊 Sync Results:');

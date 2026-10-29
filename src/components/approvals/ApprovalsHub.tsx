@@ -346,10 +346,10 @@ Generated via Elite Corporate Approvals Hub • 30-Day Rolling Active`;
                 ? 'bg-teal-50 border-teal-300 text-teal-800'
                 : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-300'
             }`}
-            title="Scan Outlook / Exchange InApprovals folder immediately"
+            title="Scan Outlook / Exchange InApprovals in staged batches (10 at a time) to prevent timeouts and rate limits"
           >
             <RefreshCw size={13} className={isSyncActive ? 'animate-spin text-teal-700' : 'text-slate-500'} />
-            <span>{isSyncActive ? 'Syncing...' : 'Sync Emails Now'}</span>
+            <span>{isSyncActive ? 'Staging Sync...' : 'Sync Emails Now'}</span>
           </button>
         </div>
       </div>
@@ -359,9 +359,9 @@ Generated via Elite Corporate Approvals Hub • 30-Day Rolling Active`;
         <div className="px-4 py-2.5 bg-teal-50 border border-teal-300/90 rounded-2xl text-xs font-bold text-teal-950 flex items-center justify-between shadow-2xs animate-pulse">
           <div className="flex items-center gap-2">
             <RefreshCw size={14} className="animate-spin text-teal-700 shrink-0" />
-            <span>جاري فحص وتحديث الموافقات مع البريد الإلكتروني (Outlook / Exchange)...</span>
+            <span>جاري مزامنة ومعالجة الموافقات على دفعات مرحلية (Staged Sync) لتفادي حدود الطلبات...</span>
           </div>
-          <span className="text-[11px] text-teal-800 font-semibold bg-teal-100 px-2 py-0.5 rounded-full">Sync Active</span>
+          <span className="text-[11px] text-teal-800 font-semibold bg-teal-100 px-2 py-0.5 rounded-full">Staged Sync</span>
         </div>
       )}
 

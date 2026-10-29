@@ -21,6 +21,7 @@ import { buildDraftReplyText } from '../lib/draftReplyBuilder';
 import { InpatientApprovalRecord, ProcedureResult } from '../types';
 import { MailSyncStats, RawMailMessage } from './types';
 import { supabaseAdmin, supabase } from '../lib/supabase';
+import { isQuotaPaused, markQuotaPaused } from '../lib/geminiRateLimiter';
 import {
   classifyApprovalThread,
   createDefaultAuditedLlmClient,
@@ -43,6 +44,10 @@ async function maybeRunClassifierOnSync(params: {
   existing?: any;
 }): Promise<Record<string, any>> {
   if (!isClassifierEnabled()) return {};
+  if (isQuotaPaused()) {
+    console.warn('[Sync Engine] Gemini quota currently paused, skipping LLM classifier on sync.');
+    return {};
+  }
   try {
     const llm = createDefaultAuditedLlmClient();
     const learningStore = client ? new SupabaseLearningStore() : null;
@@ -115,6 +120,11 @@ async function maybeRunClassifierOnSync(params: {
       approval_reference: result.approval_reference,
     };
   } catch (err: any) {
+    const msg = (err?.message || String(err)).toLowerCase();
+    if (msg.includes('429') || msg.includes('resource_exhausted')) {
+      markQuotaPaused(45000);
+      console.warn('[Sync Engine] 429 quota exhaustion in classifier; pausing quota for 45s.');
+    }
     console.warn(`[Sync Engine] Classifier warning for ${params.sourceMessageId}:`, err?.message || err);
     return {};
   }
@@ -298,15 +308,20 @@ export function matchServicesAgainstPricelist(
 
 /**
  * Runs a single sync iteration connecting to EWS and ingesting new approvals.
+ * Supports staged ingestion ("little by little") with controlled pacing to prevent
+ * Exchange timeouts and Gemini 429 quota exhaustion.
  */
 export async function runMailSync(options?: {
   folderName?: string;
   batchLimit?: number;
+  stageSize?: number;
+  delayBetweenItemsMs?: number;
   skipPurge?: boolean;
 }): Promise<MailSyncStats> {
   const startTime = Date.now();
   const folderName = options?.folderName || process.env.EWS_FOLDER || 'InApprovals';
-  const batchLimit = options?.batchLimit || 50;
+  const batchLimit = options?.batchLimit || 10; // Default to 10 items for safe staged sync
+  const delayBetweenItemsMs = options?.delayBetweenItemsMs ?? 1000; // 1s pacing between AI calls
 
   const stats: MailSyncStats = {
     success: false,
@@ -331,17 +346,24 @@ export async function runMailSync(options?: {
 
     // 2. Load latest sync cursor from PostgreSQL
     const currentCursor = await loadCursorFromPostgres(folderName);
-    console.log(`[Sync Engine] 📥 Fetching incremental approvals for "${folderName}" (Token: ${currentCursor.token ? 'Active' : 'Initial'})...`);
+    console.log(`[Sync Engine] 📥 Fetching staged incremental approvals for "${folderName}" (Limit: ${batchLimit}, Token: ${currentCursor.token ? 'Active' : 'Initial'})...`);
 
     // 3. Fetch new messages from EWS
     const { messages, nextCursor } = await ewsSource.fetchSince(currentCursor, batchLimit);
     stats.messagesFetched = messages.length;
     stats.nextCursorToken = nextCursor.token;
 
-    console.log(`[Sync Engine] 📨 Retrieved ${messages.length} messages from Exchange.`);
+    console.log(`[Sync Engine] 📨 Retrieved ${messages.length} messages from Exchange (staging batch).`);
 
-    // 4. Process each message
-    for (const msg of messages) {
+    // 4. Process each message staged little by little with pacing
+    for (let i = 0; i < messages.length; i++) {
+      const msg = messages[i];
+
+      // Safe pacing delay between items to prevent hitting Gemini 15 RPM limit
+      if (i > 0 && delayBetweenItemsMs > 0) {
+        await new Promise((resolve) => setTimeout(resolve, delayBetweenItemsMs));
+      }
+
       const convId = msg.conversationId || msg.messageId;
       const existing = await getExistingApprovalByConversation(convId);
 
