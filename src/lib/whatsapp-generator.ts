@@ -99,14 +99,21 @@ export function extractCleanProcedurePhrase(rawText: string): string {
 
   // 4. Strip trailing clinical indications, backstory, and fillers
   text = text.replace(/و?\s*بحاجة للبقاء.*$/is, '');
-  text = text.replace(/(?:\s+(?:متابعة|لمتابعة|لمتابعه|لتقييم|لحين|نظرا|نظراً|بسبب|بعد|لاشتباه|للاشتباه|اشتباه|لوجود|لحالة|لحاله)\s+.*)$/is, '');
+  text = text.replace(/(?:\s+(?:لانه|لأنه|لانها|لأنها|متابعة|لمتابعة|لمتابعه|لتقييم|لحين|نظرا|نظراً|بسبب|بعد|لاشتباه|للاشتباه|اشتباه|لوجود|لحالة|لحاله|مع\s+تاريخ\s+مرضي|لتاريخ\s+مرضي)\s+.*)$/is, '');
   text = text.replace(/الحالة\s+كاش.*$/is, '');
   text = text.replace(/@\w+.*$/is, '');
   text = text.replace(/[\r\n\t]+/g, ' ').replace(/\s+/g, ' ').trim();
 
-  // Strip leading fluff like "يعاني المريض من ... و يحتاج الى ..."
+  // Strip leading fluff like "المريضة تعاني من ... و تحتاج الى ..."
+  text = text.replace(
+    /^(?:المريض|المريضة|المريضه|الحالة|الحاله|الطفل|الطفلة|الطفله)\s+(?:يعاني|تعاني|يعانى|تعانى)\s+من\s+.*?(?:و\s*)?(?:يحتاج|تحتاج|نحتاج|بحاجة|بحاجه)\s+(?:الى|الي|لـ?)?\s*(?:عمل|إجراء|اجراء)?\s*/is,
+    ''
+  );
   text = text.replace(/^(?:يعاني|تعاني)\s+(?:المريض|المريضة|الحالة|الطفل|الطفله)\s+من\s+[^و]+و\s*(?:يحتاج|تحتاج|نحتاج)?\s*(?:الى|الي)?\s*/is, '');
   text = text.replace(/^طفل\s+يعانى\s+من\s+[^و]+و\s*/is, '');
+
+  // Normalize stay extension phrases
+  text = text.replace(/مد\s+فترة\s+حجز(?:ها)?/g, 'مد الإقامة');
 
   return text.trim();
 }
@@ -383,7 +390,12 @@ export function generateCmWhatsappMessage(record: InpatientApprovalRecord): stri
         procText.startsWith('عمل') ||
         procText.startsWith('تركيب') ||
         procText.startsWith('اجراء') ||
-        procText.startsWith('إجراء')
+        procText.startsWith('إجراء') ||
+        procText.startsWith('مد') ||
+        procText.startsWith('إقامة') ||
+        procText.startsWith('اقامة') ||
+        procText.startsWith('دخول') ||
+        procText.startsWith('حجز')
       ) {
         actionPrefix = '';
       } else if (procText.startsWith('تحليل')) {

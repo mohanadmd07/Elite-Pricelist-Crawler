@@ -16,6 +16,7 @@ export function normalizeArabic(str: string): string {
     .replace(/[ىيی]/g, 'ي') // Alef-maqsura + Persian yeh
     .replace(/[كک]/g, 'ك') // Persian keheh -> Arabic kaf
     .replace(/[ةهھۀ]/g, 'ه')
+    .replace(/(^|[^\u0600-\u06FF])علئ(?=[^\u0600-\u06FF]|$)/g, '$1علي') // Typo: علئ -> علي
     .replace(/[ئؤ]/g, 'ء')
     .replace(/[^a-zA-Z0-9\u0621-\u064A\s]/g, ' ')
     .replace(/\s+/g, ' ')
@@ -185,9 +186,14 @@ export function stripSentFromSignatures(input: string): string {
 export function cleanHisProcedureQuery(query: string): string {
   if (!query) return '';
   let trimmed = normalizeHomoglyphs(query).trim();
+  trimmed = trimmed.replace(/\bعلئ\b/g, 'علي');
 
   // Strip doctor clinical justification clauses preamble accidentally typed into procedure names
-  // e.g. "المريض بحاجه الي عمل EEG لاشتباه وجود جلطه بالمخ" -> "EEG"
+  // e.g. "المريضة تعاني من ارتفاع في درجة الحرارة و تحتاج الي مد فترة حجزها..." -> "مد فترة حجزها..."
+  trimmed = trimmed.replace(
+    /^(?:المريض|المريضة|المريضه|الحالة|الحاله|الطفل|الطفلة|الطفله)\s+(?:يعاني|تعاني|يعانى|تعانى)\s+من\s+.*?(?:و\s*)?(?:يحتاج|تحتاج|نحتاج|بحاجة|بحاجه)\s+(?:الى|الي|لـ?)?\s*(?:عمل|إجراء|اجراء)?\s*/is,
+    ''
+  );
   trimmed = trimmed.replace(
     /^(?:المريض|المريضة|المريضه|الحالة|الحاله|الطفل|الطفلة|الطفله)\s+(?:يعاني|تعاني|يعانى|تعانى)\s+من\s+[^و]+و\s*(?:يحتاج|تحتاج|نحتاج)?\s*(?:الى|الي|لـ?)?\s*/is,
     ''
@@ -204,13 +210,9 @@ export function cleanHisProcedureQuery(query: string): string {
   trimmed = trimmed.replace(/^(?:بحاجة|بحاجه)\s+(?:الى|الي|لـ?)\s+(?:عمل|إجراء|اجراء|اجراءات)?\s*/is, '');
 
   // Strip trailing clinical justification / indications
-  // e.g. "رسم سمع واتزان حيث انه يعاني من عدم اتزان و دوخة" -> "رسم سمع واتزان"
+  // e.g. "لانها تعاني من صداع شديد مع تاريخ مرضي بالجلطات"
   trimmed = trimmed.replace(
-    /\s*(?:حيث\s*(?:انه|أنها|أنه|انها|يعاني|تعاني)|نظرا\s*(?:لانه|لأنها|لوجود|لأنه|لـ?)|نظراً\s*(?:لانه|لأنها|لوجود|لأنه|لـ?)|بسبب|نظرا|نظراً)\s+.*$/is,
-    ''
-  );
-  trimmed = trimmed.replace(
-    /\s*(?:لاشتباه\s+(?:وجود\s+)?|للاشتباه\s+(?:في\s+|فى\s+|وجود\s+)?|اشتباه\s+(?:في\s+|فى\s+|وجود\s+)?|لوجود\s+|لحالة\s+|لحاله\s+|لتشخيص\s+|لتقييم\s+|لمتابعة\s+|لمتابعه\s+|لحين\s+).*$/is,
+    /\s*(?:لانه|لأنه|لانها|لأنها|بسبب|نظرا|نظراً|مع\s+تاريخ\s+مرضي|لتاريخ\s+مرضي|حيث\s*(?:انه|أنه|انها|أنها)|لاشتباه|اشتباه|لوجود|لحالة|لحاله|لتشخيص|لتقييم|لمتابعة|لمتابعه|لحين)\s+.*$/is,
     ''
   );
   trimmed = trimmed.replace(/\s*(?:due to|because of|for evaluation of|for suspected|to rule out|suspected)\s+.*$/is, '');
@@ -620,7 +622,8 @@ export function isAccommodationOrGenericFee(name: string): boolean {
   const a = normalizeArabic(name);
   return (
     /\b(bed|room|accommodation|stay|icu day|ccu day|nursing|care unit)\b/i.test(n) ||
-    /إقامة|اقامة|سرير|عناية مركزة|رعاية مركزة|رسم دخول|رسوم فتح ملف|كشف طوارئ|استشارة|مرور طبيب/i.test(a)
+    /اقامه|سرير|عنايه مركزه|رعايه مركزه|رسم دخول|رسوم فتح ملف|كشف طوارئ|استشاره|مرور طبيب|مد فتره حجز|فتره حجز|حجز|مد الاقامه/i.test(a) ||
+    /إقامة|اقامة|مد فترة حجز|مد الإقامة/i.test(name)
   );
 }
 

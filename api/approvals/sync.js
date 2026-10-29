@@ -622,7 +622,7 @@ ${activeSignatureText}`;
 // src/lib/arabic-normalizer.ts
 function normalizeArabic(str2) {
   if (!str2) return "";
-  return str2.toLowerCase().replace(/[\u064B-\u065F\u0670\u0640]/g, "").replace(/[\u0660-\u0669\u06F0-\u06F9]/g, (d) => String(d.charCodeAt(0) & 15)).replace(/[أإآا]/g, "\u0627").replace(/[ىيی]/g, "\u064A").replace(/[كک]/g, "\u0643").replace(/[ةهھۀ]/g, "\u0647").replace(/[ئؤ]/g, "\u0621").replace(/[^a-zA-Z0-9\u0621-\u064A\s]/g, " ").replace(/\s+/g, " ").trim();
+  return str2.toLowerCase().replace(/[\u064B-\u065F\u0670\u0640]/g, "").replace(/[\u0660-\u0669\u06F0-\u06F9]/g, (d) => String(d.charCodeAt(0) & 15)).replace(/[أإآا]/g, "\u0627").replace(/[ىيی]/g, "\u064A").replace(/[كک]/g, "\u0643").replace(/[ةهھۀ]/g, "\u0647").replace(/(^|[^\u0600-\u06FF])علئ(?=[^\u0600-\u06FF]|$)/g, "$1\u0639\u0644\u064A").replace(/[ئؤ]/g, "\u0621").replace(/[^a-zA-Z0-9\u0621-\u064A\s]/g, " ").replace(/\s+/g, " ").trim();
 }
 function normalizeHomoglyphs(str2) {
   if (!str2) return "";
@@ -659,6 +659,11 @@ function stripSentFromSignatures(input) {
 function cleanHisProcedureQuery(query2) {
   if (!query2) return "";
   let trimmed = normalizeHomoglyphs(query2).trim();
+  trimmed = trimmed.replace(/\bعلئ\b/g, "\u0639\u0644\u064A");
+  trimmed = trimmed.replace(
+    /^(?:المريض|المريضة|المريضه|الحالة|الحاله|الطفل|الطفلة|الطفله)\s+(?:يعاني|تعاني|يعانى|تعانى)\s+من\s+.*?(?:و\s*)?(?:يحتاج|تحتاج|نحتاج|بحاجة|بحاجه)\s+(?:الى|الي|لـ?)?\s*(?:عمل|إجراء|اجراء)?\s*/is,
+    ""
+  );
   trimmed = trimmed.replace(
     /^(?:المريض|المريضة|المريضه|الحالة|الحاله|الطفل|الطفلة|الطفله)\s+(?:يعاني|تعاني|يعانى|تعانى)\s+من\s+[^و]+و\s*(?:يحتاج|تحتاج|نحتاج)?\s*(?:الى|الي|لـ?)?\s*/is,
     ""
@@ -674,11 +679,7 @@ function cleanHisProcedureQuery(query2) {
   trimmed = trimmed.replace(/^(?:يحتاج|تحتاج|نحتاج)\s+(?:الى|الي|لـ?)\s+(?:عمل|إجراء|اجراء)?\s*/is, "");
   trimmed = trimmed.replace(/^(?:بحاجة|بحاجه)\s+(?:الى|الي|لـ?)\s+(?:عمل|إجراء|اجراء|اجراءات)?\s*/is, "");
   trimmed = trimmed.replace(
-    /\s*(?:حيث\s*(?:انه|أنها|أنه|انها|يعاني|تعاني)|نظرا\s*(?:لانه|لأنها|لوجود|لأنه|لـ?)|نظراً\s*(?:لانه|لأنها|لوجود|لأنه|لـ?)|بسبب|نظرا|نظراً)\s+.*$/is,
-    ""
-  );
-  trimmed = trimmed.replace(
-    /\s*(?:لاشتباه\s+(?:وجود\s+)?|للاشتباه\s+(?:في\s+|فى\s+|وجود\s+)?|اشتباه\s+(?:في\s+|فى\s+|وجود\s+)?|لوجود\s+|لحالة\s+|لحاله\s+|لتشخيص\s+|لتقييم\s+|لمتابعة\s+|لمتابعه\s+|لحين\s+).*$/is,
+    /\s*(?:لانه|لأنه|لانها|لأنها|بسبب|نظرا|نظراً|مع\s+تاريخ\s+مرضي|لتاريخ\s+مرضي|حيث\s*(?:انه|أنه|انها|أنها)|لاشتباه|اشتباه|لوجود|لحالة|لحاله|لتشخيص|لتقييم|لمتابعة|لمتابعه|لحين)\s+.*$/is,
     ""
   );
   trimmed = trimmed.replace(/\s*(?:due to|because of|for evaluation of|for suspected|to rule out|suspected)\s+.*$/is, "");
@@ -781,7 +782,7 @@ function isAccommodationOrGenericFee(name) {
   if (!name) return false;
   const n = normalizeText(name);
   const a = normalizeArabic(name);
-  return /\b(bed|room|accommodation|stay|icu day|ccu day|nursing|care unit)\b/i.test(n) || /إقامة|اقامة|سرير|عناية مركزة|رعاية مركزة|رسم دخول|رسوم فتح ملف|كشف طوارئ|استشارة|مرور طبيب/i.test(a);
+  return /\b(bed|room|accommodation|stay|icu day|ccu day|nursing|care unit)\b/i.test(n) || /اقامه|سرير|عنايه مركزه|رعايه مركزه|رسم دخول|رسوم فتح ملف|كشف طوارئ|استشاره|مرور طبيب|مد فتره حجز|فتره حجز|حجز|مد الاقامه/i.test(a) || /إقامة|اقامة|مد فترة حجز|مد الإقامة/i.test(name);
 }
 function extractRefusalReason(snippet) {
   if (!snippet || !snippet.trim()) return "";
@@ -1381,12 +1382,17 @@ function extractCleanProcedurePhrase(rawText) {
     text = clinicalMatch[1].trim();
   }
   text = text.replace(/و?\s*بحاجة للبقاء.*$/is, "");
-  text = text.replace(/(?:\s+(?:متابعة|لمتابعة|لمتابعه|لتقييم|لحين|نظرا|نظراً|بسبب|بعد|لاشتباه|للاشتباه|اشتباه|لوجود|لحالة|لحاله)\s+.*)$/is, "");
+  text = text.replace(/(?:\s+(?:لانه|لأنه|لانها|لأنها|متابعة|لمتابعة|لمتابعه|لتقييم|لحين|نظرا|نظراً|بسبب|بعد|لاشتباه|للاشتباه|اشتباه|لوجود|لحالة|لحاله|مع\s+تاريخ\s+مرضي|لتاريخ\s+مرضي)\s+.*)$/is, "");
   text = text.replace(/الحالة\s+كاش.*$/is, "");
   text = text.replace(/@\w+.*$/is, "");
   text = text.replace(/[\r\n\t]+/g, " ").replace(/\s+/g, " ").trim();
+  text = text.replace(
+    /^(?:المريض|المريضة|المريضه|الحالة|الحاله|الطفل|الطفلة|الطفله)\s+(?:يعاني|تعاني|يعانى|تعانى)\s+من\s+.*?(?:و\s*)?(?:يحتاج|تحتاج|نحتاج|بحاجة|بحاجه)\s+(?:الى|الي|لـ?)?\s*(?:عمل|إجراء|اجراء)?\s*/is,
+    ""
+  );
   text = text.replace(/^(?:يعاني|تعاني)\s+(?:المريض|المريضة|الحالة|الطفل|الطفله)\s+من\s+[^و]+و\s*(?:يحتاج|تحتاج|نحتاج)?\s*(?:الى|الي)?\s*/is, "");
   text = text.replace(/^طفل\s+يعانى\s+من\s+[^و]+و\s*/is, "");
+  text = text.replace(/مد\s+فترة\s+حجز(?:ها)?/g, "\u0645\u062F \u0627\u0644\u0625\u0642\u0627\u0645\u0629");
   return text.trim();
 }
 function formatProcedureForCmWhatsapp(proc) {
@@ -1547,7 +1553,7 @@ ${line2}
       line3 = `*\u0627\u0644\u0645\u0637\u0644\u0648\u0628 \u0645\u0648\u0627\u0641\u0642\u0629 \u062F\u062E\u0648\u0644 \u0648\u0625\u0642\u0627\u0645\u0629 \u0628\u0627\u0644\u0642\u0633\u0645 \u0627\u0644\u062F\u0627\u062E\u0644\u064A${diagSuffix}*`;
     } else {
       let actionPrefix = "";
-      if (procText.startsWith("\u0633\u062D\u0628") || procText.startsWith("\u0639\u0645\u0644") || procText.startsWith("\u062A\u0631\u0643\u064A\u0628") || procText.startsWith("\u0627\u062C\u0631\u0627\u0621") || procText.startsWith("\u0625\u062C\u0631\u0627\u0621")) {
+      if (procText.startsWith("\u0633\u062D\u0628") || procText.startsWith("\u0639\u0645\u0644") || procText.startsWith("\u062A\u0631\u0643\u064A\u0628") || procText.startsWith("\u0627\u062C\u0631\u0627\u0621") || procText.startsWith("\u0625\u062C\u0631\u0627\u0621") || procText.startsWith("\u0645\u062F") || procText.startsWith("\u0625\u0642\u0627\u0645\u0629") || procText.startsWith("\u0627\u0642\u0627\u0645\u0629") || procText.startsWith("\u062F\u062E\u0648\u0644") || procText.startsWith("\u062D\u062C\u0632")) {
         actionPrefix = "";
       } else if (procText.startsWith("\u062A\u062D\u0644\u064A\u0644")) {
         actionPrefix = "\u0633\u062D\u0628 ";
@@ -2659,6 +2665,10 @@ function searchLocalPricelist(cashList, requestedProcedures) {
         const bEng = normalizeText(b.nameEnglish);
         const aAra = normalizeArabic(a.nameArabic);
         const bAra = normalizeArabic(b.nameArabic);
+        const aIsExact = Boolean(qAra && aAra === qAra || qEng && aEng === qEng);
+        const bIsExact = Boolean(qAra && bAra === qAra || qEng && bEng === qEng);
+        if (aIsExact && !bIsExact) return -1;
+        if (!aIsExact && bIsExact) return 1;
         const stemToken = (t) => t.replace(/^(?:و|ف)?(?:ال)?/, "");
         const qTokens = (qEng + " " + qAra).split(/\s+/).map(stemToken).filter((t) => t.length >= 3);
         const aTokens = (aEng + " " + aAra).split(/\s+/).map(stemToken).filter((t) => t.length >= 3);
@@ -2667,6 +2677,13 @@ function searchLocalPricelist(cashList, requestedProcedures) {
         const bCount = qTokens.filter((t) => bTokens.some((bt) => bt === t || bt.includes(t) || t.includes(bt))).length;
         if (aCount !== bCount) {
           return bCount - aCount;
+        }
+        const isBilateralQ = /ساقين|طرفين|طرفان|قدمين|ركبتين|يدين|عينين|اذنين|both|bilateral/i.test(qAra + " " + qEng);
+        if (isBilateralQ) {
+          const aBoth = /both|bilateral|طرفين|ساقين|جانبين/i.test(aEng + " " + aAra);
+          const bBoth = /both|bilateral|طرفين|ساقين|جانبين/i.test(bEng + " " + bAra);
+          if (aBoth && !bBoth) return -1;
+          if (!aBoth && bBoth) return 1;
         }
         return b.nameEnglish.length - a.nameEnglish.length;
       });
@@ -3449,6 +3466,11 @@ function extractCleanReplyBody(html, text) {
   }
   return candidate;
 }
+function splitClinicalRequests(text) {
+  if (!text) return [];
+  const parts = text.split(/\s*(?:مع\s+(?:عمل|إجراء|اجراء)|بالإضافة\s+إلى\s+(?:عمل|إجراء|اجراء)?|بالاضافة\s+الي\s+(?:عمل|إجراء|اجراء)?)\s*/i).map((p) => p.trim()).filter((p) => p.length > 2);
+  return parts.length > 0 ? parts : [text.trim()];
+}
 function extractCreditLimit(text) {
   if (!text) return {};
   const normalized = text.normalize("NFKC").replace(/[\u200e\u200f\u202a-\u202e]/g, " ");
@@ -3803,6 +3825,10 @@ function parseHisApprovalEmail(msg) {
       if (container && container !== text) requestDetails = container;
     }
   });
+  if (!requestDetails) {
+    const rdMatch = fullText.match(/Request Details\s*[:\s]+([^<\n\r]+?)(?=\s*(?:SELECTED SERVICES|Patient|Contractor|Visit|Physician|Diagnosis|$))/i) || decodedHtml.match(/Request Details\s*[:\s]+([^<\n\r]+?)(?=\s*(?:<br|<div|<p|<table|SELECTED|$))/i);
+    if (rdMatch) requestDetails = rdMatch[1].trim();
+  }
   if (!patientName) {
     const pMatch = fullText.match(/Patient Name:\s*([^<\n\r]+?)(?=\s*(?:Contractor|Visit|Admission|Physician|Diagnosis|Bed|Request|Selected|جهة|الجهة|الرقم|$))/i) || fullText.match(/(?:حاله|حالة)\s*[:\/]\s*([^<\n\r]+?)(?=\s*(?:Contractor|Visit|Admission|Physician|Diagnosis|Bed|Request|Selected|جهة|الجهة|الرقم|$))/i) || fullText.match(/(?:اسم\s+المريض|اسم\s+الحال[ةه]|المريض|المريضة|المريضه|اسم\s+العميل)\s*[:\s]+([^<\n\r]+?)(?=\s*(?:جهة|الجهة|الرقم|التشخيص|Contractor|MRN|$))/i) || decodedHtml.match(/(?:موافقة|طلب|موافقه)\s+(?:أشعة|اشعة|تحاليل|عمليات|رنين|منظار|إجراء|اجراء)\s*\/\s*([\u0600-\u06FF\s]{4,40})(?=\s*<br>|[\n\r<]|$)/i) || decodedHtml.match(/(?:موافقة|طلب|موافقه)\s+(?:أشعة|اشعة|تحاليل|عمليات|رنين|منظار|إجراء|اجراء)\s*\/\s*(?:<br>|[\n\r]+)\s*([\u0600-\u06FF\s]{4,40})(?=\s*<br>|[\n\r<]|$)/i);
     if (pMatch) patientName = pMatch[1].replace(/(?:Contractor|Visit Type|MRN).*/i, "").trim();
@@ -3847,15 +3873,24 @@ function parseHisApprovalEmail(msg) {
     }
   });
   if (requestedServices.length === 0 && requestDetails) {
+    if (!diagnosis || diagnosis === "Clinical Inpatient Evaluation") {
+      const diagMatch = requestDetails.match(/(?:يعاني|تعاني)\s+(?:المريض|المريضة|الحالة)?\s*من\s+([^و\n\r<]+)/i);
+      if (diagMatch && diagMatch[1]) {
+        diagnosis = diagMatch[1].trim();
+      }
+    }
     const cleanDetails = extractCleanProcedurePhrase(requestDetails);
     const isDiagnosisCode = /^[A-Z]\d{2}(?:\.\d+)?\s*[-:]/i.test(cleanDetails);
     if (isDiagnosisCode && (!diagnosis || diagnosis === "Clinical Inpatient Evaluation")) {
       diagnosis = cleanDetails;
     } else if (!isDiagnosisCode && cleanDetails && cleanDetails.length > 3) {
-      requestedServices.push({
-        name: cleanDetails,
-        rawPrice: 0
-      });
+      const parts = splitClinicalRequests(cleanDetails);
+      for (const part of parts) {
+        requestedServices.push({
+          name: part,
+          rawPrice: 0
+        });
+      }
     }
   }
   const cleanReply = extractCleanReplyBody(msg.htmlBody, msg.textBody);
@@ -9866,6 +9901,7 @@ function matchServicesAgainstPricelist(services, year = "2025") {
     console.warn(`[Sync Engine] Failed to load catalog for ${targetYear}:`, err);
   }
   return services.map((srv) => {
+    const cleanSrv = cleanHisProcedureQuery(srv.name);
     const localMatches = searchLocalPricelist(catalog, [{ name: srv.name }]);
     if (localMatches.length > 0) {
       const best = localMatches[0];
@@ -9877,7 +9913,27 @@ function matchServicesAgainstPricelist(services, year = "2025") {
         suggestedPrice: Number(best.price) || void 0
       };
     }
-    const cleanSrv = cleanHisProcedureQuery(srv.name);
+    if (cleanSrv && cleanSrv !== srv.name) {
+      const cleanMatches = searchLocalPricelist(catalog, [{ name: cleanSrv }]);
+      if (cleanMatches.length > 0) {
+        const best = cleanMatches[0];
+        return {
+          serviceName: srv.name,
+          matchedName: best.nameEnglish || best.nameArabic,
+          code: best.code,
+          status: "matched",
+          suggestedPrice: Number(best.price) || void 0
+        };
+      }
+    }
+    if (isAccommodationOrGenericFee(srv.name) || cleanSrv && isAccommodationOrGenericFee(cleanSrv)) {
+      return {
+        serviceName: srv.name,
+        matchedName: "\u0625\u0642\u0627\u0645\u0629 \u0648\u0645\u062A\u0627\u0628\u0639\u0629 \u0637\u0628\u064A\u0629 \u0628\u0627\u0644\u0642\u0633\u0645 \u0627\u0644\u062F\u0627\u062E\u0644\u064A (Inpatient Accommodation & Care)",
+        code: "ACC-INP",
+        status: "matched"
+      };
+    }
     const normSrv = normalizeArabic(normalizeText(cleanSrv || srv.name));
     let bestMatch = null;
     let maxScore = 0;

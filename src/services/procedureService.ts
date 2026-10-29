@@ -434,6 +434,12 @@ export function searchLocalPricelist(
         const aAra = normalizeArabic(a.nameArabic);
         const bAra = normalizeArabic(b.nameArabic);
 
+        // Priority 1: Exact string match to query nameArabic or nameEnglish
+        const aIsExact = Boolean((qAra && aAra === qAra) || (qEng && aEng === qEng));
+        const bIsExact = Boolean((qAra && bAra === qAra) || (qEng && bEng === qEng));
+        if (aIsExact && !bIsExact) return -1;
+        if (!aIsExact && bIsExact) return 1;
+
         const stemToken = (t: string) => t.replace(/^(?:و|ف)?(?:ال)?/, '');
         const qTokens = (qEng + ' ' + qAra).split(/\s+/).map(stemToken).filter((t) => t.length >= 3);
         const aTokens = (aEng + ' ' + aAra).split(/\s+/).map(stemToken).filter((t) => t.length >= 3);
@@ -443,6 +449,16 @@ export function searchLocalPricelist(
         if (aCount !== bCount) {
           return bCount - aCount;
         }
+
+        // Check bilaterality: if query implies bilateral (ساقين, طرفين, طرفان, both, bilateral), prefer both over one
+        const isBilateralQ = /ساقين|طرفين|طرفان|قدمين|ركبتين|يدين|عينين|اذنين|both|bilateral/i.test(qAra + ' ' + qEng);
+        if (isBilateralQ) {
+          const aBoth = /both|bilateral|طرفين|ساقين|جانبين/i.test(aEng + ' ' + aAra);
+          const bBoth = /both|bilateral|طرفين|ساقين|جانبين/i.test(bEng + ' ' + bAra);
+          if (aBoth && !bBoth) return -1;
+          if (!aBoth && bBoth) return 1;
+        }
+
         return b.nameEnglish.length - a.nameEnglish.length;
       });
       finalResults.push(...sortedExact);

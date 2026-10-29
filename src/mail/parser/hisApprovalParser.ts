@@ -348,6 +348,18 @@ export function extractCleanReplyBody(html?: string, text?: string): string {
   return candidate;
 }
 
+/**
+ * Splits composite clinical requests (e.g. stay extension + procedure) into discrete procedure items.
+ */
+export function splitClinicalRequests(text: string): string[] {
+  if (!text) return [];
+  const parts = text
+    .split(/\s*(?:مع\s+(?:عمل|إجراء|اجراء)|بالإضافة\s+إلى\s+(?:عمل|إجراء|اجراء)?|بالاضافة\s+الي\s+(?:عمل|إجراء|اجراء)?)\s*/i)
+    .map((p) => p.trim())
+    .filter((p) => p.length > 2);
+  return parts.length > 0 ? parts : [text.trim()];
+}
+
 export function extractCreditLimit(text: string): { limit?: number; formatted?: string } {
   if (!text) return {};
   const normalized = text.normalize('NFKC').replace(/[\u200e\u200f\u202a-\u202e]/g, ' ');
@@ -873,6 +885,13 @@ export function parseHisApprovalEmail(msg: RawMailMessage): ParsedApprovalEmail 
     }
   });
 
+  if (!requestDetails) {
+    const rdMatch =
+      fullText.match(/Request Details\s*[:\s]+([^<\n\r]+?)(?=\s*(?:SELECTED SERVICES|Patient|Contractor|Visit|Physician|Diagnosis|$))/i) ||
+      decodedHtml.match(/Request Details\s*[:\s]+([^<\n\r]+?)(?=\s*(?:<br|<div|<p|<table|SELECTED|$))/i);
+    if (rdMatch) requestDetails = rdMatch[1].trim();
+  }
+
   // 3. Fallback regex extraction
   if (!patientName) {
     const pMatch =
@@ -949,15 +968,25 @@ export function parseHisApprovalEmail(msg: RawMailMessage): ParsedApprovalEmail 
   });
 
   if (requestedServices.length === 0 && requestDetails) {
+    if (!diagnosis || diagnosis === 'Clinical Inpatient Evaluation') {
+      const diagMatch = requestDetails.match(/(?:يعاني|تعاني)\s+(?:المريض|المريضة|الحالة)?\s*من\s+([^و\n\r<]+)/i);
+      if (diagMatch && diagMatch[1]) {
+        diagnosis = diagMatch[1].trim();
+      }
+    }
+
     const cleanDetails = extractCleanProcedurePhrase(requestDetails);
     const isDiagnosisCode = /^[A-Z]\d{2}(?:\.\d+)?\s*[-:]/i.test(cleanDetails);
     if (isDiagnosisCode && (!diagnosis || diagnosis === 'Clinical Inpatient Evaluation')) {
       diagnosis = cleanDetails;
     } else if (!isDiagnosisCode && cleanDetails && cleanDetails.length > 3) {
-      requestedServices.push({
-        name: cleanDetails,
-        rawPrice: 0,
-      });
+      const parts = splitClinicalRequests(cleanDetails);
+      for (const part of parts) {
+        requestedServices.push({
+          name: part,
+          rawPrice: 0,
+        });
+      }
     }
   }
 

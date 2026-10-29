@@ -13,7 +13,7 @@ import { uploadAttachmentToStorage } from './attachments/attachmentHandler';
 import { persistApprovalToPostgres, toDeterministicUuid } from '../services/approvalPostgresService';
 import { mirrorApprovalToFirestore } from '../services/approvalFirestoreSync';
 import { resolveOfficerByContractor } from '../services/contractorOfficerResolver';
-import { cleanContractorName, normalizeArabic, normalizeText, cleanHisProcedureQuery } from '../lib/arabic-normalizer';
+import { cleanContractorName, normalizeArabic, normalizeText, cleanHisProcedureQuery, isAccommodationOrGenericFee } from '../lib/arabic-normalizer';
 import { searchLocalPricelist } from '../services/procedureService';
 import { generateCmWhatsappMessage } from '../lib/whatsapp-generator';
 import { buildDraftReplyText } from '../lib/draftReplyBuilder';
@@ -181,7 +181,8 @@ export function matchServicesAgainstPricelist(
   }
 
   return services.map((srv) => {
-    // 1. Try searchLocalPricelist (exact match, cleaned HIS query, substring, clinical safety)
+    // 1. Try searchLocalPricelist with raw name and cleaned HIS procedure query
+    const cleanSrv = cleanHisProcedureQuery(srv.name);
     const localMatches = searchLocalPricelist(catalog, [{ name: srv.name }]);
     if (localMatches.length > 0) {
       const best = localMatches[0];
@@ -194,8 +195,31 @@ export function matchServicesAgainstPricelist(
       };
     }
 
-    // 2. Fallback candidate scoring with token overlap and bidirectional substring matching
-    const cleanSrv = cleanHisProcedureQuery(srv.name);
+    if (cleanSrv && cleanSrv !== srv.name) {
+      const cleanMatches = searchLocalPricelist(catalog, [{ name: cleanSrv }]);
+      if (cleanMatches.length > 0) {
+        const best = cleanMatches[0];
+        return {
+          serviceName: srv.name,
+          matchedName: best.nameEnglish || best.nameArabic,
+          code: best.code,
+          status: 'matched' as const,
+          suggestedPrice: Number(best.price) || undefined,
+        };
+      }
+    }
+
+    // 2. Check if this is an accommodation or inpatient stay extension
+    if (isAccommodationOrGenericFee(srv.name) || (cleanSrv && isAccommodationOrGenericFee(cleanSrv))) {
+      return {
+        serviceName: srv.name,
+        matchedName: 'إقامة ومتابعة طبية بالقسم الداخلي (Inpatient Accommodation & Care)',
+        code: 'ACC-INP',
+        status: 'matched' as const,
+      };
+    }
+
+    // 3. Fallback candidate scoring with token overlap and bidirectional substring matching
     const normSrv = normalizeArabic(normalizeText(cleanSrv || srv.name));
     let bestMatch: any = null;
     let maxScore = 0;
