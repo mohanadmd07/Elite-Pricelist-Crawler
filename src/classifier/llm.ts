@@ -8,6 +8,7 @@ import { GoogleGenAI } from '@google/genai';
 import { redactPhiFromText, type KnownDemographics } from '../lib/deidentifier';
 import { sha256 } from './text';
 import { inferCueDecision } from './patterns';
+import { cleanTextFromHtml } from '../mail/parser/hisApprovalParser';
 
 export type LlmPass = 'ledger' | 'verifier' | 'adjudicator' | 'ocr';
 
@@ -83,8 +84,8 @@ export function runHeuristicLlmFallback<T = any>(req: LlmRequest): T {
         ? 'PARTIAL'
         : 'PENDING';
 
-    let evidenceQuote = bestText;
-    const sentences = bestText.split(/[\r\n.،؛!]+/).map((s) => s.trim()).filter(Boolean);
+    let evidenceQuote = cleanTextFromHtml(bestText);
+    const sentences = evidenceQuote.split(/[\r\n.،؛!]+/).map((s) => s.trim()).filter(Boolean);
     const cueSentence = sentences.find((s) => inferCueDecision(s) === cue);
     if (cueSentence) {
       evidenceQuote = cueSentence;

@@ -28,6 +28,33 @@ interface ViewDraftModalProps {
   onClose: () => void;
 }
 
+function cleanDisplayText(text?: string | null): string {
+  if (!text) return '';
+  let str = text;
+  for (let i = 0; i < 2; i++) {
+    str = str
+      .replace(/&#x0*d;/gi, ' ')
+      .replace(/&#0*13;/gi, ' ')
+      .replace(/&#x0*a;/gi, ' ')
+      .replace(/&#0*10;/gi, ' ')
+      .replace(/&lt;/gi, '<')
+      .replace(/&gt;/gi, '>')
+      .replace(/&quot;/gi, '"')
+      .replace(/&apos;/gi, "'")
+      .replace(/&#0*39;/gi, "'")
+      .replace(/&nbsp;/gi, ' ')
+      .replace(/&amp;/gi, '&');
+  }
+  return str
+    .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
+    .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
+    .replace(/<head[^>]*>[\s\S]*?<\/head>/gi, '')
+    .replace(/<meta[^>]*>/gi, '')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 export const ViewDraftModal: React.FC<ViewDraftModalProps> = ({
   approval,
   isOpen,
@@ -328,8 +355,8 @@ export const ViewDraftModal: React.FC<ViewDraftModalProps> = ({
                   {approval.aiThreadSummary || 'طلب وارد من السيستم بانتظار استلام الرد أو استكمال الإجراءات.'}
                 </p>
                 {approval.statusReasonArabic && (
-                  <p className="text-xs text-slate-600 mt-2 pt-2 border-t border-teal-200/50" dir="auto">
-                    <strong>سبب الحالة:</strong> {approval.statusReasonArabic}
+                  <p className="text-xs text-slate-600 mt-2 pt-2 border-t border-teal-200/50 break-words" dir="auto">
+                    <strong>سبب الحالة:</strong> {cleanDisplayText(approval.statusReasonArabic)}
                   </p>
                 )}
               </div>
@@ -340,7 +367,7 @@ export const ViewDraftModal: React.FC<ViewDraftModalProps> = ({
                   <AlertCircle size={16} className="text-amber-700 shrink-0 mt-0.5" />
                   <div>
                     <h5 className="font-bold text-amber-900">شروط ومتطلبات جهة التعاقد:</h5>
-                    <p className="mt-0.5 font-medium leading-relaxed" dir="auto">{approval.coverageConditions}</p>
+                    <p className="mt-0.5 font-medium leading-relaxed break-words" dir="auto">{cleanDisplayText(approval.coverageConditions)}</p>
                   </div>
                 </div>
               )}
@@ -416,8 +443,8 @@ export const ViewDraftModal: React.FC<ViewDraftModalProps> = ({
                           </p>
                         )}
                         {item.evidence_quote && (
-                          <p className="text-[11px] text-slate-500 italic" dir="auto">
-                            "{item.evidence_quote}"
+                          <p className="text-[11px] text-slate-500 italic break-words" dir="auto">
+                            "{cleanDisplayText(item.evidence_quote)}"
                           </p>
                         )}
                       </div>

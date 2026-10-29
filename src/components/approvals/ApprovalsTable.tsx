@@ -32,6 +32,33 @@ import { stripSentFromSignatures } from '../../lib/arabic-normalizer';
 import { ViewDraftModal } from './ViewDraftModal';
 import { resolveApprovalContractorAndOfficer } from './ApprovalsHub';
 
+function cleanDisplayText(text?: string | null): string {
+  if (!text) return '';
+  let str = text;
+  for (let i = 0; i < 2; i++) {
+    str = str
+      .replace(/&#x0*d;/gi, ' ')
+      .replace(/&#0*13;/gi, ' ')
+      .replace(/&#x0*a;/gi, ' ')
+      .replace(/&#0*10;/gi, ' ')
+      .replace(/&lt;/gi, '<')
+      .replace(/&gt;/gi, '>')
+      .replace(/&quot;/gi, '"')
+      .replace(/&apos;/gi, "'")
+      .replace(/&#0*39;/gi, "'")
+      .replace(/&nbsp;/gi, ' ')
+      .replace(/&amp;/gi, '&');
+  }
+  return str
+    .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
+    .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
+    .replace(/<head[^>]*>[\s\S]*?<\/head>/gi, '')
+    .replace(/<meta[^>]*>/gi, '')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
 interface ApprovalsTableProps {
   approvals: InpatientApprovalRecord[];
   loading: boolean;
@@ -591,9 +618,9 @@ export const ApprovalsTable: React.FC<ApprovalsTableProps> = ({
                               {record.coverageConditions && (
                                 <span
                                   className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-950 border border-amber-200 truncate max-w-[150px]"
-                                  title={record.coverageConditions}
+                                  title={cleanDisplayText(record.coverageConditions)}
                                 >
-                                  {record.coverageConditions}
+                                  {cleanDisplayText(record.coverageConditions)}
                                 </span>
                               )}
                             </div>

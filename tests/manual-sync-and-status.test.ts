@@ -162,4 +162,27 @@ describe('Status Strings and Unresolved States Specification', () => {
       expect(parsed.isRefused).toBe(false);
     });
   });
+
+  describe('5. HTML Entity Sanitization & Medical Tourism Role Inference', () => {
+    it('should decode HTML entities and strip raw tags from approval text', async () => {
+      const { cleanTextFromHtml, decodeHtmlEntities } = await import('../src/mail/parser/hisApprovalParser');
+      const raw = '&lt;html&gt;&#xD; &lt;body&gt;&#xD; &lt;div dir="auto"&gt;&#xD; Approved&amp;nbsp;&lt;/div&gt;&#xD; &lt;/body&gt;&#xD; &lt;/html&gt;';
+
+      const decoded = decodeHtmlEntities(raw);
+      expect(decoded).not.toContain('&lt;');
+      expect(decoded).not.toContain('&#xD;');
+
+      const cleaned = cleanTextFromHtml(raw);
+      expect(cleaned).toBe('Approved');
+    });
+
+    it('should infer INSURER_ADMIN role for Medical Tourism department approvals', async () => {
+      const { inferRole } = await import('../src/classifier/text');
+      const sender = 'MedicalTourism@elitehospital.org';
+      const text = 'Approved Kind regards, Zina Ibrahim Medical Tourism Department';
+
+      const role = inferRole(sender, text);
+      expect(role).toBe('INSURER_ADMIN');
+    });
+  });
 });

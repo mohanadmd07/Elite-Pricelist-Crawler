@@ -3264,13 +3264,18 @@ var APPROVAL_KEYWORDS = [
   "approval confirmed",
   "kind regards"
 ];
-function decodeHtmlEntities(str2) {
-  if (!str2) return "";
-  return str2.replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&#x2F;/g, "/");
+function decodeHtmlEntities(input) {
+  if (!input) return "";
+  let str2 = input;
+  for (let i = 0; i < 2; i++) {
+    str2 = str2.replace(/&#x0*d;/gi, "\r").replace(/&#0*13;/g, "\r").replace(/&#x0*a;/gi, "\n").replace(/&#0*10;/g, "\n").replace(/&lt;/gi, "<").replace(/&gt;/gi, ">").replace(/&quot;/gi, '"').replace(/&apos;/gi, "'").replace(/&#0*39;/g, "'").replace(/&#x2F;/gi, "/").replace(/&nbsp;/gi, " ").replace(/&amp;/gi, "&");
+  }
+  return str2.replace(/&nbsp;/gi, " ");
 }
 function cleanTextFromHtml(input) {
   if (!input) return "";
-  return input.replace(/<style[^>]*>[\s\S]*?<\/style>/gi, "").replace(/<script[^>]*>[\s\S]*?<\/script>/gi, "").replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim();
+  const decoded = decodeHtmlEntities(input);
+  return decoded.replace(/<style[^>]*>[\s\S]*?<\/style>/gi, "").replace(/<script[^>]*>[\s\S]*?<\/script>/gi, "").replace(/<head[^>]*>[\s\S]*?<\/head>/gi, "").replace(/<meta[^>]*>/gi, "").replace(/<[^>]+>/g, " ").replace(/[\r\n]+/g, " ").replace(/\s+/g, " ").trim();
 }
 function extractCleanReplyBody(html, text) {
   if (html) {
@@ -7464,6 +7469,9 @@ function hasMedicalReviewLanguage(text) {
 function inferRole(sender, text, ctx = {}) {
   if (ctx.isAuto) return "AUTO_REPLY";
   const s = (sender || "").toLowerCase();
+  if (/medicaltourism@|medical[\._-]?tourism/i.test(s) || /medical\s*tourism\s*department/i.test(text)) {
+    return "INSURER_ADMIN";
+  }
   const hospitalDomains = ctx.hospitalDomains ?? ["elitehospital.org"];
   const isHospital = hospitalDomains.some((d) => s.includes(d.toLowerCase()));
   if (isHospital) {
@@ -7476,7 +7484,8 @@ function inferRole(sender, text, ctx = {}) {
 }
 function reconstructThread(messages, opts = {}) {
   return [...messages].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()).map((m) => {
-    const plain = /<[a-z][\s\S]*>/i.test(m.body || "") ? cleanTextFromHtml(m.body) : m.body || "";
+    const hasHtml = /<[a-z][\s\S]*>|&lt;[a-z]|&#x0*d;|&#0*13;/i.test(m.body || "");
+    const plain = hasHtml ? cleanTextFromHtml(m.body) : m.body || "";
     const auto = isAutoReply(m.subject || "", plain, m.sender);
     const split = splitNewVsQuoted(plain);
     const newContent = split.inline || split.newContent;
@@ -8182,8 +8191,8 @@ function runHeuristicLlmFallback(req) {
     const cue = inferCueDecision(bestText || req.prompt);
     const dec = cue === "APPROVED" ? "APPROVED" : cue === "REJECTED" ? "REJECTED" : cue === "CONDITIONAL" ? "CONDITIONAL" : "PENDING";
     const status = dec === "APPROVED" ? "APPROVED" : dec === "REJECTED" ? "REJECTED" : dec === "CONDITIONAL" ? "PARTIAL" : "PENDING";
-    let evidenceQuote = bestText;
-    const sentences = bestText.split(/[\r\n.،؛!]+/).map((s) => s.trim()).filter(Boolean);
+    let evidenceQuote = cleanTextFromHtml(bestText);
+    const sentences = evidenceQuote.split(/[\r\n.،؛!]+/).map((s) => s.trim()).filter(Boolean);
     const cueSentence = sentences.find((s) => inferCueDecision(s) === cue);
     if (cueSentence) {
       evidenceQuote = cueSentence;

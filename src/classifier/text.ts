@@ -106,6 +106,10 @@ export function inferRole(
 ): SpeakerRole {
   if (ctx.isAuto) return 'AUTO_REPLY';
   const s = (sender || '').toLowerCase();
+  // Medical Tourism coordinators act as payer/guarantor authorizing agents for international patients
+  if (/medicaltourism@|medical[\._-]?tourism/i.test(s) || /medical\s*tourism\s*department/i.test(text)) {
+    return 'INSURER_ADMIN';
+  }
   const hospitalDomains = ctx.hospitalDomains ?? ['elitehospital.org'];
   const isHospital = hospitalDomains.some((d) => s.includes(d.toLowerCase()));
   if (isHospital) {
@@ -126,7 +130,8 @@ export function reconstructThread(
   return [...messages]
     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
     .map((m) => {
-      const plain = /<[a-z][\s\S]*>/i.test(m.body || '') ? cleanTextFromHtml(m.body) : m.body || '';
+      const hasHtml = /<[a-z][\s\S]*>|&lt;[a-z]|&#x0*d;|&#0*13;/i.test(m.body || '');
+      const plain = hasHtml ? cleanTextFromHtml(m.body) : m.body || '';
       const auto = isAutoReply(m.subject || '', plain, m.sender);
       const split = splitNewVsQuoted(plain);
       const newContent = split.inline || split.newContent;

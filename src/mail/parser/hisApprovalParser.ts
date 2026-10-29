@@ -162,25 +162,38 @@ export const APPROVAL_KEYWORDS = [
   'kind regards',
 ];
 
-export function decodeHtmlEntities(str: string): string {
-  if (!str) return '';
-  return str
-    .replace(/&nbsp;/g, ' ')
-    .replace(/&amp;/g, '&')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
-    .replace(/&#x2F;/g, '/');
+export function decodeHtmlEntities(input: string): string {
+  if (!input) return '';
+  let str = input;
+  // Multiple decode passes to handle double-encoded entities (e.g. &amp;nbsp;)
+  for (let i = 0; i < 2; i++) {
+    str = str
+      .replace(/&#x0*d;/gi, '\r')
+      .replace(/&#0*13;/g, '\r')
+      .replace(/&#x0*a;/gi, '\n')
+      .replace(/&#0*10;/g, '\n')
+      .replace(/&lt;/gi, '<')
+      .replace(/&gt;/gi, '>')
+      .replace(/&quot;/gi, '"')
+      .replace(/&apos;/gi, "'")
+      .replace(/&#0*39;/g, "'")
+      .replace(/&#x2F;/gi, '/')
+      .replace(/&nbsp;/gi, ' ')
+      .replace(/&amp;/gi, '&');
+  }
+  return str.replace(/&nbsp;/gi, ' ');
 }
 
 export function cleanTextFromHtml(input: string): string {
   if (!input) return '';
-  return input
+  const decoded = decodeHtmlEntities(input);
+  return decoded
     .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
     .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '')
+    .replace(/<head[^>]*>[\s\S]*?<\/head>/gi, '')
+    .replace(/<meta[^>]*>/gi, '')
     .replace(/<[^>]+>/g, ' ')
-    .replace(/&nbsp;/g, ' ')
+    .replace(/[\r\n]+/g, ' ')
     .replace(/\s+/g, ' ')
     .trim();
 }
