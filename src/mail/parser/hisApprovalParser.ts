@@ -10,6 +10,48 @@ import { extractCleanProcedurePhrase } from '../../lib/whatsapp-generator';
 import { ParsedApprovalEmail, RawMailMessage } from '../types';
 
 export const REFUSAL_KEYWORDS = [
+  'الحالة كاش',
+  'الحاله كاش',
+  'المريض كاش',
+  'المريضة كاش',
+  'المريضه كاش',
+  'تم الرفض على السيستم',
+  'تم الرفض على السستم',
+  'تم الرفض علي السيستم',
+  'تم الرفض علي السستم',
+  'مرفوض على السيستم',
+  'مرفوض علي السيستم',
+  'مرفوض على السستم',
+  'مرفوض علي السستم',
+  'تم الرفض من جهة التعاقد',
+  'تم الرفض',
+  'تم رفض',
+  'رفض الطلب',
+  'رفض طلب',
+  'طلب مرفوض',
+  'مرفوض',
+  'مرفوضة',
+  'مرفوضه',
+  'المتابعة الحسابية',
+  'المتابعه الحسابيه',
+  'برجاء المتابعة الحسابية',
+  'برجاء المتابعه الحسابيه',
+  'يتم التحصيل كاش لحين احضار موافقه',
+  'يتم التحصيل كاش لحين احضار موافقة',
+  'تحصيل كاش لحين احضار موافقه',
+  'تحصيل كاش لحين احضار موافقة',
+  'يتم التحصيل كاش',
+  'التحصيل كاش',
+  'تحصيل كاش',
+  'غير مغطى برجاء ارسال الاهل للتغطيه',
+  'غير مغطى برجاء ارسال الاهل للتغطية',
+  'غير مغطى برجاء إرسال الأهل للتغطية',
+  'غير مغطي برجاء ارسال الاهل للتغطيه',
+  'غير مغطي برجاء ارسال الاهل للتغطية',
+  'غير مغطي برجاء إرسال الأهل للتغطية',
+  'غير مغطى برجاء ارسال الاهل',
+  'غير مغطي برجاء ارسال الاهل',
+  'غير مغطى برجاء إرسال الأهل',
   'غير مغطى',
   'غير مغطاه',
   'غير مغطاة',
@@ -61,11 +103,14 @@ export const REFUSAL_KEYWORDS = [
   'فى معمل خارجي',
   'تنسيق عمل التحليل طرف التعاقد والمريض في معمل خارجي',
   'طرف التعاقد والمريض في معمل خارجي',
-  'مرفوض',
   'رفض',
   'غير معتمد',
   'not approved',
   'rejected',
+  'declined',
+  'refused',
+  'not covered',
+  'denied',
   'نعتذر عن الموافقة',
   'نعتذر عن الموافقه',
   'خارج التغطية',
@@ -204,7 +249,8 @@ export function cleanTextFromHtml(input: string): string {
  */
 export function extractCleanReplyBody(html?: string, text?: string): string {
   if (html) {
-    let cleaned = html
+    const decoded = decodeHtmlEntities(html);
+    let cleaned = decoded
       .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')
       .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
 
@@ -431,12 +477,16 @@ export function detectRefusal(
   // If cleanReply exists, prioritize checking it directly
   if (cleanReply && cleanReply.trim().length > 0) {
     const normReply = cleanReply.normalize('NFKC').toLowerCase().replace(/[إأآ]/g, 'ا').replace(/ة/g, 'ه');
+    const normSubj = (subject || '').normalize('NFKC').toLowerCase().replace(/[إأآ]/g, 'ا').replace(/ة/g, 'ه');
+    const replyTarget = `${normSubj} ${normReply}`;
+
     for (const kw of REFUSAL_KEYWORDS) {
       const kwNorm = kw.normalize('NFKC').toLowerCase().replace(/[إأآ]/g, 'ا').replace(/ة/g, 'ه');
-      if (normReply.includes(kwNorm)) {
+      if (replyTarget.includes(kwNorm)) {
         return { hasRefusal: true, snippet: cleanReply.trim(), reason: extractRefusalReason(cleanReply) };
       }
     }
+    return { hasRefusal: false, snippet: '' };
   }
 
   const normText = (text || '').normalize('NFKC');
@@ -572,6 +622,9 @@ export function detectExistingApproval(
         };
       }
     }
+
+    // Clean reply exists and has no approval -> do not bleed into older quoted thread history
+    return { hasApproval: false, snippet: '' };
   }
 
   // 2. Fallback to full text scanning

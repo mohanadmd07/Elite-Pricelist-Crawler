@@ -667,6 +667,15 @@ export function extractRefusalReason(snippet?: string): string {
     .replace(/[إأآ]/g, 'ا')
     .replace(/ة/g, 'ه');
 
+  if (norm.includes('تم الرفض علي السيستم') || norm.includes('الرفض علي السيستم') || norm.includes('الرفض على السيستم') || norm.includes('علي السيستم')) {
+    return 'تم الرفض على السيستم';
+  }
+  if (norm.includes('تم الرفض') || norm.includes('رفض الطلب') || norm.includes('طلب مرفوض') || norm.includes('مرفوض')) {
+    return 'مرفوض من جهة التعاقد';
+  }
+  if (norm.includes('المتابعه الحسابيه') || norm.includes('المتابعة الحسابية')) {
+    return 'الحالة كاش - متابعة حسابية';
+  }
   if (norm.includes('معمل خارجي') || norm.includes('طرف التعاقد والمريض في معمل خارجي')) {
     return 'تنسيق التحليل بمعمل خارجي';
   }
@@ -687,7 +696,14 @@ export function extractRefusalReason(snippet?: string): string {
   if (norm.includes('رسيبشن') || norm.includes('ريسبشن')) {
     return 'توجيه الأهل للريسبشن للتغطية';
   }
-  if (norm.includes('كاش طرف الاهل') || norm.includes('كاش طرف الأهل') || norm.includes('كاش')) {
+  if (
+    norm.includes('الحاله كاش') ||
+    norm.includes('الحالة كاش') ||
+    norm.includes('المريض كاش') ||
+    norm.includes('كاش طرف الاهل') ||
+    norm.includes('كاش طرف الأهل') ||
+    norm.includes('كاش')
+  ) {
     return 'كاش طرف الأهل';
   }
   if (norm.includes('تامينيا') || norm.includes('تامنيا')) {
