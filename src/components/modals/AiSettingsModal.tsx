@@ -51,39 +51,66 @@ export const AiSettingsModal: React.FC<AiSettingsModalProps> = ({
     setTesting(true);
     setTestResult(null);
 
-    try {
-      const ai = new GoogleGenAI({ apiKey: trimmed });
-      const res = await ai.models.generateContent({
-        model: 'gemini-2.5-flash',
-        contents: 'ping',
-      });
+    const testModels = ['gemini-2.0-flash', 'gemini-2.5-flash', 'gemini-1.5-flash'];
+    let lastError: any = null;
+    let had429 = false;
 
-      if (res && res.text) {
-        setTestResult({
-          success: true,
-          message: 'Key verified successfully! Access to Gemini Flash model confirmed.',
-        });
-        setGeminiApiKey(trimmed);
-        onKeyUpdated?.();
-      } else {
-        throw new Error('No response returned from model.');
+    for (const model of testModels) {
+      try {
+        const ai = new GoogleGenAI({ apiKey: trimmed });
+        const res = await Promise.race([
+          ai.models.generateContent({
+            model,
+            contents: 'ping',
+          }),
+          new Promise<never>((_, reject) =>
+            setTimeout(() => reject(new Error('Timeout querying model')), 5000)
+          ),
+        ]);
+
+        if (res && res.text) {
+          setTestResult({
+            success: true,
+            message: `Key verified successfully! Access to ${model} confirmed.`,
+          });
+          setGeminiApiKey(trimmed);
+          onKeyUpdated?.();
+          setTesting(false);
+          return;
+        }
+      } catch (err: any) {
+        lastError = err;
+        const msg = (err?.message || String(err)).toLowerCase();
+        if (msg.includes('429') || msg.includes('resource_exhausted') || msg.includes('quota')) {
+          had429 = true;
+        } else if (msg.includes('403') || msg.includes('api key not valid') || msg.includes('permission_denied')) {
+          // Invalid key - stop trying other models
+          setTestResult({
+            success: false,
+            message: 'Invalid API key or permission denied (403). Please verify in Google AI Studio.',
+          });
+          setTesting(false);
+          return;
+        }
       }
-    } catch (err: any) {
-      console.error('Key verification error:', err);
-      const msg = err?.message || String(err);
-      let friendly = msg;
-      if (msg.includes('403') || msg.includes('API key not valid')) {
-        friendly = 'Invalid API key or permission denied (403). Please verify in Google AI Studio.';
-      } else if (msg.includes('429')) {
-        friendly = 'Rate limit reached (429). The key is valid but quota is exhausted.';
-      }
+    }
+
+    if (had429) {
+      // 429 proves the key was accepted and authenticated by Google, but RPM/RPD quota is exhausted
+      setGeminiApiKey(trimmed);
+      onKeyUpdated?.();
+      setTestResult({
+        success: true,
+        message:
+          'Key verified successfully! (Note: Current Google quota is temporarily exhausted [429]; the platform will use automatic model switching & local fallback until your quota resets).',
+      });
+    } else {
       setTestResult({
         success: false,
-        message: friendly,
+        message: lastError?.message || 'Verification failed. Please check your internet connection.',
       });
-    } finally {
-      setTesting(false);
     }
+    setTesting(false);
   };
 
   if (!isOpen) return null;

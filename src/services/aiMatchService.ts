@@ -4,6 +4,12 @@ import { cleanContractorName, normalizeArabic, normalizeText, expandMedicalSynon
 import { generateCmWhatsappMessage } from '../lib/whatsapp-generator';
 import { redactPhiFromText, assertZeroDemographics, KnownDemographics } from '../lib/deidentifier';
 import { parseDoctorNarrative, translateDoctorIndication, ParsedDoctorNarrative } from '../lib/doctorNarrativeParser';
+import {
+  isQuotaPaused,
+  markQuotaPaused,
+  RECOMMENDED_GEMINI_MODELS,
+  executeWithRateLimitRetry,
+} from '../lib/geminiRateLimiter';
 
 export const GEMINI_STORAGE_KEY = 'elite_gemini_api_key';
 
@@ -390,7 +396,7 @@ ${matchedLines || 'لا توجد إجراءات مطابقة مباشرة بال
  */
 export async function analyzeThreadWithUnifiedAI(input: UnifiedThreadInput): Promise<UnifiedThreadOutput> {
   const key = getGeminiApiKey();
-  if (!key) {
+  if (!key || isQuotaPaused()) {
     return analyzeThreadWithHeuristics(input);
   }
 
@@ -597,23 +603,26 @@ YOUR TASKS:
     throw new Error(`De-identification check failed: ${demoCheck.violations.join('; ')}`);
   }
 
-  const candidateModels = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash'];
+  const candidateModels = RECOMMENDED_GEMINI_MODELS;
   for (const model of candidateModels) {
     try {
-      const response = await Promise.race([
-        ai.models.generateContent({
-          model,
-          contents: [{ parts: [{ text: promptText }] }],
-          config: {
-            temperature: 0,
-            responseMimeType: 'application/json',
-            responseSchema,
-          },
-        }),
-        new Promise<never>((_, reject) =>
-          setTimeout(() => reject(new Error(`Timeout querying Gemini model ${model}`)), 12000)
-        ),
-      ]);
+      const response = await executeWithRateLimitRetry(
+        () => Promise.race([
+          ai.models.generateContent({
+            model,
+            contents: [{ parts: [{ text: promptText }] }],
+            config: {
+              temperature: 0,
+              responseMimeType: 'application/json',
+              responseSchema,
+            },
+          }),
+          new Promise<never>((_, reject) =>
+            setTimeout(() => reject(new Error(`Timeout querying Gemini model ${model}`)), 12000)
+          ),
+        ]),
+        { maxRetries: 1, initialDelayMs: 400 }
+      );
 
       const parsed = JSON.parse(response.text || '{}');
       if (!parsed.status) {
@@ -666,8 +675,12 @@ YOUR TASKS:
         cmWhatsappMessage: parsed.cmWhatsappMessage || '',
       };
     } catch (err: any) {
+      const msg = (err?.message || String(err)).toLowerCase();
       console.warn(`[Unified AI Agent] Model ${model} failed:`, err?.message || err);
-      if (err?.message?.includes('403') || err?.message?.includes('PERMISSION_DENIED')) {
+      if (msg.includes('429') || msg.includes('resource_exhausted')) {
+        markQuotaPaused(45000);
+      }
+      if (msg.includes('403') || msg.includes('permission_denied') || msg.includes('api key not valid')) {
         break; // API key is rejected; fallback to heuristics
       }
     }
@@ -731,6 +744,37 @@ export async function matchProceduresWithAI(
 ): Promise<ProcedureResult[]> {
   const key = getGeminiApiKey();
 
+  // Local candidate heuristic fallback helper
+  const runLocalCandidateMatching = (): ProcedureResult[] => {
+    const matches: ProcedureResult[] = [];
+    for (const proc of unmatchedProcedures) {
+      const qNorm = normalizeArabic(normalizeText(proc.name));
+      const qWords = qNorm.split(/\s+/).filter((w) => w.length > 2);
+      let bestCand: ProcedureResult | null = null;
+      let maxOverlap = 0;
+
+      for (const cand of candidates) {
+        const cNorm = normalizeArabic(normalizeText(`${cand.nameEnglish} ${cand.nameArabic || ''}`));
+        let overlap = 0;
+        for (const w of qWords) {
+          if (cNorm.includes(w)) overlap++;
+        }
+        if (overlap > maxOverlap) {
+          maxOverlap = overlap;
+          bestCand = cand;
+        }
+      }
+
+      if (bestCand && maxOverlap > 0) {
+        matches.push({
+          ...bestCand,
+          requestedProcedureName: proc.name,
+        });
+      }
+    }
+    return matches;
+  };
+
   if (!key) {
     throw new Error(
       "Gemini API key is not configured. Please click 'AI Settings' in the top header to enter your API key, or set GEMINI_API_KEY in .env.local."
@@ -745,6 +789,11 @@ export async function matchProceduresWithAI(
     throw new Error(
       "No candidate pricelist items could be identified for AI semantic matching. Try broadening your search query."
     );
+  }
+
+  if (isQuotaPaused()) {
+    console.warn('[Gemini AI] Quota currently paused due to rate limits (429), using local candidate fallback.');
+    return runLocalCandidateMatching();
   }
 
   const ai = new GoogleGenAI({ apiKey: key });
@@ -813,30 +862,33 @@ STRICT CLINICAL EXTRACTION RULES:
     throw new Error(`De-identification check failed: ${demoCheck.violations.join('; ')}`);
   }
 
-  const candidateModels = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash'];
+  const candidateModels = RECOMMENDED_GEMINI_MODELS;
   let lastError: any = null;
 
   for (const model of candidateModels) {
     try {
       // 8-second timeout per model attempt to prevent UI hangs
-      const response = await Promise.race([
-        ai.models.generateContent({
-          model,
-          contents: [
-            {
-              parts: [{ text: promptText }],
+      const response = await executeWithRateLimitRetry(
+        () => Promise.race([
+          ai.models.generateContent({
+            model,
+            contents: [
+              {
+                parts: [{ text: promptText }],
+              },
+            ],
+            config: {
+              temperature: 0, // Deterministic greedy search for maximum speed
+              responseMimeType: 'application/json',
+              responseSchema,
             },
-          ],
-          config: {
-            temperature: 0, // Deterministic greedy search for maximum speed
-            responseMimeType: 'application/json',
-            responseSchema,
-          },
-        }),
-        new Promise<never>((_, reject) =>
-          setTimeout(() => reject(new Error(`Timeout querying Gemini model ${model}`)), 8000)
-        ),
-      ]);
+          }),
+          new Promise<never>((_, reject) =>
+            setTimeout(() => reject(new Error(`Timeout querying Gemini model ${model}`)), 8000)
+          ),
+        ]),
+        { maxRetries: 1, initialDelayMs: 300 }
+      );
 
       const parsed = JSON.parse(response.text || '[]') as Array<{
         candidateId: number;
@@ -868,26 +920,33 @@ STRICT CLINICAL EXTRACTION RULES:
       return matches;
     } catch (err: any) {
       lastError = err;
-      const msg = err?.message || String(err);
+      const msg = (err?.message || String(err)).toLowerCase();
       console.warn(`Gemini model ${model} failed, trying fallback:`, msg);
 
       // If it's a 403 (Permission denied / Invalid API key), don't retry models as the key is rejected
       if (
         msg.includes('403') ||
-        msg.includes('API key not valid') ||
-        msg.includes('PERMISSION_DENIED')
+        msg.includes('api key not valid') ||
+        msg.includes('permission_denied')
       ) {
         throw new Error(
           'Gemini API Key rejected (403 Permission Denied). Please verify that your API key is active and has access to Gemini in Google AI Studio.'
         );
       }
-      // If it's a 429 quota exhausted, inform user
-      if (msg.includes('429') || msg.includes('RESOURCE_EXHAUSTED')) {
-        throw new Error(
-          'Gemini API rate limit or quota exceeded (429). Please wait a few moments and try again.'
-        );
+      // If it's a 429 quota exhausted, pause quota and allow next model attempt
+      if (msg.includes('429') || msg.includes('resource_exhausted')) {
+        markQuotaPaused(45000);
       }
     }
+  }
+
+  // If all models failed due to 429 rate limit or quota pause, fall back safely to local candidate matching
+  const is429 = (lastError?.message || '').toLowerCase().includes('429') ||
+                (lastError?.message || '').toLowerCase().includes('resource_exhausted') ||
+                isQuotaPaused();
+  if (is429) {
+    console.warn('[Gemini AI] Quota exhausted across models; returning local candidate matching.');
+    return runLocalCandidateMatching();
   }
 
   throw lastError || new Error('Failed to query Gemini AI model.');
@@ -898,9 +957,21 @@ STRICT CLINICAL EXTRACTION RULES:
  * Strips clinical history, tumor details, symptoms, patient backstory, and doctor names.
  */
 export async function extractProceduresFromTextWithAI(clinicalText: string): Promise<string[]> {
+  const localFallback = (): string[] => {
+    if (!clinicalText || !clinicalText.trim()) return [];
+    const parsed = parseDoctorNarrative(clinicalText);
+    if (parsed.cleanServices && parsed.cleanServices.length > 0) {
+      return parsed.cleanServices.map((s) => s.name);
+    }
+    if (parsed.primaryProcedure) {
+      return [parsed.primaryProcedure];
+    }
+    return [clinicalText.trim()];
+  };
+
   const key = getGeminiApiKey();
-  if (!key || !clinicalText || clinicalText.trim().length === 0) {
-    return [];
+  if (!key || !clinicalText || clinicalText.trim().length === 0 || isQuotaPaused()) {
+    return localFallback();
   }
 
   const ai = new GoogleGenAI({ apiKey: key });
@@ -932,33 +1003,40 @@ CRITICAL EXTRACTION RULES:
     throw new Error(`De-identification check failed: ${demoCheck.violations.join('; ')}`);
   }
 
-  const candidateModels = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash'];
+  const candidateModels = RECOMMENDED_GEMINI_MODELS;
   for (const model of candidateModels) {
     try {
-      const response = await Promise.race([
-        ai.models.generateContent({
-          model,
-          contents: [{ parts: [{ text: promptText }] }],
-          config: {
-            temperature: 0,
-            responseMimeType: 'application/json',
-          },
-        }),
-        new Promise<never>((_, reject) =>
-          setTimeout(() => reject(new Error('Timeout querying Gemini')), 6000)
-        ),
-      ]);
+      const response = await executeWithRateLimitRetry(
+        () => Promise.race([
+          ai.models.generateContent({
+            model,
+            contents: [{ parts: [{ text: promptText }] }],
+            config: {
+              temperature: 0,
+              responseMimeType: 'application/json',
+            },
+          }),
+          new Promise<never>((_, reject) =>
+            setTimeout(() => reject(new Error('Timeout querying Gemini')), 6000)
+          ),
+        ]),
+        { maxRetries: 1, initialDelayMs: 250 }
+      );
 
       const parsed = JSON.parse(response.text || '[]');
       if (Array.isArray(parsed) && parsed.length > 0) {
         return parsed.map((item) => String(item).trim()).filter(Boolean);
       }
-    } catch (err) {
+    } catch (err: any) {
+      const msg = (err?.message || String(err)).toLowerCase();
+      if (msg.includes('429') || msg.includes('resource_exhausted')) {
+        markQuotaPaused(45000);
+      }
       console.warn(`[AI Procedure Extract] Model ${model} failed:`, err);
     }
   }
 
-  return [];
+  return localFallback();
 }
 
 /**
@@ -969,7 +1047,7 @@ CRITICAL EXTRACTION RULES:
 export async function analyzeDoctorNarrativeWithAI(clinicalText: string): Promise<ParsedDoctorNarrative> {
   const local = parseDoctorNarrative(clinicalText);
   const key = getGeminiApiKey();
-  if (!key || !clinicalText || clinicalText.trim().length === 0) {
+  if (!key || !clinicalText || clinicalText.trim().length === 0 || isQuotaPaused()) {
     return local;
   }
 
@@ -1008,23 +1086,26 @@ Return JSON only.`;
     required: ['primaryProcedure', 'secondaryProcedures', 'clinicalIndicationAr', 'urgency', 'category'],
   };
 
-  const candidateModels = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash'];
+  const candidateModels = RECOMMENDED_GEMINI_MODELS;
   for (const model of candidateModels) {
     try {
-      const response = await Promise.race([
-        ai.models.generateContent({
-          model,
-          contents: [{ parts: [{ text: promptText }] }],
-          config: {
-            temperature: 0,
-            responseMimeType: 'application/json',
-            responseSchema,
-          },
-        }),
-        new Promise<never>((_, reject) =>
-          setTimeout(() => reject(new Error('Timeout querying Gemini')), 6000)
-        ),
-      ]);
+      const response = await executeWithRateLimitRetry(
+        () => Promise.race([
+          ai.models.generateContent({
+            model,
+            contents: [{ parts: [{ text: promptText }] }],
+            config: {
+              temperature: 0,
+              responseMimeType: 'application/json',
+              responseSchema,
+            },
+          }),
+          new Promise<never>((_, reject) =>
+            setTimeout(() => reject(new Error('Timeout querying Gemini')), 6000)
+          ),
+        ]),
+        { maxRetries: 1, initialDelayMs: 250 }
+      );
 
       const parsed = JSON.parse(response.text || '{}');
       if (parsed.primaryProcedure) {
@@ -1046,7 +1127,11 @@ Return JSON only.`;
           cleanServices,
         };
       }
-    } catch (err) {
+    } catch (err: any) {
+      const msg = (err?.message || String(err)).toLowerCase();
+      if (msg.includes('429') || msg.includes('resource_exhausted')) {
+        markQuotaPaused(45000);
+      }
       console.warn(`[AI Narrative Analysis] Model ${model} failed, using local fallback:`, err);
     }
   }
