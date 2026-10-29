@@ -168,7 +168,22 @@ export class DefaultContractResolver implements ContractResolver {
     const mapped = await this.fromMap(insurerKey, at);
     if (mapped) return mapped;
     if (!this.fallback) this.fallback = new StaticContractResolver(await this.loadContractors(), 'contractors.json');
-    return this.fallback.resolve(insurerKey);
+    const staticRes = await this.fallback.resolve(insurerKey);
+    if (staticRes) return staticRes;
+
+    // Fallback: Resolve via alias/officer resolver to canonical company name
+    try {
+      const { resolveOfficerByContractor } = await import('../services/contractorOfficerResolver');
+      const officerRes = resolveOfficerByContractor(insurerKey);
+      if (officerRes.matched && officerRes.contractorNormalized && officerRes.contractorNormalized !== insurerKey) {
+        const canonicalMapped = await this.fromMap(officerRes.contractorNormalized, at);
+        if (canonicalMapped) return canonicalMapped;
+        const canonicalStatic = await this.fallback.resolve(officerRes.contractorNormalized);
+        if (canonicalStatic) return canonicalStatic;
+      }
+    } catch {}
+
+    return null;
   }
 
   private async fromMap(insurerKey: string, at: Date): Promise<ContractInfo | null> {

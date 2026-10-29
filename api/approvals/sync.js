@@ -1549,6 +1549,346 @@ var init_supabase = __esm({
   }
 });
 
+// src/services/contractorOfficerResolver.ts
+var contractorOfficerResolver_exports = {};
+__export(contractorOfficerResolver_exports, {
+  getContractorTokens: () => getContractorTokens,
+  invalidateContractorResolverCache: () => invalidateContractorResolverCache,
+  loadContractorOfficersFromExcel: () => loadContractorOfficersFromExcel,
+  normalizeContractorText: () => normalizeContractorText,
+  resolveOfficerByContractor: () => resolveOfficerByContractor
+});
+import fs from "fs";
+import path2 from "path";
+import * as XLSX from "xlsx";
+function normalizeContractorText(text) {
+  if (!text) return "";
+  return String(text).toLowerCase().replace(/[\u064B-\u065F\u200e\u200f\u00a0]/g, "").replace(/[ـ]/g, "").replace(/[أإآ]/g, "\u0627").replace(/ة/g, "\u0647").replace(/[ىئ]/g, "\u064A").replace(/ؤ/g, "\u0648").replace(/[^\u0600-\u06FFa-z0-9 ]/g, " ").replace(/\s+/g, " ").trim();
+}
+function getContractorTokens(text) {
+  const norm = normalizeContractorText(text);
+  if (!norm) return [];
+  return norm.split(" ").map((t) => t.replace(/^ال(?=.{3,})/, "")).filter((t) => t && !STOP_WORDS.has(t));
+}
+function loadContractorOfficersFromExcel(excelPath = path2.resolve(process.cwd(), "contacts_table.xlsx")) {
+  try {
+    if (!fs.existsSync(excelPath)) {
+      console.warn(`[ContractorResolver] Excel file not found at ${excelPath}. Using fallback cache.`);
+      return cachedMappings;
+    }
+    const stat = fs.statSync(excelPath);
+    if (stat.mtimeMs === lastExcelMtime && excelPath === lastExcelPath && cachedMappings.length > 0) {
+      return cachedMappings;
+    }
+    console.log(`[ContractorResolver] Reading latest contractor officers from ${excelPath}...`);
+    const fileBuffer = fs.readFileSync(excelPath);
+    const readFn = XLSX.read || XLSX.default?.read;
+    const utils2 = XLSX.utils || XLSX.default?.utils;
+    const wb = readFn(fileBuffer, { type: "buffer" });
+    const sheetName = wb.SheetNames.includes("Contacts") ? "Contacts" : wb.SheetNames[0];
+    const sheet = wb.Sheets[sheetName];
+    const rows = utils2.sheet_to_json(sheet, { header: 1 });
+    if (!rows || rows.length < 2) {
+      console.warn("[ContractorResolver] Invalid or empty sheet format in Excel file.");
+      return cachedMappings;
+    }
+    const headerRow = rows[0];
+    const phoneRow = rows.find((r) => r.some((c) => String(c).includes("+20")));
+    const officerCols = [];
+    const officersMap = {};
+    for (let c = 1; c < headerRow.length; c++) {
+      const rawHeader = String(headerRow[c] || "").trim();
+      if (!rawHeader) continue;
+      const normHeader = normalizeContractorText(rawHeader);
+      let officerKey = Object.keys(OFFICER_DISPLAY_NAMES).find(
+        (k) => normalizeContractorText(k) === normHeader
+      ) || rawHeader;
+      const displayName = OFFICER_DISPLAY_NAMES[officerKey] || rawHeader;
+      const phone = phoneRow && phoneRow[c] ? String(phoneRow[c]).trim() : void 0;
+      const info = {
+        name: displayName,
+        columnHeader: rawHeader,
+        phone
+      };
+      officerCols.push({ colIdx: c, header: rawHeader, officer: info });
+      officersMap[displayName] = info;
+    }
+    const mappings = [];
+    for (let r = 1; r < rows.length; r++) {
+      const row = rows[r];
+      if (row === phoneRow) continue;
+      for (const col of officerCols) {
+        const cellValue = row[col.colIdx];
+        if (!cellValue) continue;
+        const rawName = String(cellValue).trim();
+        if (!rawName || rawName.startsWith("+20") || rawName.length < 2) continue;
+        const normTokens = getContractorTokens(rawName);
+        if (normTokens.length === 0 && normalizeContractorText(rawName).length === 0) continue;
+        const aliases = [rawName];
+        const parenMatch = rawName.match(/\(([^)]+)\)/);
+        if (parenMatch && parenMatch[1]) {
+          aliases.push(parenMatch[1].trim());
+        }
+        const cleanedWithoutParen = rawName.replace(/\([^)]+\)/g, "").trim();
+        if (cleanedWithoutParen && cleanedWithoutParen !== rawName) {
+          aliases.push(cleanedWithoutParen);
+        }
+        const normRaw = normalizeContractorText(rawName);
+        for (const [eng, arList] of Object.entries(TRANSLITERATION_PAIRS)) {
+          if (normRaw.includes(eng) || arList.some((ar) => normRaw.includes(normalizeContractorText(ar)))) {
+            aliases.push(eng);
+            aliases.push(...arList);
+          }
+        }
+        mappings.push({
+          rawName,
+          canonicalName: cleanedWithoutParen || rawName,
+          normalizedTokens: normTokens,
+          officer: col.officer,
+          aliases
+        });
+      }
+    }
+    try {
+      const jsonPath = path2.resolve(process.cwd(), "data", "contractors.json");
+      if (fs.existsSync(jsonPath)) {
+        const contractorsJson = JSON.parse(fs.readFileSync(jsonPath, "utf8"));
+        if (Array.isArray(contractorsJson)) {
+          for (const item of contractorsJson) {
+            if (!item.name) continue;
+            const itemAliases = Array.isArray(item.aliases) ? item.aliases : [item.name];
+            const match = mappings.find(
+              (m) => normalizeContractorText(m.rawName) === normalizeContractorText(item.name) || normalizeContractorText(m.canonicalName) === normalizeContractorText(item.name) || m.aliases.some((a) => itemAliases.some((ia) => normalizeContractorText(a) === normalizeContractorText(ia)))
+            );
+            if (match) {
+              match.canonicalName = item.name.trim();
+              if (item.contractorOfficer && item.contractorOfficer.trim()) {
+                match.officer = {
+                  name: item.contractorOfficer.trim(),
+                  columnHeader: match.officer?.columnHeader || item.contractorOfficer.trim(),
+                  phone: match.officer?.phone || ""
+                };
+              }
+              for (const alias of itemAliases) {
+                if (!match.aliases.includes(alias)) {
+                  match.aliases.push(alias);
+                }
+              }
+            } else {
+              mappings.push({
+                canonicalName: item.name.trim(),
+                rawName: item.name.trim(),
+                normalizedTokens: getContractorTokens(item.name),
+                officer: {
+                  name: item.contractorOfficer && item.contractorOfficer.trim() ? item.contractorOfficer.trim() : "\u063A\u064A\u0631 \u0645\u062D\u062F\u062F",
+                  columnHeader: item.contractorOfficer && item.contractorOfficer.trim() ? item.contractorOfficer.trim() : "\u063A\u064A\u0631 \u0645\u062D\u062F\u062F",
+                  phone: ""
+                },
+                aliases: Array.from(/* @__PURE__ */ new Set([item.name.trim(), ...itemAliases]))
+              });
+            }
+          }
+        }
+      }
+    } catch (err) {
+    }
+    cachedMappings = mappings;
+    cachedOfficers = officersMap;
+    lastExcelMtime = stat.mtimeMs;
+    lastExcelPath = excelPath;
+    console.log(
+      `[ContractorResolver] Loaded ${mappings.length} contractor mappings across ${officerCols.length} officers.`
+    );
+    return cachedMappings;
+  } catch (err) {
+    console.error("[ContractorResolver] Error reading contacts_table.xlsx:", err);
+    return cachedMappings;
+  }
+}
+function invalidateContractorResolverCache() {
+  cachedMappings = [];
+  cachedOfficers = {};
+  lastExcelMtime = 0;
+  lastExcelPath = "";
+}
+function calculateTokenScore(queryTokens, targetTokens) {
+  if (!queryTokens.length || !targetTokens.length) return 0;
+  const setQ = new Set(queryTokens);
+  const setT = new Set(targetTokens);
+  let matches = 0;
+  for (const q of setQ) {
+    if (setT.has(q)) {
+      matches += 1;
+    } else {
+      for (const t of setT) {
+        if (q.length > 3 && t.length > 3 && (q.startsWith(t) || t.startsWith(q))) {
+          matches += 0.8;
+          break;
+        }
+      }
+    }
+  }
+  const precision = matches / setQ.size;
+  const recall = matches / setT.size;
+  if (precision === 0 || recall === 0) return 0;
+  return 2 * precision * recall / (precision + recall);
+}
+function resolveOfficerByContractor(rawQuery, excelPath) {
+  if (!rawQuery || !rawQuery.trim()) {
+    return {
+      matched: false,
+      officerName: "\u063A\u064A\u0631 \u0645\u062D\u062F\u062F (\u064A\u062A\u0637\u0644\u0628 \u062A\u062D\u062F\u064A\u062F \u0645\u0646\u0633\u0642 \u0627\u0644\u0633\u064A\u0644\u0632)",
+      contractorNormalized: "\u063A\u064A\u0631 \u0645\u062D\u062F\u062F",
+      confidenceScore: 0,
+      matchType: "unmatched"
+    };
+  }
+  const mappings = loadContractorOfficersFromExcel(excelPath);
+  if (!mappings.length) {
+    return {
+      matched: false,
+      officerName: "\u063A\u064A\u0631 \u0645\u062D\u062F\u062F (\u064A\u062A\u0637\u0644\u0628 \u062A\u062D\u062F\u064A\u062F \u0645\u0646\u0633\u0642 \u0627\u0644\u0633\u064A\u0644\u0632)",
+      contractorNormalized: rawQuery.trim(),
+      confidenceScore: 0,
+      matchType: "unmatched"
+    };
+  }
+  const queryNorm = normalizeContractorText(rawQuery);
+  const queryTokens = getContractorTokens(rawQuery);
+  for (const m of mappings) {
+    for (const alias of m.aliases) {
+      if (normalizeContractorText(alias) === queryNorm) {
+        return {
+          matched: true,
+          officerName: m.officer.name,
+          officerPhone: m.officer.phone,
+          contractorNormalized: m.canonicalName,
+          confidenceScore: 1,
+          matchType: "exact"
+        };
+      }
+    }
+  }
+  const queryTokenKey = queryTokens.join("");
+  if (queryTokenKey) {
+    for (const m of mappings) {
+      if (m.normalizedTokens.join("") === queryTokenKey) {
+        return {
+          matched: true,
+          officerName: m.officer.name,
+          officerPhone: m.officer.phone,
+          contractorNormalized: m.canonicalName,
+          confidenceScore: 0.98,
+          matchType: "alias"
+        };
+      }
+    }
+  }
+  for (const m of mappings) {
+    for (const alias of m.aliases) {
+      const aliasNorm = normalizeContractorText(alias);
+      if (aliasNorm.length >= 4 && (queryNorm.includes(aliasNorm) || aliasNorm.includes(queryNorm))) {
+        return {
+          matched: true,
+          officerName: m.officer.name,
+          officerPhone: m.officer.phone,
+          contractorNormalized: m.canonicalName,
+          confidenceScore: 0.92,
+          matchType: "substring"
+        };
+      }
+    }
+  }
+  let bestMapping = null;
+  let bestScore = 0;
+  for (const m of mappings) {
+    const score = calculateTokenScore(queryTokens, m.normalizedTokens);
+    if (score > bestScore) {
+      bestScore = score;
+      bestMapping = m;
+    }
+  }
+  if (bestMapping && bestScore >= 0.65) {
+    return {
+      matched: true,
+      officerName: bestMapping.officer.name,
+      officerPhone: bestMapping.officer.phone,
+      contractorNormalized: bestMapping.canonicalName,
+      confidenceScore: Math.round(bestScore * 100) / 100,
+      matchType: "token_overlap"
+    };
+  }
+  return {
+    matched: false,
+    officerName: "\u063A\u064A\u0631 \u0645\u062D\u062F\u062F (\u064A\u062A\u0637\u0644\u0628 \u062A\u062D\u062F\u064A\u062F \u0645\u0646\u0633\u0642 \u0627\u0644\u0633\u064A\u0644\u0632)",
+    contractorNormalized: rawQuery.trim(),
+    confidenceScore: bestScore ? Math.round(bestScore * 100) / 100 : 0,
+    matchType: "unmatched"
+  };
+}
+var OFFICER_DISPLAY_NAMES, STOP_WORDS, TRANSLITERATION_PAIRS, cachedMappings, cachedOfficers, lastExcelMtime, lastExcelPath;
+var init_contractorOfficerResolver = __esm({
+  "src/services/contractorOfficerResolver.ts"() {
+    OFFICER_DISPLAY_NAMES = {
+      "\u0632\u064A\u0627\u062F": "\u0632\u064A\u0627\u062F",
+      "\u0646\u0627\u062F\u064A\u0646": "\u0646\u0627\u062F\u064A\u0646",
+      "\u0627\u0628\u0648 \u0627\u0644\u0648\u0641\u0627": "\u0645\u062D\u0645\u062F \u0627\u0628\u0648 \u0627\u0644\u0648\u0641\u0627",
+      "\u062F\u064A\u0627\u0646\u0627": "\u062F\u064A\u0627\u0646\u0627",
+      "\u062C\u0627\u0628\u0631": "\u0645\u062D\u0645\u062F \u062C\u0627\u0628\u0631",
+      "\u062D\u0645\u0632\u0629": "\u0623\u062D\u0645\u062F \u062D\u0645\u0632\u0629",
+      "\u0637\u0627\u0631\u0642": "\u0637\u0627\u0631\u0642"
+    };
+    STOP_WORDS = /* @__PURE__ */ new Set([
+      "\u0634\u0631\u0643\u0647",
+      "\u0634\u0631\u0643\u0629",
+      "\u0641\u062D\u0635",
+      "\u0643\u0627\u0634",
+      "cash",
+      "co",
+      "company",
+      "\u0645\u062C\u0645\u0648\u0639\u0647",
+      "\u0645\u062C\u0645\u0648\u0639\u0629",
+      "group",
+      "egypt",
+      "\u0645\u0635\u0631",
+      "\u0644\u0644\u062A\u0627\u0645\u064A\u0646",
+      "\u0644\u0644\u062A\u0623\u0645\u064A\u0646",
+      "\u0644\u0644\u062A\u0627\u0645\u064A\u0646\u0627\u062A",
+      "\u0644\u0644\u062A\u0623\u0645\u064A\u0646\u0627\u062A",
+      "\u0644\u0644\u0628\u062A\u0631\u0648\u0644",
+      "\u0628\u062A\u0631\u0648\u0644",
+      "\u0644\u0644\u0631\u0639\u0627\u064A\u0629",
+      "\u0644\u0644\u062E\u062F\u0645\u0627\u062A",
+      "\u0627\u0644\u0637\u0628\u064A\u0629",
+      "\u0627\u0644\u0635\u062D\u064A\u0629"
+    ]);
+    TRANSLITERATION_PAIRS = {
+      "globemed": ["\u062C\u0644\u0648\u0628 \u0645\u064A\u062F", "\u062C\u0644\u0648\u0628\u0645\u064A\u062F"],
+      "enayatisr": ["\u0639\u0646\u0627\u064A\u0647 \u0645\u0635\u0631", "\u0639\u0646\u0627\u064A\u0629 \u0645\u0635\u0631"],
+      "gasco": ["\u062C\u0627\u0633\u0643\u0648"],
+      "alico": ["\u0627\u0644\u064A\u0643\u0648", "\u0645\u064A\u062A\u0644\u0627\u064A\u0641 \u0627\u0644\u064A\u0643\u0648", "metlife"],
+      "mednet": ["\u0645\u064A\u062F\u0646\u062A", "\u0645\u064A\u062F \u0646\u062A"],
+      "medright": ["\u0645\u064A\u062F\u0631\u0627\u064A\u062A", "\u0645\u064A\u062F \u0631\u0627\u064A\u062A", "med right"],
+      "axa": ["\u0627\u0643\u0633\u0627", "\u0623\u0643\u0633\u0627"],
+      "gig": ["\u062C\u064A \u0627\u064A \u062C\u064A", "gig egypt"],
+      "dms": ["\u0627\u0644\u0645\u0627\u0633\u064A\u0629", "\u0627\u0644\u0645\u0627\u0633\u064A\u0647"],
+      "nextcare": ["\u0646\u0643\u0633\u062A \u0643\u064A\u0631", "\u0646\u064A\u0643\u0633\u062A \u0643\u064A\u0631", "next care"],
+      "wepco": ["\u0648\u064A\u0628\u0643\u0648"],
+      "petromaint": ["\u0628\u062A\u0631\u0648\u0645\u0646\u062A"],
+      "ethydco": ["\u0627\u064A\u062B\u062F\u0643\u0648", "\u0627\u062B\u064A\u062F\u0643\u0648"],
+      "sidpec": ["\u0633\u064A\u062F\u0628\u0643"],
+      "amoc": ["\u0627\u0645\u0648\u0643"],
+      "eprom": ["\u0627\u064A\u0628\u0631\u0648\u0645"],
+      "gupco": ["\u062C\u0627\u0628\u0643\u0648"],
+      "bapetco": ["\u0628\u062F\u0631 \u0627\u0644\u062F\u064A\u0646 \u0644\u0644\u0628\u062A\u0631\u0648\u0644", "\u0628\u062F\u0631 \u0627\u0644\u062F\u064A\u0646"]
+    };
+    cachedMappings = [];
+    cachedOfficers = {};
+    lastExcelMtime = 0;
+    lastExcelPath = "";
+  }
+});
+
 // src/services/procedureOverrideService.ts
 function getNormalizedOverrideKey(query2) {
   return normalizeArabic(normalizeText(query2));
@@ -3933,328 +4273,8 @@ async function mirrorApprovalToFirestore(record) {
   }
 }
 
-// src/services/contractorOfficerResolver.ts
-import fs from "fs";
-import path2 from "path";
-import * as XLSX from "xlsx";
-var OFFICER_DISPLAY_NAMES = {
-  "\u0632\u064A\u0627\u062F": "\u0632\u064A\u0627\u062F",
-  "\u0646\u0627\u062F\u064A\u0646": "\u0646\u0627\u062F\u064A\u0646",
-  "\u0627\u0628\u0648 \u0627\u0644\u0648\u0641\u0627": "\u0645\u062D\u0645\u062F \u0627\u0628\u0648 \u0627\u0644\u0648\u0641\u0627",
-  "\u062F\u064A\u0627\u0646\u0627": "\u062F\u064A\u0627\u0646\u0627",
-  "\u062C\u0627\u0628\u0631": "\u0645\u062D\u0645\u062F \u062C\u0627\u0628\u0631",
-  "\u062D\u0645\u0632\u0629": "\u0623\u062D\u0645\u062F \u062D\u0645\u0632\u0629",
-  "\u0637\u0627\u0631\u0642": "\u0637\u0627\u0631\u0642"
-};
-var STOP_WORDS = /* @__PURE__ */ new Set([
-  "\u0634\u0631\u0643\u0647",
-  "\u0634\u0631\u0643\u0629",
-  "\u0641\u062D\u0635",
-  "\u0643\u0627\u0634",
-  "cash",
-  "co",
-  "company",
-  "\u0645\u062C\u0645\u0648\u0639\u0647",
-  "\u0645\u062C\u0645\u0648\u0639\u0629",
-  "group",
-  "egypt",
-  "\u0645\u0635\u0631",
-  "\u0644\u0644\u062A\u0627\u0645\u064A\u0646",
-  "\u0644\u0644\u062A\u0623\u0645\u064A\u0646",
-  "\u0644\u0644\u062A\u0627\u0645\u064A\u0646\u0627\u062A",
-  "\u0644\u0644\u062A\u0623\u0645\u064A\u0646\u0627\u062A",
-  "\u0644\u0644\u0628\u062A\u0631\u0648\u0644",
-  "\u0628\u062A\u0631\u0648\u0644",
-  "\u0644\u0644\u0631\u0639\u0627\u064A\u0629",
-  "\u0644\u0644\u062E\u062F\u0645\u0627\u062A",
-  "\u0627\u0644\u0637\u0628\u064A\u0629",
-  "\u0627\u0644\u0635\u062D\u064A\u0629"
-]);
-var TRANSLITERATION_PAIRS = {
-  "globemed": ["\u062C\u0644\u0648\u0628 \u0645\u064A\u062F", "\u062C\u0644\u0648\u0628\u0645\u064A\u062F"],
-  "enayatisr": ["\u0639\u0646\u0627\u064A\u0647 \u0645\u0635\u0631", "\u0639\u0646\u0627\u064A\u0629 \u0645\u0635\u0631"],
-  "gasco": ["\u062C\u0627\u0633\u0643\u0648"],
-  "alico": ["\u0627\u0644\u064A\u0643\u0648", "\u0645\u064A\u062A\u0644\u0627\u064A\u0641 \u0627\u0644\u064A\u0643\u0648", "metlife"],
-  "mednet": ["\u0645\u064A\u062F\u0646\u062A", "\u0645\u064A\u062F \u0646\u062A"],
-  "medright": ["\u0645\u064A\u062F\u0631\u0627\u064A\u062A", "\u0645\u064A\u062F \u0631\u0627\u064A\u062A", "med right"],
-  "axa": ["\u0627\u0643\u0633\u0627", "\u0623\u0643\u0633\u0627"],
-  "gig": ["\u062C\u064A \u0627\u064A \u062C\u064A", "gig egypt"],
-  "dms": ["\u0627\u0644\u0645\u0627\u0633\u064A\u0629", "\u0627\u0644\u0645\u0627\u0633\u064A\u0647"],
-  "nextcare": ["\u0646\u0643\u0633\u062A \u0643\u064A\u0631", "\u0646\u064A\u0643\u0633\u062A \u0643\u064A\u0631", "next care"],
-  "wepco": ["\u0648\u064A\u0628\u0643\u0648"],
-  "petromaint": ["\u0628\u062A\u0631\u0648\u0645\u0646\u062A"],
-  "ethydco": ["\u0627\u064A\u062B\u062F\u0643\u0648", "\u0627\u062B\u064A\u062F\u0643\u0648"],
-  "sidpec": ["\u0633\u064A\u062F\u0628\u0643"],
-  "amoc": ["\u0627\u0645\u0648\u0643"],
-  "eprom": ["\u0627\u064A\u0628\u0631\u0648\u0645"],
-  "gupco": ["\u062C\u0627\u0628\u0643\u0648"],
-  "bapetco": ["\u0628\u062F\u0631 \u0627\u0644\u062F\u064A\u0646 \u0644\u0644\u0628\u062A\u0631\u0648\u0644", "\u0628\u062F\u0631 \u0627\u0644\u062F\u064A\u0646"]
-};
-function normalizeContractorText(text) {
-  if (!text) return "";
-  return String(text).toLowerCase().replace(/[\u064B-\u065F\u200e\u200f\u00a0]/g, "").replace(/[ـ]/g, "").replace(/[أإآ]/g, "\u0627").replace(/ة/g, "\u0647").replace(/[ىئ]/g, "\u064A").replace(/ؤ/g, "\u0648").replace(/[^\u0600-\u06FFa-z0-9 ]/g, " ").replace(/\s+/g, " ").trim();
-}
-function getContractorTokens(text) {
-  const norm = normalizeContractorText(text);
-  if (!norm) return [];
-  return norm.split(" ").map((t) => t.replace(/^ال(?=.{3,})/, "")).filter((t) => t && !STOP_WORDS.has(t));
-}
-var cachedMappings = [];
-var cachedOfficers = {};
-var lastExcelMtime = 0;
-var lastExcelPath = "";
-function loadContractorOfficersFromExcel(excelPath = path2.resolve(process.cwd(), "contacts_table.xlsx")) {
-  try {
-    if (!fs.existsSync(excelPath)) {
-      console.warn(`[ContractorResolver] Excel file not found at ${excelPath}. Using fallback cache.`);
-      return cachedMappings;
-    }
-    const stat = fs.statSync(excelPath);
-    if (stat.mtimeMs === lastExcelMtime && excelPath === lastExcelPath && cachedMappings.length > 0) {
-      return cachedMappings;
-    }
-    console.log(`[ContractorResolver] Reading latest contractor officers from ${excelPath}...`);
-    const fileBuffer = fs.readFileSync(excelPath);
-    const readFn = XLSX.read || XLSX.default?.read;
-    const utils2 = XLSX.utils || XLSX.default?.utils;
-    const wb = readFn(fileBuffer, { type: "buffer" });
-    const sheetName = wb.SheetNames.includes("Contacts") ? "Contacts" : wb.SheetNames[0];
-    const sheet = wb.Sheets[sheetName];
-    const rows = utils2.sheet_to_json(sheet, { header: 1 });
-    if (!rows || rows.length < 2) {
-      console.warn("[ContractorResolver] Invalid or empty sheet format in Excel file.");
-      return cachedMappings;
-    }
-    const headerRow = rows[0];
-    const phoneRow = rows.find((r) => r.some((c) => String(c).includes("+20")));
-    const officerCols = [];
-    const officersMap = {};
-    for (let c = 1; c < headerRow.length; c++) {
-      const rawHeader = String(headerRow[c] || "").trim();
-      if (!rawHeader) continue;
-      const normHeader = normalizeContractorText(rawHeader);
-      let officerKey = Object.keys(OFFICER_DISPLAY_NAMES).find(
-        (k) => normalizeContractorText(k) === normHeader
-      ) || rawHeader;
-      const displayName = OFFICER_DISPLAY_NAMES[officerKey] || rawHeader;
-      const phone = phoneRow && phoneRow[c] ? String(phoneRow[c]).trim() : void 0;
-      const info = {
-        name: displayName,
-        columnHeader: rawHeader,
-        phone
-      };
-      officerCols.push({ colIdx: c, header: rawHeader, officer: info });
-      officersMap[displayName] = info;
-    }
-    const mappings = [];
-    for (let r = 1; r < rows.length; r++) {
-      const row = rows[r];
-      if (row === phoneRow) continue;
-      for (const col of officerCols) {
-        const cellValue = row[col.colIdx];
-        if (!cellValue) continue;
-        const rawName = String(cellValue).trim();
-        if (!rawName || rawName.startsWith("+20") || rawName.length < 2) continue;
-        const normTokens = getContractorTokens(rawName);
-        if (normTokens.length === 0 && normalizeContractorText(rawName).length === 0) continue;
-        const aliases = [rawName];
-        const parenMatch = rawName.match(/\(([^)]+)\)/);
-        if (parenMatch && parenMatch[1]) {
-          aliases.push(parenMatch[1].trim());
-        }
-        const cleanedWithoutParen = rawName.replace(/\([^)]+\)/g, "").trim();
-        if (cleanedWithoutParen && cleanedWithoutParen !== rawName) {
-          aliases.push(cleanedWithoutParen);
-        }
-        const normRaw = normalizeContractorText(rawName);
-        for (const [eng, arList] of Object.entries(TRANSLITERATION_PAIRS)) {
-          if (normRaw.includes(eng) || arList.some((ar) => normRaw.includes(normalizeContractorText(ar)))) {
-            aliases.push(eng);
-            aliases.push(...arList);
-          }
-        }
-        mappings.push({
-          rawName,
-          canonicalName: cleanedWithoutParen || rawName,
-          normalizedTokens: normTokens,
-          officer: col.officer,
-          aliases
-        });
-      }
-    }
-    try {
-      const jsonPath = path2.resolve(process.cwd(), "data", "contractors.json");
-      if (fs.existsSync(jsonPath)) {
-        const contractorsJson = JSON.parse(fs.readFileSync(jsonPath, "utf8"));
-        if (Array.isArray(contractorsJson)) {
-          for (const item of contractorsJson) {
-            if (!item.name) continue;
-            const itemAliases = Array.isArray(item.aliases) ? item.aliases : [item.name];
-            const match = mappings.find(
-              (m) => normalizeContractorText(m.rawName) === normalizeContractorText(item.name) || normalizeContractorText(m.canonicalName) === normalizeContractorText(item.name) || m.aliases.some((a) => itemAliases.some((ia) => normalizeContractorText(a) === normalizeContractorText(ia)))
-            );
-            if (match) {
-              match.canonicalName = item.name.trim();
-              if (item.contractorOfficer && item.contractorOfficer.trim()) {
-                match.officer = {
-                  name: item.contractorOfficer.trim(),
-                  columnHeader: match.officer?.columnHeader || item.contractorOfficer.trim(),
-                  phone: match.officer?.phone || ""
-                };
-              }
-              for (const alias of itemAliases) {
-                if (!match.aliases.includes(alias)) {
-                  match.aliases.push(alias);
-                }
-              }
-            } else {
-              mappings.push({
-                canonicalName: item.name.trim(),
-                rawName: item.name.trim(),
-                normalizedTokens: getContractorTokens(item.name),
-                officer: {
-                  name: item.contractorOfficer && item.contractorOfficer.trim() ? item.contractorOfficer.trim() : "\u063A\u064A\u0631 \u0645\u062D\u062F\u062F",
-                  columnHeader: item.contractorOfficer && item.contractorOfficer.trim() ? item.contractorOfficer.trim() : "\u063A\u064A\u0631 \u0645\u062D\u062F\u062F",
-                  phone: ""
-                },
-                aliases: Array.from(/* @__PURE__ */ new Set([item.name.trim(), ...itemAliases]))
-              });
-            }
-          }
-        }
-      }
-    } catch (err) {
-    }
-    cachedMappings = mappings;
-    cachedOfficers = officersMap;
-    lastExcelMtime = stat.mtimeMs;
-    lastExcelPath = excelPath;
-    console.log(
-      `[ContractorResolver] Loaded ${mappings.length} contractor mappings across ${officerCols.length} officers.`
-    );
-    return cachedMappings;
-  } catch (err) {
-    console.error("[ContractorResolver] Error reading contacts_table.xlsx:", err);
-    return cachedMappings;
-  }
-}
-function calculateTokenScore(queryTokens, targetTokens) {
-  if (!queryTokens.length || !targetTokens.length) return 0;
-  const setQ = new Set(queryTokens);
-  const setT = new Set(targetTokens);
-  let matches = 0;
-  for (const q of setQ) {
-    if (setT.has(q)) {
-      matches += 1;
-    } else {
-      for (const t of setT) {
-        if (q.length > 3 && t.length > 3 && (q.startsWith(t) || t.startsWith(q))) {
-          matches += 0.8;
-          break;
-        }
-      }
-    }
-  }
-  const precision = matches / setQ.size;
-  const recall = matches / setT.size;
-  if (precision === 0 || recall === 0) return 0;
-  return 2 * precision * recall / (precision + recall);
-}
-function resolveOfficerByContractor(rawQuery, excelPath) {
-  if (!rawQuery || !rawQuery.trim()) {
-    return {
-      matched: false,
-      officerName: "\u063A\u064A\u0631 \u0645\u062D\u062F\u062F (\u064A\u062A\u0637\u0644\u0628 \u062A\u062D\u062F\u064A\u062F \u0645\u0646\u0633\u0642 \u0627\u0644\u0633\u064A\u0644\u0632)",
-      contractorNormalized: "\u063A\u064A\u0631 \u0645\u062D\u062F\u062F",
-      confidenceScore: 0,
-      matchType: "unmatched"
-    };
-  }
-  const mappings = loadContractorOfficersFromExcel(excelPath);
-  if (!mappings.length) {
-    return {
-      matched: false,
-      officerName: "\u063A\u064A\u0631 \u0645\u062D\u062F\u062F (\u064A\u062A\u0637\u0644\u0628 \u062A\u062D\u062F\u064A\u062F \u0645\u0646\u0633\u0642 \u0627\u0644\u0633\u064A\u0644\u0632)",
-      contractorNormalized: rawQuery.trim(),
-      confidenceScore: 0,
-      matchType: "unmatched"
-    };
-  }
-  const queryNorm = normalizeContractorText(rawQuery);
-  const queryTokens = getContractorTokens(rawQuery);
-  for (const m of mappings) {
-    for (const alias of m.aliases) {
-      if (normalizeContractorText(alias) === queryNorm) {
-        return {
-          matched: true,
-          officerName: m.officer.name,
-          officerPhone: m.officer.phone,
-          contractorNormalized: m.canonicalName,
-          confidenceScore: 1,
-          matchType: "exact"
-        };
-      }
-    }
-  }
-  const queryTokenKey = queryTokens.join("");
-  if (queryTokenKey) {
-    for (const m of mappings) {
-      if (m.normalizedTokens.join("") === queryTokenKey) {
-        return {
-          matched: true,
-          officerName: m.officer.name,
-          officerPhone: m.officer.phone,
-          contractorNormalized: m.canonicalName,
-          confidenceScore: 0.98,
-          matchType: "alias"
-        };
-      }
-    }
-  }
-  for (const m of mappings) {
-    for (const alias of m.aliases) {
-      const aliasNorm = normalizeContractorText(alias);
-      if (aliasNorm.length >= 4 && (queryNorm.includes(aliasNorm) || aliasNorm.includes(queryNorm))) {
-        return {
-          matched: true,
-          officerName: m.officer.name,
-          officerPhone: m.officer.phone,
-          contractorNormalized: m.canonicalName,
-          confidenceScore: 0.92,
-          matchType: "substring"
-        };
-      }
-    }
-  }
-  let bestMapping = null;
-  let bestScore = 0;
-  for (const m of mappings) {
-    const score = calculateTokenScore(queryTokens, m.normalizedTokens);
-    if (score > bestScore) {
-      bestScore = score;
-      bestMapping = m;
-    }
-  }
-  if (bestMapping && bestScore >= 0.65) {
-    return {
-      matched: true,
-      officerName: bestMapping.officer.name,
-      officerPhone: bestMapping.officer.phone,
-      contractorNormalized: bestMapping.canonicalName,
-      confidenceScore: Math.round(bestScore * 100) / 100,
-      matchType: "token_overlap"
-    };
-  }
-  return {
-    matched: false,
-    officerName: "\u063A\u064A\u0631 \u0645\u062D\u062F\u062F (\u064A\u062A\u0637\u0644\u0628 \u062A\u062D\u062F\u064A\u062F \u0645\u0646\u0633\u0642 \u0627\u0644\u0633\u064A\u0644\u0632)",
-    contractorNormalized: rawQuery.trim(),
-    confidenceScore: bestScore ? Math.round(bestScore * 100) / 100 : 0,
-    matchType: "unmatched"
-  };
-}
-
 // src/mail/syncEngine.ts
+init_contractorOfficerResolver();
 init_arabic_normalizer();
 init_procedureService();
 init_whatsapp_generator();
@@ -7723,7 +7743,20 @@ var DefaultContractResolver = class {
     const mapped = await this.fromMap(insurerKey2, at);
     if (mapped) return mapped;
     if (!this.fallback) this.fallback = new StaticContractResolver(await this.loadContractors(), "contractors.json");
-    return this.fallback.resolve(insurerKey2);
+    const staticRes = await this.fallback.resolve(insurerKey2);
+    if (staticRes) return staticRes;
+    try {
+      const { resolveOfficerByContractor: resolveOfficerByContractor2 } = await Promise.resolve().then(() => (init_contractorOfficerResolver(), contractorOfficerResolver_exports));
+      const officerRes = resolveOfficerByContractor2(insurerKey2);
+      if (officerRes.matched && officerRes.contractorNormalized && officerRes.contractorNormalized !== insurerKey2) {
+        const canonicalMapped = await this.fromMap(officerRes.contractorNormalized, at);
+        if (canonicalMapped) return canonicalMapped;
+        const canonicalStatic = await this.fallback.resolve(officerRes.contractorNormalized);
+        if (canonicalStatic) return canonicalStatic;
+      }
+    } catch {
+    }
+    return null;
   }
   async fromMap(insurerKey2, at) {
     try {

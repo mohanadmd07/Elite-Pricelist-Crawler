@@ -118,4 +118,48 @@ describe('Status Strings and Unresolved States Specification', () => {
       vi.unstubAllGlobals();
     });
   });
+
+  describe('4. Initial Request Parsing & Contractor Variant Resolution', () => {
+    it('should resolve EgyptAir Cargo variant to canonical 2025 contract without NO_MAPPING', async () => {
+      const { DefaultContractResolver } = await import('../src/classifier/pricelist');
+      const resolver = new DefaultContractResolver();
+      const contract = await resolver.resolve('مصر للطيران للشحن الجوي بالاسكندرية', new Date());
+
+      expect(contract).not.toBeNull();
+      expect(contract?.year).toBe(2025);
+      expect(contract?.discountPercent).toBe(25);
+    });
+
+    it('should correctly parse DirectApprovalRequest as initial request with pending decision', async () => {
+      const { parseHisApprovalEmail } = await import('../src/mail/parser/hisApprovalParser');
+      const html = `<html>
+        <body>
+          <strong>Type:</strong> Request<br>
+          <strong>Category:</strong> Approval<br>
+          <strong>Group:</strong> DirectApprovalRequest<br>
+          <strong>By:</strong> Mohamed Hany Saad Ahmed<br>
+          <strong>Description:</strong><br>
+          Patient Barcode: 0000095572<br>
+          Patient Name: اشرف ابراهيم حنفي محمود<br>
+          Contractor Name: مصر للطيران للشحن الجوي بالاسكندرية Main<br>
+          Visit Type: HospitalCase<br>
+          EmployeeName: محمد سعيد ابو الوفا ابو الوفا
+        </body>
+      </html>`;
+
+      const parsed = parseHisApprovalEmail({
+        subject: 'DirectApprovalRequest',
+        htmlBody: html,
+        textBody: '',
+        sender: 'notifications@elitehospital.org',
+        receivedAt: new Date().toISOString(),
+      });
+
+      expect(parsed.mrn).toBe('0000095572');
+      expect(parsed.patientName).toBe('اشرف ابراهيم حنفي محمود');
+      expect(parsed.isReplyMessage).toBe(false);
+      expect(parsed.hasExistingApproval).toBe(false);
+      expect(parsed.isRefused).toBe(false);
+    });
+  });
 });
