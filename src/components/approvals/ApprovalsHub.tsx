@@ -99,7 +99,7 @@ export const ApprovalsHub: React.FC<ApprovalsHubProps> = ({
     try {
       setIsSyncing(true);
       setSyncMessage(null);
-      const res = await triggerManualApprovalsSync();
+      const res = await triggerManualApprovalsSync(true);
       setSyncMessage(res.message || 'Sync complete!');
       setTimeout(() => setSyncMessage(null), 4000);
     } catch (err: any) {

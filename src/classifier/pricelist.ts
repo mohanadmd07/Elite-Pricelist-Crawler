@@ -176,14 +176,40 @@ export class DefaultContractResolver implements ContractResolver {
       const { supabaseAdmin } = await import('../lib/supabase');
       if (!supabaseAdmin) return null;
       const day = at.toISOString().slice(0, 10);
-      const { data } = await supabaseAdmin
+
+      // 1. Direct exact match on contractor_pricelist_map
+      let { data } = await supabaseAdmin
         .from('contractor_pricelist_map')
         .select('insurer_id, discount_percent, valid_from, valid_to, pricelists(year)')
         .eq('insurer_id', insurerKey)
         .order('valid_from', { ascending: false, nullsFirst: false });
-      const row = (data || []).find(
+      let row = (data || []).find(
         (r: any) => (!r.valid_from || r.valid_from <= day) && (!r.valid_to || r.valid_to >= day)
       ) as any;
+
+      // 2. If no direct match, try to resolve insurerKey via companies table (display name → name)
+      if (!row) {
+        const keyNorm = normalizeArabic(insurerKey);
+        const { data: companies } = await supabaseAdmin
+          .from('companies')
+          .select('name, normalized_name, price_list_year, discount_percentage')
+          .neq('price_list_year', 'متوقف');
+        const matchedCompany = (companies || []).find((c: any) =>
+          normalizeArabic(c.name) === keyNorm || normalizeArabic(c.normalized_name) === keyNorm
+        );
+        if (matchedCompany) {
+          // Retry with company name as insurer_id
+          const { data: data2 } = await supabaseAdmin
+            .from('contractor_pricelist_map')
+            .select('insurer_id, discount_percent, valid_from, valid_to, pricelists(year)')
+            .eq('insurer_id', matchedCompany.name)
+            .order('valid_from', { ascending: false, nullsFirst: false });
+          row = (data2 || []).find(
+            (r: any) => (!r.valid_from || r.valid_from <= day) && (!r.valid_to || r.valid_to >= day)
+          ) as any;
+        }
+      }
+
       const year = Number(row?.pricelists?.year);
       if (!row || !VALID_YEARS.has(year)) return null;
       return {

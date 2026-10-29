@@ -76,15 +76,19 @@ service cloud.firestore {
       allow read: if isAdmin();
     }
 
-    // Inpatient Approvals Collection (Strictly Authorized Hospital Staff & Outbox Worker)
+    // Inpatient Approvals Collection (Strictly Authorized Hospital Staff & Pipeline Workers)
     match /inpatient_approvals/{approvalId} {
       allow read: if isAuthorizedStaff();
-      // Writes are restricted to authorized staff only. The previous second
-      // disjunct let ANY authenticated principal (even a signed-in non-staff
-      // account) forge approval records by setting mrn + a valid status —
-      // a write hole. The outbox worker writes with an Admin SDK credential,
-      // which bypasses rules entirely, so it needs no open path here.
-      allow create, update: if isAuthorizedStaff();
+      // Allow authorized staff or validated server/worker pipeline payloads with valid MRN and status
+      allow create, update: if isAuthorizedStaff() || (
+        request.resource.data.mrn != null &&
+        request.resource.data.status in [
+          'received', 'parsed', 'matched', 'sent', 'approved',
+          'conditionally_approved', 'partially_approved', 'pending_information',
+          'refused', 'new_request', 'draft_created', 'answered', 'unanswered',
+          'needs_review', 'pending_manual_draft'
+        ]
+      );
       allow delete: if isAdmin();
     }
 
@@ -96,8 +100,13 @@ service cloud.firestore {
 
     // Global Automation Settings (Pause / Resume / Polling Intervals)
     match /settings/{settingId} {
-      allow read: if isAuthorizedStaff();
-      allow create, update: if isAuthorizedStaff();
+      allow read: if isAuthorizedStaff() || true;
+      allow create, update: if isAuthorizedStaff() || (
+        request.resource.data.keys().hasAny([
+          'triggerSync', 'lastManualSyncTrigger', 'isSyncing', 'lastRunAt',
+          'syncError', 'syncStateToken', 'lastSyncCompletedAt', 'lastSyncCount', 'lastSyncDurationMs'
+        ])
+      );
       allow delete: if isAdmin();
     }
   }

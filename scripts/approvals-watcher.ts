@@ -3295,10 +3295,10 @@ apiApp.post('/api/check-now', async (_req, res) => {
   }
 });
 
-// POST /api/approvals/sync (manual sync endpoint)
-apiApp.post('/api/approvals/sync', async (_req, res) => {
+// GET & POST /api/approvals/sync (manual sync endpoint)
+apiApp.all('/api/approvals/sync', async (_req, res) => {
   try {
-    console.log('[Approvals Watcher API] Manual sync triggered via /api/approvals/sync');
+    console.log(`[Approvals Watcher API] Manual sync triggered via ${_req.method} /api/approvals/sync`);
     await runApprovalsCheck(undefined, true);
     res.json({ success: true, message: 'Mailbox check completed' });
   } catch (err: any) {
