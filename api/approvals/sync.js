@@ -14,6 +14,120 @@ var __export = (target, all) => {
     __defProp(target, name, { get: all[name], enumerable: true });
 };
 
+// src/mail/adapters/ewsXml.ts
+import { load } from "cheerio";
+function textOf(container, selector) {
+  return container.children(selector).first().text().trim();
+}
+function rawInner($, container, selector) {
+  const node = container.children(selector).first();
+  if (!node.length) return "";
+  return node.text().trim();
+}
+function toIsoUtc(value) {
+  if (!value) return void 0;
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime()) ? void 0 : parsed.toISOString();
+}
+function parseAttachments($, message) {
+  const attachments = [];
+  const container = message.children(`${T}Attachments`).first();
+  if (!container.length) return attachments;
+  container.children().each((_i, el) => {
+    const node = scope($, el);
+    const localName = (el.name || "").replace(/^t:/i, "");
+    if (!/^(FileAttachment|ItemAttachment)$/.test(localName)) return;
+    const id = node.children(`${T}AttachmentId`).first().attr("Id") || "";
+    const name = node.children(`${T}Name`).first().text().trim();
+    const contentType = node.children(`${T}ContentType`).first().text().trim();
+    const size = Number(node.children(`${T}Size`).first().text().trim());
+    if (!id && !name) return;
+    attachments.push({
+      id,
+      name: name || "attachment",
+      contentType: contentType || "application/octet-stream",
+      sizeBytes: Number.isFinite(size) ? size : 0
+    });
+  });
+  return attachments;
+}
+function parseGetItemsResponse(xml) {
+  const $ = load(xml, { xml: true });
+  const messages = [];
+  $(`${M}GetItemResponseMessage[ResponseClass="Success"], ${M}FindItemResponseMessage[ResponseClass="Success"]`).each(
+    (_i, respEl) => {
+      const items = scope($, respEl).children(`${M}Items`).first();
+      items.children(`${T}Message`).each((_j, msgEl) => {
+        const message = scope($, msgEl);
+        const itemIdEl = message.children(`${T}ItemId`).first();
+        const id = itemIdEl.attr("Id") || "";
+        const changeKey = itemIdEl.attr("ChangeKey") || "";
+        const subject = textOf(message, `${T}Subject`);
+        const conversationId = message.children(`${T}ConversationId`).first().attr("Id") || "";
+        const internetMessageId = textOf(message, `${T}InternetMessageId`);
+        const sender = message.children(`${T}From`).first().find(`${T}EmailAddress`).first().text().trim();
+        const receivedAt = toIsoUtc(textOf(message, `${T}DateTimeReceived`));
+        const htmlBody = rawInner($, message, `${T}Body`);
+        if (!id) return;
+        messages.push({
+          id,
+          changeKey,
+          messageId: internetMessageId || `<${id}@exchange>`,
+          conversationId,
+          subject,
+          sender,
+          receivedAt: receivedAt || (/* @__PURE__ */ new Date()).toISOString(),
+          htmlBody,
+          textBody: htmlBody.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim(),
+          attachments: parseAttachments($, message)
+        });
+      });
+    }
+  );
+  return messages;
+}
+function parseSyncFolderItemsResponse(xml) {
+  const $ = load(xml, { xml: true });
+  const changes = [];
+  $(`${M}SyncFolderItemsResponseMessage`).each((_i, respEl) => {
+    const resp = scope($, respEl);
+    const responseCode = textOf(resp, `${M}ResponseCode`);
+    if (responseCode && responseCode !== "NoError") return;
+    const root = resp.children(`${M}Changes`).first();
+    const buckets = [
+      ["create", `${M}Create`],
+      ["update", `${M}Update`],
+      ["delete", `${M}Delete`]
+    ];
+    for (const [kind, bucketSelector] of buckets) {
+      root.children(bucketSelector).each((_k, bucketEl) => {
+        scope($, bucketEl).children().each((_m, itemEl) => {
+          const node = scope($, itemEl);
+          const idEl = node.children(`${T}ItemId`).first();
+          const id = idEl.attr("Id") || node.attr("Id");
+          if (!id) return;
+          changes.push({
+            id,
+            changeKey: idEl.attr("ChangeKey") || node.attr("ChangeKey") || "",
+            kind
+          });
+        });
+      });
+    }
+  });
+  const syncState = $(`${M}SyncState`).first().text().trim() || null;
+  const includesLast = $(`${M}IncludesLastItemInRange`).first().text().trim().toLowerCase() === "true";
+  return { changes, syncState, includesLastItemInRange: includesLast };
+}
+var T, M, scope;
+var init_ewsXml = __esm({
+  "src/mail/adapters/ewsXml.ts"() {
+    T = "t\\:";
+    M = "m\\:";
+    scope = ($, node) => $(node);
+  }
+});
+
 // src/mail/adapters/EwsSource.ts
 var EwsSource_exports = {};
 __export(EwsSource_exports, {
@@ -23,9 +137,31 @@ __export(EwsSource_exports, {
   EwsSource: () => EwsSource
 });
 import httpntlm from "httpntlm";
-var EXACT_INAPPROVALS_FOLDER_ID, DEFAULT_OUTLOOK_SIGNATURE_HTML, DEFAULT_OUTLOOK_SIGNATURE_TEXT, EwsSource;
+function escapeXmlAttr(value) {
+  return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&apos;");
+}
+function countErrorResponses(xml) {
+  return (xml.match(/ResponseClass="Error"/g) || []).length;
+}
+function retryDelayMs(err, attempt) {
+  const message = `${err?.message || err || ""} ${err?.responseBody || ""}`;
+  const backOff = message.match(/(\d+)\s*seconds\s*until\s*retry/i);
+  if (backOff) return Math.min(Number(backOff[1]) * 1e3, 6e4);
+  const retryAfter = message.match(/Retry-After["']?\s*[:=]\s*"?(\d+)/i);
+  if (retryAfter) return Math.min(Number(retryAfter[1]) * 1e3, 6e4);
+  const base2 = 1e3 * 2 ** (attempt - 1);
+  return base2 + Math.floor(Math.random() * 250);
+}
+var GETITEM_CHUNK_SIZE, MAX_SYNC_PAGES, FALLBACK_OVERLACK_HOURS, FALLBACK_MAX_LOOKBACK_DAYS, FALLBACK_DEFAULT_DAYS_BACK, DISTINGUISHED_FOLDERS, EXACT_INAPPROVALS_FOLDER_ID, DEFAULT_OUTLOOK_SIGNATURE_HTML, DEFAULT_OUTLOOK_SIGNATURE_TEXT, EwsSource;
 var init_EwsSource = __esm({
   "src/mail/adapters/EwsSource.ts"() {
+    init_ewsXml();
+    GETITEM_CHUNK_SIZE = 25;
+    MAX_SYNC_PAGES = 10;
+    FALLBACK_OVERLACK_HOURS = 6;
+    FALLBACK_MAX_LOOKBACK_DAYS = 30;
+    FALLBACK_DEFAULT_DAYS_BACK = 3;
+    DISTINGUISHED_FOLDERS = ["inbox", "drafts", "deleteditems", "sentitems", "msgfolderroot"];
     EXACT_INAPPROVALS_FOLDER_ID = "AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgAuAAAAAAA4U9epEFcNRbR5QhtWJDZyAQCVKjW+UMYOTr9U/HR/zy7WAAActvclAAA=";
     DEFAULT_OUTLOOK_SIGNATURE_HTML = `
 <br><br>
@@ -242,10 +378,22 @@ Email:  Mohanad.elmaamoun@elitehospital.org`;
       }
       /**
        * Fetches full message details in batch for a list of EWS item IDs.
+       * Requests only the properties the ingestion pipeline needs (AllProperties pulls
+       * attachment payloads and unused MAPI blobs, which is how large batches time out).
        */
       async getItemsBatch(itemIds) {
         if (itemIds.length === 0) return [];
-        const idsXml = itemIds.map((id) => `<t:ItemId Id="${id}"/>`).join("\n");
+        const requested = [...new Set(itemIds.filter(Boolean))];
+        const collected = [];
+        for (let i = 0; i < requested.length; i += GETITEM_CHUNK_SIZE) {
+          const chunk = requested.slice(i, i + GETITEM_CHUNK_SIZE);
+          const messages = await this.getItemsChunk(chunk);
+          collected.push(...messages);
+        }
+        return collected;
+      }
+      async getItemsChunk(itemIds) {
+        const idsXml = itemIds.map((id) => `<t:ItemId Id="${escapeXmlAttr(id)}"/>`).join("\n");
         const soap = `<?xml version="1.0" encoding="utf-8"?>
 <soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                xmlns:m="http://schemas.microsoft.com/exchange/services/2006/messages"
@@ -257,7 +405,17 @@ Email:  Mohanad.elmaamoun@elitehospital.org`;
   <soap:Body>
     <m:GetItem>
       <m:ItemShape>
-        <t:BaseShape>AllProperties</t:BaseShape>
+        <t:BaseShape>IdOnly</t:BaseShape>
+        <t:AdditionalProperties>
+          <t:FieldURI FieldURI="item:Subject"/>
+          <t:FieldURI FieldURI="item:DateTimeReceived"/>
+          <t:FieldURI FieldURI="item:ConversationId"/>
+          <t:FieldURI FieldURI="message:InternetMessageId"/>
+          <t:FieldURI FieldURI="message:From"/>
+          <t:FieldURI FieldURI="message:Body"/>
+          <t:FieldURI FieldURI="message:IsRead"/>
+          <t:FieldURI FieldURI="item:Attachments"/>
+        </t:AdditionalProperties>
         <t:BodyType>HTML</t:BodyType>
       </m:ItemShape>
       <m:ItemIds>
@@ -269,63 +427,50 @@ Email:  Mohanad.elmaamoun@elitehospital.org`;
         for (let attempt = 1; attempt <= 3; attempt++) {
           try {
             const xml = await this.ewsRequest(soap);
-            const messageBlocks = [...xml.matchAll(/<t:Message>([\s\S]*?)<\/t:Message>/g)];
-            return messageBlocks.map((mb) => {
-              const block = mb[1];
-              const idMatch = block.match(/<t:ItemId Id="([^"]+)"(?:\s+ChangeKey="([^"]+)")?/);
-              const itemId = idMatch ? idMatch[1] : "";
-              const changeKey = idMatch?.[2] || "";
-              const subject = block.match(/<t:Subject>([^<]*)<\/t:Subject>/)?.[1] || "";
-              const messageId = block.match(/<t:InternetMessageId>([^<]*)<\/t:InternetMessageId>/)?.[1] || `<${itemId}@exchange>`;
-              const from = block.match(/<t:From>[\s\S]*?<t:EmailAddress>([^<]+)<\/t:EmailAddress>/)?.[1] || "";
-              const bodyHtml = block.match(/<t:Body[^>]*>([\s\S]*?)<\/t:Body>/)?.[1] || "";
-              const conversationId = block.match(/<t:ConversationId Id="([^"]+)"/)?.[1] || "";
-              const receivedAtStr = block.match(/<t:DateTimeReceived>([^<]+)<\/t:DateTimeReceived>/)?.[1];
-              const receivedAt = receivedAtStr ? new Date(receivedAtStr).toISOString() : (/* @__PURE__ */ new Date()).toISOString();
-              const attachments = [];
-              const attMatches = block.matchAll(/<t:FileAttachment>[\s\S]*?<t:AttachmentId Id="([^"]+)"[\s\S]*?<t:Name>([^<]+)<\/t:Name>(?:[\s\S]*?<t:ContentType>([^<]+)<\/t:ContentType>)?(?:[\s\S]*?<t:Size>([^<]+)<\/t:Size>)?/g);
-              for (const am of attMatches) {
-                attachments.push({
-                  id: am[1],
-                  name: am[2],
-                  contentType: am[3] || "application/octet-stream",
-                  sizeBytes: Number(am[4]) || 0
-                });
-              }
-              return {
-                id: itemId,
-                changeKey,
-                messageId,
-                conversationId,
-                subject,
-                sender: from,
-                receivedAt,
-                htmlBody: bodyHtml,
-                textBody: bodyHtml.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim(),
-                attachments
-              };
-            });
+            const messages = parseGetItemsResponse(xml);
+            const failed = countErrorResponses(xml);
+            if (failed > 0) {
+              console.warn(
+                `[EWS Source] GetItem chunk returned ${failed} failed item(s) of ${itemIds.length} requested (moved/deleted/expired). ${messages.length} parsed.`
+              );
+            }
+            return messages;
           } catch (err) {
             const isThrottled = String(err).includes("ErrorServerBusy") || String(err).includes("503");
             if (attempt < 3 && isThrottled) {
-              const delay = attempt * 1500;
+              const delay = retryDelayMs(err, attempt);
+              console.warn(`[EWS Source] Exchange throttled GetItem; retrying in ${delay}ms.`);
               await new Promise((r) => setTimeout(r, delay));
               continue;
             }
-            if (attempt === 3) throw err;
+            throw err;
           }
         }
         return [];
       }
       /**
        * Incrementally fetches messages since the given cursor.
+       *
+       * Uses SyncFolderItems with `AllItems` scope (NormalItems silently omits
+       * meeting-based approvals), drains every page while Exchange signals
+       * `IncludesLastItemInRange=false`, separates deletes so moved/deleted items are
+       * not re-ingested as new, and falls back to a FindItem window anchored on the
+       * durable `watermarkReceivedAt` rather than wall-clock time.
        */
       async fetchSince(cursor, maxItems = 50) {
         const folderId = await this.resolveFolderId(cursor.folderName || this.config.folderName);
-        const isDistinguished = ["inbox", "drafts", "deleteditems", "sentitems", "msgfolderroot"].includes(folderId.toLowerCase());
-        const folderXml = isDistinguished ? `<t:DistinguishedFolderId Id="${folderId}"/>` : `<t:FolderId Id="${folderId}"/>`;
-        const syncStateXml = cursor.token ? `<m:SyncState>${cursor.token}</m:SyncState>` : "";
-        const soap = `<?xml version="1.0" encoding="utf-8"?>
+        const isDistinguished = DISTINGUISHED_FOLDERS.includes(folderId.toLowerCase());
+        const folderXml = isDistinguished ? `<t:DistinguishedFolderId Id="${folderId}"/>` : `<t:FolderId Id="${escapeXmlAttr(folderId)}"/>`;
+        const pageSize = Math.min(maxItems, 250);
+        const collectedIds = [];
+        const deletedIds = [];
+        let syncState = cursor.token;
+        let moreAvailable = false;
+        let page = 0;
+        while (page < MAX_SYNC_PAGES) {
+          page += 1;
+          const syncStateXml = syncState ? `<m:SyncState>${syncState}</m:SyncState>` : "";
+          const soap = `<?xml version="1.0" encoding="utf-8"?>
 <soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                xmlns:m="http://schemas.microsoft.com/exchange/services/2006/messages"
                xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types"
@@ -342,53 +487,87 @@ Email:  Mohanad.elmaamoun@elitehospital.org`;
         ${folderXml}
       </m:SyncFolderId>
       ${syncStateXml}
-      <m:MaxChangesReturned>${Math.min(maxItems, 250)}</m:MaxChangesReturned>
-      <m:SyncScope>NormalItems</m:SyncScope>
+      <m:MaxChangesReturned>${pageSize}</m:MaxChangesReturned>
+      <m:SyncScope>AllItems</m:SyncScope>
     </m:SyncFolderItems>
   </soap:Body>
 </soap:Envelope>`;
-        let xml = "";
-        try {
-          xml = await this.ewsRequest(soap);
-        } catch (err) {
-          if (String(err).includes("ErrorInvalidSyncStateData")) {
-            console.warn("[EWS Source] Invalid SyncState token encountered; resetting token and requesting full sync.");
-            const resetCursor = { ...cursor, token: void 0 };
-            return this.fetchSince(resetCursor, maxItems);
+          let xml;
+          try {
+            xml = await this.ewsRequest(soap);
+          } catch (err) {
+            if (String(err).includes("ErrorInvalidSyncStateData")) {
+              console.warn("[EWS Source] Invalid SyncState token encountered; resetting token and requesting full sync.");
+              return this.fetchSince({ ...cursor, token: void 0 }, maxItems);
+            }
+            throw err;
           }
-          throw err;
+          const parsed = parseSyncFolderItemsResponse(xml);
+          syncState = parsed.syncState || syncState;
+          for (const change of parsed.changes) {
+            if (change.kind === "delete") {
+              if (!deletedIds.includes(change.id)) deletedIds.push(change.id);
+              continue;
+            }
+            if (!collectedIds.includes(change.id)) collectedIds.push(change.id);
+          }
+          moreAvailable = !parsed.includesLastItemInRange;
+          if (parsed.includesLastItemInRange) break;
         }
-        const syncStateMatch = xml.match(/<m:SyncState>([^<]+)<\/m:SyncState>/);
-        const nextSyncState = syncStateMatch ? syncStateMatch[1] : cursor.token;
-        const includesLast = xml.includes("<m:IncludesLastItemInRange>true</m:IncludesLastItemInRange>");
-        const createdIds = [];
-        const createMatches = xml.matchAll(/<t:Create>[\s\S]*?<t:ItemId Id="([^"]+)"/g);
-        for (const match of createMatches) {
-          createdIds.push(match[1]);
+        if (moreAvailable) {
+          syncState = cursor.token;
+          console.warn(`[EWS Source] ${MAX_SYNC_PAGES} sync pages drained with changes still pending; resuming from the stored token next run.`);
         }
-        if (createdIds.length === 0) {
-          const defaultSince = new Date(Date.now() - 3 * 24 * 60 * 60 * 1e3).toISOString();
-          const sinceDateIso = cursor.lastSyncedAt ? new Date(new Date(cursor.lastSyncedAt).getTime() - 24 * 60 * 60 * 1e3).toISOString() : defaultSince;
+        const idsToFetch = collectedIds.slice(0, maxItems);
+        if (idsToFetch.length < collectedIds.length) {
+          moreAvailable = true;
+          syncState = cursor.token;
+          console.warn(`[EWS Source] Deferring ${collectedIds.length - idsToFetch.length} change(s) beyond batch size ${maxItems}; resuming from the pre-sync token next run.`);
+        }
+        if (idsToFetch.length === 0) {
+          const sinceDateIso = this.fallbackWindowStart(cursor);
           console.log(`[EWS Source] SyncFolderItems returned 0 changes. Running FindItem fallback (since ${sinceDateIso})...`);
           const recentItems = await this.findItemsInFolder(folderId, maxItems, sinceDateIso);
           for (const item of recentItems) {
-            if (!createdIds.includes(item.id)) {
-              createdIds.push(item.id);
+            if (!collectedIds.includes(item.id) && !deletedIds.includes(item.id)) {
+              collectedIds.push(item.id);
             }
           }
-          console.log(`[EWS Source] FindItem fallback discovered ${createdIds.length} candidate items.`);
+          console.log(`[EWS Source] FindItem fallback discovered ${collectedIds.length} candidate items.`);
         }
-        const messages = await this.getItemsBatch(createdIds);
+        const messages = await this.getItemsBatch(idsToFetch);
+        const highestReceivedAt = messages.reduce((max, m) => {
+          if (!m.receivedAt) return max;
+          return !max || new Date(m.receivedAt) > new Date(max) ? m.receivedAt : max;
+        }, cursor.watermarkReceivedAt);
         return {
           messages,
+          deletedItemIds: deletedIds,
+          highestReceivedAt,
           nextCursor: {
             folderName: cursor.folderName,
-            token: nextSyncState,
+            token: syncState,
             lastSyncedAt: (/* @__PURE__ */ new Date()).toISOString(),
+            watermarkReceivedAt: highestReceivedAt,
             totalSyncedCount: (cursor.totalSyncedCount || 0) + messages.length
           },
-          moreAvailable: !includesLast && createdIds.length > 0
+          moreAvailable
         };
+      }
+      /**
+       * Start of the FindItem recovery window. Prefers the last durably ingested
+       * item timestamp (survives multi-day outages) over wall-clock heuristics, and
+       * always overlaps backwards to absorb clock skew and late-arriving items.
+       */
+      fallbackWindowStart(cursor) {
+        const overlapMs = FALLBACK_OVERLACK_HOURS * 60 * 60 * 1e3;
+        const anchor = cursor.watermarkReceivedAt || (cursor.lastSyncedAt && cursor.lastSyncedAt !== (/* @__PURE__ */ new Date(0)).toISOString() ? cursor.lastSyncedAt : void 0);
+        if (anchor) {
+          const start = new Date(new Date(anchor).getTime() - overlapMs).toISOString();
+          const floor = new Date(Date.now() - FALLBACK_MAX_LOOKBACK_DAYS * 24 * 60 * 60 * 1e3).toISOString();
+          return start < floor ? floor : start;
+        }
+        return new Date(Date.now() - FALLBACK_DEFAULT_DAYS_BACK * 24 * 60 * 60 * 1e3).toISOString();
       }
       /**
        * Searches for an email in Exchange by its InternetMessageId or ConversationId
@@ -4320,14 +4499,15 @@ async function loadCursorFromPostgres(folderName = DEFAULT_FOLDER) {
     folderName,
     token: void 0,
     lastSyncedAt: (/* @__PURE__ */ new Date(0)).toISOString(),
-    totalSyncedCount: 0
+    totalSyncedCount: 0,
+    watermarkReceivedAt: void 0
   };
   if (!client) {
     console.warn("[Cursor Manager] Supabase client unavailable; using fresh cursor.");
     return fallbackCursor;
   }
   try {
-    const { data, error } = await client.from("sync_checkpoints").select("folder_name, sync_state_token, last_synced_at, total_synced_count").eq("folder_name", folderName).maybeSingle();
+    const { data, error } = await client.from("sync_checkpoints").select("folder_name, sync_state_token, last_synced_at, total_synced_count, watermark_received_at").eq("folder_name", folderName).maybeSingle();
     if (error) {
       console.warn(`[Cursor Manager] Failed to load watermark for "${folderName}":`, error.message);
       return fallbackCursor;
@@ -4339,7 +4519,8 @@ async function loadCursorFromPostgres(folderName = DEFAULT_FOLDER) {
       folderName: data.folder_name,
       token: data.sync_state_token || void 0,
       lastSyncedAt: data.last_synced_at || (/* @__PURE__ */ new Date(0)).toISOString(),
-      totalSyncedCount: Number(data.total_synced_count) || 0
+      totalSyncedCount: Number(data.total_synced_count) || 0,
+      watermarkReceivedAt: data.watermark_received_at || void 0
     };
   } catch (err) {
     console.error(`[Cursor Manager] Unexpected error reading cursor:`, err.message || err);
@@ -4352,12 +4533,15 @@ async function saveCursorToPostgres(cursor, itemsIncrement = 0) {
   }
   try {
     const newTotal = (cursor.totalSyncedCount || 0) + itemsIncrement;
+    const stored = await readStoredWatermark(cursor.folderName);
+    const watermark = maxIso(cursor.watermarkReceivedAt, stored);
     const { error } = await client.from("sync_checkpoints").upsert(
       {
         folder_name: cursor.folderName,
         sync_state_token: cursor.token || null,
         last_synced_at: (/* @__PURE__ */ new Date()).toISOString(),
-        total_synced_count: newTotal
+        total_synced_count: newTotal,
+        watermark_received_at: watermark
       },
       { onConflict: "folder_name" }
     );
@@ -4370,6 +4554,20 @@ async function saveCursorToPostgres(cursor, itemsIncrement = 0) {
     console.error(`[Cursor Manager] Unexpected error writing cursor:`, err.message || err);
     return false;
   }
+}
+async function readStoredWatermark(folderName) {
+  try {
+    const { data, error } = await client.from("sync_checkpoints").select("watermark_received_at").eq("folder_name", folderName).maybeSingle();
+    if (error || !data) return null;
+    return data.watermark_received_at || null;
+  } catch {
+    return null;
+  }
+}
+function maxIso(a, b) {
+  if (!a) return b || null;
+  if (!b) return a;
+  return new Date(a) >= new Date(b) ? a : b;
 }
 async function triggerPhiRetentionPurge(retentionDays = 30) {
   if (!client) return { success: false };
@@ -10697,7 +10895,10 @@ async function runMailSync(options) {
         console.warn(`[Sync Engine] Failed to persist approval ${msg.messageId}:`, persistRes.error);
       }
     }
-    await saveCursorToPostgres(nextCursor, stats.messagesProcessed);
+    await saveCursorToPostgres(
+      stats.messagesProcessed > 0 ? nextCursor : { ...nextCursor, watermarkReceivedAt: currentCursor.watermarkReceivedAt },
+      stats.messagesProcessed
+    );
     if (!options?.skipPurge) {
       await triggerPhiRetentionPurge(30);
     }

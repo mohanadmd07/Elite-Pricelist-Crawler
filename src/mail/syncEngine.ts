@@ -711,7 +711,12 @@ export async function runMailSync(options?: {
     }
 
     // 5. Update cursor watermark in Postgres
-    await saveCursorToPostgres(nextCursor, stats.messagesProcessed);
+    // Only advance the durable watermark once this batch is actually persisted: a fatal
+    // error mid-batch must leave the recovery anchor at the last known-good item.
+    await saveCursorToPostgres(
+      stats.messagesProcessed > 0 ? nextCursor : { ...nextCursor, watermarkReceivedAt: currentCursor.watermarkReceivedAt },
+      stats.messagesProcessed,
+    );
 
     // 6. Enforce PHI Data Retention (purge raw bodies older than 30 days)
     if (!options?.skipPurge) {

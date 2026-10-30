@@ -31,6 +31,13 @@ export interface MailCursor {
   token?: string; // EWS SyncState or IMAP UID or Gmail historyId
   lastSyncedAt: string;
   totalSyncedCount?: number;
+  /**
+   * Highest item DateTimeReceived durably ingested, as UTC ISO. Unlike
+   * `lastSyncedAt` (wall clock of the last run) this survives an outage and is
+   * what the FindItem fallback must query from, so a long downtime cannot slip
+   * past the overlap window and lose mail.
+   */
+  watermarkReceivedAt?: string;
 }
 
 export interface ParsedApprovalEmail {
@@ -76,6 +83,16 @@ export interface MailSyncStats {
   error?: string;
 }
 
+export interface MailSyncResult {
+  messages: RawMailMessage[];
+  nextCursor: MailCursor;
+  moreAvailable: boolean;
+  /** ItemIds Exchange reported as deleted/moved out of the synced folder. */
+  deletedItemIds?: string[];
+  /** Highest DateTimeReceived in this batch — the durable watermark to persist. */
+  highestReceivedAt?: string;
+}
+
 export interface MailSource {
   /**
    * Fetches new or updated messages incrementally since the provided cursor.
@@ -83,11 +100,7 @@ export interface MailSource {
   fetchSince(
     cursor: MailCursor,
     maxItems?: number
-  ): Promise<{
-    messages: RawMailMessage[];
-    nextCursor: MailCursor;
-    moreAvailable: boolean;
-  }>;
+  ): Promise<MailSyncResult>;
 
   /**
    * Health and connectivity test against the remote mail server.
