@@ -12,7 +12,6 @@ from pathlib import Path
 import sys
 import logging
 import hashlib
-from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 from datetime import datetime, timedelta, timezone
 from typing import Generator, List, Dict, Any, Optional
 
@@ -75,23 +74,6 @@ FIRESTORE_PROJECT_ID = os.getenv("FIREBASE_PROJECT_ID", "ai-studio-applet-webapp
 FIRESTORE_DATABASE_ID = os.getenv("FIRESTORE_DATABASE_ID", "(default)")
 APPROVALS_COLLECTION = "inpatient_approvals"
 FIRESTORE_BATCH_LIMIT = 450  # Hard limit is 500; 450 leaves headroom for safety
-
-# Mailbox server timezone. exchangelib hands back naive datetimes already
-# expressed in this zone, so it drives every naive -> UTC conversion below.
-EXCHANGE_TZ_NAME = os.getenv("EXCHANGE_TIMEZONE", "Africa/Cairo")
-
-
-def _resolve_server_tz() -> ZoneInfo:
-    try:
-        return ZoneInfo(EXCHANGE_TZ_NAME)
-    except (ZoneInfoNotFoundError, ValueError):
-        logger.warning(
-            "Unknown EXCHANGE_TIMEZONE '%s'; falling back to Africa/Cairo.", EXCHANGE_TZ_NAME
-        )
-        return ZoneInfo("Africa/Cairo")
-
-
-_SERVER_TZINFO = _resolve_server_tz()
 
 # ==============================================================================
 # FIREBASE INITIALIZATION
@@ -188,31 +170,6 @@ def extract_patient_name(body: str) -> str:
             return match.group(1).strip()[:100]
     return "Unknown Patient"
 
-def to_utc_datetime(value: Optional[datetime]) -> datetime:
-    """
-    Normalizes an EWS timestamp to a tz-aware UTC datetime.
-
-    exchangelib returns ``item.datetime_received`` as a NAIVE datetime already
-    expressed in the mailbox server timezone (Africa/Cairo for this deployment).
-    Naive values must therefore be *interpreted* in that timezone before being
-    converted; treating them as UTC silently shifts every approval two hours
-    earlier (the bug this helper replaces).
-
-    Already-aware values are converted without re-basing their wall clock.
-    ``None`` falls back to the current time so records never lose a timestamp.
-    """
-    if value is None:
-        return datetime.now(timezone.utc)
-
-    source_tz = _SERVER_TZINFO
-    if value.tzinfo is None:
-        aware = value.replace(tzinfo=source_tz)
-    else:
-        aware = value
-
-    return aware.astimezone(timezone.utc)
-
-
 def build_deterministic_id(mrn: str, conversation_id: str, subject: str) -> str:
     """Creates an idempotent Firestore document key based on MRN and thread identity."""
     thread_key = f"{conversation_id}_{subject.lower().strip()}"
@@ -265,7 +222,11 @@ def stream_ews_items(
             conv_id = getattr(item.conversation_id, "id", str(item.id))
             doc_id = build_deterministic_id(mrn, conv_id, subject)
 
-            received_dt = to_utc_datetime(item.datetime_received)
+            received_dt = item.datetime_received
+            if isinstance(received_dt, EWSDateTime):
+                received_dt = datetime.fromtimestamp(received_dt.timestamp(), tz=timezone.utc)
+            elif received_dt is None:
+                received_dt = datetime.now(timezone.utc)
 
             thread_signature = hashlib.md5(
                 f"{item.id}_{item.changekey}_{received_dt.isoformat()}".encode("utf-8")

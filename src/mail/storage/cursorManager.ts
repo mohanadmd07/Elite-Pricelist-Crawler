@@ -19,7 +19,6 @@ export async function loadCursorFromPostgres(folderName: string = DEFAULT_FOLDER
     token: undefined,
     lastSyncedAt: new Date(0).toISOString(),
     totalSyncedCount: 0,
-    watermarkReceivedAt: undefined,
   };
 
   if (!client) {
@@ -30,7 +29,7 @@ export async function loadCursorFromPostgres(folderName: string = DEFAULT_FOLDER
   try {
     const { data, error } = await client
       .from('sync_checkpoints')
-      .select('folder_name, sync_state_token, last_synced_at, total_synced_count, watermark_received_at')
+      .select('folder_name, sync_state_token, last_synced_at, total_synced_count')
       .eq('folder_name', folderName)
       .maybeSingle();
 
@@ -48,7 +47,6 @@ export async function loadCursorFromPostgres(folderName: string = DEFAULT_FOLDER
       token: data.sync_state_token || undefined,
       lastSyncedAt: data.last_synced_at || new Date(0).toISOString(),
       totalSyncedCount: Number(data.total_synced_count) || 0,
-      watermarkReceivedAt: data.watermark_received_at || undefined,
     };
   } catch (err: any) {
     console.error(`[Cursor Manager] Unexpected error reading cursor:`, err.message || err);
@@ -58,10 +56,6 @@ export async function loadCursorFromPostgres(folderName: string = DEFAULT_FOLDER
 
 /**
  * Persists an updated sync watermark to PostgreSQL.
- *
- * `watermark_received_at` is monotonic: a batch that yields no newer item (empty
- * delta, transient failure, or a replay of older mail) must never move the recovery
- * anchor backwards, or the gap it skipped becomes permanent.
  */
 export async function saveCursorToPostgres(cursor: MailCursor, itemsIncrement: number = 0): Promise<boolean> {
   if (!client) {
@@ -70,9 +64,6 @@ export async function saveCursorToPostgres(cursor: MailCursor, itemsIncrement: n
 
   try {
     const newTotal = (cursor.totalSyncedCount || 0) + itemsIncrement;
-    const stored = await readStoredWatermark(cursor.folderName);
-    const watermark = maxIso(cursor.watermarkReceivedAt, stored);
-
     const { error } = await client
       .from('sync_checkpoints')
       .upsert(
@@ -81,7 +72,6 @@ export async function saveCursorToPostgres(cursor: MailCursor, itemsIncrement: n
           sync_state_token: cursor.token || null,
           last_synced_at: new Date().toISOString(),
           total_synced_count: newTotal,
-          watermark_received_at: watermark,
         },
         { onConflict: 'folder_name' }
       );
@@ -96,29 +86,6 @@ export async function saveCursorToPostgres(cursor: MailCursor, itemsIncrement: n
     console.error(`[Cursor Manager] Unexpected error writing cursor:`, err.message || err);
     return false;
   }
-}
-
-/** Reads only the durable watermark column, returning null when absent. */
-async function readStoredWatermark(folderName: string): Promise<string | null> {
-  try {
-    const { data, error } = await client!
-      .from('sync_checkpoints')
-      .select('watermark_received_at')
-      .eq('folder_name', folderName)
-      .maybeSingle();
-
-    if (error || !data) return null;
-    return (data as any).watermark_received_at || null;
-  } catch {
-    return null;
-  }
-}
-
-/** Later of two ISO timestamps, ignoring missing values. */
-function maxIso(a?: string | null, b?: string | null): string | null {
-  if (!a) return b || null;
-  if (!b) return a;
-  return new Date(a) >= new Date(b) ? a : b;
 }
 
 /**

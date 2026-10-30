@@ -6,59 +6,7 @@
 
 // @ts-ignore
 import httpntlm from 'httpntlm';
-import { AttachmentMeta, MailCursor, MailSource, MailSyncResult, RawMailMessage } from '../types';
-import { parseGetItemsResponse, parseSyncFolderItemsResponse } from './ewsXml';
-
-/** EWS accepts at most 50 items per GetItem call; stay under it with headroom. */
-const GETITEM_CHUNK_SIZE = 25;
-
-/** Safety cap on SyncFolderItems pages drained per run, so a huge backlog cannot
- *  turn one invocation into an unbounded loop against a throttling server. */
-const MAX_SYNC_PAGES = 10;
-
-/** Overlap subtracted from the durable watermark when recovering via FindItem. */
-const FALLBACK_OVERLACK_HOURS = 6;
-
-/** Hard floor for recovery queries; matches the folder's practical retention. */
-const FALLBACK_MAX_LOOKBACK_DAYS = 30;
-
-/** Recovery window for a first-ever run with no stored watermark. */
-const FALLBACK_DEFAULT_DAYS_BACK = 3;
-
-const DISTINGUISHED_FOLDERS = ['inbox', 'drafts', 'deleteditems', 'sentitems', 'msgfolderroot'];
-
-/** Escapes a value for use inside a double-quoted XML attribute. */
-function escapeXmlAttr(value: string): string {
-  return value
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&apos;');
-}
-
-/** Counts failed response elements so partial batches are visible in logs. */
-function countErrorResponses(xml: string): number {
-  return (xml.match(/ResponseClass="Error"/g) || []).length;
-}
-
-/**
- * Honors Exchange's throttle contract: a 503 carries a mandatory RetryAfter
- * header, and SOAP faults carry BackOffPeriod ("N seconds until retry allowed").
- * Falls back to exponential backoff with jitter when the server gives no hint.
- */
-function retryDelayMs(err: any, attempt: number): number {
-  const message = `${err?.message || err || ''} ${err?.responseBody || ''}`;
-
-  const backOff = message.match(/(\d+)\s*seconds\s*until\s*retry/i);
-  if (backOff) return Math.min(Number(backOff[1]) * 1000, 60_000);
-
-  const retryAfter = message.match(/Retry-After["']?\s*[:=]\s*"?(\d+)/i);
-  if (retryAfter) return Math.min(Number(retryAfter[1]) * 1000, 60_000);
-
-  const base = 1000 * 2 ** (attempt - 1);
-  return base + Math.floor(Math.random() * 250);
-}
+import { AttachmentMeta, MailCursor, MailSource, RawMailMessage } from '../types';
 
 export const EXACT_INAPPROVALS_FOLDER_ID =
   'AAMkAGU5Y2EzNmMxLTIwZDItNDcxOC05ZTk0LTBlODJjZjkxOGU5NgAuAAAAAAA4U9epEFcNRbR5QhtWJDZyAQCVKjW+UMYOTr9U/HR/zy7WAAActvclAAA=';
@@ -326,28 +274,10 @@ export class EwsSource implements MailSource {
 
   /**
    * Fetches full message details in batch for a list of EWS item IDs.
-   * Requests only the properties the ingestion pipeline needs (AllProperties pulls
-   * attachment payloads and unused MAPI blobs, which is how large batches time out).
    */
   public async getItemsBatch(itemIds: string[]): Promise<RawMailMessage[]> {
     if (itemIds.length === 0) return [];
-
-    const requested = [...new Set(itemIds.filter(Boolean))];
-    const collected: RawMailMessage[] = [];
-
-    // EWS caps items per GetItem call; chunk so one oversized request can't fail
-    // the whole batch and lose every message behind it.
-    for (let i = 0; i < requested.length; i += GETITEM_CHUNK_SIZE) {
-      const chunk = requested.slice(i, i + GETITEM_CHUNK_SIZE);
-      const messages = await this.getItemsChunk(chunk);
-      collected.push(...messages);
-    }
-
-    return collected;
-  }
-
-  private async getItemsChunk(itemIds: string[]): Promise<RawMailMessage[]> {
-    const idsXml = itemIds.map((id) => `<t:ItemId Id="${escapeXmlAttr(id)}"/>`).join('\n');
+    const idsXml = itemIds.map((id) => `<t:ItemId Id="${id}"/>`).join('\n');
 
     const soap = `<?xml version="1.0" encoding="utf-8"?>
 <soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -360,17 +290,7 @@ export class EwsSource implements MailSource {
   <soap:Body>
     <m:GetItem>
       <m:ItemShape>
-        <t:BaseShape>IdOnly</t:BaseShape>
-        <t:AdditionalProperties>
-          <t:FieldURI FieldURI="item:Subject"/>
-          <t:FieldURI FieldURI="item:DateTimeReceived"/>
-          <t:FieldURI FieldURI="item:ConversationId"/>
-          <t:FieldURI FieldURI="message:InternetMessageId"/>
-          <t:FieldURI FieldURI="message:From"/>
-          <t:FieldURI FieldURI="message:Body"/>
-          <t:FieldURI FieldURI="message:IsRead"/>
-          <t:FieldURI FieldURI="item:Attachments"/>
-        </t:AdditionalProperties>
+        <t:BaseShape>AllProperties</t:BaseShape>
         <t:BodyType>HTML</t:BodyType>
       </m:ItemShape>
       <m:ItemIds>
@@ -383,26 +303,54 @@ export class EwsSource implements MailSource {
     for (let attempt = 1; attempt <= 3; attempt++) {
       try {
         const xml = await this.ewsRequest(soap);
-        const messages = parseGetItemsResponse(xml);
+        const messageBlocks = [...xml.matchAll(/<t:Message>([\s\S]*?)<\/t:Message>/g)];
 
-        const failed = countErrorResponses(xml);
-        if (failed > 0) {
-          console.warn(
-            `[EWS Source] GetItem chunk returned ${failed} failed item(s) of ${itemIds.length} requested ` +
-              `(moved/deleted/expired). ${messages.length} parsed.`,
-          );
-        }
+        return messageBlocks.map((mb) => {
+          const block = mb[1];
+          const idMatch = block.match(/<t:ItemId Id="([^"]+)"(?:\s+ChangeKey="([^"]+)")?/);
+          const itemId = idMatch ? idMatch[1] : '';
+          const changeKey = idMatch?.[2] || '';
+          const subject = block.match(/<t:Subject>([^<]*)<\/t:Subject>/)?.[1] || '';
+          const messageId = block.match(/<t:InternetMessageId>([^<]*)<\/t:InternetMessageId>/)?.[1] || `<${itemId}@exchange>`;
+          const from = block.match(/<t:From>[\s\S]*?<t:EmailAddress>([^<]+)<\/t:EmailAddress>/)?.[1] || '';
+          const bodyHtml = block.match(/<t:Body[^>]*>([\s\S]*?)<\/t:Body>/)?.[1] || '';
+          const conversationId = block.match(/<t:ConversationId Id="([^"]+)"/)?.[1] || '';
+          const receivedAtStr = block.match(/<t:DateTimeReceived>([^<]+)<\/t:DateTimeReceived>/)?.[1];
+          const receivedAt = receivedAtStr ? new Date(receivedAtStr).toISOString() : new Date().toISOString();
 
-        return messages;
+          // Extract attachment metadata if present
+          const attachments: AttachmentMeta[] = [];
+          const attMatches = block.matchAll(/<t:FileAttachment>[\s\S]*?<t:AttachmentId Id="([^"]+)"[\s\S]*?<t:Name>([^<]+)<\/t:Name>(?:[\s\S]*?<t:ContentType>([^<]+)<\/t:ContentType>)?(?:[\s\S]*?<t:Size>([^<]+)<\/t:Size>)?/g);
+          for (const am of attMatches) {
+            attachments.push({
+              id: am[1],
+              name: am[2],
+              contentType: am[3] || 'application/octet-stream',
+              sizeBytes: Number(am[4]) || 0,
+            });
+          }
+
+          return {
+            id: itemId,
+            changeKey,
+            messageId,
+            conversationId,
+            subject,
+            sender: from,
+            receivedAt,
+            htmlBody: bodyHtml,
+            textBody: bodyHtml.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim(),
+            attachments,
+          };
+        });
       } catch (err: any) {
         const isThrottled = String(err).includes('ErrorServerBusy') || String(err).includes('503');
         if (attempt < 3 && isThrottled) {
-          const delay = retryDelayMs(err, attempt);
-          console.warn(`[EWS Source] Exchange throttled GetItem; retrying in ${delay}ms.`);
+          const delay = attempt * 1500;
           await new Promise((r) => setTimeout(r, delay));
           continue;
         }
-        throw err;
+        if (attempt === 3) throw err;
       }
     }
 
@@ -411,35 +359,24 @@ export class EwsSource implements MailSource {
 
   /**
    * Incrementally fetches messages since the given cursor.
-   *
-   * Uses SyncFolderItems with `AllItems` scope (NormalItems silently omits
-   * meeting-based approvals), drains every page while Exchange signals
-   * `IncludesLastItemInRange=false`, separates deletes so moved/deleted items are
-   * not re-ingested as new, and falls back to a FindItem window anchored on the
-   * durable `watermarkReceivedAt` rather than wall-clock time.
    */
   public async fetchSince(
     cursor: MailCursor,
     maxItems: number = 50
-  ): Promise<MailSyncResult & { deletedItemIds?: string[]; highestReceivedAt?: string }> {
+  ): Promise<{
+    messages: RawMailMessage[];
+    nextCursor: MailCursor;
+    moreAvailable: boolean;
+  }> {
     const folderId = await this.resolveFolderId(cursor.folderName || this.config.folderName);
-    const isDistinguished = DISTINGUISHED_FOLDERS.includes(folderId.toLowerCase());
+    const isDistinguished = ['inbox', 'drafts', 'deleteditems', 'sentitems', 'msgfolderroot'].includes(folderId.toLowerCase());
     const folderXml = isDistinguished
       ? `<t:DistinguishedFolderId Id="${folderId}"/>`
-      : `<t:FolderId Id="${escapeXmlAttr(folderId)}"/>`;
+      : `<t:FolderId Id="${folderId}"/>`;
 
-    const pageSize = Math.min(maxItems, 250);
-    const collectedIds: string[] = [];
-    const deletedIds: string[] = [];
-    let syncState = cursor.token;
-    let moreAvailable = false;
-    let page = 0;
+    const syncStateXml = cursor.token ? `<m:SyncState>${cursor.token}</m:SyncState>` : '';
 
-    while (page < MAX_SYNC_PAGES) {
-      page += 1;
-      const syncStateXml = syncState ? `<m:SyncState>${syncState}</m:SyncState>` : '';
-
-      const soap = `<?xml version="1.0" encoding="utf-8"?>
+    const soap = `<?xml version="1.0" encoding="utf-8"?>
 <soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                xmlns:m="http://schemas.microsoft.com/exchange/services/2006/messages"
                xmlns:t="http://schemas.microsoft.com/exchange/services/2006/types"
@@ -456,115 +393,63 @@ export class EwsSource implements MailSource {
         ${folderXml}
       </m:SyncFolderId>
       ${syncStateXml}
-      <m:MaxChangesReturned>${pageSize}</m:MaxChangesReturned>
-      <m:SyncScope>AllItems</m:SyncScope>
+      <m:MaxChangesReturned>${Math.min(maxItems, 250)}</m:MaxChangesReturned>
+      <m:SyncScope>NormalItems</m:SyncScope>
     </m:SyncFolderItems>
   </soap:Body>
 </soap:Envelope>`;
 
-      let xml: string;
-      try {
-        xml = await this.ewsRequest(soap);
-      } catch (err: any) {
-        if (String(err).includes('ErrorInvalidSyncStateData')) {
-          console.warn('[EWS Source] Invalid SyncState token encountered; resetting token and requesting full sync.');
-          return this.fetchSince({ ...cursor, token: undefined }, maxItems);
-        }
-        throw err;
+    let xml = '';
+    try {
+      xml = await this.ewsRequest(soap);
+    } catch (err: any) {
+      if (String(err).includes('ErrorInvalidSyncStateData')) {
+        console.warn('[EWS Source] Invalid SyncState token encountered; resetting token and requesting full sync.');
+        const resetCursor: MailCursor = { ...cursor, token: undefined };
+        return this.fetchSince(resetCursor, maxItems);
       }
-
-      const parsed = parseSyncFolderItemsResponse(xml);
-      syncState = parsed.syncState || syncState;
-
-      for (const change of parsed.changes) {
-        if (change.kind === 'delete') {
-          if (!deletedIds.includes(change.id)) deletedIds.push(change.id);
-          continue;
-        }
-        if (!collectedIds.includes(change.id)) collectedIds.push(change.id);
-      }
-
-      moreAvailable = !parsed.includesLastItemInRange;
-      if (parsed.includesLastItemInRange) break;
+      throw err;
     }
 
-    // Drain cap hit with changes still pending: keep the pre-sync token so the
-    // next run replays the delta instead of pretending the folder is caught up.
-    if (moreAvailable) {
-      syncState = cursor.token;
-      console.warn(`[EWS Source] ${MAX_SYNC_PAGES} sync pages drained with changes still pending; resuming from the stored token next run.`);
+    const syncStateMatch = xml.match(/<m:SyncState>([^<]+)<\/m:SyncState>/);
+    const nextSyncState = syncStateMatch ? syncStateMatch[1] : cursor.token;
+    const includesLast = xml.includes('<m:IncludesLastItemInRange>true</m:IncludesLastItemInRange>');
+
+    const createdIds: string[] = [];
+    const createMatches = xml.matchAll(/<t:Create>[\s\S]*?<t:ItemId Id="([^"]+)"/g);
+    for (const match of createMatches) {
+      createdIds.push(match[1]);
     }
 
-    // Bound the GetItem fan-out to the caller's batch size. The ids we do not
-    // fetch this run must be replayed next run, so keep the token from BEFORE
-    // this call drained pages — Exchange replays the whole delta from it and the
-    // pipeline dedupes on InternetMessageId. Advancing to the post-drain token
-    // here would drop the deferred changes permanently.
-    const idsToFetch = collectedIds.slice(0, maxItems);
-    if (idsToFetch.length < collectedIds.length) {
-      moreAvailable = true;
-      syncState = cursor.token;
-      console.warn(`[EWS Source] Deferring ${collectedIds.length - idsToFetch.length} change(s) beyond batch size ${maxItems}; resuming from the pre-sync token next run.`);
-    }
+    // If SyncFolderItems returned no items (e.g. initial token or empty delta), fall back to FindItem rolling window
+    if (createdIds.length === 0) {
+      const defaultSince = new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString();
+      const sinceDateIso = cursor.lastSyncedAt
+        ? new Date(new Date(cursor.lastSyncedAt).getTime() - 24 * 60 * 60 * 1000).toISOString()
+        : defaultSince;
 
-    // If SyncFolderItems returned no items (e.g. initial token or empty delta),
-    // fall back to a FindItem rolling window anchored on the durable watermark.
-    if (idsToFetch.length === 0) {
-      const sinceDateIso = this.fallbackWindowStart(cursor);
       console.log(`[EWS Source] SyncFolderItems returned 0 changes. Running FindItem fallback (since ${sinceDateIso})...`);
       const recentItems = await this.findItemsInFolder(folderId, maxItems, sinceDateIso);
       for (const item of recentItems) {
-        if (!collectedIds.includes(item.id) && !deletedIds.includes(item.id)) {
-          collectedIds.push(item.id);
+        if (!createdIds.includes(item.id)) {
+          createdIds.push(item.id);
         }
       }
-      console.log(`[EWS Source] FindItem fallback discovered ${collectedIds.length} candidate items.`);
+      console.log(`[EWS Source] FindItem fallback discovered ${createdIds.length} candidate items.`);
     }
 
-    const messages = await this.getItemsBatch(idsToFetch);
-
-    const highestReceivedAt = messages.reduce<string | undefined>((max, m) => {
-      if (!m.receivedAt) return max;
-      return !max || new Date(m.receivedAt) > new Date(max) ? m.receivedAt : max;
-    }, cursor.watermarkReceivedAt);
+    const messages = await this.getItemsBatch(createdIds);
 
     return {
       messages,
-      deletedItemIds: deletedIds,
-      highestReceivedAt,
       nextCursor: {
         folderName: cursor.folderName,
-        token: syncState,
+        token: nextSyncState,
         lastSyncedAt: new Date().toISOString(),
-        watermarkReceivedAt: highestReceivedAt,
         totalSyncedCount: (cursor.totalSyncedCount || 0) + messages.length,
       },
-      moreAvailable,
+      moreAvailable: !includesLast && createdIds.length > 0,
     };
-  }
-
-  /**
-   * Start of the FindItem recovery window. Prefers the last durably ingested
-   * item timestamp (survives multi-day outages) over wall-clock heuristics, and
-   * always overlaps backwards to absorb clock skew and late-arriving items.
-   */
-  private fallbackWindowStart(cursor: MailCursor): string {
-    const overlapMs = FALLBACK_OVERLACK_HOURS * 60 * 60 * 1000;
-    const anchor =
-      cursor.watermarkReceivedAt ||
-      (cursor.lastSyncedAt && cursor.lastSyncedAt !== new Date(0).toISOString()
-        ? cursor.lastSyncedAt
-        : undefined);
-
-    if (anchor) {
-      const start = new Date(new Date(anchor).getTime() - overlapMs).toISOString();
-      // Never query further back than the retention horizon; that would pull
-      // thousands of already-ingested items into every recovery run.
-      const floor = new Date(Date.now() - FALLBACK_MAX_LOOKBACK_DAYS * 24 * 60 * 60 * 1000).toISOString();
-      return start < floor ? floor : start;
-    }
-
-    return new Date(Date.now() - FALLBACK_DEFAULT_DAYS_BACK * 24 * 60 * 60 * 1000).toISOString();
   }
 
   /**
